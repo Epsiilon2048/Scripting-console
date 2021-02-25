@@ -24,7 +24,7 @@ function Console_window() constructor{
 		self.sidebar			= 0
 	}
 	set = function(_text, _plaintext){
-		draw_set_font(fnt_debug)
+		draw_set_font(o_console.font)
 		self.text = _text
 		
 		if is_undefined(_plaintext) self.plaintext = embedded_text_get_plain(_text)

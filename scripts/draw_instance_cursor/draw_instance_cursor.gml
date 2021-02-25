@@ -9,7 +9,7 @@ var line_width = 2
 var box_col  = o_console.colors.body
 var text_col = o_console.colors.output
 
-draw_set_font(fnt_debug)
+draw_set_font(o_console.font)
 draw_set_align(fa_left, fa_bottom)
 
 draw_set_color(box_col)

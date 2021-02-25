@@ -1,4 +1,19 @@
 
+scale_mult = array_create(3)
+scale_font = array_create(3)
+
+scale_mult[1] = 11/15
+scale_font[1] = fnt_debug1x
+
+scale_mult[2] = 1
+scale_mult[2] = fnt_debug2x
+
+draw_scale = 1
+
+font = scale_font[draw_scale]
+
+#macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
+
 space_sep = ds_list_create()
 ds_list_add(space_sep,
 	",",
@@ -78,7 +93,7 @@ global.gui_my = 0
 
 prev_longMessage = "No errors yet! Yay!!"
 
-draw_set_font(fnt_debug)
+draw_set_font(font)
 
 step = 0
 
@@ -94,8 +109,6 @@ console_bottom	= win_h-50
 console_text_x	= console_left + 18
 console_text_y	= console_bottom + (console_top-console_bottom)/2
 console_object_x = console_right - 18
-
-log_window_cutoff = 28
 
 console_string = ""
 char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
@@ -117,7 +130,7 @@ copy		= false
 paste		= false
 
 //i dont remember what f stands for but these are for key repeating
-key_repeat = 30
+key_repeat  = 30
 fleft		= 0
 fright		= 0
 fbackspace	= 0
@@ -151,14 +164,14 @@ Window.initialize("Window", 23, 23, SIDES.RIGHT)
 
 Output = {
 	console_x:		console_text_x,
-	console_y:		console_top - 12,
+	console_y:		console_top - SCALE_ 12,
 	noconsole_x:	console_text_x,
 	noconsole_y:	console_text_y,
 	x:				console_text_x,
 	y:				console_text_y,
 	
-	border_w: 6,
-	border_h: 5,
+	border_w: SCALE_ 6,
+	border_h: SCALE_ 5,
 	
 	text:			[],
 	plaintext:		"",
@@ -173,7 +186,7 @@ Output = {
 	mouse_over_embed:	false,
 }
 Output_window = new Console_window()
-Output_window.initialize("Output", 23, 300, SIDES.LEFT)
+Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)
 
 log_list = []
 log_to_window = false

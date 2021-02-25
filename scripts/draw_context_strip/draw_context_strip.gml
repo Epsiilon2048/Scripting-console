@@ -9,7 +9,7 @@ draw_set_alpha((hovering-o_console.context_time)*o_console.context_alpha_spd)
 var dist   = 7
 var border = 5
 
-draw_set_font(fnt_debug)
+draw_set_font(o_console.font)
 draw_set_halign(fa_left)
 draw_set_valign(fa_top)
 

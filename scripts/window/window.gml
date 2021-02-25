@@ -24,7 +24,7 @@ with o_console
 	Window.show = true
 	if log_to_window
 	{
-		draw_set_font(fnt_debug)
+		draw_set_font(font)
 		Window.y -= string_height(" ")*2
 	}
 	else window_reset_pos()

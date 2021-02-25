@@ -2,7 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function draw_console_text(x, y, color_list){
 
-draw_set_font(fnt_debug)
+draw_set_font(o_console.font)
 draw_set_halign(fa_left)
 for(var i = 0; i <= array_length(color_list)-1; i++)
 {

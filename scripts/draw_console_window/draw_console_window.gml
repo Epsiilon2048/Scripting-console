@@ -4,14 +4,14 @@ function draw_console_window(win){
 var win_w = display_get_gui_width()
 var win_h = display_get_gui_height()
 
-static sidebar_width	  = 2
-static sidebar_width_max  = 4
-static sidebar_width_lerp = .4
-
-static sidebar_range = 17 //mouse activation dist
-
-static border_x = 19 //spacing between text and edges of window
-static border_y = 9
+var sidebar_width	   = SCALE_ 2
+var sidebar_width_max  = SCALE_ 4
+var sidebar_width_lerp = SCALE_ .4
+var
+var sidebar_range = SCALE_ 17 //mouse activation dist
+var
+var border_x = SCALE_ 19 //spacing between text and edges of window
+var border_y = SCALE_ 9
 
 var mouse_over_embed = false
 
@@ -74,14 +74,14 @@ if win.mouse_over_sidebar and mouse_check_button(mb_left)
 else
 {
 	win.x = clamp(win.x, sidebar_width, win_w-sidebar_width)
-	win.y = clamp(win.y, 0-win.text_h, win_h-string_height(" "))
+	win.y = clamp(win.y, -win.text_h, win_h-string_height(" "))
 }
 
 if not o_console.collapse_windows win.show = true
 
 if win.show
 {
-	draw_set_font(fnt_debug)
+	draw_set_font(o_console.font)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
