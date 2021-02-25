@@ -7,9 +7,9 @@ var win_h = display_get_gui_height()
 var sidebar_width	   = SCALE_ 2
 var sidebar_width_max  = SCALE_ 4
 var sidebar_width_lerp = SCALE_ .4
-var
+
 var sidebar_range = SCALE_ 17 //mouse activation dist
-var
+
 var border_x = SCALE_ 19 //spacing between text and edges of window
 var border_y = SCALE_ 9
 
@@ -85,14 +85,9 @@ if win.show
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
-	draw_set_color(colors.body) 
-	gpu_set_blendmode(colors.body_bm)
-	
-	draw_rectangle(left, top, right, bottom, false)
-	
+	//if window_blur draw_surface_blur_ext(application_surface, left, top, right-left, bottom-top, o_game.zoom, o_game.zoom, d)
+	draw_console_body(left, top, right, bottom)
 	draw_set_color(colors.output)
-	draw_set_alpha(1)
-	gpu_set_blendmode(bm_normal)
 	
 	if (o_console.embed_text and o_console.window_embed_text) or (win.name == "Output" and o_console.embed_text) mouse_over_embed = draw_embedded_text(left+border_x, top+border_y+1, win.text, win.plaintext)
 	else draw_text(left+border_x, top+border_y+1, win.plaintext)

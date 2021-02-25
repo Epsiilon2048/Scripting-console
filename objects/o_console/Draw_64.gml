@@ -66,10 +66,7 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	Output.mouse_over = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 	if Output.mouse_over or force_output_body or (Output.text_embedding and force_output_embed_body)
 	{
-		gpu_set_blendmode(colors.body_bm)
-		draw_set_color(colors.body)
-		draw_rectangle(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2, false)
-		gpu_set_blendmode(bm_normal)
+		//draw_console_body(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 		
 		if not console_toggle and Output.mouse_over
 		{
@@ -99,13 +96,9 @@ else Output.mouse_over = false
 if console_toggle
 {
 	//Draw console
-	draw_set_color(colors.body)
-	gpu_set_blendmode(colors.body_bm)
-	draw_rectangle(console_left, console_bottom, console_right, console_top, false)
-	gpu_set_blendmode(bm_normal)
-	draw_set_color(colors.plain)
+	draw_console_body(console_left, console_bottom, console_right, console_top)
 
-	draw_set_alpha(1)
+	draw_set_color(colors.plain)
 	draw_line_width(console_left, console_bottom, console_left, console_top, 2)
 
 	draw_set_font(font)

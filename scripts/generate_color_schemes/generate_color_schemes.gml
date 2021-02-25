@@ -13,6 +13,7 @@ var orange	  = RGB(255, 184, 113)
 color_schemes[cs.greenbeans] = {
 	body:		-dark_blue,
 	body_bm:	 bm_subtract,
+	body_alpha:  1,
 	output:		 green,
 	ex_output:	 green,
 	embed:		 yellow,
@@ -36,6 +37,7 @@ var yellow	  = RGB(250, 221, 35)
 color_schemes[cs.royal] = {
 	body:		-dark_pink,
 	body_bm:	 bm_subtract,
+	body_alpha:  1,
 	output:		 pink,
 	ex_output:	 white,
 	embed:		 yellow,
@@ -59,6 +61,7 @@ var yellow		= RGB(250, 221, 35)
 color_schemes[cs.drowned] = {
 	body:		-dark_blue,
 	body_bm:	 bm_subtract,
+	body_alpha:  1,
 	output:		 cyan,
 	ex_output:	 white,
 	embed:		 yellow,
@@ -81,6 +84,7 @@ var yellow		= RGB(246, 248, 44)
 color_schemes[cs.helios] = {
 	body:		-dark_pink,
 	body_bm:	 bm_subtract,
+	body_alpha:  1,
 	output:		 orange,
 	ex_output:	 white,
 	embed:		 yellow,
@@ -103,6 +107,7 @@ var white		= c_white
 color_schemes[cs.humanrights] = {
 	body:		-dark_pink,
 	body_bm:	 bm_subtract,
+	body_alpha:  1,
 	output:		 pink,
 	ex_output:	 white,
 	embed:		 blue,
@@ -127,6 +132,7 @@ var light_grey  = RGB(138, 134, 136)
 color_schemes[cs.whiteblack] = {
 	body:		 black,
 	body_bm:	 bm_normal,
+	body_alpha:  1,
 	output:		 light_grey,
 	ex_output:	 true_white,
 	embed:		 true_white,
@@ -146,6 +152,7 @@ var dark_grey  = RGB(98, 96, 102)
 color_schemes[cs.blackwhite] = {
 	body:		 white,
 	body_bm:	 bm_normal,
+	body_alpha:  1,
 	output:		 dark_grey,
 	ex_output:	 true_black,
 	embed:		 true_black,

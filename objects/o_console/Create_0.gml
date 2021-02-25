@@ -1,4 +1,6 @@
 
+d = .5
+
 scale_mult = array_create(3)
 scale_font = array_create(3)
 
@@ -79,6 +81,10 @@ output_as_window = false
 force_output = false
 force_output_body = false //this sounds pretty yikesy thinking of it now
 force_output_embed_body = false
+
+force_body_solid = false
+
+window_blur = true
 
 cs_index = cs.greenbeans
 

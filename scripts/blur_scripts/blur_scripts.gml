@@ -149,7 +149,71 @@ function draw_surface_blur(surface, x, y, w, h, downamount)
 }
 
 
+function draw_surface_blur_ext(surface, x, y, w, h, xscale, yscale, downamount)
+{
+	/// @func draw_surface_blur(surface, x, y, w, h, downamount);
+	/// @arg surface
+	/// @arg x
+	/// @arg y
+	/// @arg w
+	/// @arg h
+	/// @arg downamount
+	
+	var _surface = surface;
+	var _xx = x;
+	var _yy = y;
+	var _ww = w;
+	var _hh = h;
+	var _downscale = downamount;
+	var _shader = sh_blur_realtime;
+	var _uni_texel_size = shader_get_uniform(_shader, "texel_size");
+	var _uni_blur_vector = shader_get_uniform(_shader, "blur_vector");
+	var _texel_w = 1/_ww;
+	var _texel_h = 1/_hh;
+	
+	var surf_pang = surface_create(_ww, _hh);
+	var surf_ping = surface_create(_ww*_downscale, _hh*_downscale);
+	var surf_pong = surface_create(_ww*_downscale, _hh*_downscale);
+	
+	var tex_filter_old = gpu_get_tex_filter();
+	gpu_set_tex_filter(true);
+	gpu_set_blendenable(false);
 
+	// surface blur area
+	surface_set_target(surf_pang);
+	draw_surface_part_ext(_surface, _xx/xscale, _yy/yscale, _ww, _hh, 0, 0, xscale, yscale, c_white, 1);
+	surface_reset_target();
+
+	// ping surface (downscale)
+	surface_set_target(surf_ping);
+	draw_surface_stretched(surf_pang, 0, 0, round(_ww*_downscale), round(_hh*_downscale));
+	surface_reset_target();
+
+	// apply blur shader
+	shader_set(_shader);
+
+	shader_set_uniform_f(_uni_texel_size, _texel_w/_downscale, _texel_h/_downscale);
+	shader_set_uniform_f(_uni_blur_vector, 1, 0);
+	surface_set_target(surf_pong)
+	draw_surface_stretched(surf_ping, 0, 0, 1, 1);
+	surface_reset_target();
+
+	shader_set_uniform_f(_uni_blur_vector, 0, 1);
+	surface_set_target(surf_ping)
+	draw_surface_stretched(surf_pong, 0, 0, 1, 1);
+	surface_reset_target();
+
+	shader_reset();
+
+	// draw blur
+	draw_surface_stretched(surf_ping, _xx, _yy, _ww, _hh);
+
+	gpu_set_tex_filter(tex_filter_old);
+	gpu_set_blendenable(true);
+	surface_free(surf_pang);
+	surface_free(surf_ping);
+	surface_free(surf_pong);
+}
 
 function wave(from, to, duration, offset)
 {
