@@ -180,6 +180,7 @@ function draw_surface_blur_ext(surface, x, y, w, h, xscale, yscale, downamount)
 	gpu_set_blendenable(false);
 
 	// surface blur area
+	
 	surface_set_target(surf_pang);
 	draw_surface_part_ext(_surface, _xx/xscale, _yy/yscale, _ww, _hh, 0, 0, xscale, yscale, c_white, 1);
 	surface_reset_target();

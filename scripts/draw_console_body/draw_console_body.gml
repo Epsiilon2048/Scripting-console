@@ -11,7 +11,7 @@ var color_old = draw_get_color()
 var alpha_old = draw_get_alpha()
 var bm_old = gpu_get_blendmode()
 
-if window_blur draw_surface_blur_ext(application_surface, _x1, _y1, _x2-_x1, _y2-_y1, o_game.zoom, o_game.zoom, d)
+//if window_blur draw_surface_blur_ext(application_surface, _x1, _y1, _x2-_x1, _y2-_y1, o_game.zoom, o_game.zoom, d)
 
 draw_set_color(colors.body)
 
