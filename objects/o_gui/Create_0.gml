@@ -1,6 +1,13 @@
 
-global.text_value = 0
-text = false
-words = "/wpleaseeee find an actual background artist to do all this :("
-index = 1
-frame = 0
+Slider = {}; with Slider {
+
+	x = 50
+	y = 50
+
+	width = 200
+	
+	value = 0
+	variable = ""
+	
+	mouse_on = false
+}

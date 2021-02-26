@@ -1,6 +1,27 @@
 
 function generate_color_schemes(){
 
+/*
+body		The background of the console
+body_real	The background of the consone when the blendmode and alpha isn't applied
+body_bm
+body_alpha
+output		The output, generally used as an accent color
+ex_output	The exposed output; the output when it doesn't have a background
+embed		Text with embeds
+embed_hover	Text with embeds when the mouse is hovering over them
+
+// These are specific for the command text
+plain		Input which isn't understood to represent anything
+selection	The color of the text that's selected
+string		
+number		
+macro
+variable
+object
+script
+*/
+
 var dark_blue = RGB(34, 50, 66)
 var green	  = RGB(40, 235, 134)
 var white	  = c_white
@@ -12,6 +33,7 @@ var orange	  = RGB(255, 184, 113)
 
 color_schemes[cs.greenbeans] = {
 	body:		-dark_blue,
+	body_real:	 dark_blue,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
 	output:		 green,
@@ -36,6 +58,7 @@ var yellow	  = RGB(250, 221, 35)
 
 color_schemes[cs.royal] = {
 	body:		-dark_pink,
+	body_real:	 dark_pink,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
 	output:		 pink,
@@ -60,6 +83,7 @@ var yellow		= RGB(250, 221, 35)
 
 color_schemes[cs.drowned] = {
 	body:		-dark_blue,
+	body_real:	 dark_blue,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
 	output:		 cyan,
@@ -83,6 +107,7 @@ var yellow		= RGB(246, 248, 44)
 
 color_schemes[cs.helios] = {
 	body:		-dark_pink,
+	body_real:	 dark_pink,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
 	output:		 orange,
@@ -106,6 +131,7 @@ var white		= c_white
 
 color_schemes[cs.humanrights] = {
 	body:		-dark_pink,
+	body_real:	 dark_pink,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
 	output:		 pink,
@@ -131,6 +157,7 @@ var light_grey  = RGB(138, 134, 136)
 
 color_schemes[cs.whiteblack] = {
 	body:		 black,
+	body_real:	 black,
 	body_bm:	 bm_normal,
 	body_alpha:  1,
 	output:		 light_grey,
@@ -151,6 +178,7 @@ var dark_grey  = RGB(98, 96, 102)
 
 color_schemes[cs.blackwhite] = {
 	body:		 white,
+	body_real:	 white,
 	body_bm:	 bm_normal,
 	body_alpha:  1,
 	output:		 dark_grey,

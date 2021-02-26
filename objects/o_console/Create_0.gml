@@ -1,4 +1,15 @@
 
+#macro SLIDER global.SLIDER_PROPERTIES
+
+SLIDER = {}; with SLIDER {
+	
+	height = 32
+	
+	update_every_frame = false
+	
+	easing = ease_normal
+}
+
 d = .5
 
 scale_mult = array_create(3)
@@ -8,9 +19,14 @@ scale_mult[1] = 11/15
 scale_font[1] = fnt_debug1x
 
 scale_mult[2] = 1
-scale_mult[2] = fnt_debug2x
+scale_font[2] = fnt_debug2x
 
 draw_scale = 1
+
+var window_size = window_get_width()*window_get_height()
+
+if window_size <= 2560*1440 draw_scale = 2
+else						draw_scale = 1
 
 font = scale_font[draw_scale]
 
@@ -168,28 +184,29 @@ Display.initialize("Display", 23, 23, SIDES.LEFT)
 Window = new Console_window()
 Window.initialize("Window", 23, 23, SIDES.RIGHT)
 
-Output = {
-	console_x:		console_text_x,
-	console_y:		console_top - SCALE_ 12,
-	noconsole_x:	console_text_x,
-	noconsole_y:	console_text_y,
-	x:				console_text_x,
-	y:				console_text_y,
+Output = {}; with Output {
+	console_x	= other.console_text_x
+	console_y	= other.console_top - SCALE_ 12
+	noconsole_x	= other.console_text_x
+	noconsole_y	= other.console_text_y
 	
-	border_w: SCALE_ 6,
-	border_h: SCALE_ 5,
+	x = other.console_text_x
+	y = other.console_text_y
 	
-	text:			[],
-	plaintext:		"",
-	embedding:		false,
-	text_embedding: false,
+	border_w = SCALE_ 6
+	border_h = SCALE_ 5
 	
-	time:				3*60,
-	fade_time:			0,
-	alpha:				0,
-	alpha_dec:			.04,
-	mouse_over:			false,
-	mouse_over_embed:	false,
+	text			= []
+	plaintext		= ""
+	embedding		= false
+	text_embedding	= false
+	
+	time			 = 3*60
+	fade_time		 = 0
+	alpha			 = 0
+	alpha_dec		 = .04
+	mouse_over		 = false
+	mouse_over_embed = false
 }
 Output_window = new Console_window()
 Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)
