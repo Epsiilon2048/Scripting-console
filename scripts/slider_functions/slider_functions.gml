@@ -1,18 +1,32 @@
 
-#macro SLIDER global.SLIDER_PROPERTIES
-
-SLIDER = {}; with SLIDER {
+function Console_slider() constructor{
 	
-	height = 32
-	text_offset = 10
+	initialize = function(variable, x, y, value_min, value_max){
+		
+		self.variable = variable
+		
+		self.x = x
+		self.y = y
 	
-	mouse_is_pivot		  = false
-	update_every_frame	  = true
-	lock_value_to_step	  = true
-	correct_not_real	  = true
-	text_fill_places	  = true
+		self.width = 200
+		
+		self.value = 0
+		self.value_min = value_min
+		self.value_max = value_max
+		self.value_step = .1
+		self.value_places = float_places(value_step)
+		self.value_show = true
+		
+		self.ease = ease_normal
+		
+		self.mouse_on = false
+	}
 	
-	ease = ease_normal
+	set_value_step = function(step){
+		
+		self.value_step = step
+		self.value_places = float_places(step)
+	}
 }
 
 
@@ -36,7 +50,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 
 	if mouse_on
 	{
-		value = clamp( (mx - x)/width , 0, 1)
+		value = ease(clamp( (mx - x)/width , 0, 1))
 	
 		if not mouse_check_button(mb_left) 
 		{
@@ -49,15 +63,16 @@ if SLIDER.correct_not_real or is_real(curvalue)
 			if value == 1 newvalue = value_max
 			else
 			{
-				newvalue = SLIDER.ease(value)*(value_max-value_min)
-				newvalue = newvalue - newvalue mod value_step + value_min
+				newvalue = value*(value_max-value_min)
+				if value_step != 0 newvalue = newvalue - newvalue mod value_step + value_min
+				else newvalue += value_min
 			}
 		
 			variable_string_set(variable, newvalue)
 		
-			if SLIDER.lock_value_to_step and value != 1
+			if SLIDER.lock_value_to_step and value_step != 0 and value != 1
 			{
-				value = SLIDER.ease((newvalue - value_min)/(value_max-value_min))
+				value = (newvalue - value_min)/(value_max-value_min)
 			}
 			
 			curvalue = newvalue
@@ -65,7 +80,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 	}
 	else if is_real(curvalue)
 	{
-		value = clamp( SLIDER.ease((curvalue - value_min)/(value_max-value_min)) , 0, 1)
+		value = clamp( (curvalue - value_min)/(value_max-value_min) , 0, 1)
 	}
 	else
 	{
@@ -84,26 +99,33 @@ if is_real(curvalue)
 draw_set_color(o_console.colors.body_real)
 draw_rectangle(x, y, x2, y2, false)
 
-draw_set_color(o_console.colors.output)
-draw_set_font(o_console.font)
-draw_set_align(fa_left, fa_center)
+if value_show
+{
+	draw_set_color(o_console.colors.output)
+	draw_set_font(o_console.font)
+	draw_set_align(fa_left, fa_center)
 
-clip_rect_cutout(x, y, x2+1, y2)
-draw_text(x+SLIDER.text_offset, y+SLIDER.height/2+1, text)
-shader_reset()
+	clip_rect_cutout(x, y, x2+1, y2)
+	draw_text(x+SLIDER.text_offset, y+SLIDER.height/2+1, text)
+	shader_reset()
+}
 
 if value > 0
 {
-	var value_x = x + ceil( (x2-x)*value )
+	var value_x = x + (ceil( (x2-x)*value ))
 	
+	draw_set_color(o_console.colors.output)
 	draw_rectangle(x, y, value_x, y2, false)
 	
-	clip_rect_cutout(x, y, value_x+1, y2);
-
-	draw_set_color(o_console.colors.body_real)
-	draw_text(x+SLIDER.text_offset, y+SLIDER.height/2+1, text)
-
-	shader_reset()
+	if value_show
+	{
+		clip_rect_cutout(x, y, value_x+1, y2);
+		
+		draw_set_color(o_console.colors.body_real)
+		draw_text(x+SLIDER.text_offset, y+SLIDER.height/2+1, text)
+		
+		shader_reset()
+	}
 }
 
 draw_set_color(c_white)

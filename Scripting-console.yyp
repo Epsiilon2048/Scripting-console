@@ -37,6 +37,7 @@
     {"id":{"name":"o_level_editor_companion","path":"objects/o_level_editor_companion/o_level_editor_companion.yy",},"order":1,},
     {"id":{"name":"vt_my","path":"scripts/vt_my/vt_my.yy",},"order":34,},
     {"id":{"name":"keyboard_check_multiple_pressed","path":"scripts/keyboard_check_multiple_pressed/keyboard_check_multiple_pressed.yy",},"order":13,},
+    {"id":{"name":"reverse_ease","path":"scripts/reverse_ease/reverse_ease.yy",},"order":26,},
     {"id":{"name":"nice_thing","path":"scripts/nice_thing/nice_thing.yy",},"order":11,},
     {"id":{"name":"display_toggle_objects","path":"scripts/display_toggle_objects/display_toggle_objects.yy",},"order":28,},
     {"id":{"name":"con_exec","path":"scripts/con_exec/con_exec.yy",},"order":2,},

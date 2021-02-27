@@ -1,4 +1,7 @@
 
+show_message(ease_in_quint(.5))
+show_message(reverse_ease(.03, ease_in_quint))
+
 d = .5
 
 scale_mult = array_create(3)
@@ -10,16 +13,31 @@ scale_font[1] = fnt_debug1x
 scale_mult[2] = 1
 scale_font[2] = fnt_debug2x
 
-draw_scale = 1
+draw_scale = 2
 
-var window_size = window_get_width()*window_get_height()
-
-if window_size >= 2560*1440 draw_scale = 2
-else						draw_scale = 1
+//var window_size = window_get_width()*window_get_height()
+//
+//if window_size >= 2560*1440 draw_scale = 2
+//else						draw_scale = 1
 
 font = scale_font[draw_scale]
 
 #macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
+
+#macro SLIDER global.SLIDER_PROPERTIES
+
+SLIDER = {}; with SLIDER {
+
+	height = SCALE_ 39
+	text_offset = SCALE_ 10
+
+	mouse_is_pivot		  = false
+	update_every_frame	  = true
+	lock_value_to_step	  = true
+	correct_not_real	  = true
+	text_fill_places	  = true
+}
+
 
 space_sep = ds_list_create()
 ds_list_add(space_sep,
