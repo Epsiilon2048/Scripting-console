@@ -86,9 +86,20 @@ var line = lines[l]
 
 for(var i = 1; i <= array_length(line)-1; i++)
 {
-	var arg = line[i]
+	var _arg = line[i]
+	var arg
 	var type = -1
 	var value
+	
+	var _macro = console_macros[? _arg]
+	
+	if not is_undefined(_macro) 
+	{
+		if is_real(_macro) arg = string_format_float(_macro)
+		else			   arg = string(_macro)
+		
+	}
+	else						arg = _arg
 	
 	if string_char_at(arg, 2) == "/" and ds_map_exists(identifiers, string_char_at(arg, 1))
 	{
@@ -114,29 +125,21 @@ for(var i = 1; i <= array_length(line)-1; i++)
 		{
 			type = DT.VARIABLE
 		}
-		else if not is_undefined( macro_get(arg) )
-		{
-			type = DT.MACRO
-		}
 		else
 		{
 			type = undefined
 		}
 	}
-
-	aa = arg
-
+	
 	switch type
 	{
 	case DT.NUMBER:		value = real_float(arg)
 	break
-	case DT.STRING:		value = string_copy(arg, 2, string_length(arg)-1)
+	case DT.STRING:		value = string_copy(arg, 2, string_length(arg)-2)
 	break
 	case DT.ASSET:		value = asset_get_index(arg)
 	break
 	case DT.VARIABLE:	value = variable_string_get( string_add_scope(arg) )
-	break
-	case DT.MACRO:		value = macro_get(arg)
 	break
 	case undefined:		return "Syntax from \""+arg+"\""
 	}

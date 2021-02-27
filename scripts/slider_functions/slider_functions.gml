@@ -1,20 +1,20 @@
 
 function Console_slider() constructor{
 	
-	initialize = function(variable, x, y, value_min, value_max, value_step){
+	initialize = function(variable, x, y, var_min, var_max, var_step){
 		
 		self.variable = variable
 		
-		self.slider = true
+		self.meter = false
 		self.value_show = true
 		self.condensed = false
 		self.mouse_is_pivot = false
 		
 		self.value = 0
-		self.value_min = value_min
-		self.value_max = value_max
-		self.value_step = value_step
-		self.value_places = float_places(value_step)
+		self.var_min = var_min
+		self.var_max = var_max
+		self.var_step = var_step
+		//self.var_places = float_places(var_step)
 		
 		self.markers = 10 //incriment for each value step
 		self.submarkers = 3 //amount of submarkers in between markers
@@ -24,8 +24,12 @@ function Console_slider() constructor{
 		self.x = x
 		self.y = y
 		
-		self.init_mx = 0
-		self.init_my = 0
+		self.mx_init = 0
+		self.my_init = 0
+		self.value_init = 0
+		
+		self.before_text = ""
+		self.after_text  = ""
 	
 		self.width = 200
 		
@@ -34,10 +38,10 @@ function Console_slider() constructor{
 		self.mouse_on = false
 	}
 	
-	set_value_step = function(step){
+	set_var_step = function(step){
 		
-		self.value_step = step
-		self.value_places = float_places(step)
+		self.var_step = step
+		//self.var_places = float_places(step)
 	}
 }
 
@@ -53,17 +57,23 @@ var y2 = y + (condensed ? SLIDER.height_condensed : SLIDER.height)
 
 var curvalue = variable_string_get(variable)
 
-if SLIDER.correct_not_real or is_real(curvalue)
+if not meter and (SLIDER.correct_not_real or is_real(curvalue))
 {
 	if gui_mouse_between(x, y, x2, y2) and mouse_check_button_pressed(mb_left)
 	{
 		mouse_on = true
+		value_init = value
+		mx_init = mx
+		my_init = my
 	}
 
 	if mouse_on
 	{
-		value = ease(clamp( (mx - x)/width , 0, 1))
-	
+		if mouse_is_pivot
+			{ value = clamp( value_init + ease((mx - mx_init)/width), 0, 1) }
+		else
+			{ value = ease(clamp( (mx - x)/width , 0, 1)) }
+
 		if not mouse_check_button(mb_left) 
 		{
 			mouse_on = false
@@ -72,19 +82,19 @@ if SLIDER.correct_not_real or is_real(curvalue)
 		if SLIDER.update_every_frame or not mouse_on
 		{
 			var newvalue
-			if value == 1 newvalue = value_max
+			if value == 1 newvalue = var_max
 			else
 			{
-				newvalue = value*(value_max-value_min)
-				if value_step != 0 newvalue = clamp(newvalue - newvalue mod value_step + value_min + round(value)*value_step, value_min, value_max)
-				else newvalue += value_min
+				newvalue = value*(var_max-var_min)
+				if var_step != 0 newvalue = clamp(newvalue - newvalue mod var_step + var_min + round(value)*var_step, var_min, var_max)
+				else newvalue += var_min
 			}
 		
 			variable_string_set(variable, newvalue)
 		
-			if SLIDER.lock_value_to_step and value_step != 0 and value != 1
+			if SLIDER.lock_value_to_step and var_step != 0 and value != 1
 			{
-				value = clamp((newvalue - value_min)/(value_max-value_min), 0, 1)
+				value = clamp((newvalue - var_min)/(var_max-var_min), 0, 1)
 			}
 			
 			curvalue = newvalue
@@ -92,7 +102,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 	}
 	else if is_real(curvalue)
 	{
-		value = clamp( (curvalue - value_min)/(value_max-value_min) , 0, 1)
+		value = clamp( (curvalue - var_min)/(var_max-var_min) , 0, 1)
 	}
 	else
 	{
@@ -104,8 +114,11 @@ var text = "NaN"
 
 if is_real(curvalue) 
 {
-	if SLIDER.text_fill_places text = float_fill_places(curvalue, value_places)
-	else					   text = string_format_float(curvalue)
+	//if SLIDER.text_fill_places text = float_fill_places(curvalue, var_places)
+	//else
+	text = string_format_float(curvalue)
+	
+	text = before_text + text + after_text
 }
 
 draw_set_color(o_console.colors.body_real)

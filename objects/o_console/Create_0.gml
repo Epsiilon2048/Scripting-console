@@ -1,4 +1,7 @@
 
+console_macros = -1
+initialize_console_macros()
+
 scale_mult = array_create(3)
 scale_font = array_create(3)
 
@@ -13,7 +16,7 @@ draw_scale = 2
 var display_size = display_get_width()*display_get_height()
 
 if display_size >= 2560*1440 draw_scale = 2
-else						draw_scale = 1
+else						 draw_scale = 1
 
 font = scale_font[draw_scale]
 
@@ -85,7 +88,8 @@ enum cs //color schemes
 }
 
 console_key = vk_tab
-#macro obj_identifier "o_"
+
+old_obj_identifier = "o_"
 
 show_hidden_commands = false
 show_hidden_args = false

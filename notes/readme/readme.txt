@@ -36,7 +36,7 @@ the switch statement in the macro_get script.
 // Object identifier trouble //
 As it is, the console currently relies on an object identifier in the name of the object to determine if a
 data type is an object ID. You might prefix your object names with "o_" or "obj_". By default, it checks
-for "o_". You can change it by changing the obj_identifier macro in the console create event. This system 
+for "o_". You can change it by changing the old_obj_identifier macro in the console create event. This system 
 isn't very good because it doesn't support camel casing. For instance, if your objects were named 
 as "oName", the identifier would have to be just "o", meaning you wouldn't be able to access any variables 
 that start with an "o" properly. In later releases, I'll fix this. In the meantime however, I've added a 

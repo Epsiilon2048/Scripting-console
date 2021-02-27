@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Console/Console functions.yy",
   },
   "resourceVersion": "1.0",
-  "name": "macro_get",
+  "name": "initialize_console_macros",
   "tags": [],
   "resourceType": "GMScript",
 }

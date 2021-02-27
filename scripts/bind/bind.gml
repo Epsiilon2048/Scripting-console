@@ -7,9 +7,9 @@ var _key = -1
 
 if is_string(_keyname) 
 {
-	if macro_get(_keyname) != undefined 
+	if console_macros[? _keyname] != undefined 
 	{
-		_key = macro_get(_keyname)
+		_key = console_macros[? _keyname]
 		_keyname = string_copy(_keyname, 4, string_length(_keyname)-3)
 	}
 	else

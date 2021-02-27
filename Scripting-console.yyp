@@ -102,7 +102,7 @@
     {"id":{"name":"string_pop","path":"scripts/string_pop/string_pop.yy",},"order":16,},
     {"id":{"name":"string_mult","path":"scripts/string_mult/string_mult.yy",},"order":22,},
     {"id":{"name":"color_console_string","path":"scripts/color_console_string/color_console_string.yy",},"order":1,},
-    {"id":{"name":"macro_get","path":"scripts/macro_get/macro_get.yy",},"order":0,},
+    {"id":{"name":"initialize_console_macros","path":"scripts/initialize_console_macros/initialize_console_macros.yy",},"order":0,},
     {"id":{"name":"version_log","path":"notes/version_log/version_log.yy",},"order":0,},
     {"id":{"name":"s_collision9","path":"sprites/s_collision9/s_collision9.yy",},"order":2,},
     {"id":{"name":"string_add_scope","path":"scripts/string_add_scope/string_add_scope.yy",},"order":4,},

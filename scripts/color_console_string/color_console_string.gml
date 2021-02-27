@@ -1,6 +1,6 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function color_console_string(str){
+function color_console_string(str){ with o_console {
 
 var list = []
 var segment
@@ -46,7 +46,7 @@ while str != ""
 			col: colors.string
 		}
 	}
-	else if string_copy(segment, 1, 2) == "o/" or string_copy(segment, 1, string_length(obj_identifier)) == obj_identifier or string_copy(segment, 1, 6) == "global" //object
+	else if string_copy(segment, 1, 2) == "o/" or string_copy(segment, 1, string_length(old_obj_identifier)) == old_obj_identifier or string_copy(segment, 1, 6) == "global" //object
 	{
 		if string_pos(".", segment) != 0
 		{
@@ -98,7 +98,7 @@ while str != ""
 			col: colors.script
 		}
 	}
-	else if macro_get(segment) != undefined
+	else if console_macros[? segment] != undefined
 	{
 		list[array_length(list)] = {
 			text: segment+" ",
@@ -121,6 +121,4 @@ while str != ""
 	}
 }
 return list
-}
-
-//"sdfg " s d f"g
+}}
