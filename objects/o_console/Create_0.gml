@@ -1,15 +1,4 @@
 
-#macro SLIDER global.SLIDER_PROPERTIES
-
-SLIDER = {}; with SLIDER {
-	
-	height = 32
-	
-	update_every_frame = false
-	
-	easing = ease_normal
-}
-
 d = .5
 
 scale_mult = array_create(3)
@@ -25,7 +14,7 @@ draw_scale = 1
 
 var window_size = window_get_width()*window_get_height()
 
-if window_size <= 2560*1440 draw_scale = 2
+if window_size >= 2560*1440 draw_scale = 2
 else						draw_scale = 1
 
 font = scale_font[draw_scale]

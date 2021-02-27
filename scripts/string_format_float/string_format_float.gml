@@ -5,6 +5,6 @@ function string_format_float(float){
 var decimal = float - floor(float)
 var whole = floor(float)
 
-if decimal == 0 return float
-else return stitch(whole,shave("0", real(string_format(decimal, 0, 6))))
+if decimal == 0 return string(float)
+else return stitch(whole, shave("0", string_format(decimal, 0, 10)))
 }

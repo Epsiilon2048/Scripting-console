@@ -1,11 +1,12 @@
 {
-  "type": 1,
+  "isDnD": false,
+  "isCompatibility": false,
   "parent": {
     "name": "Scripting-console",
     "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "Shader3",
+  "name": "clip_rect_functions",
   "tags": [],
-  "resourceType": "GMShader",
+  "resourceType": "GMScript",
 }
