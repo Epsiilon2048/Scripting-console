@@ -1,9 +1,4 @@
 
-show_message(ease_in_quint(.5))
-show_message(reverse_ease(.03, ease_in_quint))
-
-d = .5
-
 scale_mult = array_create(3)
 scale_font = array_create(3)
 
@@ -28,8 +23,10 @@ font = scale_font[draw_scale]
 
 SLIDER = {}; with SLIDER {
 
-	height = SCALE_ 39
-	text_offset = SCALE_ 10
+	height			 = SCALE_ 39
+	height_condensed = SCALE_ 15
+	text_offset		 = SCALE_ 10
+	
 
 	mouse_is_pivot		  = false
 	update_every_frame	  = true

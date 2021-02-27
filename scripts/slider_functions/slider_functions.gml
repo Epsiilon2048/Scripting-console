@@ -1,7 +1,7 @@
 
 function Console_slider() constructor{
 	
-	initialize = function(variable, x, y, value_min, value_max){
+	initialize = function(variable, x, y, value_min, value_max, value_step){
 		
 		self.variable = variable
 		
@@ -13,9 +13,10 @@ function Console_slider() constructor{
 		self.value = 0
 		self.value_min = value_min
 		self.value_max = value_max
-		self.value_step = .1
+		self.value_step = value_step
 		self.value_places = float_places(value_step)
 		self.value_show = true
+		self.condensed = false
 		
 		self.ease = ease_normal
 		
@@ -37,7 +38,7 @@ var mx = device_mouse_x_to_gui(0)
 var my = device_mouse_y_to_gui(0)
 
 var x2 = x + width
-var y2 = y + SLIDER.height
+var y2 = y + (condensed ? SLIDER.height_condensed : SLIDER.height)
 
 var curvalue = variable_string_get(variable)
 
@@ -64,7 +65,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 			else
 			{
 				newvalue = value*(value_max-value_min)
-				if value_step != 0 newvalue = newvalue - newvalue mod value_step + value_min
+				if value_step != 0 newvalue = newvalue - newvalue mod value_step + value_min + round(value)*value_step
 				else newvalue += value_min
 			}
 		
@@ -99,7 +100,7 @@ if is_real(curvalue)
 draw_set_color(o_console.colors.body_real)
 draw_rectangle(x, y, x2, y2, false)
 
-if value_show
+if value_show and not condensed
 {
 	draw_set_color(o_console.colors.output)
 	draw_set_font(o_console.font)
@@ -117,7 +118,7 @@ if value > 0
 	draw_set_color(o_console.colors.output)
 	draw_rectangle(x, y, value_x, y2, false)
 	
-	if value_show
+	if value_show and not condensed
 	{
 		clip_rect_cutout(x, y, value_x+1, y2);
 		
