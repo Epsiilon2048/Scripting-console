@@ -5,18 +5,29 @@ function Console_slider() constructor{
 		
 		self.variable = variable
 		
-		self.x = x
-		self.y = y
-	
-		self.width = 200
+		self.slider = true
+		self.value_show = true
+		self.condensed = false
+		self.mouse_is_pivot = false
 		
 		self.value = 0
 		self.value_min = value_min
 		self.value_max = value_max
 		self.value_step = value_step
 		self.value_places = float_places(value_step)
-		self.value_show = true
-		self.condensed = false
+		
+		self.markers = 10 //incriment for each value step
+		self.submarkers = 3 //amount of submarkers in between markers
+		
+		self.dividers = false
+		
+		self.x = x
+		self.y = y
+		
+		self.init_mx = 0
+		self.init_my = 0
+	
+		self.width = 200
 		
 		self.ease = ease_normal
 		
@@ -65,7 +76,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 			else
 			{
 				newvalue = value*(value_max-value_min)
-				if value_step != 0 newvalue = newvalue - newvalue mod value_step + value_min + round(value)*value_step
+				if value_step != 0 newvalue = clamp(newvalue - newvalue mod value_step + value_min + round(value)*value_step, value_min, value_max)
 				else newvalue += value_min
 			}
 		
@@ -73,7 +84,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 		
 			if SLIDER.lock_value_to_step and value_step != 0 and value != 1
 			{
-				value = (newvalue - value_min)/(value_max-value_min)
+				value = clamp((newvalue - value_min)/(value_max-value_min), 0, 1)
 			}
 			
 			curvalue = newvalue
@@ -89,7 +100,7 @@ if SLIDER.correct_not_real or is_real(curvalue)
 	}
 }
 
-var text = "/"
+var text = "NaN"
 
 if is_real(curvalue) 
 {

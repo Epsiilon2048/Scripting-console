@@ -3,6 +3,8 @@ function float_fill_places(value, places){
 
 var _value = string_format_float(value)
 
+if places < 1 return _value
+
 var curplaces
 
 if string_pos(".", _value) == 0 

@@ -10,10 +10,10 @@ scale_font[2] = fnt_debug2x
 
 draw_scale = 2
 
-//var window_size = window_get_width()*window_get_height()
-//
-//if window_size >= 2560*1440 draw_scale = 2
-//else						draw_scale = 1
+var display_size = display_get_width()*display_get_height()
+
+if display_size >= 2560*1440 draw_scale = 2
+else						draw_scale = 1
 
 font = scale_font[draw_scale]
 
@@ -27,12 +27,15 @@ SLIDER = {}; with SLIDER {
 	height_condensed = SCALE_ 15
 	text_offset		 = SCALE_ 10
 	
-
-	mouse_is_pivot		  = false
 	update_every_frame	  = true
 	lock_value_to_step	  = true
 	correct_not_real	  = true
 	text_fill_places	  = true
+	
+	font = o_console.font
+	marker_font = -1 //set later
+	
+	divider_width = 2
 }
 
 
