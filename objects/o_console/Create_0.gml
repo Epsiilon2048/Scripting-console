@@ -53,7 +53,6 @@ ds_list_add(space_sep,
 identifiers = ds_map_create()
 ds_map_add(identifiers, "a", DT.ASSET)
 ds_map_add(identifiers, "v", DT.VARIABLE)
-ds_map_add(identifiers, "m", DT.MACRO)
 
 #macro RGB make_color_rgb
 
@@ -74,6 +73,7 @@ enum DT //data types
 	SCRIPT,
 	OBJECT,
 	MACRO,
+	ROOM,
 }
 
 enum cs //color schemes

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Common utilities",
-    "path": "folders/Scripts/Console/Common utilities.yy",
+    "name": "Console utilities",
+    "path": "folders/Scripts/Console/Console utilities.yy",
   },
   "resourceVersion": "1.0",
-  "name": "variable_string_set",
+  "name": "console_exec_old",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -1,0 +1,284 @@
+// Script assets have changed for v2.3.0 see
+// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+function console_compile(command){ with o_console {
+
+static space_sep = " ,()="
+
+if shave(" ", command) == "" return ""
+
+#region Separate commands
+var command_split = []
+
+var marker = 1
+var in_string = false
+
+for(var i = 1; i <= string_length(command); i++)
+{
+	var char = string_char_at(command, i)
+	
+	if char == "\\" and in_string
+	{
+		i++
+	}
+	else
+	{
+		if char == "\""
+		{
+			in_string = not in_string
+		}
+		else if not in_string and char == ";"
+		{
+			array_push(command_split, string_copy(command, marker, i-marker) )
+			marker = i+1
+		}
+	}
+}
+
+if in_string and string_pop(command) != "\"" command += "\""
+array_push(command_split, string_copy(command, marker, string_length(command)-marker+1) )
+#endregion
+
+#region Separate arguments within commands
+var lines		= array_create(array_length(command_split))
+var comp_lines	= array_create(array_length(command_split))
+
+for(var l = 0; l <= array_length(command_split)-1; l++)
+{
+
+var line = command_split[l]
+var arg_split = []
+
+var marker = 1
+var in_string = false
+
+for(var i = 1; i <= string_length(line); i++)
+{
+	var char = string_char_at(line, i)
+	
+	if char == "\\" and in_string
+	{
+		i++
+	}
+	else
+	{
+		if char == "\""
+		{
+			in_string = not in_string
+		}
+		else if not in_string and string_pos(char, space_sep)
+		{
+			if marker != i array_push(arg_split, string_copy(line, marker, i-marker))
+			marker = i+1
+		}
+	}
+}
+
+if marker != i array_push(arg_split, string_copy(line, marker, string_length(line)-marker+1))
+
+lines[l] = arg_split
+}
+#endregion
+
+#region Decide argument datatypes
+for(var l = 0; l <= array_length(lines)-1; l++)
+{
+if array_length(lines[l]) > 0
+{
+
+var line = lines[l]
+
+var comp_line = array_create(array_length(line)-1)
+
+var _arg = line[0]
+var arg
+var type = -1
+var value = undefined
+var error = undefined
+
+if string_char_at(_arg, 2) == "/" and ds_map_exists(identifiers, string_char_at(_arg, 1))
+{
+	type = identifiers[? string_char_at(_arg, 1)]
+	_arg = string_copy(_arg, 3, string_length(_arg))
+}
+
+if _arg == "" 
+{
+	type = undefined
+	arg = line[i]
+}
+else
+{
+
+	var _macro = console_macros[? _arg]
+	
+	if not is_undefined(_macro)
+	{
+		if is_real(_macro) 
+		{
+			arg = string_format_float(_macro)
+			if script_exists(_macro) 
+			{
+				type = DT.SCRIPT
+				value = _macro
+			}
+		}
+		else arg = string(_macro)
+	}
+	else arg = _arg
+	
+	if (type == -1) and asset_get_index(arg) != -1
+	{
+		var asset_type = asset_get_type(arg)
+		
+		switch asset_type
+		{
+		case asset_script:	type = DT.SCRIPT
+							value = asset_get_index(arg)
+		break
+		case asset_room:	type = DT.ROOM
+		break
+		case asset_object:
+			if instance_exists(asset_get_index(arg))
+			{
+				type = DT.OBJECT
+				value = asset_get_index(arg).id
+			}
+		}
+		
+		if type == -1 type = DT.ASSET
+	}
+	
+	if (type == -1) and string_is_int(arg)
+	{
+		if instance_exists(real(arg)) 
+		{
+			type = DT.OBJECT
+			if object_exists(real(arg)) value = real(arg).id
+			else value = real(arg)
+		}
+		
+		else if script_exists(real(arg)) type = DT.SCRIPT
+		
+		else type = undefined
+	}
+	
+	if type == -1 or type == DT.VARIABLE 
+	{
+		var varstring = string_add_scope(arg)
+
+		if not is_undefined(varstring) and variable_string_exists(varstring)
+		{
+			if type != DT.VARIABLE and is_method(variable_string_get(varstring))
+			{
+				type = DT.SCRIPT
+			}
+			else
+			{
+				type = DT.VARIABLE
+				value = varstring
+			}
+		}
+		else
+		{
+			type = undefined
+		}
+	}
+	
+}
+
+if is_undefined(type) error = "Syntax from "+arg
+
+var subject = {
+	value: value,
+	type: type,
+	plain: line[0],
+}
+
+if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
+{
+	var _arg = line[i]
+	var arg
+	var type = -1
+	var value
+	
+	if string_char_at(_arg, 2) == "/" and ds_map_exists(identifiers, string_char_at(_arg, 1))
+	{
+		type = identifiers[? string_char_at(_arg, 1)]
+		_arg = string_copy(_arg, 3, string_length(_arg))
+	}
+	
+	if _arg == "" 
+	{
+		type = undefined
+		arg = line[i]
+	}
+	else
+	{
+	
+		var _macro = console_macros[? _arg]
+	
+		if not is_undefined(_macro)
+		{
+			if is_real(_macro) arg = string_format_float(_macro)
+			else			   arg = string(_macro)
+		}
+		else arg = _arg
+	
+		//reeeeeally weird logic here, i swear its necessary
+		if (type == -1) and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\""
+		{
+			type = DT.STRING
+		}
+		if (type == -1) and asset_get_index(arg) != -1
+		{
+			type = DT.ASSET
+		}
+		if (type == -1) and string_is_float(arg) 
+		{
+			type = DT.NUMBER
+		}
+		if type == -1 or type == DT.VARIABLE
+		{
+			var varstring = string_add_scope(arg)
+
+			if not is_undefined(varstring) and variable_string_exists(varstring)
+			{
+				type = DT.VARIABLE
+			}
+			else
+			{
+				type = undefined
+			}
+		}
+		
+	}
+	
+	switch type
+	{
+	case DT.NUMBER:		value = real_float(arg)
+	break
+	case DT.STRING:		value = string_copy(arg, 2, string_length(arg)-2)
+	break
+	case DT.ASSET:		value = asset_get_index(arg)
+	break
+	case DT.VARIABLE:	value = variable_string_get( string_add_scope(arg) )
+	break
+	case undefined:		value = "Syntax from \""+line[i]+"\""
+						error = value
+	}
+
+	comp_line[i-1] = {
+		value: value, 
+		type: type,
+		plain: line[i],
+	}
+	
+	if not is_undefined(error) break
+}
+comp_lines[l] = {subject: subject, args: comp_line, error: error}
+}
+}
+#endregion
+
+return comp_lines
+}}
