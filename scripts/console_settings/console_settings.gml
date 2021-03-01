@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function console_settings(){ with o_console {
 	
-Output.embedding = true
-return [
+return {__embedded__: true, o: [
 	{str: "", checkbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
 	{str: "", checkbox: "o_console.embed_text"}, " Text embedding - WILL MAKE THIS WINDOW UNUSABLE IF DISABLED\n",
 	{str: "", checkbox: "o_console.window_embed_text"}, " Window text embedding\n\n",
@@ -20,5 +19,5 @@ return [
 
 	{str: "Reset console\n", scr: reset_obj, arg: o_console},
 	{str: "Destroy console", scr: destroy_console},
-]
+]}
 }}

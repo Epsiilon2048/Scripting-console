@@ -8,6 +8,8 @@ var acceptable = "-0123456789"
 
 var _str = shave("-", shave("0", string_delete(str, string_pos(".", str), 1)))
 
+if string_pos("0", str) != 0 and _str == "" _str = "0"
+
 if (
 	string_pos(string_char_at(_str, 1), acceptable) != 0 and
 	string_pos(".", _str) == 0 and

@@ -8,10 +8,9 @@ if confirmation
 }
 else
 {
-	o_console.Output.embedding = true
-	output_set([[
+	output_set({__embedded__: true, o: [
 	"H-huh?? Unless you build your own method of getting it back, I'll be gone for the rest of the runtime!\nCould break some stuff too!! S-seriously, I bet it'll crash the moment you do it!\n",
 	"Are you absolutely sure? <",{str: "yep!", scr: destroy_console, arg: true},">"
-	]])
+	]})
 }
 }

@@ -14,7 +14,7 @@ else if variable_string_exists(_variable)
 	var toggle = not variable_string_get(_variable)
 	
 	variable_string_set(_variable, toggle)
-	return stitch("Toggled "+variable+" (",toggle?"true":"false",")")
+	return stitch("Toggled "+variable+" (",toggle _BOOL_STRING,")")
 }
 else
 {

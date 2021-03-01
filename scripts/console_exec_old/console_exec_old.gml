@@ -60,8 +60,7 @@ for(var i = 0; i <= array_length(_console_string)-1; i++)
 			try _output_string[i] = script_execute_ext(asset_get_index(subject), args)
 			catch(_exception) 
 			{
-				o_console.Output.embedding = true
-				_output_string[i] = [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]
+				_output_string[i] = {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
 				prev_longMessage = _exception.longMessage
 			}
 		}

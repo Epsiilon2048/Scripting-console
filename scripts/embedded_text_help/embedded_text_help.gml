@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function embedded_text_help(){ with o_console {
 
-o_console.Output.embedding = true
-return [
+return {__embedded__: true, o: [
 	"Text embedding is used everywhere for menus and interactive elements.\n\n"+
 	
 	"It's used to change the color of or bind scripts to text, and it also\n"+
@@ -19,5 +18,5 @@ return [
 	"Note that the console input colors are not embeds.\n\n"+
 
 	"Embeds can be disabled in ",{str: "general settings", scr: console_settings, output: true},"."
-]
+]}
 }}

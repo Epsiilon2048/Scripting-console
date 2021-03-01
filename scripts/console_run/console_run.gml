@@ -6,7 +6,11 @@ var output_string = array_create(array_length(com))
 
 for(var i = 0; i <= array_length(com)-1; i++)
 {
-	if com[i] != 0
+	if com[i] == 0
+	{
+		output_string[i] = 0
+	}
+	else
 	{
 	if is_undefined(com[i].error)
 	{
@@ -27,12 +31,11 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				if instance_exists(object) 
 					{ with object output_string[i] = script_execute_ext(subject.value, _args) }
 				else 
-					{ output_string[i] = script_execute_ext(subject.value, _args) }
+								{ output_string[i] = script_execute_ext(subject.value, _args) }
 			}
 			catch(_exception)
 			{
-				Output.embedding = true
-				output_string[i] = [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]
+				output_string[i] = {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
 				prev_longMessage = _exception.longMessage
 			}
 		
@@ -54,11 +57,20 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 		break
 	
-		case DT.VARIABLE: //set a variable
+		case DT.VARIABLE: //set or display a variable
+	
+			//if there are multiple lines and one of them changes the scope of the console,
+			//the variable will not be updated to the new scope
 	
 			if array_length(com[i].args) < 1
 			{
-				output_string[i] = variable_string_get(subject.value)
+				var _value = variable_string_get(subject.value)
+				
+				var string_value
+				if is_real(_value) string_value = string_format_float(_value)
+				else			   string_value = string(_value)
+				
+				output_string[i] = string_value
 			}
 			else
 			{
@@ -82,7 +94,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 		case undefined:
 		
-			output_string[i] = "Syntax from "+subject.plain
+			output_string[i] = "[SYNTAX ERROR] from \""+subject.plain+"\""
 		}
 	}
 	else

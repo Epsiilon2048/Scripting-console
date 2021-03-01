@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function console_window_help(){ with o_console {
 
-o_console.Output.embedding = true
-return [
+return {__embedded__: true, o: [
 	"The Window\n"+
 	"- Shows static strings.\n"+
 	"- If it's enabled in settings, you can click on the output to quickly set the window to it.\n"+
@@ -20,5 +19,5 @@ return [
 	"You can drag windows from their sidebar, and collapse them by clicking it.\n\n"+
 	
 	"Click to show ",{str: "Window", scr: window, arg: "This is the Window!"}, " - ",{str: "Display", scr: display, arg: "o_console.is_this_the_display"},
-]
+]}
 }}

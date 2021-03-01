@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function help(){
 
-o_console.Output.embedding = true
-return [
+return {__embedded__: true, o: [
 	"Help & info\n",
 	{str: "Basic syntax & usage", scr: syntax_help, output: true},
 	{str: "\nCommand list", scr: command_help, output: true},
@@ -23,5 +22,5 @@ return [
 	
 	"\n\nNote, you can press [shift+console_key]\n"+
 	"to quickely return to this menu!"
-]
+]}
 }

@@ -28,6 +28,5 @@ keybinds[array_length(keybinds)] =
 	built_in: false
 }
 
-Output.embedding = true
-return [{str:"[BINDINGS]", scr: bindings, output: true}," Bound "+_keyname+" to \""+command+"\""]
+return {__embedded__: true, o: [{str:"[BINDINGS]", scr: bindings, output: true}," Bound "+_keyname+" to \""+command+"\""]}
 }}

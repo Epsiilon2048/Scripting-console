@@ -6,7 +6,7 @@
     "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "string_pos_multiple",
+  "name": "color_console_command",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -13,8 +13,7 @@ if array_length(keybinds) > 0
 
 	text[array_length(text)] = "\nClick on binding numbers to unbind"
 
-	o_console.Output.embedding = true
-	return text
+	return {__embedded__: true, o: text}
 }
 else
 {

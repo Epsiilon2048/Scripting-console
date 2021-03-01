@@ -1,6 +1,9 @@
 
 //if window_get_cursor() == cr_handpoint window_set_cursor(cr_default)
 
+col_str = color_console_command(console_string)
+draw_colored_console_text(200, 200, col_str)
+
 #region Deal with mouse inputs
 if mouse_check_button_pressed(mb_left) and not Output.mouse_over_embed
 {
@@ -163,7 +166,7 @@ if Display.enabled and ds_list_size(display_list) > 0
 		{
 			var obj = string_split(".", display_list[| i].variable)[0]
 			var variable = string_copy(display_list[| i].variable, string_pos(".", display_list[| i].variable)+1, string_length(display_list[| i].variable))
-			var value = string_replace( string( variable_string_get(display_list[| i].variable) ), "\n", "\\n" )
+			var value = string_replace_all( string( variable_string_get(display_list[| i].variable) ), "\n", "\\n" )
 		
 			if window_embed_text and embed_text
 			{

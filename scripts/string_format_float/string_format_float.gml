@@ -6,5 +6,5 @@ var decimal = float - floor(float)
 var whole = floor(float)
 
 if decimal == 0 return string(float)
-else return stitch(whole, shave("0", string_format(decimal, 0, 10)))
+else return stitch(whole, shave("0", string_format(decimal, 0, 6)))
 }

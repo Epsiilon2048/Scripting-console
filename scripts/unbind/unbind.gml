@@ -6,7 +6,6 @@ var keybind = keybinds[index]
 	
 array_delete(keybinds, index, 1)
 
-o_console.Output.embedding = true
 if show_bindings return bindings()
-else return [{str: "[BINDINGS]", scr: bindings, output: true}," Removed keybind "+keybind.keyname+" - "+keybind.name]
+else return {__embedded__: true, o: [{str: "[BINDINGS]", scr: bindings, output: true}," Removed keybind "+keybind.keyname+" - "+keybind.name]}
 }}

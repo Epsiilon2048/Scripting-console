@@ -6,7 +6,7 @@
     "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "string_pos_multiple",
+  "name": "console_compile",
   "tags": [],
   "resourceType": "GMScript",
 }

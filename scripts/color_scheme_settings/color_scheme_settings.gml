@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function color_scheme_settings(){
 
-o_console.Output.embedding = true
-return [
+return {__embedded__: true, o: [
 	{str: "Greenbeans ",	scr: color_scheme, arg: cs.greenbeans},
 	{str: "\nRoyal ",	scr: color_scheme, arg: cs.royal},
 	{str: "\nDrowned",		scr: color_scheme, arg: cs.drowned},
@@ -17,5 +16,5 @@ return [
 	{str: "Regenerate color schemes", scr: generate_color_schemes},
 
 	"\n\nClick on a palette to try it out!"
-]
+]}
 }

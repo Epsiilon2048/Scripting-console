@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function syntax_help(){ with o_console {
 	
-o_console.Output.embedding = true
-return [ //note that this only takes the colors from the current color scheme; doesn't change with it
+return {__embedded__: true, o: [ //note that this only takes the colors from the current color scheme; doesn't change with it
 	"Supported datatypes/references\n",
 	{str:"integers",col:colors.number}," - ",{str:"floats",col:colors.number}," - ",{str:"macros",col:colors.macro},"* - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.object}," - ",{str:"variables",col:colors.variable},"\n\n"+
 	
@@ -19,5 +18,5 @@ return [ //note that this only takes the colors from the current color scheme; d
 	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)"+
 	"\nNote that this means strings currently cannot contain semi-colons"+
 	"\n\n*consult readme file for more info"
-]
+]}
 }}

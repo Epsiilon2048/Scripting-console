@@ -12,6 +12,5 @@ for(var i = 0; i <= array_length(list)-1; i++)
 }
 
 list[array_length(list)] = "\nClick on a variable to add to the display"
-o_console.Output.embedding = true
-return list
+return {__embedded__: true, o: list}
 }

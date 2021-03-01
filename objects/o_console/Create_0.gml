@@ -22,6 +22,8 @@ font = scale_font[draw_scale]
 
 #macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
 
+#macro _BOOL_STRING ? "true" : "false"
+
 #macro SLIDER global.SLIDER_PROPERTIES
 
 SLIDER = {}; with SLIDER {
@@ -75,6 +77,15 @@ enum DT //data types
 	MACRO,
 	ROOM,
 }
+
+dt_string[DT.NUMBER  ] = "number"
+dt_string[DT.STRING  ] = "string"
+dt_string[DT.ASSET   ] = "asset"
+dt_string[DT.VARIABLE] = "variable"
+dt_string[DT.SCRIPT  ] = "script"
+dt_string[DT.OBJECT  ] = "object"
+dt_string[DT.MACRO   ] = "macro"
+dt_string[DT.ROOM	 ] = "room"
 
 enum cs //color schemes
 {
@@ -209,7 +220,6 @@ Output = {}; with Output {
 	
 	text			= []
 	plaintext		= ""
-	embedding		= false
 	text_embedding	= false
 	
 	time			 = 3*60
@@ -324,8 +334,7 @@ greetings = [
 	"Heloooooo,"
 ]
 
-Output.embedding = true
-output_set([[greetings[irandom(array_length(greetings)-1)]+" Click ",{str: "here", scr: help, output: true}," for a commands, info, and settings (or just type \"help\")!"]])
+output_set({__embedded__: true, o: [greetings[irandom(array_length(greetings)-1)]+" Click ",{str: "here", scr: help, output: true}," for a commands, info, and settings (or just type \"help\")!"]})
 Output.alpha = 0
 
 generate_color_schemes()

@@ -1,9 +1,6 @@
 
 draw_set_color(c_white)
 
-x = mouse_x
-y = mouse_y
-
 if show
 {
 	gpu_set_blendmode_ext(bm_inv_dest_color, bm_zero)

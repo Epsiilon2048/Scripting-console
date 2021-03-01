@@ -1,5 +1,4 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function console_compile(command){ with o_console {
 
 static space_sep = " ,()="
@@ -157,8 +156,6 @@ else
 			else value = real(arg)
 		}
 		
-		else if script_exists(real(arg)) type = DT.SCRIPT
-		
 		else type = undefined
 	}
 	
@@ -186,7 +183,7 @@ else
 	
 }
 
-if is_undefined(type) error = "Syntax from "+arg
+if is_undefined(type) error = "[SYNTAX ERROR] from \""+arg+"\""
 
 var subject = {
 	value: value,
@@ -263,7 +260,7 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	break
 	case DT.VARIABLE:	value = variable_string_get( string_add_scope(arg) )
 	break
-	case undefined:		value = "Syntax from \""+line[i]+"\""
+	case undefined:		value = "[SYNTAX ERROR] from \""+line[i]+"\""
 						error = value
 	}
 

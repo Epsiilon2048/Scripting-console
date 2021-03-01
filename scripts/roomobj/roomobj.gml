@@ -11,6 +11,5 @@ for (i = 0; i <= instance_count-1; i++)
 }
 text[array_length(text)] = "\nClick on an ID to set the console scope"
 
-o_console.Output.embedding = true
-return text
+return {__embedded__: true, o: text}
 }

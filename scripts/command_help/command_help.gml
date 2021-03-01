@@ -47,11 +47,10 @@ else
 	for(var i = 0; i <= array_length(_optargs)-1; i++)	  argtext += "["+_optargs[i]   +"] "
 	for(var i = 0; i <= array_length(_hiddenargs)-1; i++) argtext += "("+_hiddenargs[i]+") "
 	
-	text = [
+	text = {__embedded__: true, o: [
 		{str:"[COMMAND]", scr: command_help, output:true},{str:" "+command.scr, col:colors.script},hiddentext+argtext+"- "+command.desc
-	]
+	]}
 }
 
-Output.embedding = true
 return text
 }}

@@ -2,8 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function Epsiilon(){
 
-o_console.Output.embedding = true
-return [
+return {__embedded__: true, o: [
 	"This scripting console was developed by Epsiilon2048, with help from the \nGMS community\n\n",
 	
 	"[links] ",
@@ -12,5 +11,5 @@ return [
 	{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},
 	
 	"\n\nThank you so much for your interest and support! My only hope is that someone\ncan make some use out of this little project of mine."
-]
+]}
 }

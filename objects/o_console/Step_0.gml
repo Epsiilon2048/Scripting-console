@@ -1,7 +1,4 @@
 
-global.gui_mx = device_mouse_x_to_gui(0)
-global.gui_my = device_mouse_y_to_gui(0)
-
 step ++
 
 if rainbow
@@ -214,13 +211,23 @@ if console_toggle
 	#region Parse command
 	if enter
 	{	
-		output_set(console_exec(console_string))
+		var _compile = console_compile(console_string)
+		var _output  = console_run(_compile)
+		
+		if is_array(_compile) 
+		{
+			prev_command = console_string
+			prev_compile = _compile
+			prev_output  = _output
+		}
+		
+		output_set(_output)
 		
 		var _console_string = string_split(";", console_string)
 		
 		if array_length(_console_string) > 0
 		{
-			ds_list_insert(input_log, 0, array_to_string(_console_string, "; "))
+			ds_list_insert(input_log, 0, console_string)
 			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit)
 		}
 		
@@ -238,10 +245,9 @@ for(var i = 0; i <= array_length(keybinds)-1; i++)
 	if (keyboard_check_pressed(keybinds[i].key) and not console_toggle) or keyboard_check_multiple_pressed(keybinds[i].key, vk_alt)
 	{
 		try keybinds[i].action()
-		catch(_exception) 
+		catch(_exception)
 		{
-			Output.embedding = true
-			output_set([{str: "[BIND SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message])
+			output_set({__embedded__: true, o: [{str: "[BIND SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]})
 			prev_longMessage = _exception.longMessage
 		}
 	}

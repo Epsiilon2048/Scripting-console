@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripting-console",
-    "path": "Scripting-console.yyp",
+    "name": "Console draw presets",
+    "path": "folders/Scripts/Console/Console draw presets.yy",
   },
   "resourceVersion": "1.0",
-  "name": "string_pos_multiple",
+  "name": "draw_colored_console_text",
   "tags": [],
   "resourceType": "GMScript",
 }
