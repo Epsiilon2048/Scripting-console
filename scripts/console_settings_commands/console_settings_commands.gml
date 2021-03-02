@@ -68,6 +68,7 @@ return {__embedded__: true, o: [{str:"[BINDINGS]", scr: bindings, output: true},
 
 
 
+
 function unbind(index, show_bindings){		with o_console {
 	
 var keybind = keybinds[index]
@@ -76,4 +77,28 @@ array_delete(keybinds, index, 1)
 
 if show_bindings return bindings()
 else return {__embedded__: true, o: [{str: "[BINDINGS]", scr: bindings, output: true}," Removed keybind "+keybind.keyname+" - "+keybind.name]}
+}}
+
+
+
+
+function bindings(){						with o_console {
+
+if array_length(keybinds) > 0
+{
+	var text = []
+
+	for(var i = 0; i <= array_length(keybinds)-1; i++)
+	{
+		array_insert(text, i*2, {str: stitch("[",i,"]"), scr: unbind, args: [i, true], output: true},stitch(" ",keybinds[i].keyname," - RUN COMMAND: ",keybinds[i].name,"\n"))
+	}
+
+	text[array_length(text)] = "\nClick on binding numbers to unbind"
+
+	return {__embedded__: true, o: text}
+}
+else
+{
+	return "No active keybinds!"
+}
 }}

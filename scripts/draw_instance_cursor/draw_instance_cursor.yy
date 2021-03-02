@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Console draw presets",
-    "path": "folders/Scripts/Console/Console draw presets.yy",
+    "name": "Common utilities",
+    "path": "folders/Scripts/Common utilities.yy",
   },
   "resourceVersion": "1.0",
   "name": "draw_instance_cursor",

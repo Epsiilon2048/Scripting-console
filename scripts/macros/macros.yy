@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Scripts.yy",
+    "name": "Scripting-console",
+    "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
   "name": "macros",

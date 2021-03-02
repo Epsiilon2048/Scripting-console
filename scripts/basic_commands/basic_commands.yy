@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Scripts.yy",
+    "name": "Console commands",
+    "path": "folders/Scripts/Console/Console commands.yy",
   },
   "resourceVersion": "1.0",
-  "name": "con_exec",
+  "name": "basic_commands",
   "tags": [],
   "resourceType": "GMScript",
 }

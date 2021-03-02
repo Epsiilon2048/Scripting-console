@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Common utilities",
-    "path": "folders/Scripts/Console/Common utilities.yy",
+    "path": "folders/Scripts/Common utilities.yy",
   },
   "resourceVersion": "1.0",
   "name": "string_split_multiple",

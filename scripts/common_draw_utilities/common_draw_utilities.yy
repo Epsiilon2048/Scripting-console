@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "draw_round_line",
+  "name": "common_draw_utilities",
   "tags": [],
   "resourceType": "GMScript",
 }
