@@ -6,8 +6,8 @@ for(var i = 0; i <= ds_list_size(display_list)-1; i++)
 {
 	if display_list[| i].variable == variable
 	{
-		return true
+		return i
 	}
 }
-return false
+return -1
 }

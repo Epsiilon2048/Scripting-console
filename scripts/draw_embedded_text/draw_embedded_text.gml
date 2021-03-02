@@ -115,7 +115,7 @@ if checkvar != ""
 
 if scr != -1
 {
-	if arg != undefined scr_return = script_execute(scr, arg)
+	if arg != undefined scr_return = scr(arg)
 	else				scr_return = script_execute_ext(scr, args)
 }
 

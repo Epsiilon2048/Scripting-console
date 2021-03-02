@@ -6,8 +6,16 @@ var text = []
 
 for (i = 0; i <= instance_count-1; i++)
 {
-	var name = object_get_name(instance_id[i].object_index)
-    array_push(text, name+" ", {str: stitch("(",instance_id[other.i],")\n"), func: function(){o_console.object = instance_id[other.i]}})
+	var inst = instance_id[i]
+	var name = object_get_name(inst.object_index)
+	var entry = {}; with entry
+	{
+		id   = inst
+		str  = stitch("(",id,")\n")
+		func = function(){o_console.object = id}
+	}
+	
+    array_push(text, name+" ", entry)
 }
 text[array_length(text)] = "\nClick on an ID to set the console scope"
 

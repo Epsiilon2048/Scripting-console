@@ -44,7 +44,9 @@ for(var i = 0; i <= array_length(com)-1; i++)
 		case DT.OBJECT: //set the console scope
 	
 			object = subject.value
-			output_string[i] = (
+			
+			if subject.value == noone output_string[i] = "Reset console scope"
+			else output_string[i] = (
 				"Scope set to "+stitch(object_get_name(subject.value.object_index)," ",subject.value)
 			)
 	

@@ -1,7 +1,7 @@
 
 function console_compile(command){ with o_console {
 
-static space_sep = " ,()="
+static space_sep = " ,()=:"
 
 if shave(" ", command) == "" return ""
 
@@ -115,6 +115,8 @@ else
 		if is_real(_macro) 
 		{
 			arg = string_format_float(_macro)
+			
+			if arg == noone type = DT.OBJECT
 			if script_exists(_macro) 
 			{
 				type = DT.SCRIPT
@@ -147,15 +149,14 @@ else
 		if type == -1 type = DT.ASSET
 	}
 	
-	if (type == -1) and string_is_int(arg)
+	if (type == -1 or type == DT.OBJECT) and string_is_int(arg)
 	{
-		if instance_exists(real(arg)) 
+		if instance_exists(real(arg)) or real(arg) == noone
 		{
 			type = DT.OBJECT
 			if object_exists(real(arg)) value = real(arg).id
 			else value = real(arg)
 		}
-		
 		else type = undefined
 	}
 	
@@ -222,8 +223,9 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 		else arg = _arg
 	
 		//reeeeeally weird logic here, i swear its necessary
-		if (type == -1) and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\""
+		if (type == -1 or type == DT.STRING) and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\""
 		{
+			if type != DT.STRING arg = string_copy(arg, 2, string_length(arg)-2)
 			type = DT.STRING
 		}
 		if (type == -1) and asset_get_index(arg) != -1
@@ -254,7 +256,7 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	{
 	case DT.NUMBER:		value = real_float(arg)
 	break
-	case DT.STRING:		value = string_copy(arg, 2, string_length(arg)-2)
+	case DT.STRING:		value = arg
 	break
 	case DT.ASSET:		value = asset_get_index(arg)
 	break

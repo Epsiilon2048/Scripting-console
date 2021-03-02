@@ -55,6 +55,7 @@ ds_list_add(space_sep,
 identifiers = ds_map_create()
 ds_map_add(identifiers, "a", DT.ASSET)
 ds_map_add(identifiers, "v", DT.VARIABLE)
+ds_map_add(identifiers, "s", DT.STRING)
 
 #macro RGB make_color_rgb
 
@@ -125,6 +126,9 @@ force_body_solid = false
 window_blur = true
 
 cs_index = cs.greenbeans
+
+console_color_interval = 300
+console_color_time = 0
 
 keybinds = []
 
@@ -270,7 +274,7 @@ commands = [
 	{scr: "color_scheme", args:["color scheme index"], desc: "Sets the console color scheme to the specified index"},
 	{scr: "color_scheme_settings", desc: "Returns the color scheme settings menu"},
 	{hidden: true, scr: "console_videos", desc: "Returns a list of videos featuring the console"},
-	{hidden: true, scr: "generate_color_schemes", desc: "Resets the color schemes"},
+	{hidden: true, scr: "initialize_color_schemes", desc: "Resets the color schemes"},
 	
 	{hidden: true, scr: "Epsiilon", desc: "Returns info about the creator of the console"},
 	{hidden: true, scr: "nice_thing", desc: "Why don't you run it and find out?"},
@@ -337,5 +341,5 @@ greetings = [
 output_set({__embedded__: true, o: [greetings[irandom(array_length(greetings)-1)]+" Click ",{str: "here", scr: help, output: true}," for a commands, info, and settings (or just type \"help\")!"]})
 Output.alpha = 0
 
-generate_color_schemes()
+initialize_color_schemes()
 console_startup()

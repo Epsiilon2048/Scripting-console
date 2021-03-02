@@ -238,6 +238,9 @@ if console_toggle
 		char_pos2 = 1
 	}
 	#endregion
+	
+	if console_color_time == console_color_interval color_string = color_console_string(console_string)
+	console_color_time ++
 }
 
 for(var i = 0; i <= array_length(keybinds)-1; i++)

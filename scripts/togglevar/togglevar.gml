@@ -18,6 +18,6 @@ else if variable_string_exists(_variable)
 }
 else
 {
-	return "Variable "+variable+" does not exist"
+	return "\""+variable+"\" does not exist"
 }
 }

@@ -1,124 +1,96 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function color_console_string(str){ with o_console {
 
-var list = []
-var segment
-var out
+function color_console_string(command){ with o_console {
 
-while str != ""
+static space_sep = " ,()=:;"
+
+if shave(" ", command) == "" return {text: "", colors: []}
+
+var color_list = []
+var marker = 0
+var in_string = false
+var instscope = ""
+var _col = "plain"
+
+for(var i = 1; i <= string_length(command)+1; i++)
 {
-	if string_pos(" ", str) != 0
-	{
-		if  string_pos("\"", str) == 1
-		{
-			//show_message(string_pos(string_char_at(str, string_pos_index("\"", str, 2)+1), separators)!=0)
-			if string_count("\"", str) == 1
-			{
-				out = string_length(str)
-			}
-			else if string_count("\"", str) > 1 and not string_count(string_char_at(str, string_pos_index("\"", str, 2)+1), separators)
-			{
-				if string_pos_ext(" ", str, string_pos_index("\"", str, 2)) == 0 out = string_length(str)
-				else out = string_pos_ext(" ", str, string_pos_index("\"", str, 2))-1
-			}
-			else 
-			{
-				out = string_pos_index("\"", str, 2)
-			}
-		}
-		
-		else out = string_pos(" ", str)-1
-		
-		segment = string_copy(str, 1, out)
-		str = string_delete(str, 1, out+(string_char_at(str, out) != "\""))
-	}
-	else
-	{
-		segment = str
-		str = ""
-	}
+	var char = string_char_at(command, i)
 	
-	if string_char_at(segment, 1) == "\"" and (string_count("\"", segment) == 1 or string_char_at(segment, string_length(segment)) == "\"") //string
+	if char == "\\" and in_string
 	{
-		list[array_length(list)] = {
-			text: segment,
-			col: colors.string
-		}
-	}
-	else if string_copy(segment, 1, 2) == "o/" or string_copy(segment, 1, string_length(old_obj_identifier)) == old_obj_identifier or string_copy(segment, 1, 6) == "global" //object
-	{
-		if string_pos(".", segment) != 0
-		{
-			var sep
-			sep[0] = string_copy(segment, 1, string_pos(".", segment)-1)
-			sep[1] = string_copy(segment, string_pos(".", segment), string_length(segment))
-			
-			if array_length(sep) == 1 sep[1] = ""
-			
-			list[array_length(list)] = {
-				text: sep[0],
-				col: colors.object
-			}
-			
-			if variable_instance_exists(asset_get_index(sep[0]), string_copy(sep[1], 2, string_length(sep[1])-1)) or (sep[0] == "global" and variable_global_exists(string_copy(sep[1], 2, string_length(sep[1])-1)))
-			{
-				list[array_length(list)] = {
-					text: sep[1]+" ",
-					col: colors.variable	
-				}
-			}
-			else
-			{
-				list[array_length(list)] = {
-					text: sep[1]+" ",
-					col: colors.plain
-				}
-			}
-		}
-		else
-		{
-			list[array_length(list)] = {
-				text: segment+" ",
-				col: colors.object
-			}
-		}
-	}
-	else if string_is_float(segment)
-	{
-		list[array_length(list)] = {
-			text: segment+" ",
-			col: colors.number 
-		}
-	}
-	else if script_get_name(asset_get_index(segment)) == segment and array_length(list) == 0
-	{
-		list[array_length(list)] = {
-			text: segment+" ",
-			col: colors.script
-		}
-	}
-	else if console_macros[? segment] != undefined
-	{
-		list[array_length(list)] = {
-			text: segment+" ",
-			col: colors.macro
-		}
-	}
-	else if variable_instance_exists(object, segment)
-	{
-		list[array_length(list)] = {
-			text: segment+" ",
-			col: colors.variable
-		}
+		i++
 	}
 	else
 	{
-		list[array_length(list)] = {
-			text: segment+" ",
-			col: colors.plain
+		if char == "\""
+		{
+			in_string = not in_string
+		}
+		else if (not in_string and (string_pos(char, space_sep))) or i == string_length(command)+1
+		{	
+			if marker != i
+			{
+				var segment = string_copy(command, marker+1, i-marker-1)
+				
+				var asset_segment = segment
+				if string_pos(".", segment) != 0 asset_segment = string_copy(segment, 1, string_pos(".", segment)-1)
+				
+				var _col = "plain"
+				var asset_index = asset_get_index(asset_segment)
+				
+				if string_char_at(segment, 1) == "\"" and (i == string_length(command)+1 or string_pop(segment) == "\"") _col = "string"
+				else if asset_index != -1
+				{
+					var asset_type = asset_get_type(asset_segment)
+					
+					switch asset_type
+					{
+					case asset_object: _col = "object"; break
+					case asset_script: _col = "script"
+					}
+					
+					if _col == "plain" _col = "asset"
+					
+					if _col == "object" and segment != asset_segment i -= string_length(segment) - string_pos(".", segment)+1
+				}
+				else if string_is_float(segment) _col = "number"
+				else
+				{
+					var varstring
+					
+					if instscope != "" varstring = instscope + "." + segment
+					else			   varstring = string_add_scope(segment)
+					
+					if not is_undefined(varstring) and variable_string_exists(varstring)
+					{
+						if is_method(variable_string_get(varstring))
+						{
+							_col = "script"
+						}
+						else
+						{
+							_col = "variable"
+						}
+					}
+				}
+				
+				//if array_length(color_list) > 0 and array_pop(color_list).col == _col color_list[array_length(color_list)-1].pos = i
+				//else
+				if marker != 0
+				{
+					array_push(color_list, {pos: marker+1 - (instscope != ""), col: "plain"})
+				}
+				
+				instscope = ""
+				
+				if string_char_at(command, i) == "." and _col == "object" instscope = asset_segment
+				
+				array_push(color_list, {pos: i, col: _col})
+			}		
+			marker = i
 		}
 	}
 }
-return list
+console_color_time = 0
+
+return {text: command, colors: color_list}
 }}

@@ -1,9 +1,6 @@
 
 //if window_get_cursor() == cr_handpoint window_set_cursor(cr_default)
 
-col_str = color_console_command(console_string)
-draw_colored_console_text(200, 200, col_str)
-
 #region Deal with mouse inputs
 if mouse_check_button_pressed(mb_left) and not Output.mouse_over_embed
 {
