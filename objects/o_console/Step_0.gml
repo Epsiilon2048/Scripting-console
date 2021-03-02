@@ -82,7 +82,7 @@ if to_var != ""
 
 if keyboard_check_multiple_pressed(console_key, vk_shift)
 {
-	output_set([help()])
+	output_set(help())
 }
 else if keyboard_check_pressed(console_key) or keyboard_check_pressed(vk_up)
 {
@@ -221,7 +221,7 @@ if console_toggle
 			prev_output  = _output
 		}
 		
-		output_set(_output)
+		output_set_lines(_output)
 		
 		var _console_string = string_split(";", console_string)
 		

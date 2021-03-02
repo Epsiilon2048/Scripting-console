@@ -232,6 +232,9 @@ Output = {}; with Output {
 	alpha_dec		 = .04
 	mouse_over		 = false
 	mouse_over_embed = false
+	
+	tag = -1
+	tag_prev = -1
 }
 Output_window = new Console_window()
 Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)

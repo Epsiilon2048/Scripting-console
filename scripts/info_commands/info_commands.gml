@@ -2,7 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function help(){
 
-return {__embedded__: true, o: [
+return {__embedded__: true, __tag__: help, o: [
 	"Help & info\n",
 	{str: "Basic syntax & usage", scr: syntax_help, output: true},
 	{str: "\nCommand list", scr: command_help, output: true},
@@ -76,7 +76,7 @@ else
 	for(var i = 0; i <= array_length(_optargs)-1; i++)	  argtext += "["+_optargs[i]   +"] "
 	for(var i = 0; i <= array_length(_hiddenargs)-1; i++) argtext += "("+_hiddenargs[i]+") "
 	
-	text = {__embedded__: true, o: [
+	text = {__embedded__: true, __tag__: command_help, o: [
 		{str:"[COMMAND]", scr: command_help, output:true},{str:" "+command.scr, col:colors.script},hiddentext+argtext+"- "+command.desc
 	]}
 }
@@ -89,7 +89,7 @@ return text
 
 function syntax_help(){					with o_console {
 	
-return {__embedded__: true, o: [ //note that this only takes the colors from the current color scheme; doesn't change with it
+return {__embedded__: true, __tag__: syntax_help, o: [ //note that this only takes the colors from the current color scheme; doesn't change with it
 	"Supported datatypes/references\n",
 	{str:"integers",col:colors.number}," - ",{str:"floats",col:colors.number}," - ",{str:"macros",col:colors.macro},"* - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.object}," - ",{str:"variables",col:colors.variable},"\n\n"+
 	
@@ -209,7 +209,7 @@ return {__embedded__: true, o: [
 	
 function Epsiilon(){
 
-return {__embedded__: true, o: [
+return {__embedded__: true, __tag__: Epsiilon, o: [
 	"This scripting console was developed by Epsiilon2048, with help from the \nGMS community\n\n",
 	
 	"[links] ",
@@ -226,7 +226,7 @@ return {__embedded__: true, o: [
 	
 function console_videos(){				with o_console {
 
-return {__embedded__: true, o: [
+return {__embedded__: true, __tag__: console_videos, o: [
 	"Video explaining the new updates soon (hopefully)!\n\n"+
 	"[links]\n",
 	{str: "1.0 Demonstration", scr: url_open, arg:"https://www.youtube.com/watch?v=DePksU_vjRY&t=2s"}," (quite old)\n",
@@ -252,5 +252,5 @@ var _nice_things = [
 	"Remember to take breaks from time to time!",
 ]
 
-return _nice_things[irandom(array_length(_nice_things)-1)]
+return {__tag__: nice_thing, o: _nice_things[irandom(array_length(_nice_things)-1)]}
 }

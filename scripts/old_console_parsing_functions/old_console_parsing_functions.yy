@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Editor draw presets",
-    "path": "folders/Scripts/Editor draw presets.yy",
+    "name": "Scripts",
+    "path": "folders/Scripts.yy",
   },
   "resourceVersion": "1.0",
-  "name": "draw_editor_button",
+  "name": "old_console_parsing_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

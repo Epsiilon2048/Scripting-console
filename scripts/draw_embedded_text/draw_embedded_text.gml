@@ -121,7 +121,7 @@ if scr != -1
 
 if func != -1	scr_return = func()
 
-if output output_set([scr_return])
+if output output_set(scr_return)
 
 draw_set_color(col)
 
