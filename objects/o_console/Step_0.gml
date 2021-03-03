@@ -1,4 +1,6 @@
 
+COLOR_PICKER.size += (keyboard_check(vk_right) - keyboard_check(vk_left))
+
 step ++
 
 if rainbow
@@ -54,7 +56,7 @@ if inst_select
 		}
 		else
 		{
-			output_set()
+			output_set("")
 		}
 	}
 }
@@ -255,3 +257,6 @@ for(var i = 0; i <= array_length(keybinds)-1; i++)
 		}
 	}
 }
+
+run_in_console = false
+run_in_embed   = false

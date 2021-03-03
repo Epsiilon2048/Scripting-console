@@ -30,7 +30,7 @@ var arg  = undefined
 var args = []
 var func = -1
 var output = false
-var scr_return
+var scr_return = undefined
 var checkvar = ""
 var check = false
 var _check = undefined
@@ -115,13 +115,23 @@ if checkvar != ""
 
 if scr != -1
 {
-	if arg != undefined scr_return = scr(arg)
-	else				scr_return = script_execute_ext(scr, args)
+	o_console.run_in_embed = true
+	
+	try
+	{
+		if arg != undefined scr_return = scr(arg)
+		else				scr_return = script_execute_ext(scr, args)
+	}
+	
+	o_console.run_in_embed = false
 }
 
 if func != -1	scr_return = func()
 
-if output output_set(scr_return)
+if output 
+{
+	output_set(scr_return)
+}
 
 draw_set_color(col)
 

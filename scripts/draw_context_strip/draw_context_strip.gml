@@ -1,17 +1,10 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function draw_context_strip(x, y, string, hovering){
 
-if not (is_undefined(string) or string == "")
+function draw_context_strip(x, y, string, hovering){ with CTX_STRIP {
+
+if is_string(string) and string != ""
 {
-draw_set_alpha((hovering-o_console.context_time)*o_console.context_alpha_spd)
-	
-var dist   = 7
-var border = 5
-
-draw_set_font(o_console.font)
-draw_set_halign(fa_left)
-draw_set_valign(fa_top)
+draw_set_font(font)
+draw_set_align(fa_left, fa_top)
 
 var w = string_width (string)
 var h = string_height(string)
@@ -37,17 +30,16 @@ if y2 > display_get_gui_height()-h
 	y2 = y2 - h - dist*2
 }
 
-draw_set_color(-o_console.colors.body)
+draw_set_color(o_console.colors.body_real)
 
 draw_rectangle(x1, y1, x2, y2, false)
-gpu_set_blendmode(bm_normal)
 
 draw_set_color(o_console.colors.output)
 draw_text(x, y+1, string)
 
-draw_line_width(x1, y2, x1, y1, 2)
-draw_line_width(x1, y2, x2, y2, 2)
+draw_line_width(x1, y2+line_width/2, x1, y1-1, line_width)
+draw_line_width(x1, y2, x2, y2, line_width)
 
 draw_reset_properties()
 }
-}
+}}

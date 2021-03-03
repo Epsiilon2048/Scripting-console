@@ -24,10 +24,84 @@ font = scale_font[draw_scale]
 
 #macro _BOOL_STRING ? "true" : "false"
 
-#macro SLIDER global.SLIDER_PROPERTIES
+#macro SLIDER	    global.SLIDER_PROPERTIES
+#macro CTX_MENU	    global.CONTEXT_MENU_PROPERTIES
+#macro CTX_STRIP    global.CONTEXT_STRIP_PROPERTIES
+#macro COLOR_PICKER global.COLOR_PICKER_PROPERTIES
+
+COLOR_PICKER = {}; with COLOR_PICKER {
+	
+	var g = surface_create(256, 256)
+	surface_set_target(g)
+
+	for(var yy = 0; yy <= 255; yy++)
+	for(var xx = 0; xx <= 255; xx++)
+	{
+		var _col = make_color_hsv(
+			0,
+			xx,
+			255-yy
+		)
+
+		draw_point_color(xx, yy, _col)
+	}
+	draw_set_alpha(1)
+
+	sv_square = sprite_create_from_surface(g, 0, 0, 256, 256, false, false, 0, 0)
+
+	surface_reset_target()
+	surface_resize(g, 1, 256)
+	surface_set_target(g)
+
+	draw_clear_alpha(c_black, 1)
+
+	for(var yy = 0; yy <= 255; yy++)
+	{
+		var _col = make_color_hsv(yy, 255, 255)
+		draw_point_color(0, yy, _col)
+	}
+	draw_set_color(c_white)
+
+	h_strip = sprite_create_from_surface(g, 0, 0, 1, 256, false, false, 0, 0)
+
+	surface_reset_target()
+	surface_free(g)
+	
+	border_width = 1
+	border_alpha = .2
+	
+	sv_square_dropper_radius = 11
+	
+	h_strip_width	   = 50
+	h_strip_dist	   = 20
+	h_strip_bar_height = 18
+	
+	color_bar_dist	 = 20
+	color_bar_height = 53
+	
+	hue = 0
+	sat = 255
+	val = 255
+	
+	color = make_color_hsv(hue, sat, val)
+	size = 100
+}
+
+CTX_STRIP = {}; with CTX_STRIP {
+	
+	dist   = 7
+	border = 5
+	
+	line_width = 1
+	
+	time = 20
+	alpha_spd = .3
+	
+	font = o_console.font
+}
 
 SLIDER = {}; with SLIDER {
-
+	
 	height			 = SCALE_ 39
 	height_condensed = SCALE_ 15
 	text_offset		 = SCALE_ 10
@@ -61,10 +135,10 @@ ds_map_add(identifiers, "s", DT.STRING)
 
 enum SIDES
 {
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM,
+	TOP		= 0,
+	RIGHT	= 90,
+	BOTTOM	= 180,
+	LEFT	= 270,
 }
 
 enum DT //data types
@@ -79,6 +153,8 @@ enum DT //data types
 	ROOM,
 }
 
+color_schemes = {}
+
 dt_string[DT.NUMBER  ] = "number"
 dt_string[DT.STRING  ] = "string"
 dt_string[DT.ASSET   ] = "asset"
@@ -87,17 +163,6 @@ dt_string[DT.SCRIPT  ] = "script"
 dt_string[DT.OBJECT  ] = "object"
 dt_string[DT.MACRO   ] = "macro"
 dt_string[DT.ROOM	 ] = "room"
-
-enum cs //color schemes
-{
-	greenbeans,
-	royal,
-	drowned,
-	helios,
-	humanrights,
-	blackwhite,
-	whiteblack,
-}
 
 console_key = vk_tab
 
@@ -125,7 +190,7 @@ force_body_solid = false
 
 window_blur = true
 
-cs_index = cs.greenbeans
+cs_index = "greenbeans"
 
 console_color_interval = 300
 console_color_time = 0
@@ -235,12 +300,17 @@ Output = {}; with Output {
 	
 	tag = -1
 	tag_prev = -1
+	tag_prev_menu = -1
+
+	tag_set = function(_tag){
+		
+		if tag != -1 tag_prev_menu = tag
+		tag_prev = tag
+		tag = _tag
+	}
 }
 Output_window = new Console_window()
 Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)
-
-log_list = []
-log_to_window = false
 
 to_mouse_x_object = noone
 to_mouse_y_object = noone
@@ -262,9 +332,6 @@ instance_cursor = false
 color_string = []
 
 console_colors = true
-
-context_time = 20
-context_alpha_spd = .3
 
 commands = [
 	{scr: "help", desc: "Returns console help and info. But surely you already know this command if you're viewing it?"},
@@ -340,6 +407,9 @@ greetings = [
 	"Ay how's it goin?",
 	"Heloooooo,"
 ]
+
+run_in_embed   = false
+run_in_console = false
 
 output_set({__embedded__: true, o: [greetings[irandom(array_length(greetings)-1)]+" Click ",{str: "here", scr: help, output: true}," for a commands, info, and settings (or just type \"help\")!"]})
 Output.alpha = 0

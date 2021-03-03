@@ -26,6 +26,8 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			{
 				_args[j] = com[i].args[j].value
 			}
+			
+			run_in_console = true
 			try 
 			{
 				if instance_exists(object) 
@@ -38,6 +40,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				output_string[i] = {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
 				prev_longMessage = _exception.longMessage
 			}
+			run_in_console = false
 		
 		break
 	
@@ -70,7 +73,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				
 				var string_value
 				if is_real(_value) string_value = string_format_float(_value)
-				else			   string_value = string(_value)
+				else			   string_value = _value
 				
 				output_string[i] = string_value
 			}

@@ -105,21 +105,24 @@ for (i = 0; i <= instance_count-1; i++)
 	var entry = {}; with entry
 	{
 		id   = inst
-		str  = stitch("(",id,")\n")
-		func = function(){o_console.object = id}
+		str  = stitch("(",id,")")
+		func = function(){o_console.object = id; output_set(roomobj())}
 	}
 	
-    array_push(text, name+" ", entry)
+	var scoped_text = ""
+	if inst == o_console.object scoped_text = " - current scope"
+	
+    array_push(text, name+" ", entry, scoped_text+"\n")
 }
 text[array_length(text)] = "\nClick on an ID to set the console scope"
 
-return {__embedded__: true, o: text}
+return format_output(text, true, roomobj)
 }
 
 
 
 
-function objvar(obj){
+function objvar(obj){ with o_console {
 
 if is_undefined(obj) obj = object
 var list = variable_instance_get_names(obj)
@@ -131,8 +134,8 @@ for(var i = 0; i <= array_length(list)-1; i++)
 }
 
 list[array_length(list)] = "\nClick on a variable to add to the display"
-return {__embedded__: true, o: list}
-}
+return format_output(list, true, -1)
+}}
 
 
 
@@ -162,7 +165,7 @@ return "Object reset!"
 
 
 
-function color_make(r, g, b){
+function color_make(r, g, b){ with o_console {
 
 var _col = make_color_rgb(r, g, b)
 var box = {str: "color ", col: _col}
@@ -170,13 +173,13 @@ var box = {str: "color ", col: _col}
 if instance_exists(object)
 {
 	object._col = _col
-	return {__embedded__: true, o: [box, stitch(object_get_name(object),"._col set to ",_col)]}
+	return {__embedded__: true, o: [box, stitch(object_get_name(object.asset_index),"._col set to ",_col)]}
 }
 else
 {
 	return {__embedded__: true, o: [box, string(_col)]}
 }
-}
+}}
 
 
 

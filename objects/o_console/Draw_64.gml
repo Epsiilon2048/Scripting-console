@@ -17,7 +17,7 @@ else if mouse_check_button_released(mb_left) and
 	else if Output.mouse_over and not Output.mouse_over_embed and output_set_window and not output_as_window
 	{
 		window_embed(Output.text)
-		output_set()
+		output_set("")
 	}
 }
 
@@ -66,7 +66,7 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	Output.mouse_over = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 	if Output.mouse_over or force_output_body or (Output.text_embedding and force_output_embed_body)
 	{
-		//draw_console_body(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
+		draw_console_body(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 		
 		if not console_toggle and Output.mouse_over
 		{

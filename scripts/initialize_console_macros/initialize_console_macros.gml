@@ -7,8 +7,6 @@ else console_macros = ds_map_create()
 
 console_macros[? "instance_destroy"] =  instance_destroy
 
-console_macros[? "o_gui"] =  "\"nope\""
-
 console_macros[? "true" ] = true
 console_macros[? "false"] =	false
 

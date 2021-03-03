@@ -6,6 +6,7 @@ body		The background of the console
 body_real	The background of the consone when the blendmode and alpha isn't applied
 body_bm
 body_alpha
+body_accent
 output		The output, generally used as an accent color
 ex_output	The exposed output; the output when it doesn't have a background
 embed		Text with embeds
@@ -32,11 +33,12 @@ var red		  = RGB(247, 116, 129)
 var cyan	  = RGB(64, 220, 255)
 var orange	  = RGB(255, 184, 113)
 
-color_schemes[cs.greenbeans] = {
+color_schemes[$ "greenbeans"] = {
 	body:		-dark_blue,
 	body_real:	 dark_blue,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 green,
 	ex_output:	 green,
 	embed:		 yellow,
@@ -50,6 +52,8 @@ color_schemes[cs.greenbeans] = {
 	object:		 red,
 	script:		 orange,
 	asset:		 red,
+	
+	__builtin__ : true
 }
 
 var dark_pink = RGB(55,  34, 66)
@@ -58,11 +62,12 @@ var white	  = c_white
 var purple	  = RGB(140, 62, 250)
 var yellow	  = RGB(250, 221, 35)
 
-color_schemes[cs.royal] = {
+color_schemes[$ "royal"] = {
 	body:		-dark_pink,
 	body_real:	 dark_pink,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 pink,
 	ex_output:	 white,
 	embed:		 yellow,
@@ -76,6 +81,8 @@ color_schemes[cs.royal] = {
 	number:		 pink,
 	script:		 purple,
 	asset:		 purple,
+	
+	__builtin__ : true
 }
 
 var dark_blue	= RGB(43, 52, 82)
@@ -84,11 +91,12 @@ var white		= c_white
 var pink		= RGB(214, 94, 220)
 var yellow		= RGB(250, 221, 35)
 
-color_schemes[cs.drowned] = {
+color_schemes[$ "drowned"] = {
 	body:		-dark_blue,
 	body_real:	 dark_blue,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 cyan,
 	ex_output:	 white,
 	embed:		 yellow,
@@ -102,6 +110,8 @@ color_schemes[cs.drowned] = {
 	number:		 cyan,
 	script:		 pink,
 	asset:		 pink,
+	
+	__builtin__ : true
 }
 
 var dark_pink	= RGB(84, 35, 59)
@@ -109,11 +119,12 @@ var orange		= RGB(242, 151, 37)
 var green		= RGB(60, 233, 137)
 var yellow		= RGB(246, 248, 44)
 
-color_schemes[cs.helios] = {
+color_schemes[$ "helios"] = {
 	body:		-dark_pink,
 	body_real:	 dark_pink,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 orange,
 	ex_output:	 white,
 	embed:		 yellow,
@@ -127,6 +138,8 @@ color_schemes[cs.helios] = {
 	number:		 orange,
 	script:		 green,
 	asset:		 green,
+	
+	__builtin__ : true
 }
 
 var dark_pink	= RGB(44, 34, 54)
@@ -134,11 +147,12 @@ var pink		= RGB(255, 159, 255)
 var blue		= RGB(127, 225, 255)
 var white		= c_white
 
-color_schemes[cs.humanrights] = {
+color_schemes[$ "humanrights"] = {
 	body:		-dark_pink,
 	body_real:	 dark_pink,
 	body_bm:	 bm_subtract,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 pink,
 	ex_output:	 white,
 	embed:		 blue,
@@ -152,6 +166,8 @@ color_schemes[cs.humanrights] = {
 	number:		 pink,
 	script:		 blue,
 	asset:		 pink,
+	
+	__builtin__ : true
 }
 
 var true_black = c_black
@@ -161,11 +177,12 @@ var white = RGB(219, 216, 215)
 
 var light_grey  = RGB(138, 134, 136)
 
-color_schemes[cs.whiteblack] = {
+color_schemes[$ "whiteblack"] = {
 	body:		 black,
 	body_real:	 black,
 	body_bm:	 bm_normal,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 light_grey,
 	ex_output:	 true_white,
 	embed:		 true_white,
@@ -179,15 +196,18 @@ color_schemes[cs.whiteblack] = {
 	number:		 light_grey,
 	script:		 true_white,
 	asset:		 true_white,
+	
+	__builtin__ : true
 }
 
 var dark_grey  = RGB(98, 96, 102)
 
-color_schemes[cs.blackwhite] = {
+color_schemes[$ "blackwhite"] = {
 	body:		 white,
 	body_real:	 white,
 	body_bm:	 bm_normal,
 	body_alpha:  1,
+	body_accent: 0,
 	output:		 dark_grey,
 	ex_output:	 true_black,
 	embed:		 true_black,
@@ -202,6 +222,7 @@ color_schemes[cs.blackwhite] = {
 	script:		 true_black,
 	asset:		 true_black,
 	
+	__builtin__ : true
 }
 
 o_console.rainbow = false

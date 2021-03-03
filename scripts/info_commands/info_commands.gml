@@ -1,8 +1,7 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function help(){
 
-return {__embedded__: true, __tag__: help, o: [
+return format_output([
 	"Help & info\n",
 	{str: "Basic syntax & usage", scr: syntax_help, output: true},
 	{str: "\nCommand list", scr: command_help, output: true},
@@ -22,7 +21,7 @@ return {__embedded__: true, __tag__: help, o: [
 	
 	"\n\nNote, you can press [shift+console_key]\n"+
 	"to quickely return to this menu!"
-]}
+], true, help)
 }
 
 
@@ -76,12 +75,12 @@ else
 	for(var i = 0; i <= array_length(_optargs)-1; i++)	  argtext += "["+_optargs[i]   +"] "
 	for(var i = 0; i <= array_length(_hiddenargs)-1; i++) argtext += "("+_hiddenargs[i]+") "
 	
-	text = {__embedded__: true, __tag__: command_help, o: [
+	text = [
 		{str:"[COMMAND]", scr: command_help, output:true},{str:" "+command.scr, col:colors.script},hiddentext+argtext+"- "+command.desc
-	]}
+	]
 }
 
-return text
+return format_output(text, true, command_help)
 }}
 
 
@@ -89,7 +88,7 @@ return text
 
 function syntax_help(){					with o_console {
 	
-return {__embedded__: true, __tag__: syntax_help, o: [ //note that this only takes the colors from the current color scheme; doesn't change with it
+return format_output([ //note that this only takes the colors from the current color scheme; doesn't change with it
 	"Supported datatypes/references\n",
 	{str:"integers",col:colors.number}," - ",{str:"floats",col:colors.number}," - ",{str:"macros",col:colors.macro},"* - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.object}," - ",{str:"variables",col:colors.variable},"\n\n"+
 	
@@ -105,7 +104,7 @@ return {__embedded__: true, __tag__: syntax_help, o: [ //note that this only tak
 	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)"+
 	"\nNote that this means strings currently cannot contain semi-colons"+
 	"\n\n*consult readme file for more info"
-]}
+], true, syntax_help)
 }}
 
 
@@ -113,7 +112,7 @@ return {__embedded__: true, __tag__: syntax_help, o: [ //note that this only tak
 
 function console_window_help(){			with o_console {
 
-return {__embedded__: true, o: [
+return format_output([
 	"The Window\n"+
 	"- Shows static strings.\n"+
 	"- If it's enabled in settings, you can click on the output to quickly set the window to it.\n"+
@@ -130,7 +129,7 @@ return {__embedded__: true, o: [
 	"You can drag windows from their sidebar, and collapse them by clicking it.\n\n"+
 	
 	"Click to show ",{str: "Window", scr: window, arg: "This is the Window!"}, " - ",{str: "Display", scr: display, arg: "o_console.is_this_the_display"},
-]}
+], true, console_window_help)
 }}
 
 
@@ -138,7 +137,7 @@ return {__embedded__: true, o: [
 
 function embedded_text_help(){			with o_console {
 
-return {__embedded__: true, o: [
+return format_output([
 	"Text embedding is used everywhere for menus and interactive elements.\n\n"+
 	
 	"It's used to change the color of or bind scripts to text, and it also\n"+
@@ -154,7 +153,7 @@ return {__embedded__: true, o: [
 	"Note that the console input colors are not embeds.\n\n"+
 
 	"Embeds can be disabled in ",{str: "general settings", scr: console_settings, output: true},"."
-]}
+], true, embedded_text_help)
 }}
 
 
@@ -162,7 +161,7 @@ return {__embedded__: true, o: [
 
 function console_settings(){			with o_console {
 	
-return {__embedded__: true, o: [
+return format_output([
 	{str: "", checkbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
 	{str: "", checkbox: "o_console.embed_text"}, " Text embedding - WILL MAKE THIS WINDOW UNUSABLE IF DISABLED\n",
 	{str: "", checkbox: "o_console.window_embed_text"}, " Window text embedding\n\n",
@@ -179,37 +178,56 @@ return {__embedded__: true, o: [
 
 	{str: "Reset console\n", scr: reset_obj, arg: o_console},
 	{str: "Destroy console", scr: destroy_console},
-]}
+], true, console_settings)
 }}
 	
 
 	
 	
-function color_scheme_settings(){
+function color_scheme_settings(){ with o_console {
 
-return {__embedded__: true, o: [
-	{str: "Greenbeans ",		scr: color_scheme, arg: cs.greenbeans},
-	{str: "\nRoyal ",			scr: color_scheme, arg: cs.royal},
-	{str: "\nDrowned",			scr: color_scheme, arg: cs.drowned},
-	{str: "\nHelios",			scr: color_scheme, arg: cs.helios},
-	{str: "\nHumanrights",		scr: color_scheme, arg: cs.humanrights},
-	{str: "\nBlack & white",	scr: color_scheme, arg: cs.blackwhite},
-	{str: "\nWhite & black",	scr: color_scheme, arg: cs.whiteblack},
-	"\n\n",
-	{str: "", checkbox: "o_console.rainbow"}," gamer mode",
+var cs_list		= variable_struct_get_names(color_schemes)
+var text		= []
+var builtin		= []
+var notbuiltin	= []
+
+for(var i = 0; i <= array_length(cs_list)-1; i++)
+{
+	if variable_struct_exists_get(color_schemes[$ cs_list[i]], "__builtin__", false)
+	{
+		array_push(builtin, {str: "\n"+cs_list[i], scr: color_scheme, arg: cs_list[i], output: true})
+		
+		if cs_list[i] == cs_index array_push(builtin, " - current")
+	}
+	else
+	{
+		array_push(notbuiltin, {str: "\n"+cs_list[i], scr: color_scheme, arg: cs_list[i], output: true})
+		
+		if cs_list[i] == cs_index array_push(notbuiltin, " - current")
+	}
+}
+
+array_push(text, "Default")
+array_copy(text, 0, builtin, 0, array_length(builtin))
+array_push(text, "\n\nOther")
+array_copy(text, array_length(builtin), notbuiltin, 0, array_length(notbuiltin))
+array_push(text, 
+	"\n\n", {str: "", checkbox: "o_console.rainbow"}, " gamer mode"+
 	"\n\n",
 	{str: "Regenerate color schemes", scr: initialize_color_schemes},
+	
+	"\n\nClick on a color scheme to try it out!"
+)
 
-	"\n\nClick on a palette to try it out!"
-]}
-}
+return format_output(text, true, color_scheme_settings)
+}}
 	
 	
 	
 	
 function Epsiilon(){
 
-return {__embedded__: true, __tag__: Epsiilon, o: [
+return format_output([
 	"This scripting console was developed by Epsiilon2048, with help from the \nGMS community\n\n",
 	
 	"[links] ",
@@ -218,7 +236,7 @@ return {__embedded__: true, __tag__: Epsiilon, o: [
 	{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},
 	
 	"\n\nThank you so much for your interest and support! My only hope is that someone\ncan make some use out of this little project of mine."
-]}
+], true, Epsiilon)
 }
 	
 	
@@ -226,13 +244,13 @@ return {__embedded__: true, __tag__: Epsiilon, o: [
 	
 function console_videos(){				with o_console {
 
-return {__embedded__: true, __tag__: console_videos, o: [
+return format_output([
 	"Video explaining the new updates soon (hopefully)!\n\n"+
 	"[links]\n",
 	{str: "1.0 Demonstration", scr: url_open, arg:"https://www.youtube.com/watch?v=DePksU_vjRY&t=2s"}," (quite old)\n",
 	{str: "1.1 Colors", scr: url_open, arg:"https://www.youtube.com/watch?v=rz2lvfYwHyQ"},
 	{str: "\n1.2 Color schemes", scr: url_open, arg: "https://youtu.be/QCn5csFYYgA"}
-]}
+], true, console_videos)
 }}
 
 
@@ -252,5 +270,14 @@ var _nice_things = [
 	"Remember to take breaks from time to time!",
 ]
 
-return {__tag__: nice_thing, o: _nice_things[irandom(array_length(_nice_things)-1)]}
+var _nice_thing = _nice_things[irandom(array_length(_nice_things)-1)]
+
+if o_console.run_in_embed and o_console.Output.tag != -1
+{
+	return format_output([{str: "<back>", scr: previous_menu, output: true}, " "+_nice_thing], true, nice_thing)
+}
+else
+{
+	return format_output(_nice_thing, false, nice_thing)
+}
 }

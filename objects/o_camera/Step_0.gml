@@ -35,13 +35,3 @@ else if instance_exists(object_following)
 		y += lengthdir_y(spd, direction)
 	}
 }
-
-if	keyboard_check_pressed(vk_numpad6) or 
-	keyboard_check_pressed(vk_numpad4) or 
-	keyboard_check_pressed(vk_numpad8) or 
-	keyboard_check_pressed(vk_numpad2) or 
-	keyboard_check(vk_numpad5)
-{
-	x = floor(x + (keyboard_check_pressed(vk_numpad6) - keyboard_check_pressed(vk_numpad4))*o_bg.scale)
-	y = floor(y + (keyboard_check_pressed(vk_numpad2) - keyboard_check_pressed(vk_numpad8))*o_bg.scale)
-}

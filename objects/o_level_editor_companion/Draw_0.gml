@@ -1,6 +1,6 @@
 
-var xx = snap(mouse_x)
-var yy = snap(mouse_y)
+//var xx = snap(mouse_x)
+//var yy = snap(mouse_y)
 
 if not surface_exists(grid_surface)
 {

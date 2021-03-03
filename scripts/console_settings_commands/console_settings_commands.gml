@@ -1,10 +1,18 @@
 
 function color_scheme(value){				with o_console {
 
-colors = color_schemes[value]
+colors = color_schemes[$ value]
 color_string = color_console_string(console_string)
 cs_index = value
-return stitch("Console color scheme set to ",value)
+
+if run_in_embed and (Output.tag == color_scheme_settings)
+{
+	return color_scheme_settings()
+}
+else
+{
+	return stitch("Console color scheme set to ",value)
+}
 }}
 
 

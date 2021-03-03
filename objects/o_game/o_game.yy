@@ -23,7 +23,6 @@
     {"isDnD":false,"eventNum":116,"eventType":9,"collisionObjectId":null,"parent":{"name":"o_game","path":"objects/o_game/o_game.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":112,"eventType":9,"collisionObjectId":null,"parent":{"name":"o_game","path":"objects/o_game/o_game.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":113,"eventType":9,"collisionObjectId":null,"parent":{"name":"o_game","path":"objects/o_game/o_game.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":115,"eventType":9,"collisionObjectId":null,"parent":{"name":"o_game","path":"objects/o_game/o_game.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"parent":{"name":"o_game","path":"objects/o_game/o_game.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"o_game","path":"objects/o_game/o_game.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],

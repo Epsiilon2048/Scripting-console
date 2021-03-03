@@ -1,5 +1,34 @@
 
-function output_set(output){ with(o_console.Output) {
+function input_set(str, add){
+
+with o_console
+{
+	input_log_index = -1
+	console_toggle = true
+	
+	if not add 
+	{
+		ds_list_insert(input_log, 0, console_string)
+		console_string = str
+	}
+	else
+	{
+		console_string = string_insert(str, console_string, char_pos1)
+		char_pos1 += string_length(str)
+		char_pos2 = char_pos1
+	}
+
+	keyboard_string = console_string
+	color_string = color_console_string(console_string)
+	char_pos1 = string_length(console_string)+1
+	char_pos2 = char_pos1
+}
+}
+
+
+
+
+function output_set(output){ with o_console.Output {
 
 var _output = output
 	
@@ -11,11 +40,7 @@ if is_undefined(_output) or _output == "" or _output == [] or _output == {}
 }
 else
 {	
-	if array_length(_output) > 0
-	{
-		if tag != -1 tag_prev = tag
-		tag = variable_struct_exists_get(_output, "__tag__", -1)
-	}
+	tag_set(variable_struct_exists_get(_output, "__tag__", -1))
 	
 	if variable_struct_exists_get(_output, "__embedded__", false)
 	{
@@ -68,7 +93,7 @@ return _output
 
 
 
-function output_set_lines(output){ with(o_console.Output) {
+function output_set_lines(output){ with o_console.Output {
 
 var _output = output
 	
@@ -84,8 +109,7 @@ else
 	
 	if array_length(_output) > 0
 	{
-		if tag != -1 tag_prev = tag
-		tag = variable_struct_exists_get(_output[0], "__tag__", -1)
+		tag_set(variable_struct_exists_get(_output[0], "__tag__", -1))
 	}
 	
 	text_embedding = false
