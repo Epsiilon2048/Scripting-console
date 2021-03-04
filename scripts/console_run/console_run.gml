@@ -18,22 +18,37 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 		switch subject.type
 		{
+		case DT.NUMBER: //return the number
+			output_string[i] = subject.value
+		break
+		
 		case DT.SCRIPT: //run a script
 	
-			var _args = array_create(array_length(com[i].args))
+			var a = array_create(16, undefined)
+			var _args_count = array_length(com[i].args)
 			
-			for(var j = 0; j <= array_length(_args)-1; j++)
+			for(var j = 0; j <= _args_count-1; j++)
 			{
-				_args[j] = com[i].args[j].value
+				a[j] = com[i].args[j].value
 			}
 			
 			run_in_console = true
 			try 
 			{
+				//So, the reason I do this weird thing instead of using script_execute_ext is because for
+				//reasons beyond human comprehension, gms... doesn't allow you to use arrays with built in
+				//scripts?? like, normally it would pass the script an argument for each item in the array,
+				//but with built ins it just passes the array as a single argument... wtf...
+				
+				//If for some reason you need to use scripts with more than 16 arguments, feel free to add
+				//more i guess lol
+				
 				if instance_exists(object) 
-					{ with object output_string[i] = script_execute_ext(subject.value, _args) }
+					{ with object output_string[i] = subject.value(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[15]) }
 				else 
-								{ output_string[i] = script_execute_ext(subject.value, _args) }
+					{			  output_string[i] = subject.value(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[15]) }
+				
+				if is_undefined(output_string[i]) output_string[i] = ""
 			}
 			catch(_exception)
 			{

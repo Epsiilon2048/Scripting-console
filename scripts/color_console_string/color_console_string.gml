@@ -31,14 +31,23 @@ for(var i = 1; i <= string_length(command)+1; i++)
 			{
 				var segment = string_copy(command, marker+1, i-marker-1)
 				
+				var _col = "plain"
+				
+				var _macro = console_macros[$ segment]
+				
+				if not is_undefined(_macro)
+				{
+					segment = _macro.value
+					if _macro.type != -1 _col = dt_string[_macro.type]
+				}
+
 				var asset_segment = segment
 				if string_pos(".", segment) != 0 asset_segment = string_copy(segment, 1, string_pos(".", segment)-1)
 				
-				var _col = "plain"
 				var asset_index = asset_get_index(asset_segment)
 				
-				if string_char_at(segment, 1) == "\"" and (i == string_length(command)+1 or string_pop(segment) == "\"") _col = "string"
-				else if asset_index != -1
+				if _col == "plain" and string_char_at(segment, 1) == "\"" and (i == string_length(command)+1 or string_pop(segment) == "\"") _col = "string"
+				else if _col == "plain" and asset_index != -1
 				{
 					var asset_type = asset_get_type(asset_segment)
 					
@@ -52,8 +61,8 @@ for(var i = 1; i <= string_length(command)+1; i++)
 					
 					if _col == "object" and segment != asset_segment i -= string_length(segment) - string_pos(".", segment)+1
 				}
-				else if string_is_float(segment) _col = "number"
-				else
+				else if _col == "plain" and string_is_float(segment) _col = "number"
+				else if _col == "plain"
 				{
 					var varstring
 					

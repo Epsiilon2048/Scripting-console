@@ -90,11 +90,10 @@ function syntax_help(){					with o_console {
 	
 return format_output([ //note that this only takes the colors from the current color scheme; doesn't change with it
 	"Supported datatypes/references\n",
-	{str:"integers",col:colors.number}," - ",{str:"floats",col:colors.number}," - ",{str:"macros",col:colors.macro},"* - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.object}," - ",{str:"variables",col:colors.variable},"\n\n"+
+	{str:"integers",col:colors.number}," - ",{str:"floats",col:colors.number}," - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.object}," - ",{str:"variables",col:colors.variable},"\n\n"+
 	
-	"- ",{str:"scripts",col:colors.script}," are also supported, but cannot be used in arguments.\n"+
 	"- When variables are referenced in arguments, they return their value.\n"+
-	"- Note that if a script asks for a variable or command as an argument, it's likely \n"+
+	"- Note that if a script asks for a variable or command as an argument, it's likely\n"+
 	"  intended to be a string\n"+
 	
 	"\nSetting scope:     ",{str:"object",col:colors.object},
@@ -102,7 +101,9 @@ return format_output([ //note that this only takes the colors from the current c
 	"\nSetting variables: ",{str:"object",col:colors.object},{str:".variable",col:colors.variable},{str:" value",col:colors.plain},
 	"\nRunning scripts:   ",{str:"script",col:colors.script},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},
 	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)"+
-	"\nNote that this means strings currently cannot contain semi-colons"+
+	"\Keep in mind, variables are substituted for their values during the compiling process,"+
+	"\nmeaning they all take place within the initial scope."+
+	
 	"\n\n*consult readme file for more info"
 ], true, syntax_help)
 }}
@@ -195,22 +196,27 @@ for(var i = 0; i <= array_length(cs_list)-1; i++)
 {
 	if variable_struct_exists_get(color_schemes[$ cs_list[i]], "__builtin__", false)
 	{
-		array_push(builtin, {str: "\n"+cs_list[i], scr: color_scheme, arg: cs_list[i], output: true})
+		array_push(builtin, {str: "\n "+cs_list[i], scr: color_scheme, arg: cs_list[i], output: true})
 		
 		if cs_list[i] == cs_index array_push(builtin, " - current")
 	}
 	else
 	{
-		array_push(notbuiltin, {str: "\n"+cs_list[i], scr: color_scheme, arg: cs_list[i], output: true})
+		array_push(notbuiltin, {str: "\n "+cs_list[i], scr: color_scheme, arg: cs_list[i], output: true})
 		
 		if cs_list[i] == cs_index array_push(notbuiltin, " - current")
 	}
 }
 
 array_push(text, "Default")
-array_copy(text, 0, builtin, 0, array_length(builtin))
-array_push(text, "\n\nOther")
-array_copy(text, array_length(builtin), notbuiltin, 0, array_length(notbuiltin))
+array_copy(text, 1, builtin, 0, array_length(builtin))
+
+if array_length(notbuiltin) > 0 
+{
+	array_push(text, "\n\nOther")
+	array_copy(text, array_length(builtin)+2, notbuiltin, 0, array_length(notbuiltin))
+}
+
 array_push(text, 
 	"\n\n", {str: "", checkbox: "o_console.rainbow"}, " gamer mode"+
 	"\n\n",

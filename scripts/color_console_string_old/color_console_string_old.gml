@@ -98,7 +98,7 @@ while str != ""
 			col: colors.script
 		}
 	}
-	else if console_macros[? segment] != undefined
+	else if console_macros[$ segment] != undefined
 	{
 		list[array_length(list)] = {
 			text: segment+" ",

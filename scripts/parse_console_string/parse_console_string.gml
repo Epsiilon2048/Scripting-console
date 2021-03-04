@@ -20,11 +20,11 @@ else if string_copy(segment, 1, string_length(o_console.old_obj_identifier)) == 
 	if string_pos(".", segment) != 0 //variable in other object
 	{
 		var segment_split = string_split(".", segment)
-		if instance_exists(asset_get_index(segment_split[0])) or o_console.console_macros[? segment_split[0]] == global
+		if instance_exists(asset_get_index(segment_split[0])) or o_console.console_macros[? segment_split[0]].value == global
 		{
 			var obj_id
 			
-			if o_console.console_macros[? segment_split[0]] == global obj_id = global
+			if o_console.console_macros[$ segment_split[0]].value == global obj_id = global
 			else obj_id = asset_get_index(segment_split[0])
 			
 			if variable_instance_exists(obj_id, segment_split[1]) or (obj_id == global and variable_global_exists(segment_split[1]))
@@ -83,9 +83,9 @@ else if variable_global_exists(segment)
 {
 	arg = variable_global_get(segment)
 }
-else if o_console.console_macros[? segment] != undefined
+else if o_console.console_macros[$ segment] != undefined
 {
-	arg = o_console.console_macros[? segment]
+	arg = o_console.console_macros[$ segment].value
 	
 	if firstarg
 	{

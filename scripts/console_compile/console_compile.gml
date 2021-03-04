@@ -94,9 +94,9 @@ var type = -1
 var value = undefined
 var error = undefined
 
-if string_char_at(_arg, 2) == "/" and ds_map_exists(identifiers, string_char_at(_arg, 1))
+if string_char_at(_arg, 2) == "/" and variable_struct_exists(identifiers, string_char_at(_arg, 1))
 {
-	type = identifiers[? string_char_at(_arg, 1)]
+	type = identifiers[$ string_char_at(_arg, 1)]
 	_arg = string_copy(_arg, 3, string_length(_arg))
 }
 
@@ -108,22 +108,14 @@ if _arg == ""
 else
 {
 
-	var _macro = console_macros[? _arg]
+	var _macro = console_macros[$ _arg]
 	
 	if not is_undefined(_macro)
 	{
-		if is_real(_macro) 
-		{
-			arg = string_format_float(_macro)
-			
-			if arg == noone type = DT.OBJECT
-			if script_exists(_macro) 
-			{
-				type = DT.SCRIPT
-				value = _macro
-			}
-		}
-		else arg = string(_macro)
+		if _macro.type == DT.NUMBER arg = string_format_float(_macro.value)
+		else						arg = string(_macro.value)
+		
+		type = _macro.type
 	}
 	else arg = _arg
 	
@@ -148,6 +140,7 @@ else
 		
 		if type == -1 type = DT.ASSET
 	}
+	else if type == DT.SCRIPT value = real(arg)
 	
 	if (type == -1 or type == DT.OBJECT) and string_is_int(arg)
 	{
@@ -159,6 +152,8 @@ else
 		}
 		else type = undefined
 	}
+	
+	if type == DT.NUMBER value = real(arg)
 	
 	if type == -1 or type == DT.VARIABLE 
 	{
@@ -199,9 +194,9 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	var type = -1
 	var value
 	
-	if string_char_at(_arg, 2) == "/" and ds_map_exists(identifiers, string_char_at(_arg, 1))
+	if string_char_at(_arg, 2) == "/" and variable_struct_exists(identifiers, string_char_at(_arg, 1))
 	{
-		type = identifiers[? string_char_at(_arg, 1)]
+		type = identifiers[$ string_char_at(_arg, 1)]
 		_arg = string_copy(_arg, 3, string_length(_arg))
 	}
 	
@@ -213,7 +208,7 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	else
 	{
 	
-		var _macro = console_macros[? _arg]
+		var _macro = console_macros[$ _arg]
 	
 		if not is_undefined(_macro)
 		{

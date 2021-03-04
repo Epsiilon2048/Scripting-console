@@ -1,5 +1,6 @@
 
-console_macros = -1
+include_niche_virtual_keys = false
+console_macros = {}
 initialize_console_macros()
 
 scale_mult = array_create(3)
@@ -126,10 +127,10 @@ ds_list_add(space_sep,
 	"="
 )
 
-identifiers = ds_map_create()
-ds_map_add(identifiers, "a", DT.ASSET)
-ds_map_add(identifiers, "v", DT.VARIABLE)
-ds_map_add(identifiers, "s", DT.STRING)
+identifiers = {}
+identifiers[$ "a"] = DT.ASSET
+identifiers[$ "v"] = DT.VARIABLE
+identifiers[$ "s"] = DT.STRING
 
 #macro RGB make_color_rgb
 

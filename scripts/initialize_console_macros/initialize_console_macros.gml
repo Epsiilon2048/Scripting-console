@@ -1,100 +1,107 @@
 // Script assets have changed for v2.3.0 see
-// https] =//help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+// https =//help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function initialize_console_macros(){
 
-if ds_exists(console_macros, ds_type_map) ds_map_clear(console_macros)
-else console_macros = ds_map_create()
+console_macros [$ "instance_create_layer"] = {type: DT.SCRIPT, value: instance_create_layer}
+console_macros [$ "instance_destroy"]	   = {type: DT.SCRIPT, value: instance_destroy}
+console_macros [$ "show_message"]		   = {type: DT.SCRIPT, value: show_message}
+console_macros [$ "power"]				   = {type: DT.SCRIPT, value: power}
 
-console_macros[? "instance_destroy"] =  instance_destroy
+console_macros [$ "true"]	= {type: DT.NUMBER, value: true}
+console_macros [$ "false"]	= {type: DT.NUMBER, value: false}
 
-console_macros[? "true" ] = true
-console_macros[? "false"] =	false
-
-console_macros[? "global"] = global
-console_macros[? "noone" ] = noone
-console_macros[? "all"   ] = all
+console_macros [$ "global"]	= {type: DT.NUMBER, value: global}
+console_macros [$ "noone"]	= {type: DT.NUMBER, value: noone}
+console_macros [$ "all"]	= {type: DT.NUMBER, value: all}
 
 #region Colors
-console_macros[? "c_white" ] = c_white
-console_macros[? "c_black" ] = c_black
-console_macros[? "c_red"   ] = c_red
-console_macros[? "c_blue"  ] = c_blue
-console_macros[? "c_yellow"] = c_yellow
-console_macros[? "c_green" ] = c_green
+console_macros [$ "c_white"]	= {type: DT.NUMBER, value: c_white}
+console_macros [$ "c_black"]	= {type: DT.NUMBER, value: c_black}
+console_macros [$ "c_red"]		= {type: DT.NUMBER, value: c_red}
+console_macros [$ "c_blue"]		= {type: DT.NUMBER, value: c_blue}
+console_macros [$ "c_yellow"]	= {type: DT.NUMBER, value: c_yellow}
+console_macros [$ "c_green"]	= {type: DT.NUMBER, value: c_green}
 #endregion
 
 #region Blendmodes
-console_macros[? "bm_normal"  ] = bm_normal
-console_macros[? "bm_add"     ] = bm_add
-console_macros[? "bm_subtract"] = bm_subtract
-console_macros[? "bm_max"     ] = bm_max
+console_macros [$ "bm_normal"]		= {type: DT.NUMBER, value: bm_normal}
+console_macros [$ "bm_add"]			= {type: DT.NUMBER, value: bm_add}
+console_macros [$ "bm_subtract"]	= {type: DT.NUMBER, value: bm_subtract}
+console_macros [$ "bm_max"]			= {type: DT.NUMBER, value: bm_max}
 #endregion
 
 #region Text alignments
-console_macros[? "fa_top"   ] =	fa_top
-console_macros[? "fa_bottom"] =	fa_bottom
-console_macros[? "fa_middle"] =	fa_middle
-console_macros[? "fa_left"  ] =	fa_left
-console_macros[? "fa_right" ] =	fa_right
-console_macros[? "fa_center"] =	fa_center
+console_macros [$ "fa_top"]		= {type: DT.NUMBER, value: fa_top}
+console_macros [$ "fa_bottom"]	= {type: DT.NUMBER, value: fa_bottom}
+console_macros [$ "fa_middle"]	= {type: DT.NUMBER, value: fa_middle}
+console_macros [$ "fa_left"]	= {type: DT.NUMBER, value: fa_left}
+console_macros [$ "fa_right"]	= {type: DT.NUMBER, value: fa_right}
+console_macros [$ "fa_center"]	= {type: DT.NUMBER, value: fa_center}
 #endregion
 
 #region Virtual keys
-console_macros[? "vk_add"	     ] = vk_add
-console_macros[? "vk_alt"	     ] = vk_alt
-console_macros[? "vk_anykey"     ] = vk_anykey
-console_macros[? "vk_backspace"  ] = vk_backspace
-console_macros[? "vk_control"    ] = vk_control
-console_macros[? "vk_decimal"    ] = vk_decimal
-console_macros[? "vk_delete"     ] = vk_delete
-console_macros[? "vk_divide"     ] = vk_divide
-console_macros[? "vk_down"	     ] = vk_down
-console_macros[? "vk_end"	     ] = vk_end
-console_macros[? "vk_enter"	     ] = vk_enter
-console_macros[? "vk_escape"     ] = vk_escape
-console_macros[? "vk_f1"	     ] = vk_f1
-console_macros[? "vk_f2"	     ] = vk_f2
-console_macros[? "vk_f3"	     ] = vk_f3
-console_macros[? "vk_f4"	     ] = vk_f4
-console_macros[? "vk_f5"	     ] = vk_f5
-console_macros[? "vk_f6"	     ] = vk_f6
-console_macros[? "vk_f7"	     ] = vk_f7
-console_macros[? "vk_f8"	     ] = vk_f8
-console_macros[? "vk_f9"	     ] = vk_f9
-console_macros[? "vk_f10"	     ] = vk_f10
-console_macros[? "vk_f11"	     ] = vk_f11
-console_macros[? "vk_f12"	     ] = vk_f12
-console_macros[? "vk_home"	     ] = vk_home
-console_macros[? "vk_insert"     ] = vk_insert
-console_macros[? "vk_lalt"	     ] = vk_lalt
-console_macros[? "vk_lcontrol"   ] = vk_lcontrol
-console_macros[? "vk_left"	     ] = vk_left
-console_macros[? "vk_lshift"     ] = vk_lshift
-console_macros[? "vk_multiply"   ] = vk_multiply
-console_macros[? "vk_nokey"      ] = vk_nokey
-console_macros[? "vk_numpad0"    ] = vk_numpad0
-console_macros[? "vk_numpad1"    ] = vk_numpad1
-console_macros[? "vk_numpad2"    ] = vk_numpad2
-console_macros[? "vk_numpad3"    ] = vk_numpad3
-console_macros[? "vk_numpad4"    ] = vk_numpad4
-console_macros[? "vk_numpad5"    ] = vk_numpad5
-console_macros[? "vk_numpad6"    ] = vk_numpad6
-console_macros[? "vk_numpad7"    ] = vk_numpad7
-console_macros[? "vk_numpad8"    ] = vk_numpad8
-console_macros[? "vk_numpad9"    ] = vk_numpad9
-console_macros[? "vk_pagedown"   ] = vk_pagedown
-console_macros[? "vk_pageup"     ] = vk_pageup
-console_macros[? "vk_pause"      ] = vk_pause
-console_macros[? "vk_printscreen"] = vk_printscreen
-console_macros[? "vk_ralt"		 ] = vk_ralt
-console_macros[? "vk_rcontrol"   ] = vk_rcontrol
-console_macros[? "vk_return"	 ] = vk_return
-console_macros[? "vk_right"		 ] = vk_right
-console_macros[? "vk_rshift"	 ] = vk_rshift
-console_macros[? "vk_shift"		 ] = vk_shift
-console_macros[? "vk_space"		 ] = vk_space
-console_macros[? "vk_subtract"	 ] = vk_subtract
-console_macros[? "vk_tab"		 ] = vk_tab
-console_macros[? "vk_up"		 ] = vk_up
+console_macros [$ "vk_anykey"]		= {type: DT.NUMBER, value: vk_anykey		}
+console_macros [$ "vk_nokey"]		= {type: DT.NUMBER, value: vk_nokey			}
+																				
+console_macros [$ "vk_left"]		= {type: DT.NUMBER, value: vk_left			}
+console_macros [$ "vk_up"]			= {type: DT.NUMBER, value: vk_up			}
+console_macros [$ "vk_down"]		= {type: DT.NUMBER, value: vk_down			}
+console_macros [$ "vk_right"]		= {type: DT.NUMBER, value: vk_right			}
+
+console_macros [$ "vk_space"]		= {type: DT.NUMBER, value: vk_space			}
+console_macros [$ "vk_backspace"]	= {type: DT.NUMBER, value: vk_backspace		}
+console_macros [$ "vk_enter"]	    = {type: DT.NUMBER, value: vk_enter			}
+console_macros [$ "vk_escape"]		= {type: DT.NUMBER, value: vk_escape		}
+console_macros [$ "vk_tab"]			= {type: DT.NUMBER, value: vk_tab			}
+
+console_macros [$ "vk_shift"]		= {type: DT.NUMBER, value: vk_shift			}
+console_macros [$ "vk_control"]		= {type: DT.NUMBER, value: vk_control		}
+console_macros [$ "vk_alt"]			= {type: DT.NUMBER, value: vk_alt			}
+
+if include_niche_virtual_keys
+{
+console_macros [$ "vk_add"]			= {type: DT.NUMBER, value: vk_add			}
+console_macros [$ "vk_decimal"]		= {type: DT.NUMBER, value: vk_decimal		}
+console_macros [$ "vk_delete"]		= {type: DT.NUMBER, value: vk_delete		}
+console_macros [$ "vk_divide"]		= {type: DT.NUMBER, value: vk_divide		}
+console_macros [$ "vk_end"]			= {type: DT.NUMBER, value: vk_end			}
+console_macros [$ "vk_f1"]			= {type: DT.NUMBER, value: vk_f1			}
+console_macros [$ "vk_f2"]			= {type: DT.NUMBER, value: vk_f2			}
+console_macros [$ "vk_f3"]			= {type: DT.NUMBER, value: vk_f3			}
+console_macros [$ "vk_f4"]			= {type: DT.NUMBER, value: vk_f4			}
+console_macros [$ "vk_f5"]			= {type: DT.NUMBER, value: vk_f5			}
+console_macros [$ "vk_f6"]			= {type: DT.NUMBER, value: vk_f6			}
+console_macros [$ "vk_f7"]			= {type: DT.NUMBER, value: vk_f7			}
+console_macros [$ "vk_f8"]			= {type: DT.NUMBER, value: vk_f8			}
+console_macros [$ "vk_f9"]			= {type: DT.NUMBER, value: vk_f9			}
+console_macros [$ "vk_f10"]			= {type: DT.NUMBER, value: vk_f10			}
+console_macros [$ "vk_f11"]			= {type: DT.NUMBER, value: vk_f11			}
+console_macros [$ "vk_f12"]			= {type: DT.NUMBER, value: vk_f12			}
+console_macros [$ "vk_home"]		= {type: DT.NUMBER, value: vk_home			}
+console_macros [$ "vk_insert"]		= {type: DT.NUMBER, value: vk_insert		}
+console_macros [$ "vk_lalt"]		= {type: DT.NUMBER, value: vk_lalt			}
+console_macros [$ "vk_lcontrol"]	= {type: DT.NUMBER, value: vk_lcontrol		}
+console_macros [$ "vk_lshift"]		= {type: DT.NUMBER, value: vk_lshift		}
+console_macros [$ "vk_multiply"]	= {type: DT.NUMBER, value: vk_multiply		}
+console_macros [$ "vk_numpad0"]		= {type: DT.NUMBER, value: vk_numpad0		}
+console_macros [$ "vk_numpad1"]		= {type: DT.NUMBER, value: vk_numpad1		}
+console_macros [$ "vk_numpad2"]		= {type: DT.NUMBER, value: vk_numpad2		}
+console_macros [$ "vk_numpad3"]		= {type: DT.NUMBER, value: vk_numpad3		}
+console_macros [$ "vk_numpad4"]		= {type: DT.NUMBER, value: vk_numpad4		}
+console_macros [$ "vk_numpad5"]		= {type: DT.NUMBER, value: vk_numpad5		}
+console_macros [$ "vk_numpad6"]		= {type: DT.NUMBER, value: vk_numpad6		}
+console_macros [$ "vk_numpad7"]		= {type: DT.NUMBER, value: vk_numpad7		}
+console_macros [$ "vk_numpad8"]		= {type: DT.NUMBER, value: vk_numpad8		}
+console_macros [$ "vk_numpad9"]		= {type: DT.NUMBER, value: vk_numpad9		}
+console_macros [$ "vk_pagedown"]	= {type: DT.NUMBER, value: vk_pagedown		}
+console_macros [$ "vk_pageup"]		= {type: DT.NUMBER, value: vk_pageup		}
+console_macros [$ "vk_pause"]		= {type: DT.NUMBER, value: vk_pause			}
+console_macros [$ "vk_printscreen"]	= {type: DT.NUMBER, value: vk_printscreen	}
+console_macros [$ "vk_ralt"]		= {type: DT.NUMBER, value: vk_ralt			}
+console_macros [$ "vk_rcontrol"]	= {type: DT.NUMBER, value: vk_rcontrol		}
+console_macros [$ "vk_return"]		= {type: DT.NUMBER, value: vk_return		}
+console_macros [$ "vk_rshift"]		= {type: DT.NUMBER, value: vk_rshift		}
+console_macros [$ "vk_subtract"]	= {type: DT.NUMBER, value: vk_subtract		}
+}
 #endregion
 }
