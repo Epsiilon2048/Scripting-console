@@ -5,6 +5,8 @@ static space_sep = " ,()=:"
 
 if shave(" ", command) == "" return ""
 
+command = string_replace(command, "\\n", "\n")
+
 #region Separate commands
 var command_split = []
 
@@ -161,9 +163,12 @@ else
 
 		if not is_undefined(varstring) and variable_string_exists(varstring)
 		{
-			if type != DT.VARIABLE and is_method(variable_string_get(varstring))
+			var varstringvalue = variable_string_get(varstring)
+			
+			if type != DT.VARIABLE and is_method(varstringvalue)
 			{
 				type = DT.SCRIPT
+				value = varstringvalue
 			}
 			else
 			{

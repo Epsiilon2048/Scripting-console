@@ -15,7 +15,7 @@ for(var i = 1; i <= string_length(command)+1; i++)
 {
 	var char = string_char_at(command, i)
 	
-	if char == "\\" and in_string
+	if char == "\\" and in_string and i != string_length(command)
 	{
 		i++
 	}
