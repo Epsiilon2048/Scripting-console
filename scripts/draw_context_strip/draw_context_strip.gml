@@ -1,5 +1,5 @@
 
-function draw_context_strip(x, y, string, hovering){ with CTX_STRIP {
+function draw_context_strip(x, y, string){ with CTX_STRIP {
 
 if is_string(string) and string != ""
 {

@@ -88,6 +88,23 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 	size = 100
 }
 
+CTX_MENU = {}; with CTX_MENU {
+	
+	SEPARATOR = 0
+	
+	x = 50
+	y = 50
+	
+	border_l = 15
+	border_r = 15
+	border_h = 6
+	
+	spacing = 5
+	sep_spacing = 6
+	
+	font = o_console.font
+}
+
 CTX_STRIP = {}; with CTX_STRIP {
 	
 	dist   = 7
