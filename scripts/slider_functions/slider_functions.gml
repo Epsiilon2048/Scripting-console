@@ -53,11 +53,11 @@ var mx = device_mouse_x_to_gui(0)
 var my = device_mouse_y_to_gui(0)
 
 var x2 = x + width
-var y2 = y + (condensed ? SLIDER.height_condensed : SLIDER.height)
+var y2 = y + (condensed ? o_console.SLIDER.height_condensed : o_console.SLIDER.height)
 
 var curvalue = variable_string_get(variable)
 
-if not meter and (SLIDER.correct_not_real or is_real(curvalue))
+if not meter and (o_console.SLIDER.correct_not_real or is_real(curvalue))
 {
 	if gui_mouse_between(x, y, x2, y2) and mouse_check_button_pressed(mb_left)
 	{
@@ -79,7 +79,7 @@ if not meter and (SLIDER.correct_not_real or is_real(curvalue))
 			mouse_on = false
 		}
 	
-		if SLIDER.update_every_frame or not mouse_on
+		if o_console.SLIDER.update_every_frame or not mouse_on
 		{
 			var newvalue
 			if value == 1 newvalue = var_max
@@ -92,7 +92,7 @@ if not meter and (SLIDER.correct_not_real or is_real(curvalue))
 		
 			variable_string_set(variable, newvalue)
 		
-			if SLIDER.lock_value_to_step and var_step != 0 and value != 1
+			if o_console.SLIDER.lock_value_to_step and var_step != 0 and value != 1
 			{
 				value = clamp((newvalue - var_min)/(var_max-var_min), 0, 1)
 			}
@@ -114,7 +114,7 @@ var text = "NaN"
 
 if is_real(curvalue) 
 {
-	//if SLIDER.text_fill_places text = float_fill_places(curvalue, var_places)
+	//if o_console.SLIDER.text_fill_places text = float_fill_places(curvalue, var_places)
 	//else
 	text = string_format_float(curvalue)
 	
@@ -131,7 +131,7 @@ if value_show and not condensed
 	draw_set_align(fa_left, fa_center)
 
 	clip_rect_cutout(x, y, x2+1, y2)
-	draw_text(x+SLIDER.text_offset, y+SLIDER.height/2+1, text)
+	draw_text(x+o_console.SLIDER.text_offset, y+o_console.SLIDER.height/2+1, text)
 	shader_reset()
 }
 
@@ -147,7 +147,7 @@ if value > 0
 		clip_rect_cutout(x, y, value_x+1, y2);
 		
 		draw_set_color(o_console.colors.body_real)
-		draw_text(x+SLIDER.text_offset, y+SLIDER.height/2+1, text)
+		draw_text(x+o_console.SLIDER.text_offset, y+o_console.SLIDER.height/2+1, text)
 		
 		shader_reset()
 	}

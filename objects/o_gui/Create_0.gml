@@ -8,15 +8,19 @@ func
 checkbox
 shortcut
 */
-
+g = false
 ctx = new Ctx_menu()
 ctx.set([
 	{str: "Hello!!"},
 	{str: "Hows the context menu looking??"},
+	o_console.CTX_MENU.SEPARATOR,
 	{str: "yooooo"},
-	CTX_MENU.SEPARATOR,
-	{str: "Option3"}
-	CTX_MENU.SEPARATOR,
+	{str: "Option3"},
+	{str: "yooooo"},
+	{str: "Option4", checkbox: "o_gui.g", stay: true},
+	{str: "yooooo"},
+	{str: "Option5"},
+	o_console.CTX_MENU.SEPARATOR,
 	{str: "The option"},
-	{str: "The cooler option"}
+	{str: "The cooler option"},
 ])

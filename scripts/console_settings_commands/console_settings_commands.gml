@@ -1,18 +1,23 @@
 
 function color_scheme(value){				with o_console {
 
-colors = color_schemes[$ value]
-color_string = color_console_string(console_string)
-cs_index = value
+if not is_undefined(color_schemes[$ value])
+{
+	colors = color_schemes[$ value]
+	
+	color_string = color_console_string(console_string)
+	cs_index = value
 
-if run_in_embed and (Output.tag == color_scheme_settings)
-{
-	return color_scheme_settings()
+	if run_in_embed and (Output.tag == color_scheme_settings)
+	{
+		return color_scheme_settings()
+	}
+	else
+	{
+		return stitch("Console color scheme set to ",value)
+	}
 }
-else
-{
-	return stitch("Console color scheme set to ",value)
-}
+else return "No such color scheme exists!"
 }}
 
 

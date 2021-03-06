@@ -6,7 +6,7 @@ if is_string(str)
 {
 var acceptable = "-0123456789"
 
-var _str = shave("-", shave("0", string_delete(str, string_pos(".", str), 1)))
+var _str = shave("0", shave("-", string_delete(str, string_pos(".", str), 1)))
 
 if string_pos("0", str) != 0 and _str == "" _str = "0"
 

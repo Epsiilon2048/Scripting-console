@@ -1,6 +1,4 @@
 
-COLOR_PICKER.size += (keyboard_check(vk_right) - keyboard_check(vk_left))
-
 step ++
 
 if rainbow

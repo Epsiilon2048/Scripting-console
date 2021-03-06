@@ -114,9 +114,11 @@ return "Display position reset"
 
 function display_toggle_objects(toggle){	with o_console {
 
-if is_undefined(toggle) = not display_show_objects 
+_toggle = toggle
 
-display_show_objects = toggle
+if is_undefined(_toggle) _toggle = not display_show_objects 
+
+display_show_objects = _toggle
 
 return "Toggled display objects"
 }}

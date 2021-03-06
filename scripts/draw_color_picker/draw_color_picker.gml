@@ -1,5 +1,5 @@
 
-function draw_color_picker(x, y, variable){ with COLOR_PICKER {
+function draw_color_picker(x, y, variable){ with o_console.COLOR_PICKER {
 
 static mouse_on_h = false
 static mouse_on_sv = false

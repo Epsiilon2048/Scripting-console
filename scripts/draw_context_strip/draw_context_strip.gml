@@ -1,5 +1,5 @@
 
-function draw_context_strip(x, y, string){ with CTX_STRIP {
+function draw_context_strip(x, y, string){ with o_console.CTX_STRIP {
 
 if is_string(string) and string != ""
 {

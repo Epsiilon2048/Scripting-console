@@ -4,25 +4,29 @@ function variable_string_exists(str){
 var list = string_split(".", str)
 var object
 
+var asset = asset_get_index(list[0])
+
 if string_is_int(list[0])
 {
 	var r = real(list[0])
 	
-	if object_exists(r) object = asset.id
+	if r == global object = global
+	else if object_exists(r) object = asset.id
 	else if instance_exists(r) object = r
 	else return false
 }
 else
 {
-	var asset = asset_get_index(list[0])
-	if instance_exists(asset) object = asset.id
+	if list[0] == "global" object = global
+	else if instance_exists(asset) object = asset.id
 	else return false
 }
 
 if array_length(list) < 2 return false
-if not variable_instance_exists( object, list[1] ) return false
 
-var variable = variable_instance_get( asset_get_index(list[0]), list[1] )
+var variable = variable_instance_get( object, list[1] )
+
+if is_undefined( variable ) return false
 
 for(var i = 2; i <= array_length(list)-1; i++)
 {
@@ -35,25 +39,31 @@ return true
 
 
 
+
 function variable_string_get(str){
 
 var list = string_split(".", str)
-var object
+var object = -1
+
+var asset = asset_get_index(list[0])
 
 if string_is_int(list[0])
 {
 	var r = real(list[0])
 	
-	if object_exists(r) object = asset.id
+	if r == global object = global
+	else if object_exists(r) object = asset.id
 	else if instance_exists(r) object = r
 }
 else
 {
-	var asset = asset_get_index(list[0])
-	if instance_exists(asset) object = asset.id
+	if list[0] == "global" object = global
+	else if instance_exists(asset) object = asset.id
 }
 
-var value = variable_instance_get( object, list[1] )
+if object == -1 return undefined
+
+var value = variable_instance_get( object, list[min(1, array_length(list)-1)] )
 
 for(var i = 2; i <= array_length(list)-1; i++)
 {
@@ -69,20 +79,26 @@ function variable_string_set(str, val){
 
 var list = string_split(".", str)
 var lenlist = array_length(list)
-var object
+var object = -1
+
+var asset = asset_get_index(list[0])
 
 if string_is_int(list[0])
 {
 	var r = real(list[0])
 	
-	if object_exists(r) object = asset.id
+	if r == global object = global
+	else if object_exists(r) object = asset.id
 	else if instance_exists(r) object = r
 }
 else
 {
-	var asset = asset_get_index(list[0])
-	if instance_exists(asset) object = asset.id
+
+	if list[0] == "global" object = global
+	else if instance_exists(asset) object = asset.id
 }
+
+if object == -1 return undefined
 
 if lenlist > 2
 {

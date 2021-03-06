@@ -117,9 +117,10 @@ if console_toggle
 	{
 		draw_set_color(colors.selection)
 		draw_set_halign(fa_left)
-		draw_set_valign(fa_bottom)
+		draw_set_valign(fa_center)
 		draw_text(
-			console_text_x + char_width*(char_pos1-1), console_text_y + char_height/2, 
+			console_text_x + char_width*(char_pos1-1), 
+			console_text_y, 
 			string_copy(console_string, char_pos1, char_pos2-char_pos1+1)
 		)
 	}
@@ -164,25 +165,16 @@ if Display.enabled and ds_list_size(display_list) > 0
 			var obj = string_split(".", display_list[| i].variable)[0]
 			var variable = string_copy(display_list[| i].variable, string_pos(".", display_list[| i].variable)+1, string_length(display_list[| i].variable))
 			var value = string_replace_all( string( variable_string_get(display_list[| i].variable) ), "\n", "\\n" )
-		
-			if window_embed_text and embed_text
+
+			if display_show_objects
 			{
-				if display_show_objects 
-				{
-					ds_list_add( display_string, {str: obj, func: function() {o_console.object = asset_get_index(obj)} } )
-					variable = "."+variable
-				}
-				ds_list_add( display_string, {str: variable, scr: input_set, args: [variable, true]}, " "+value+"\n" )
+				if instance_number(obj.object_index) > 1 ds_list_add(display_string, string(obj)+" ")
+				
+				ds_list_add(display_string, object_get_name(obj.object_index))
+				
+				variable = "."+variable
 			}
-			else
-			{
-				if display_show_objects
-				{
-					ds_list_add(display_string, obj)
-					variable = "."+variable
-				}
-				ds_list_add(display_string, variable+" "+value+"\n")
-			}
+			ds_list_add(display_string, variable+" "+value+"\n")
 		}
 	
 		var embed_string = ds_list_to_array(display_string)

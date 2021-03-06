@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripting-console",
-    "path": "Scripting-console.yyp",
+    "name": "Console commands",
+    "path": "folders/Scripts/Console commands.yy",
   },
   "resourceVersion": "1.0",
-  "name": "draw_ctx_menu",
+  "name": "create_variable",
   "tags": [],
   "resourceType": "GMScript",
 }

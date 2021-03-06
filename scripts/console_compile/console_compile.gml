@@ -217,8 +217,8 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	
 		if not is_undefined(_macro)
 		{
-			if is_real(_macro) arg = string_format_float(_macro)
-			else			   arg = string(_macro)
+			if is_real(_macro) arg = string_format_float(_macro.value)
+			else			   arg = string(_macro.value)
 		}
 		else arg = _arg
 	

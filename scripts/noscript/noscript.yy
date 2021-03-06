@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Common utilities",
-    "path": "folders/Scripts/Common utilities.yy",
+    "name": "Debugging",
+    "path": "folders/Objects/Debugging.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Script93",
+  "name": "noscript",
   "tags": [],
   "resourceType": "GMScript",
 }

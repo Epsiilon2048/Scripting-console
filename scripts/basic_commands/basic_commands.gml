@@ -167,6 +167,10 @@ return "Object reset!"
 
 function color_make(r, g, b){ with o_console {
 
+if is_undefined(r) r = 0
+if is_undefined(g) g = 0
+if is_undefined(b) b = 0
+
 var _col = make_color_rgb(r, g, b)
 var box = {str: "color ", col: _col}
 

@@ -2,17 +2,36 @@
 // https =//help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function initialize_console_macros(){
 
+console_macros [$ "var"]				   = {type: DT.SCRIPT, value: create_variable}
+
 console_macros [$ "instance_create_layer"] = {type: DT.SCRIPT, value: instance_create_layer}
 console_macros [$ "instance_destroy"]	   = {type: DT.SCRIPT, value: instance_destroy}
+
 console_macros [$ "show_message"]		   = {type: DT.SCRIPT, value: show_message}
+
 console_macros [$ "power"]				   = {type: DT.SCRIPT, value: power}
+
+console_macros [$ "variable_instance_exists"] = {type: DT.SCRIPT, value: variable_instance_exists}
+console_macros [$ "variable_instance_get"]	  = {type: DT.SCRIPT, value: variable_instance_get}
+console_macros [$ "variable_instance_set"]	  = {type: DT.SCRIPT, value: variable_instance_exists}
+console_macros [$ "variable_struct_exists"]   = {type: DT.SCRIPT, value: variable_struct_exists}
+console_macros [$ "variable_struct_get"]	  = {type: DT.SCRIPT, value: variable_struct_get}
+console_macros [$ "variable_struct_set"]	  = {type: DT.SCRIPT, value: variable_struct_exists}
+
+console_macros [$ "is_real"]	  = {type: DT.SCRIPT, value: is_real}
+
+console_macros [$ "Display"]	= {type: DT.VARIABLE, value: "o_console.Display"}
+console_macros [$ "Window"]		= {type: DT.VARIABLE, value: "o_console.Window"}
+
+console_macros [$ "asset_get_index"] = {type: DT.SCRIPT, value: asset_get_index}
+console_macros [$ "asset_get_type"]	 = {type: DT.SCRIPT, value: asset_get_type}
 
 console_macros [$ "true"]	= {type: DT.NUMBER, value: true}
 console_macros [$ "false"]	= {type: DT.NUMBER, value: false}
 
-console_macros [$ "global"]	= {type: DT.NUMBER, value: global}
+console_macros [$ "global"]	= {type: DT.OBJECT, value: global}
 console_macros [$ "noone"]	= {type: DT.NUMBER, value: noone}
-console_macros [$ "all"]	= {type: DT.NUMBER, value: all}
+console_macros [$ "all"]	= {type: DT.OBJECT, value: all}
 
 #region Colors
 console_macros [$ "c_white"]	= {type: DT.NUMBER, value: c_white}

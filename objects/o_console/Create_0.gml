@@ -25,11 +25,6 @@ font = scale_font[draw_scale]
 
 #macro _BOOL_STRING ? "true" : "false"
 
-#macro SLIDER	    global.SLIDER_PROPERTIES
-#macro CTX_MENU	    global.CONTEXT_MENU_PROPERTIES
-#macro CTX_STRIP    global.CONTEXT_STRIP_PROPERTIES
-#macro COLOR_PICKER global.COLOR_PICKER_PROPERTIES
-
 COLOR_PICKER = {}; with COLOR_PICKER {
 	
 	var g = surface_create(256, 256)
@@ -90,17 +85,31 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 
 CTX_MENU = {}; with CTX_MENU {
 	
-	SEPARATOR = 0
+	SEPARATOR = "separator"
+	
+	enabled = false
 	
 	x = 50
 	y = 50
 	
 	border_l = 15
-	border_r = 15
-	border_h = 6
+	border_r = 10
 	
-	spacing = 5
-	sep_spacing = 6
+	mouse_item = -1
+	
+	clicking_on = false
+	
+	inputs = false
+	
+	left   = 0
+	right  = 0
+	top	   = 0
+	bottom = 0
+	
+	roundrect_radius = 5
+	
+	spacing = 8
+	sep_spacing = 10
 	
 	font = o_console.font
 }
@@ -388,7 +397,6 @@ commands = [
 	{scr: "display_all", optargs: ["object"], hiddenargs: ["enable all?"], desc: "Puts all variables in the specified/scoped instance on the Display"},
 	{scr: "display_clear", desc: "Removes all variables from the Display"},
 	{scr: "display_reset_pos", desc: "Resets the position of the Display"},
-	{scr: "display_toggle_objects", hiddenargs: ["enable?"], desc: "Toggles whether or not the Display shows the scopes variables are from"},
 	
 	{scr: "bind",	  args: ["key", "command"], desc: "Binds a key to a command"},
 	{scr: "unbind",	  args: ["bind index"], hiddenargs: ["return bindings menu?"], desc: "Removes the binding in the specified index"},
