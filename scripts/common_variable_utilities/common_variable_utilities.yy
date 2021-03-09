@@ -3,10 +3,10 @@
   "isCompatibility": false,
   "parent": {
     "name": "Common utilities",
-    "path": "folders/Scripts/Common utilities.yy",
+    "path": "folders/Scripts/Sorted/Backend/Common utilities.yy",
   },
   "resourceVersion": "1.0",
-  "name": "roll",
+  "name": "common_variable_utilities",
   "tags": [],
   "resourceType": "GMScript",
 }

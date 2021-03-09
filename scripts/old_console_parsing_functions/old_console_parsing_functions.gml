@@ -1,9 +1,6 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function console_exec_old(command){ with o_console {
 
-with o_console
-{
 var _console_string = string_split(";", command)
 
 var _output_string = []
@@ -97,5 +94,4 @@ for(var i = 0; i <= array_length(_console_string)-1; i++)
 if array_length(_output_string) == 1 and not is_array(_output_string[0]) _output_string = [_output_string]
 
 return _output_string
-}
 }}

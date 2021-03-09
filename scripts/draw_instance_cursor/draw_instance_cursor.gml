@@ -19,8 +19,8 @@ draw_rectangle(x, y, x+text_offsetx+string_width(text)+3, y-string_height(text)-
 gpu_set_blendmode(bm_normal)
 draw_set_color(text_col)
 
-draw_round_line(x, y, x+text_offsetx+string_width(text)/text_dampner, y, line_width)
-draw_round_line(x, y, x, y-string_height(text), line_width)
+draw_roundline(x, y, x+text_offsetx+string_width(text)/text_dampner, y, line_width)
+draw_roundline(x, y, x, y-string_height(text), line_width)
 draw_triangle(x, y, x+triangle_size, y, x, y-triangle_size, false)
 
 draw_text(x+text_offsetx, y, text)

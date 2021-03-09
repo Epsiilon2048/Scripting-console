@@ -14,7 +14,10 @@ while string_char_at(output, string_length(output)) == substr
 }
 return output
 }
-	
+
+
+
+
 function stitch(){ //combines args into a string
 	
 var str = ""
@@ -27,62 +30,8 @@ for( var i = 0; i <= argument_count-1; i++ )
 return str
 }
 	
-function stitch_sep(sep){ //combines args into a string with a separator in between
 	
-var _sep = string(sep)
-var str = ""
 
-for( var i = 1; i <= argument_count-1; i++ )
-{
-	str += string(argument[i])
-	
-	if i != argument_count-1 str += _sep
-}
-
-return str	
-}
-
-function string_count_exclude(substr, str, before, after){ //counts substrs in the str, excluding substrs around the specified before and after substrs
-
-var _before = before
-var _after  = after
-
-if is_undefined(before) _before = ""
-if is_undefined(after)  _after  = ""
-
-var count = 0
-
-for(var i = 1; i <= string_length(str); i++)
-{
-	if	string_pos_ext(substr, str, i-1) == i and
-		(_before == "" or (i == 1 or string_pos_ext(_before, str, i-1-string_length(_before)) != i-string_length(_before))) and
-		(_after  == "" or string_pos_ext(_after,  str, i-1+string_length(substr)) != i+string_length(substr))
-	{
-		count ++
-	}
-}
-return count
-}
-
-function string_pos_exclude(substr, str, before, after){ //finds the string pos, excluding substrs around the specified before and after substrs
-
-var _before = before
-var _after  = after
-
-if is_undefined(before) _before = ""
-if is_undefined(after)  _after  = ""
-
-for(var i = 1; i <= string_length(str); i++)
-{
-	if	string_pos_ext(substr, str, i-1) == i and
-		(_before == "" or (i == 1 or string_pos_ext(_before, str, i-1-string_length(_before)) != i-string_length(_before))) and
-		(_after  == "" or string_pos_ext(_after,  str, i-1+string_length(substr)) != i+string_length(substr))
-	{
-		return i
-	}
-}
-return 0
-}
 	
 function string_split(substr, str){ //splits a string into an array by a separator
 
@@ -107,28 +56,8 @@ var i = 0; while str != ""
 return list
 }
 
-function string_split_exclude(substr, str, before, after){ //splits a string into an array by a separator, excluding separators around the specified before and after substrs
 
-var list = array_create(string_count_exclude(substr, str, before, after), "")
-var len = string_length(substr)
 
-var i = 0; while str != ""
-{
-	if string_pos_exclude(substr, str, before, after) != 0
-	{
-		list[i] = string_copy(str, 1, string_pos_exclude(substr, str, before, after)-1)
-		str = string_delete(str, 1, string_pos_exclude(substr, str, before, after)+len-1)
-	}
-	else
-	{
-		list[i] = str
-		str = ""
-	}
-	
-	i++
-}
-return list
-}
 
 function string_split_keep(substr, str){ //splits a string into an array by a separator, but keeping it
 
@@ -153,3 +82,71 @@ var i = 0; while str != ""
 return list
 }
 	
+	
+	
+	
+function string_is_int(str){ //returns true if a string is a base10 or base16 integer
+
+var _str = str
+if string_pos("-", _str) == 1 _str = string_delete(_str, 1, 1)
+
+if _str == "" return false	
+
+if string_pos("0x", _str) == 1
+{
+	_str = string_delete(_str, 1, 2)
+	
+	if hex_to_dec(_str) >= 0 return true
+	else					 return false
+}
+
+if string_digits(_str) == _str return true
+else						   return false
+}
+
+
+
+
+function string_is_float(str){ //returns true if a string is a base10 or base16 float
+
+if string_pos(".-", str) == 1 return false
+
+var _str = str
+if string_pos(".", str) != 0 
+{
+	if string_pos(".0x", _str) or string_pos("0.x", _str) return false
+	
+	_str = string_delete( _str, string_pos(".", _str), 1 )
+}
+
+return string_is_int(_str)
+}
+
+
+
+
+function string_format_float(float){ //formats a float into a string, rounding to the 10^6 place (rather than 100s place)
+
+var decimal = float - floor(float)
+var whole = floor(float)
+
+if decimal == 0 return string(float)
+else return stitch(whole, shave("0", string_format(decimal, 0, 6)))
+}
+
+
+
+
+function string_pos_index(substr, str, index){ //returns the nth instance of the substr in the str
+
+var count = 0
+for(var i = 1; i <= string_length(str); i++)
+{
+	if string_char_at(str, i) == substr
+	{
+		count ++
+		if count == index return i
+	}
+}
+return false
+}

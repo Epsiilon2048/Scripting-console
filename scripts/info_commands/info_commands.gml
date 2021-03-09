@@ -1,4 +1,17 @@
 
+return [
+	"help",
+	"command_help",
+	"syntax_help",
+	"console_window_help",
+	"embedded_text_help",
+	"console_settings",
+	"color_scheme_settings",
+	"Epsiilon",
+	"console_videos",
+	"nice_thing",
+]
+
 function help(){
 
 return format_output([
@@ -27,7 +40,7 @@ return format_output([
 
 
 
-function command_help(_command){		with o_console {
+function command_help(_command){ with o_console {
 	
 var text = []
 
@@ -86,7 +99,7 @@ return format_output(text, true, command_help)
 
 
 
-function syntax_help(){					with o_console {
+function syntax_help(){ with o_console {
 	
 return format_output([ //note that this only takes the colors from the current color scheme; doesn't change with it
 	"Supported datatypes/references\n",
@@ -109,7 +122,7 @@ return format_output([ //note that this only takes the colors from the current c
 
 
 
-function console_window_help(){			with o_console {
+function console_window_help(){ with o_console {
 
 return format_output([
 	"The Window\n"+
@@ -134,7 +147,7 @@ return format_output([
 
 
 
-function embedded_text_help(){			with o_console {
+function embedded_text_help(){ with o_console {
 
 return format_output([
 	"Text embedding is used everywhere for menus and interactive elements.\n\n"+
@@ -158,7 +171,7 @@ return format_output([
 
 
 
-function console_settings(){			with o_console {
+function console_settings(){ with o_console {
 	
 return format_output([
 	{str: "", checkbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
@@ -246,7 +259,7 @@ return format_output([
 	
 	
 	
-function console_videos(){				with o_console {
+function console_videos(){ with o_console {
 
 return format_output([
 	"Video explaining the new updates soon (hopefully)!\n\n"+

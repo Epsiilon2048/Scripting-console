@@ -5,7 +5,7 @@ if show
 	if spd == 0 draw_circle(x, y, 1.1, true)
 
 	draw_set_color(o_console.colors.output)
-	draw_round_line(
+	draw_roundline(
 		x,
 		y,
 		x + lengthdir_x(spd, direction),

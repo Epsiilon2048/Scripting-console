@@ -10,7 +10,6 @@ SCALE[$ 3] = {mult: 1,	   font: fnt_debug3x}
 draw_scale = SCALE[$ 1]
 font = draw_scale.font
 
-
 WINDOW = {}; with WINDOW {
 	
 	width = 400

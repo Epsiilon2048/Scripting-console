@@ -1,8 +1,8 @@
 {
   "type": 1,
   "parent": {
-    "name": "Scripting-console",
-    "path": "Scripting-console.yyp",
+    "name": "Shaders",
+    "path": "folders/Shaders.yy",
   },
   "resourceVersion": "1.0",
   "name": "shd_clip_rect",

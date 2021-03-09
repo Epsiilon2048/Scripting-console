@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Common utilities",
-    "path": "folders/Scripts/Common utilities.yy",
+    "name": "Shaders",
+    "path": "folders/Shaders.yy",
   },
   "resourceVersion": "1.0",
-  "name": "variable_from_string",
+  "name": "clip_rect_cutout",
   "tags": [],
   "resourceType": "GMScript",
 }

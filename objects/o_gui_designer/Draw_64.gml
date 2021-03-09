@@ -15,7 +15,7 @@
 //{
 //	gpu_set_blendmode(lines[i].bm)
 //	draw_set_color(lines[i].c)
-//	draw_round_line(lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2, lines[i].w, lines[i].c)
+//	draw_roundline(lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2, lines[i].w, lines[i].c)
 //}
 //for(var i = 0; i <= array_length(rects)-1; i++)
 //{
