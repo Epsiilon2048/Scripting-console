@@ -1,15 +1,14 @@
 
-function string_add_scope(str){ with o_console {
+function string_add_scope(str, add_macro){ with o_console {
 
-var _str
-if is_undefined(str) _str = ""
-else _str = string(str)
+var _add_macro = is_undefined(add_macro) ? true : add_macro
+var _str = is_undefined(str) ? "" : string(str)
 
 var split = string_split(".", _str)
 
 if array_length(split) == 0 return undefined
 
-var _macro = console_macros[$ split[0]]
+var _macro = _add_macro ? console_macros[$ split[0]] : undefined
 
 if array_length(split) < 2 or (
    split[0] != "global" and split[0] != "-5" and

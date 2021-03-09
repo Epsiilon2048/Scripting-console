@@ -1,24 +1,12 @@
 
-f = [
-	{pos: 1},
-	{pos: 12},
-	{pos: 231},
-	{pos: 13},
-	{pos: 123},
-	{pos: 1},
-	{pos: 231},
-	{pos: 1},
-	{pos: 51},
-	{pos: 231},
-	{pos: 1555},
-	{pos: 1},
-	{pos: 123},
-	{pos: 1},
-	{pos: 1523},
-]
+#macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
+
+#macro _BOOL_STRING ? "true" : "false"
+#macro _PLURAL == 1 ? "" : "s"
 
 include_niche_virtual_keys = false
 console_macros = {}
+
 initialize_console_macros()
 
 scale_mult = array_create(3)
@@ -39,136 +27,7 @@ else						 draw_scale = 1
 
 font = scale_font[draw_scale]
 
-#macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
-
-#macro _BOOL_STRING ? "true" : "false"
-#macro _PLURAL == 1 ? "" : "s"
-
-WINDOW = {}; with WINDOW {
-	
-	width = 400
-	height = 300
-}
-
-COLOR_PICKER = {}; with COLOR_PICKER {
-	
-	var c = surface_create(256, 256)
-	surface_set_target(c)
-
-	for(var yy = 0; yy <= 255; yy++)
-	for(var xx = 0; xx <= 255; xx++)
-	{
-		var _col = make_color_hsv(
-			0,
-			xx,
-			255-yy
-		)
-
-		draw_point_color(xx, yy, _col)
-	}
-	draw_set_alpha(1)
-
-	sv_square = sprite_create_from_surface(c, 0, 0, 256, 256, false, false, 0, 0)
-
-	surface_reset_target()
-	surface_resize(c, 1, 256)
-	surface_set_target(c)
-
-	draw_clear_alpha(c_black, 1)
-
-	for(var yy = 0; yy <= 255; yy++)
-	{
-		var _col = make_color_hsv(yy, 255, 255)
-		draw_point_color(0, yy, _col)
-	}
-	draw_set_color(c_white)
-
-	h_strip = sprite_create_from_surface(c, 0, 0, 1, 256, false, false, 0, 0)
-
-	surface_reset_target()
-	surface_free(c)
-	
-	border_width = 1
-	border_alpha = .2
-	
-	sv_square_dropper_radius = 11
-	
-	h_strip_width	   = 50
-	h_strip_dist	   = 20
-	h_strip_bar_height = 18
-	
-	color_bar_dist	 = 20
-	color_bar_height = 53
-	
-	hue = 0
-	sat = 255
-	val = 255
-	
-	color = make_color_hsv(hue, sat, val)
-	size = 100
-}
-
-CTX_MENU = {}; with CTX_MENU {
-	
-	SEPARATOR = "separator"
-	
-	enabled = false
-	
-	x = 50
-	y = 50
-	
-	border_l = 36
-	border_r = 10
-	
-	mouse_item = -1
-	
-	clicking_on = false
-	
-	inputs = false
-	
-	left   = 0
-	right  = 0
-	top	   = 0
-	bottom = 0
-	
-	roundrect_radius = 5
-	
-	spacing = 8
-	sep_spacing = 10
-	
-	font = o_console.font
-}
-
-CTX_STRIP = {}; with CTX_STRIP {
-	
-	dist   = 7
-	border = 5
-	
-	line_width = 1
-	
-	time = 20
-	alpha_spd = .3
-	
-	font = o_console.font
-}
-
-SLIDER = {}; with SLIDER {
-	
-	height			 = SCALE_ 39
-	height_condensed = SCALE_ 15
-	text_offset		 = SCALE_ 10
-	
-	update_every_frame	  = true
-	lock_value_to_step	  = true
-	correct_not_real	  = true
-	text_fill_places	  = true
-	
-	font = o_console.font
-	marker_font = -1 //set later
-	
-	divider_width = 2
-}
-
+initialize_console_graphics()
 
 space_sep = ds_list_create()
 ds_list_add(space_sep,
@@ -178,10 +37,12 @@ ds_list_add(space_sep,
 	"="
 )
 
-identifiers = {}
-identifiers[$ "a"] = DT.ASSET
-identifiers[$ "v"] = DT.VARIABLE
-identifiers[$ "s"] = DT.STRING
+identifiers = {
+	a: DT.ASSET,
+	v: DT.VARIABLE,
+	s: DT.STRING,
+	r: DT.NUMBER,
+}
 
 #macro RGB make_color_rgb
 
@@ -193,17 +54,7 @@ enum SIDES
 	LEFT	= 270,
 }
 
-enum DT //data types
-{
-	NUMBER,
-	STRING,
-	ASSET,
-	VARIABLE,
-	SCRIPT,
-	OBJECT,
-	MACRO,
-	ROOM,
-}
+enum DT { NUMBER, STRING, ASSET, VARIABLE, SCRIPT, OBJECT, MACRO, ROOM }
 
 color_schemes = {}
 
@@ -439,6 +290,7 @@ commands = [
 ]
 
 outdated = [
+	{name: "ar",					newname: "@",			ver: "Release 1.2"},
 	{name: "color",					newname: "color_make",	ver: "Early 1.2"},
 	{name: "obj_reset",				newname: "reset_obj",	ver: "Early 1.2"},
 	{name: "window_toggle",			newname: "window",		ver: "Early 1.2"},
@@ -446,13 +298,17 @@ outdated = [
 	{name: "select",				newname: "select_obj",	ver: "Unreleased 1.0"},
 	{name: "objects_in_room",		newname: "roomobj",		ver: "Unreleased 1.0"},
 	{name: "variables_in_object",	newname: "objvar",		ver: "Unreleased 1.0"},
-	{name: "var_to_mouse_x",		newname: "vt_mx",		ver: "Unreleased 1.0"},
-	{name: "var_to_mouse_y",		newname: "vt_my",		ver: "Unreleased 1.0"},
-	{name: "var_to_var",			newname: "vtv",			ver: "Unreleased 1.0"},
-	{name: "create_camera_point",	note: "Was project specific", ver: "Unreleased 1.0"},
+
+	{name: "vtv",					note: "Became obsolete with better parsing", ver: "Release 1.2"},
+	{name: "vt_mx",					note: "Became obsolete with better parsing", ver: "Release 1.2"},
+	{name: "vt_my",					note: "Became obsolete with better parsing", ver: "Release 1.2"},
+	{name: "var_to_mouse_x",		note: "Became obsolete with better parsing", ver: "Unreleased 1.0"},
+	{name: "var_to_mouse_y",		note: "Became obsolete with better parsing", ver: "Unreleased 1.0"},
+	{name: "var_to_var",			note: "Became obsolete with better parsing", ver: "Unreleased 1.0"},
+	{name: "create_camera_point",	note: "Was project specific",				 ver: "Unreleased 1.0"},
 ]
 
-greetings = [
+var greetings = [
 	"Hello!! Welcome to the console!",
 	"Afternoon! Or morning! Or whenever!",
 	"Howsya day going?",
@@ -464,7 +320,7 @@ greetings = [
 run_in_embed   = false
 run_in_console = false
 
-output_set({__embedded__: true, o: [greetings[irandom(array_length(greetings)-1)]+" Click ",{str: "here", scr: help, output: true}," for a commands, info, and settings (or just type \"help\")!"]})
+output_set(greetings[irandom(array_length(greetings)-1)]+" Type \"help\" for a general guide.")
 Output.alpha = 0
 
 initialize_color_schemes()

@@ -29,6 +29,10 @@ console_macros [$ "@"] = {type: DT.SCRIPT, value: dealwith_array}
 console_macros [$ "$"] = {type: DT.SCRIPT, value: dealwith_struct}	
 console_macros [$ "|"] = {type: DT.SCRIPT, value: dealwith_ds_list}
 
+console_macros [$ "?"] = {type: DT.SCRIPT, value: command_help}
+
+console_macros [$ "&"] = {type: DT.OBJECT, value: o_console}
+
 console_macros [$ "Display"]	= {type: DT.VARIABLE, value: "o_console.Display"}
 console_macros [$ "Window"]		= {type: DT.VARIABLE, value: "o_console.Window"}
 
