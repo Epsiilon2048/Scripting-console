@@ -15,7 +15,7 @@
     {"id":{"name":"create_color_scheme_basic","path":"scripts/create_color_scheme_basic/create_color_scheme_basic.yy",},"order":14,},
     {"id":{"name":"hex_functions","path":"scripts/hex_functions/hex_functions.yy",},"order":28,},
     {"id":{"name":"string_split_multiple","path":"scripts/string_split_multiple/string_split_multiple.yy",},"order":33,},
-    {"id":{"name":"fnt_debug2x","path":"fonts/fnt_debug2x/fnt_debug2x.yy",},"order":4,},
+    {"id":{"name":"fnt_debug3x","path":"fonts/fnt_debug3x/fnt_debug3x.yy",},"order":4,},
     {"id":{"name":"s_editor_icon_goal","path":"sprites/s_editor_icon_goal/s_editor_icon_goal.yy",},"order":3,},
     {"id":{"name":"create_variable","path":"scripts/create_variable/create_variable.yy",},"order":5,},
     {"id":{"name":"rm_start","path":"rooms/rm_start/rm_start.yy",},"order":3,},

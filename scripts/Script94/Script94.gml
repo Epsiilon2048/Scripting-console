@@ -2,6 +2,15 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function initialize_console_graphics(){ with o_console {
 	
+SCALE = {}
+	
+SCALE[$ 1] = {mult: 11/15, font: fnt_debug1x}
+SCALE[$ 3] = {mult: 1,	   font: fnt_debug3x}
+
+draw_scale = SCALE[$ 1]
+font = draw_scale.font
+
+
 WINDOW = {}; with WINDOW {
 	
 	width = 400

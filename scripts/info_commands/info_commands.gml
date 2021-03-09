@@ -100,11 +100,9 @@ return format_output([ //note that this only takes the colors from the current c
 	"\nGetting variables: ",{str:"object",col:colors.object},{str:".variable",col:colors.variable},
 	"\nSetting variables: ",{str:"object",col:colors.object},{str:".variable",col:colors.variable},{str:" value",col:colors.plain},
 	"\nRunning scripts:   ",{str:"script",col:colors.script},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},
-	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)"+
-	"\Keep in mind, variables are substituted for their values during the compiling process,"+
-	"\nmeaning they all take place within the initial scope."+
-	
-	"\n\n*consult readme file for more info"
+	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)."+
+	"\nKeep in mind, variables are substituted for their values during the compiling process,"+
+	"\nmeaning they all take place within the initial scope."
 ], true, syntax_help)
 }}
 

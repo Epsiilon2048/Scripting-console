@@ -1,33 +1,18 @@
 
-#macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
+#macro SCALE_ o_console.draw_scale.mult *
 
 #macro _BOOL_STRING ? "true" : "false"
 #macro _PLURAL == 1 ? "" : "s"
+#macro RGB make_color_rgb
 
 include_niche_virtual_keys = false
 console_macros = {}
 
 initialize_console_macros()
 
-scale_mult = array_create(3)
-scale_font = array_create(3)
-
-scale_mult[1] = 11/15
-scale_font[1] = fnt_debug1x
-
-scale_mult[2] = 1
-scale_font[2] = fnt_debug2x
-
-draw_scale = 2
+initialize_console_graphics()
 
 var display_size = display_get_width()*display_get_height()
-
-if display_size >= 2560*1440 draw_scale = 2
-else						 draw_scale = 1
-
-font = scale_font[draw_scale]
-
-initialize_console_graphics()
 
 space_sep = ds_list_create()
 ds_list_add(space_sep,
@@ -44,15 +29,7 @@ identifiers = {
 	r: DT.NUMBER,
 }
 
-#macro RGB make_color_rgb
-
-enum SIDES
-{
-	TOP		= 0,
-	RIGHT	= 90,
-	BOTTOM	= 180,
-	LEFT	= 270,
-}
+enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
 enum DT { NUMBER, STRING, ASSET, VARIABLE, SCRIPT, OBJECT, MACRO, ROOM }
 
@@ -76,8 +53,6 @@ show_hidden_args = false
 
 updown_enables_console = false
 
-body_blur_quality = .4
-
 embed_text = true
 window_embed_text = true
 collapse_windows = true
@@ -93,8 +68,6 @@ force_output_body = false //this sounds pretty yikesy thinking of it now
 force_output_embed_body = false
 
 force_body_solid = false
-
-window_blur = false
 
 cs_index = "greenbeans"
 
@@ -181,13 +154,13 @@ Window = new Console_window()
 Window.initialize("Window", 23, 23, SIDES.RIGHT)
 
 Output = {}; with Output {
-	console_x	= other.console_text_x
-	console_y	= other.console_top - SCALE_ 12
-	noconsole_x	= other.console_text_x
-	noconsole_y	= other.console_text_y
+	console_x	= o_console.console_text_x
+	console_y	= o_console.console_top - SCALE_ 12
+	noconsole_x	= o_console.console_text_x
+	noconsole_y	= o_console.console_text_y
 	
-	x = other.console_text_x
-	y = other.console_text_y
+	x = console_x
+	y = noconsole_y
 	
 	border_w = SCALE_ 6
 	border_h = SCALE_ 5

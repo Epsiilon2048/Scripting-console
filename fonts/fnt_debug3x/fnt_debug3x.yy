@@ -131,7 +131,7 @@
     "path": "folders/Fonts.yy",
   },
   "resourceVersion": "1.0",
-  "name": "fnt_debug2x",
+  "name": "fnt_debug3x",
   "tags": [],
   "resourceType": "GMFont",
 }
