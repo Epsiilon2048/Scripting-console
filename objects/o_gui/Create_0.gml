@@ -12,7 +12,7 @@ g = false
 ctx = new Ctx_menu()
 ctx.set([
 	{str: "Hello!!"},
-	{str: "Hows the context menu looking??"},
+	{str: "Hows the context menu looking??", scr: show_message, arg: "Good!"},
 	o_console.CTX_MENU.SEPARATOR,
 	{str: "yooooo"},
 	{str: "Option3"},

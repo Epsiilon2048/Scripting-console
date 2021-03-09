@@ -1,9 +1,11 @@
 
 function string_add_scope(str){ with o_console {
 
-if is_undefined(str) str = ""
+var _str
+if is_undefined(str) _str = ""
+else _str = string(str)
 
-var split = string_split(".", str)
+var split = string_split(".", _str)
 
 if array_length(split) == 0 return undefined
 
@@ -16,7 +18,7 @@ if array_length(split) < 2 or (
    is_undefined(_macro)
    )
 {
-	if instance_exists(object) return string(object)+"."+str
+	if instance_exists(object) return string(object)+"."+_str
 	else return undefined
 }
 
@@ -27,5 +29,5 @@ if not is_undefined(_macro) and (_macro.type == DT.OBJECT or _macro.type == DT.V
 	return array_to_string(split, ".")
 }
 
-return str
+return _str
 }}

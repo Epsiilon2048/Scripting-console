@@ -1,6 +1,8 @@
 
 function variable_string_exists(str){
 
+if not is_string(str) return undefined
+
 var list = string_split(".", str)
 var object
 
@@ -42,6 +44,8 @@ return true
 
 function variable_string_get(str){
 
+if not is_string(str) return undefined
+
 var list = string_split(".", str)
 var object = -1
 
@@ -67,7 +71,7 @@ var value = variable_instance_get( object, list[min(1, array_length(list)-1)] )
 
 for(var i = 2; i <= array_length(list)-1; i++)
 {
-	value = variable_struct_get(value, list[i])
+	if is_struct(value) value = variable_struct_get(value, list[i])
 }
 
 return value
@@ -76,6 +80,8 @@ return value
 
 
 function variable_string_set(str, val){
+
+if not is_string(str) return undefined
 
 var list = string_split(".", str)
 var lenlist = array_length(list)

@@ -1,4 +1,22 @@
 
+f = [
+	{pos: 1},
+	{pos: 12},
+	{pos: 231},
+	{pos: 13},
+	{pos: 123},
+	{pos: 1},
+	{pos: 231},
+	{pos: 1},
+	{pos: 51},
+	{pos: 231},
+	{pos: 1555},
+	{pos: 1},
+	{pos: 123},
+	{pos: 1},
+	{pos: 1523},
+]
+
 include_niche_virtual_keys = false
 console_macros = {}
 initialize_console_macros()
@@ -24,11 +42,18 @@ font = scale_font[draw_scale]
 #macro SCALE_ o_console.scale_mult[o_console.draw_scale] *
 
 #macro _BOOL_STRING ? "true" : "false"
+#macro _PLURAL == 1 ? "" : "s"
+
+WINDOW = {}; with WINDOW {
+	
+	width = 400
+	height = 300
+}
 
 COLOR_PICKER = {}; with COLOR_PICKER {
 	
-	var g = surface_create(256, 256)
-	surface_set_target(g)
+	var c = surface_create(256, 256)
+	surface_set_target(c)
 
 	for(var yy = 0; yy <= 255; yy++)
 	for(var xx = 0; xx <= 255; xx++)
@@ -43,11 +68,11 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 	}
 	draw_set_alpha(1)
 
-	sv_square = sprite_create_from_surface(g, 0, 0, 256, 256, false, false, 0, 0)
+	sv_square = sprite_create_from_surface(c, 0, 0, 256, 256, false, false, 0, 0)
 
 	surface_reset_target()
-	surface_resize(g, 1, 256)
-	surface_set_target(g)
+	surface_resize(c, 1, 256)
+	surface_set_target(c)
 
 	draw_clear_alpha(c_black, 1)
 
@@ -58,10 +83,10 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 	}
 	draw_set_color(c_white)
 
-	h_strip = sprite_create_from_surface(g, 0, 0, 1, 256, false, false, 0, 0)
+	h_strip = sprite_create_from_surface(c, 0, 0, 1, 256, false, false, 0, 0)
 
 	surface_reset_target()
-	surface_free(g)
+	surface_free(c)
 	
 	border_width = 1
 	border_alpha = .2
@@ -92,7 +117,7 @@ CTX_MENU = {}; with CTX_MENU {
 	x = 50
 	y = 50
 	
-	border_l = 15
+	border_l = 36
 	border_r = 10
 	
 	mouse_item = -1
@@ -200,11 +225,14 @@ show_hidden_args = false
 
 updown_enables_console = false
 
+body_blur_quality = .4
+
 embed_text = true
 window_embed_text = true
 collapse_windows = true
 
 display_show_objects = false
+display_update = 1
 
 output_set_window = true
 
@@ -215,7 +243,7 @@ force_output_embed_body = false
 
 force_body_solid = false
 
-window_blur = true
+window_blur = false
 
 cs_index = "greenbeans"
 
@@ -231,7 +259,7 @@ checkboxes_like_this_one = false
 global.gui_mx = 0
 global.gui_my = 0
 
-prev_longMessage = "No errors yet! Yay!!"
+prev_exception = {longMessage: "No errors yet! Yay!!"}
 
 draw_set_font(font)
 
@@ -289,7 +317,6 @@ input_log_limit = 20
 input_log_index = -1
 
 display_list = ds_list_create()
-display_string = ds_list_create()
 
 x2 = 0
 y2 = 0

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Shaders",
-    "path": "folders/Shaders.yy",
+    "name": "Scripting-console",
+    "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "shader_hue_end",
+  "name": "script_execute_ext_builtin",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -41,9 +41,27 @@ else
 
 
 	
-function error_report(){
-return string_replace_all(o_console.prev_longMessage, "▯", "")
+function error_report(){ with o_console {
+
+var list = [
+	{str: "stacktrace\n", col: o_console.colors.variable}
+]
+
+for(var i = 0; i <= array_length(prev_exception.stacktrace)-1; i++)
+{
+	array_push(list,
+	string_replace_all(prev_exception.stacktrace[i], "	", "")+"\n"
+	)
 }
+
+array_push(list, 
+	"\n",
+	{str: "longMessage", col: o_console.colors.variable},"\n"+
+	prev_exception.longMessage
+)
+
+return format_output(list, true, error_report)
+}}
 	
 	
 	

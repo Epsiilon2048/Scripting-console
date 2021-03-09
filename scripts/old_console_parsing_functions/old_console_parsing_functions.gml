@@ -61,7 +61,7 @@ for(var i = 0; i <= array_length(_console_string)-1; i++)
 			catch(_exception) 
 			{
 				_output_string[i] = {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
-				prev_longMessage = _exception.longMessage
+				prev_exception = _exception
 			}
 		}
 		else if not is_string(subject) and instance_exists(subject) //object

@@ -5,7 +5,7 @@ static space_sep = " ,()=:"
 
 if shave(" ", command) == "" return ""
 
-command = string_replace(command, "\\n", "\n")
+var _command = string_replace_all(string_replace_all(command, "\\n", "\n"), "\\\\", "\\")
 
 #region Separate commands
 var command_split = []
@@ -13,9 +13,9 @@ var command_split = []
 var marker = 1
 var in_string = false
 
-for(var i = 1; i <= string_length(command); i++)
+for(var i = 1; i <= string_length(_command); i++)
 {
-	var char = string_char_at(command, i)
+	var char = string_char_at(_command, i)
 	
 	if char == "\\" and in_string
 	{
@@ -29,15 +29,16 @@ for(var i = 1; i <= string_length(command); i++)
 		}
 		else if not in_string and char == ";"
 		{
-			array_push(command_split, string_copy(command, marker, i-marker) )
+			array_push(command_split, string_copy(_command, marker, i-marker) )
 			marker = i+1
 		}
 	}
 }
 
-if in_string and string_pop(command) != "\"" command += "\""
-array_push(command_split, string_copy(command, marker, string_length(command)-marker+1) )
+if in_string and string_pop(_command) != "\"" _command += "\""
+array_push(command_split, string_copy(_command, marker, string_length(_command)-marker+1) )
 #endregion
+
 
 #region Separate arguments within commands
 var lines		= array_create(array_length(command_split))
@@ -64,6 +65,9 @@ for(var i = 1; i <= string_length(line); i++)
 	{
 		if char == "\""
 		{
+			if marker != i array_push(arg_split, string_copy(line, marker, i-marker+in_string))
+			marker = i+in_string
+			
 			in_string = not in_string
 		}
 		else if not in_string and string_pos(char, space_sep)
@@ -71,6 +75,7 @@ for(var i = 1; i <= string_length(line); i++)
 			if marker != i array_push(arg_split, string_copy(line, marker, i-marker))
 			marker = i+1
 		}
+		
 	}
 }
 
@@ -79,6 +84,7 @@ if marker != i array_push(arg_split, string_copy(line, marker, string_length(lin
 lines[l] = arg_split
 }
 #endregion
+
 
 #region Decide argument datatypes
 for(var l = 0; l <= array_length(lines)-1; l++)
@@ -93,6 +99,7 @@ var comp_line = array_create(array_length(line)-1)
 var _arg = line[0]
 var arg
 var type = -1
+var b = false
 var value = undefined
 var error = undefined
 
@@ -105,7 +112,7 @@ if string_char_at(_arg, 2) == "/" and variable_struct_exists(identifiers, string
 if _arg == "" 
 {
 	type = undefined
-	arg = line[i]
+	arg = line[0]
 }
 else
 {
@@ -114,13 +121,23 @@ else
 	
 	if not is_undefined(_macro)
 	{
+		b = variable_struct_exists_get(_macro, "b", false)
+		
 		if _macro.type == DT.NUMBER arg = string_format_float(_macro.value)
 		else						arg = string(_macro.value)
 		
 		type = _macro.type
 	}
 	else arg = _arg
-	
+
+	if type == DT.STRING or (type == -1 and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\"")
+	{
+		if type != DT.STRING value = string_copy(arg, 2, string_length(arg)-2)
+		else value = arg
+		
+		type = DT.STRING
+	}
+
 	if (type == -1) and asset_get_index(arg) != -1
 	{
 		var asset_type = asset_get_type(arg)
@@ -146,13 +163,20 @@ else
 	
 	if (type == -1 or type == DT.OBJECT) and string_is_int(arg)
 	{
-		if instance_exists(real(arg)) or real(arg) == noone
+		if string_pos("0x", arg) 
+		{
+			type = DT.NUMBER
+		}
+		else if instance_exists(real(arg)) or real(arg) == noone
 		{
 			type = DT.OBJECT
 			if object_exists(real(arg)) value = real(arg).id
 			else value = real(arg)
 		}
-		else type = undefined
+		else 
+		{
+			type = undefined
+		}
 	}
 	
 	if type == DT.NUMBER value = real(arg)
@@ -190,6 +214,7 @@ var subject = {
 	value: value,
 	type: type,
 	plain: line[0],
+	builtin: b,
 }
 
 if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
@@ -254,7 +279,7 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	
 	switch type
 	{
-	case DT.NUMBER:		value = real_float(arg)
+	case DT.NUMBER:		value = real(arg)
 	break
 	case DT.STRING:		value = arg
 	break

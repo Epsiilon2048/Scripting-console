@@ -81,7 +81,6 @@ if not enabled
 {
 	if mouse_check_button_released(mb_right)
 	{
-		//show_message(1)
 		enabled = true
 		
 		x = device_mouse_x_to_gui(0)
@@ -141,7 +140,7 @@ if enabled
 					
 					if _scr != noscript
 					{
-						if _args != []
+						if array_length(_args) > 0
 						{
 							script_execute_ext(_scr, _args)
 						}

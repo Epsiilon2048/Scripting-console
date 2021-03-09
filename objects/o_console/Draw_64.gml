@@ -66,7 +66,7 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	Output.mouse_over = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 	if Output.mouse_over or force_output_body or (Output.text_embedding and force_output_embed_body)
 	{
-		draw_console_body(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
+		draw_console_body(Output.x-Output.border_w, y2, x2, Output.y+Output.border_h)
 		
 		if not console_toggle and Output.mouse_over
 		{
@@ -96,14 +96,13 @@ else Output.mouse_over = false
 if console_toggle
 {
 	//Draw console
-	draw_console_body(console_left, console_bottom, console_right, console_top)
+	draw_console_body(console_left, console_top, console_right, console_bottom)
 
 	draw_set_color(colors.plain)
 	draw_line_width(console_left, console_bottom, console_left, console_top, 2)
 
 	draw_set_font(font)
-	draw_set_halign(fa_left)
-	draw_set_valign(fa_center)
+	draw_set_align(fa_left, fa_center)
 	if console_colors draw_console_text(console_text_x, console_text_y, color_string)
 	else draw_text(console_text_x, console_text_y, console_string)
 	
@@ -116,8 +115,6 @@ if console_toggle
 	if string_length(console_string) > char_pos1-1
 	{
 		draw_set_color(colors.selection)
-		draw_set_halign(fa_left)
-		draw_set_valign(fa_center)
 		draw_text(
 			console_text_x + char_width*(char_pos1-1), 
 			console_text_y, 
@@ -154,33 +151,34 @@ if console_toggle
 #region Draw display
 if Display.enabled and ds_list_size(display_list) > 0
 {
-	if Display.show
+	if Display.show and step mod display_update == 0
 	{
 		draw_set_font(font)
-		ds_list_clear(display_string)
-		var temp_plaintext = undefined
+		display_string = ""
 	
 		for(var i = 0; i <= ds_list_size(display_list)-1; i++)
 		{
 			var obj = string_split(".", display_list[| i].variable)[0]
 			var variable = string_copy(display_list[| i].variable, string_pos(".", display_list[| i].variable)+1, string_length(display_list[| i].variable))
-			var value = string_replace_all( string( variable_string_get(display_list[| i].variable) ), "\n", "\\n" )
+			
+			var value = variable_string_get(display_list[| i].variable)
+			
+			if is_string(value) value = "\""+value+"\""
+			
+			value = string_replace_all( string(value), "\n", "\\n" )
 
 			if display_show_objects
 			{
-				if instance_number(obj.object_index) > 1 ds_list_add(display_string, string(obj)+" ")
+				if instance_number(obj.object_index) > 1 display_string += string(obj)+" "
 				
-				ds_list_add(display_string, object_get_name(obj.object_index))
+				display_string += object_get_name(obj.object_index)
 				
 				variable = "."+variable
 			}
-			ds_list_add(display_string, variable+" "+value+"\n")
+			display_string += variable+" "+value+"\n"
 		}
-	
-		var embed_string = ds_list_to_array(display_string)
-		if not window_embed_text and not embed_text temp_plaintext = embed_string
-	
-		Display.set(embed_string, temp_plaintext)
+		
+		Display.set(display_string, display_string)
 	}
 	draw_console_window(Display)
 }

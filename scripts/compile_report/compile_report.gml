@@ -60,9 +60,14 @@ for(var l = 0; l <= _lines-1; l++)
 	
 	for(var i = 0; i <= array_length(_args)-1; i++)
 	{
-		_plainstr += " "+_args[i].plain
-		_valstr   += " "+string(_args[i].value)
-		_argstr   += stitch("\n ARG ",i,": Plain "+_args[i].plain+"; Type ",dt_string[_args[i].type],"; Value ",_args[i].value)
+		if is_struct(_args[i])
+		{
+			var _type = is_undefined(_args[i].type) ? -1 : dt_string[_args[i].type]
+		
+			_plainstr += " "+_args[i].plain
+			_valstr   += " "+string(_args[i].value)
+			_argstr   += stitch("\n ARG ",i,": Plain "+_args[i].plain+"; Type ",_type,"; Value ",_args[i].value)
+		}
 	}
 	
 	if array_length(_args) != 0

@@ -29,31 +29,25 @@ if win.side != SIDES.RIGHT//win.side = SIDES.LEFT or win.side = SIDES.TOP
 {
 	left   = win.x
 	top    = win.y
+	//right  = win.x + win.width  + border_x*2
+	//bottom = win.y + win.height + border_y*2
 	right  = win.x + win.text_w + border_x*2
 	bottom = win.y + win.text_h + border_y*2
 }
 else if win.side == SIDES.RIGHT
 {
+	//left   = win.x - win.width  - border_x*2
 	left   = win.x - win.text_w - border_x*2
 	top    = win.y
 	right  = win.x
+	//bottom = win.y + win.height + border_y*2
 	bottom = win.y + win.text_h + border_y*2
 }
 
-if win.side == SIDES.LEFT or win.side == SIDES.RIGHT or win.side == SIDES.BOTTOM
-{
-	sidebar_x1 = win.x-1 + win.sidebar/2*signbool(win.side == SIDES.LEFT)
-	sidebar_y1 = top-1
-	sidebar_x2 = sidebar_x1
-	sidebar_y2 = bottom
-}
-else if win.side == SIDES.TOP //or win.side == SIDES.BOTTOM
-{
-	sidebar_x1 = left-1
-	sidebar_y1 = win.y-1 + win.sidebar/2*signbool(win.side == SIDES.TOP)
-	sidebar_x2 = right
-	sidebar_y2 = sidebar_y1
-}
+sidebar_x1 = win.x-1 + win.sidebar/2*signbool(win.side == SIDES.LEFT)
+sidebar_y1 = top-1
+sidebar_x2 = sidebar_x1
+sidebar_y2 = bottom
 	
 if win.mouse_over_sidebar and mouse_check_button(mb_left)
 {
@@ -85,12 +79,15 @@ if win.show
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
-	//if window_blur draw_surface_blur_ext(application_surface, left, top, right-left, bottom-top, o_game.zoom, o_game.zoom, d)
 	draw_console_body(left, top, right, bottom)
 	draw_set_color(colors.output)
 	
+	clip_rect_cutout(left, top, right, bottom)
+	
 	if (o_console.embed_text and o_console.window_embed_text) or (win.name == "Output" and o_console.embed_text) mouse_over_embed = draw_embedded_text(left+border_x, top+border_y+1, win.text, win.plaintext)
 	else draw_text(left+border_x, top+border_y+1, win.plaintext)
+
+	shader_reset()
 }
 	
 draw_set_color(colors.output)

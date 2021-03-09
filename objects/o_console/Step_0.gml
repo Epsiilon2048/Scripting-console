@@ -251,7 +251,7 @@ for(var i = 0; i <= array_length(keybinds)-1; i++)
 		catch(_exception)
 		{
 			output_set({__embedded__: true, o: [{str: "[BIND SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]})
-			prev_longMessage = _exception.longMessage
+			prev_exception = _exception
 		}
 	}
 }

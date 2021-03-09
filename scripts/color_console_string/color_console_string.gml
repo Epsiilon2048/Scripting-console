@@ -3,6 +3,8 @@ function color_console_string(command){ with o_console {
 
 static space_sep = " ,()=:;/"
 
+try
+{
 if shave(" ", command) == "" return {text: "", colors: []}
 
 var color_list = []
@@ -15,6 +17,9 @@ var _col = "plain"
 for(var i = 1; i <= string_length(command)+1; i++)
 {
 	var char = string_char_at(command, i)
+	var string_sep = false
+	var string_offset = 0
+	var string_onset  = 0
 	
 	if char == "\\" and in_string and i != string_length(command)
 	{
@@ -26,12 +31,17 @@ for(var i = 1; i <= string_length(command)+1; i++)
 		if char == "\""
 		{
 			in_string = not in_string
+			string_sep = true
+			string_offset = in_string
+			string_onset  = not in_string
 		}
-		else if (not in_string and (string_pos(char, space_sep))) or i == string_length(command)+1
+		
+		if string_sep or (not in_string and (string_pos(char, space_sep))) or i == string_length(command)+1
 		{	
 			if marker != i
 			{
-				var segment = string_copy(command, marker+1, i-marker-1)
+				var segment = string_copy(command, marker+1, i-marker-1+string_onset)
+				//var segment = string_copy(command, marker+1-string_offset, i-marker-1+string_onset-string_offset)
 				
 				var _col = "plain"
 				
@@ -68,7 +78,7 @@ for(var i = 1; i <= string_length(command)+1; i++)
 					
 						if _col == "plain" and asset_get_index(segment) != -1 _col = "asset"
 					
-						if _col == "object" and segment != asset_segment i -= string_length(segment) - string_pos(".", segment)+1
+						if _col == "object" and segment != asset_segment and not string_sep i -= string_length(segment) - string_pos(".", segment)+1
 					}
 					else if _col == "plain" and string_is_float(segment) _col = "number"
 				
@@ -79,7 +89,7 @@ for(var i = 1; i <= string_length(command)+1; i++)
 						if instscope != "" varstring = instscope + "." + segment
 						else			   varstring = string_add_scope(segment)
 					
-						if not is_undefined(varstring) and not is_undefined(variable_string_get(varstring))
+						if not is_undefined(varstring) and variable_string_exists(varstring)
 						{
 							if is_method(variable_string_get(varstring))
 							{
@@ -102,9 +112,9 @@ for(var i = 1; i <= string_length(command)+1; i++)
 				
 				if string_char_at(command, i) == "." and _col == "object" instscope = asset_segment
 				
-				array_push(color_list, {pos: i+_identifier, col: _col})
+				array_push(color_list, {pos: i+_identifier+string_onset, col: _col})
 			}		
-			marker = i
+			marker = i-string_offset
 			
 			_identifier = false
 		}
@@ -113,4 +123,9 @@ for(var i = 1; i <= string_length(command)+1; i++)
 console_color_time = 0
 
 return {text: command, colors: color_list}
+}
+catch(_exception)
+{
+	return {text: command, colors: [{pos: string_length(command)+1, col: "plain"}]}
+}
 }}

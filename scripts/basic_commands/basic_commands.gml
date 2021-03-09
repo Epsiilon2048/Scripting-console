@@ -1,69 +1,80 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function ar(array_name, index, value){
 
-var _array_name = array_name
+function dealwith_array(array, index, value){
 
-if is_string(array_name) _array_name = string_add_scope(array_name)
+if is_undefined(array) return "Must provide array!"
 
-if is_undefined(_array_name)
+var _array
+var _array_name = ""
+
+if is_string(array) 
 {
-	return "Missing variable scope"
+	_array_name = string_add_scope(array)
+	
+	if is_undefined(_array_name)				return "Missing variable scope"
+	if not variable_string_exists(_array_name)	return array+" doesn't exist"
+	
+	_array = variable_string_get(_array_name)
 }
-else if is_undefined(value)
-{
-	var array = array_name
-	
-	if is_string(array) var array = variable_string_get(_array_name)
-	
-	return array[index]
-}
-else
-{
-	if variable_string_exists(_array_name)
-	{
-		var array = variable_string_get(_array_name)
-	
-		if is_array(array)
-		{
-			array[index] = value
-			variable_string_set(_array_name, array)
-		
-			return stitch("Set "+array_name+"[",index,"] to ",value)
-		}
-		else
-		{
-			return array_name+" is not an array"
-		}
-	}
-	else return "Array "+array_name+" does not exist"
-}
-}
-	
-	
-	
-	
-function addvar(variable, value){
+else _array = array
 
-if is_undefined(value) value = 1
+if is_undefined(index) return _array
+if is_undefined(value) return _array[index]
+
+if not is_string(array) return "Must provide array name as string when setting items"
+
+_array[index] = value
+variable_string_set(_array_name, _array)
+return stitch(array+"[",index,"] set to ",value)
+}
+
+
+
+function dealwith_struct(struct){
+
+if is_undefined(struct) return "Must provide struct!"
+
+if argument_count == 1 return struct
+
+for(var i = 1; i <= argument_count-2; i+=2)
+{
+	variable_struct_set(struct, argument[i], argument[i+1])
+}
+}
+
+	
+	
+function dealwith_ds_list(ds_list, index, value){
+
+if is_undefined(ds_list) return "Must provide ds list!"
+if not is_real(ds_list) or not ds_exists(ds_list, ds_type_list) return stitch("\"",ds_list,"\""+" is not a ds list")
+
+if is_undefined(index) return ds_list_to_array(ds_list)
+if is_undefined(value) return ds_list[| index]
+
+ds_list[| index] = value
+return stitch("Set item ",value," in datastructure ",ds_list," to ",value)
+}
+
+
+
+
+function addvar(variable, amount){
+
+if not is_string(variable) return "Must provide variable name as string"
 
 var _variable = string_add_scope(variable)
+var _amount = amount
 
-if is_undefined(_variable)
-{
-	return "Missing variable scope"
-}
-else if variable_string_exists(_variable)
-{
-	var _value = variable_string_get(_variable)
-	
-	variable_string_set(_variable, _value+value)
-	return stitch("Added ",value," to "+variable+" (",_value+value,")")
-}
-else
-{
-	return "Variable "+variable+" does not exist"
-}
+if is_undefined(amount) _amount = 1
+
+if is_undefined(_variable)				 return "Missing variable scope"
+if not variable_string_exists(_variable) return "Variable "+variable+" doesn't exist"
+
+var value = variable_string_get(_variable) + _amount
+
+variable_string_set(_variable, value)
+
+return stitch("Added ",_amount," to "+variable+" (",value,")")
 }
 
 
@@ -71,24 +82,18 @@ else
 
 function togglevar(variable){
 	
-var _variable = string_add_scope(variable)
-var toggle
+if not is_string(variable) return "Must provide variable name as string"
 
-if is_undefined(_variable)
-{
-	return "Missing variable scope"
-}
-else if variable_string_exists(_variable)
-{
-	var toggle = not variable_string_get(_variable)
-	
-	variable_string_set(_variable, toggle)
-	return stitch("Toggled "+variable+" (",toggle _BOOL_STRING,")")
-}
-else
-{
-	return "\""+variable+"\" does not exist"
-}
+var _variable = string_add_scope(variable)
+
+if is_undefined(_variable)				 return "Missing variable scope"
+if not variable_string_exists(_variable) return "Variable "+variable+" doesn't exist"
+
+var toggle = not variable_string_get(_variable)
+
+variable_string_set(_variable, toggle)
+
+return stitch("Toggled "+variable+" (",toggle _BOOL_STRING,")")
 }
 
 
@@ -192,5 +197,8 @@ function color_get(_col){ with o_console {
 
 if is_undefined(_col) _col = object._col
 	
-return {__embedded__: true, o: [{str: "color ", col: _col},stitch(color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col))]}
+return stitch(
+	"RBG ",color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"+
+	"HEX ",dec_to_hex(_col, 6)
+)
 }}

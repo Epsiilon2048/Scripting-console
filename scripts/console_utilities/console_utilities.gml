@@ -60,13 +60,9 @@ else
 		text = ""
 		
 		_output = variable_struct_exists_get(_output, "o", _output)
-		
-		if is_array(_output) text = "Array with "+string(array_length(_output))+" items\n"
 			
-		else if is_struct(_output) 
+		if is_struct(_output) 
 		{
-			text = "Struct with "+string(variable_struct_names_count(_output))+" variables"
-				
 			var structnames = variable_struct_get_names(_output)
 				
 			for(var i = 0; i <= array_length(structnames)-1; i++)
@@ -132,7 +128,7 @@ else
 			if variable_struct_exists_get(_output[i], "__embedded__", false)
 			{
 				array_copy(text, array_length(text), _output[i].o, 0, array_length(_output[i].o))
-				array_push(text, "\n")
+				if i != array_length(_output)-1 array_push(text, "\n")
 			}
 			else
 			{
@@ -151,12 +147,8 @@ else
 		{
 			_output = variable_struct_exists_get(_output[0], "o", _output[0])
 			
-			if is_array(_output) text = "Array with "+string(array_length(_output))+" items\n"
-			
-			else if is_struct(_output) 
+			if is_struct(_output)
 			{
-				text = "Struct with "+string(variable_struct_names_count(_output))+" variables"
-				
 				var structnames = variable_struct_get_names(_output)
 				
 				for(var i = 0; i <= array_length(structnames)-1; i++)
@@ -164,7 +156,7 @@ else
 					text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
 				}
 			}
-			else text = string(_output)
+			else if not is_array(_output) text = string(_output)
 		}
 		else
 		{

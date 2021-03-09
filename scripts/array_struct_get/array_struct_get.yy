@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Common utilities",
-    "path": "folders/Scripts/Common utilities.yy",
+    "name": "Scripting-console",
+    "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "string_is_int",
+  "name": "array_struct_get",
   "tags": [],
   "resourceType": "GMScript",
 }

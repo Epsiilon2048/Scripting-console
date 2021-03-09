@@ -1,6 +1,8 @@
 
 function console_run(compiled_command){ with o_console {
 
+try
+{
 var com = compiled_command
 var output_string = array_create(array_length(com))
 
@@ -24,36 +26,29 @@ for(var i = 0; i <= array_length(com)-1; i++)
 		
 		case DT.SCRIPT: //run a script
 	
-			var a = array_create(16, undefined)
-			var _args_count = array_length(com[i].args)
-			
-			for(var j = 0; j <= _args_count-1; j++)
-			{
-				a[j] = com[i].args[j].value
-			}
+			var a = array_struct_get(com[i].args, "value")
 			
 			run_in_console = true
 			try 
 			{
-				//So, the reason I do this weird thing instead of using script_execute_ext is because for
-				//reasons beyond human comprehension, gms... doesn't allow you to use arrays with built in
-				//scripts?? like, normally it would pass the script an argument for each item in the array,
-				//but with built ins it just passes the array as a single argument... wtf...
-				
-				//If for some reason you need to use scripts with more than 16 arguments, feel free to add
-				//more i guess lol
-				
-				if instance_exists(object) 
-					{ with object output_string[i] = subject.value(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[15]) }
+				if instance_exists(object) with object
+				{ 
+					if subject.builtin output_string[i] = script_execute_ext_builtin(subject.value, a)
+					else			   output_string[i] = script_execute_ext(subject.value, a)
+				}
 				else 
-					{			  output_string[i] = subject.value(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[15]) }
+				{
+					if subject.builtin output_string[i] = script_execute_ext_builtin(subject.value, a)
+					else			   output_string[i] = script_execute_ext(subject.value, a)
+				}
 				
 				if is_undefined(output_string[i]) output_string[i] = ""
+				else if is_real(output_string[i]) output_string[i] = string_format_float(output_string[i])
 			}
 			catch(_exception)
 			{
 				output_string[i] = {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
-				prev_longMessage = _exception.longMessage
+				prev_exception = _exception
 			}
 			run_in_console = false
 		
@@ -109,12 +104,20 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 		case DT.ASSET: //return an asset id
 	
-			output_string[i] = "Asset index "+string(asset_get_index(subject.plain))
+			var _asset = string_delete(subject.plain, 1, string_pos("/", subject.plain))
+	
+			output_string[i] = "Asset index "+string(asset_get_index(_asset))
+		break
+	
+		case DT.STRING:
+		
+			output_string[i] = "\""+subject.value+"\""
+			
 		break
 	
 		case undefined:
 		
-			output_string[i] = "[SYNTAX ERROR] from \""+subject.plain+"\""
+			output_string[i] = format_output([{str: "[SYNTAX ERROR]", scr: compile_report, output: true}," from \""+subject.plain+"\""], true, -1)
 		}
 	}
 	else
@@ -124,4 +127,10 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	}
 }
 return output_string
+}
+catch(_exception)
+{
+	prev_exception = _exception
+	return [format_output([{str: "[CONSOLE ERROR]", scr: error_report, output: true}," Awfully sorry about this! It seems the console encountered a runtime error."], true, -1)]
+}
 }}

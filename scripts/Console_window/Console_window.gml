@@ -11,12 +11,13 @@ function Console_window() constructor{
 		self.starting_y = _y
 		self.side		= _side
 		
+		self.width	= o_console.WINDOW.width
+		self.height	= o_console.WINDOW.height
+		
 		self.text		= []
 		self.plaintext  = ""
 		self.text_w = 0
 		self.text_h = 0
-		
-		self.max_width	= -1
 		
 		self.enabled			= true
 		self.show				= true
