@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "s_mac_overworld",
-    "path": "sprites/s_mac_overworld/s_mac_overworld.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "spriteMaskId": null,

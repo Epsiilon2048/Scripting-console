@@ -16,7 +16,7 @@ else if mouse_check_button_released(mb_left) and
 	else if Window.enabled and Window.mouse_over_sidebar	Window.show = not Window.show
 	else if Output.mouse_over and not Output.mouse_over_embed and output_set_window and not output_as_window
 	{
-		window_embed(Output.text)
+		window( format_output( Output.text, Output.text_embedding, -1) )
 		output_set("")
 	}
 }
@@ -196,4 +196,6 @@ if output_as_window and Output.plaintext != ""
 	Output.fade_time  = 0
 	draw_console_window(Output_window)
 }
+
+if variable_string_exists(string(id) + color_picker_var) draw_color_picker(200, 200, string(id) + color_picker_var)
 #endregion

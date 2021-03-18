@@ -110,7 +110,7 @@ if not meter and (o_console.SLIDER.correct_not_real or is_real(curvalue))
 	}
 }
 
-var text = "NaN"
+var text = NaN
 
 if is_real(curvalue) 
 {

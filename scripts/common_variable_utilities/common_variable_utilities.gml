@@ -1,7 +1,8 @@
 
 function variable_string_exists(str){
 
-if not is_string(str) return undefined
+if not is_string(str) or str == "" return undefined
+if string_pos(".", str) == 1 return false
 
 var list = string_split(".", str)
 var object
@@ -32,7 +33,10 @@ if is_undefined( variable ) return false
 
 for(var i = 2; i <= array_length(list)-1; i++)
 {
+	if not is_struct(variable) and i != array_length(list) return false
+	
 	if not variable_struct_exists(variable, list[i]) return false
+	
 	variable = variable_struct_get(variable, list[i])
 }
 
@@ -45,6 +49,7 @@ return true
 function variable_string_get(str){
 
 if not is_string(str) return undefined
+else if str == "" return undefined
 
 var list = string_split(".", str)
 var object = -1

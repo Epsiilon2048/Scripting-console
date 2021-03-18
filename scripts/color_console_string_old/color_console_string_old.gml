@@ -58,7 +58,7 @@ while str != ""
 			
 			list[array_length(list)] = {
 				text: sep[0],
-				col: colors.object
+				col: colors.instance
 			}
 			
 			if variable_instance_exists(asset_get_index(sep[0]), string_copy(sep[1], 2, string_length(sep[1])-1)) or (sep[0] == "global" and variable_global_exists(string_copy(sep[1], 2, string_length(sep[1])-1)))
@@ -80,7 +80,7 @@ while str != ""
 		{
 			list[array_length(list)] = {
 				text: segment+" ",
-				col: colors.object
+				col: colors.instance
 			}
 		}
 	}
@@ -88,14 +88,14 @@ while str != ""
 	{
 		list[array_length(list)] = {
 			text: segment+" ",
-			col: colors.number 
+			col: colors.real 
 		}
 	}
 	else if script_get_name(asset_get_index(segment)) == segment and array_length(list) == 0
 	{
 		list[array_length(list)] = {
 			text: segment+" ",
-			col: colors.script
+			col: colors.method
 		}
 	}
 	else if console_macros[$ segment] != undefined

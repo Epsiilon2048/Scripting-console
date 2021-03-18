@@ -1,7 +1,7 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function initialize_console_graphics(){ with o_console {
-	
+
 SCALE = {}
 	
 SCALE[$ 1] = {mult: 11/15, font: fnt_debug1x}
@@ -9,6 +9,8 @@ SCALE[$ 3] = {mult: 1,	   font: fnt_debug3x}
 
 draw_scale = SCALE[$ 1]
 font = draw_scale.font
+
+draw_set_font(font)
 
 WINDOW = {}; with WINDOW {
 	
@@ -39,6 +41,22 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 	
 	color = make_color_hsv(hue, sat, val)
 	size = 100
+}
+
+VALUE_BOX = {}; with VALUE_BOX {
+	
+	radius = 23
+	border = 9
+	border_w = 6
+	outline_dist = border-2
+	outline_radius1 = radius*(outline_dist/border)
+	outline_radius2 = radius*((outline_dist-1)/border)
+	text_w = string_width(" ")
+	text_h = string_height(" ")
+
+	ease_max = 200
+	ease_div = 1.5
+	ease = ease_normal
 }
 
 CTX_MENU = {}; with CTX_MENU {

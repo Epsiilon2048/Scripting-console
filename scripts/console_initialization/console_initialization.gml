@@ -15,18 +15,18 @@ embed_hover	Text with embeds when the mouse is hovering over them
 // These are specific for the command text
 plain		Input which isn't understood to represent anything
 selection	The color of the text that's selected
-string		
-number		
-macro
+string
+real
 variable
-object
-script
+instance
+method
+room
 asset
 */
 
 var dark_blue    = RGB(34, 50, 66)
 var green	     = RGB(40, 235, 134)
-var slight_green = 6705192
+var slight_green = RGB(40, 80, 102)
 var white	     = c_white
 var black	     = c_black
 var yellow	     = RGB(252, 252, 0)
@@ -47,15 +47,15 @@ color_schemes[$ "greenbeans"] = {
 	plain:		 white,
 	selection:	 black,
 	string:		 yellow,
-	number:		 red,
-	macro:		 red,
+	real:		 red,
 	variable:	 cyan,
-	object:		 red,
-	script:		 orange,
+	instance:	 red,
+	method:		 orange,
 	asset:		 red,
 	
 	__builtin__ : true
 }
+color_schemes.greenbeans[$ "room"] = red
 
 var dark_pink   = RGB(55,  34, 66)
 var slight_pink = 4466264
@@ -77,11 +77,11 @@ color_schemes[$ "royal"] = {
 	plain:		 pink,
 	selection:	 dark_pink,
 	variable:	 purple,
-	object:		 purple,
-	macro:		 purple,
+	instance:	 purple,
 	string:		 yellow,
-	number:		 pink,
-	script:		 purple,
+	real:		 pink,
+	method:		 purple,
+//	room:		 purple,
 	asset:		 purple,
 	
 	__builtin__ : true
@@ -107,11 +107,11 @@ color_schemes[$ "drowned"] = {
 	plain:		 cyan,
 	selection:	 dark_blue,
 	variable:	 pink,
-	object:		 pink,
-	macro:		 pink,
+	instance:	 pink,
 	string:		 yellow,
-	number:		 cyan,
-	script:		 pink,
+	real:		 cyan,
+	method:		 pink,
+//	room:		 pink,
 	asset:		 pink,
 	
 	__builtin__ : true
@@ -136,11 +136,11 @@ color_schemes[$ "helios"] = {
 	plain:		 orange,
 	selection:	 dark_pink,
 	variable:	 green,
-	object:		 green,
-	macro:		 green,
+	instance:	 green,
 	string:		 yellow,
-	number:		 orange,
-	script:		 green,
+	real:		 orange,
+	method:		 green,
+//	room:		 green,
 	asset:		 green,
 	
 	__builtin__ : true
@@ -165,11 +165,11 @@ color_schemes[$ "humanrights"] = {
 	plain:		 white,
 	selection:	 dark_pink,
 	variable:	 blue,
-	object:		 blue,
-	macro:		 pink,
+	instance:	 blue,
 	string:		 pink,
-	number:		 pink,
-	script:		 blue,
+	real:		 pink,
+	method:		 blue,
+//	room:		 pink,
 	asset:		 pink,
 	
 	__builtin__ : true

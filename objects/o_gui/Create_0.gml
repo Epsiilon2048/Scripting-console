@@ -1,4 +1,8 @@
 
+v = new Console_value_box()
+v.initialize(40, 40, "o_console.x")
+
+
 /*
 str
 scr

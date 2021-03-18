@@ -35,13 +35,13 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			switch subject.type 
 			{
 			#region Real
-			case DT.NUMBER:
+			case dt_real:
 				output_string[i] = subject.value
 			break
 			#endregion
 
 			#region Method
-			case DT.SCRIPT:
+			case dt_method:
 	
 				var a = array_struct_get(com[i].args, "value")
 			
@@ -50,14 +50,14 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				{
 					if instance_exists(object) with object
 					{ 
-						if subject.builtin 
+						if subject.value < 100000 
 							{ output_string[i] = script_execute_ext_builtin(subject.value, a) }
 						else   
 							{ output_string[i] = script_execute_ext(subject.value, a) }
 					}
 					else 
 					{
-						if subject.builtin 
+						if subject.value < 100000 
 							{ output_string[i] = script_execute_ext_builtin(subject.value, a) }
 						else
 							{ output_string[i] = script_execute_ext(subject.value, a) }
@@ -79,7 +79,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#endregion
 	
 			#region Object
-			case DT.OBJECT:
+			case dt_instance:
 				object = subject.value
 			
 				if subject.value == noone output_string[i] = "Reset console scope"
@@ -90,14 +90,14 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#endregion
 
 			#region Room
-			case DT.ROOM:
+			case dt_room:
 				room_goto(asset_get_index(subject.plain))
 				output_string[i] = "Changed room to "+subject.plain
 			break
 			#endregion
 		
 			#region Variable	
-			case DT.VARIABLE:
+			case dt_variable:
 	
 				//if there are multiple lines and one of them changes the scope of the console,
 				//the variable will not be updated to the new scope
@@ -129,7 +129,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#endregion
 	
 			#region Asset
-			case DT.ASSET:
+			case dt_asset:
 				var _asset = string_delete(subject.plain, 1, string_pos("/", subject.plain))
 	
 				output_string[i] = "Asset index "+string(asset_get_index(_asset))
@@ -137,7 +137,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#endregion
 	
 			#region String
-			case DT.STRING:
+			case dt_string:
 				output_string[i] = "\""+subject.value+"\""
 			break
 			#endregion

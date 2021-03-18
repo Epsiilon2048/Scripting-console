@@ -1,5 +1,0 @@
- "GetGameSignature" with inputs: "entryGuid: c8418949-39e1-4056-8bf7-e866097fcdaa"
-2021-01-19 09:00:53,093 [54] DEBUG GameManagerClient [(null)] - Done: Invoking method on Razer.GameManagerClientLib.GameManagerClient: "GetGameSignature" with inputs: "entryGuid: c8418949-39e1-4056-8bf7-e866097fcdaa"
-2021-01-19 09:00:53,093 [54] DEBUG GameManagerClient [(null)] - Invoking method on Razer.GameManagerClientLib.GameManagerClient: "GetGameSignature" with inputs: "entryGuid: 5615d593-c851-4fe8-a943-670e389cd834"
-2021-01-19 09:00:53,095 [54] DEBUG GameManagerClient [(null)] - Done: Invoking method on Razer.GameManagerClientLib.GameManagerClient: "GetGameSignature" with inputs: "entryGuid: 5615d593-c851-4fe8-a943-670e389cd834"
-2021-01-19 09:00:53,095 [54] DEBUG GameManagerCli

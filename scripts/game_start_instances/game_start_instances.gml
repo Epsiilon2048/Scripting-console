@@ -3,7 +3,6 @@
 function game_start_instances(){
 
 var start_instances = [
-	o_cursor,
 	o_console,
 	o_gui,
 ]

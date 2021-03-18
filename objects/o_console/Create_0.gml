@@ -5,8 +5,13 @@
 #macro _PLURAL == 1 ? "" : "s"
 #macro RGB make_color_rgb
 
+#macro gui_mx device_mouse_x_to_gui(0)
+#macro gui_my device_mouse_y_to_gui(0)
+
 include_niche_virtual_keys = false
 console_macros = {}
+
+color_picker_var = ""
 
 initialize_console_macros()
 
@@ -23,26 +28,28 @@ ds_list_add(space_sep,
 )
 
 identifiers = {
-	a: DT.ASSET,
-	v: DT.VARIABLE,
-	s: DT.STRING,
-	r: DT.NUMBER,
+	r: dt_real,
+	s: dt_string,
+	a: dt_asset,
+	v: dt_variable,
+	m: dt_method,
+	i: dt_instance,
+	n: dt_room,
 }
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
-enum DT { NUMBER, STRING, ASSET, VARIABLE, SCRIPT, OBJECT, MACRO, ROOM }
+#macro dt_real "real"
+#macro dt_string "string"
+#macro dt_asset "asset"
+#macro dt_variable "variable"
+#macro dt_method "method"
+#macro dt_instance "instance"
+#macro dt_room "room"
+#macro dt_unknown "plain"
+
 
 color_schemes = {}
-
-dt_string[DT.NUMBER  ] = "number"
-dt_string[DT.STRING  ] = "string"
-dt_string[DT.ASSET   ] = "asset"
-dt_string[DT.VARIABLE] = "variable"
-dt_string[DT.SCRIPT  ] = "script"
-dt_string[DT.OBJECT  ] = "object"
-dt_string[DT.MACRO   ] = "macro"
-dt_string[DT.ROOM	 ] = "room"
 
 console_key = vk_tab
 
@@ -79,9 +86,6 @@ keybinds = []
 //these are just for the help command
 is_this_the_display = "it sure is!"
 checkboxes_like_this_one = false
-
-global.gui_mx = 0
-global.gui_my = 0
 
 prev_exception = {longMessage: "No errors yet! Yay!!"}
 

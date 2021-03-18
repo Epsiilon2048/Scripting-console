@@ -150,3 +150,33 @@ for(var i = 1; i <= string_length(str); i++)
 }
 return false
 }
+	
+	
+	
+	
+function string_pop(str){ //returns the last character of a string
+return string_char_at(str, string_length(str))
+}
+
+
+
+
+function string_pos_multiple(substrs, str){
+
+var bestpos = string_length(str)+1
+
+for(var i = 0; i <= array_length(substrs)-1; i++)
+{
+	var pos = string_pos(substrs[i], str)
+	
+	if pos != 0 and pos < bestpos
+	{
+		bestpos = pos
+	}
+}
+if bestpos == string_length(str)+1 
+{
+	return 0
+}
+else return bestpos
+}

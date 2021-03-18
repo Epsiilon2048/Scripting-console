@@ -50,7 +50,7 @@ for(var l = 0; l <= _lines-1; l++)
 	if not is_undefined(output)
 	
 	if not is_undefined(_error)	  _error_exists  = true
-	if _subject.type == DT.SCRIPT _script_exists = true
+	if _subject.type == dt_method _script_exists = true
 	
 	if array_length(_args) > 0
 	{
@@ -62,7 +62,7 @@ for(var l = 0; l <= _lines-1; l++)
 	{
 		if is_struct(_args[i])
 		{
-			var _type = is_undefined(_args[i].type) ? -1 : dt_string[_args[i].type]
+			var _type = is_undefined(_args[i].type) ? -1 : _args[i].type
 		
 			_plainstr += " "+_args[i].plain
 			_valstr   += " "+string(_args[i].value)

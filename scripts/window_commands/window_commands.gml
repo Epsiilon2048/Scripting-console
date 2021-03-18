@@ -1,5 +1,5 @@
 
-function display(variable, toggle){			with o_console {
+function display(variable, toggle){ with o_console {
 
 var _variable = variable
 
@@ -73,7 +73,7 @@ else
 
 
 
-function display_all(obj, toggle){			with o_console {
+function display_all(obj, toggle){ with o_console {
 
 if is_undefined(obj) obj = object
 var list = variable_instance_get_names(obj)
@@ -89,7 +89,7 @@ return "Displaying all variables in "+object_get_name(obj)
 
 
 
-function display_clear(){					with o_console {
+function display_clear(){ with o_console {
 	
 ds_list_clear(display_list)
 display_reset_pos()
@@ -100,7 +100,7 @@ return "Cleared display"
 
 
 
-function display_reset_pos(){				with o_console {
+function display_reset_pos(){ with o_console {
 
 Display.reset_pos()
 Display.enabled = true
@@ -112,7 +112,7 @@ return "Display position reset"
 
 
 
-function display_toggle_objects(toggle){	with o_console {
+function display_toggle_objects(toggle){ with o_console {
 
 _toggle = toggle
 
@@ -126,7 +126,7 @@ return "Toggled display objects"
 
 
 
-function window(text){						with o_console {
+function window(text){ with o_console {
 
 if is_undefined(text)
 {
@@ -134,13 +134,19 @@ if is_undefined(text)
 	return "Window toggled"
 }
 
-if is_array(text)
+var _text
+if variable_struct_exists_get(text, "__embedded__", false)
 {
-	if array_length(text) == 1 text = text[0]
-	if is_array(text) text = array_to_string(text, "\n")
+	_text = text.o
 }
-	
-Window.set(string(text))
+else if is_array(text)
+{
+	if array_length(text) == 1 _text = text[0]
+	if is_array(text) _text = array_to_string(text, "\n")
+}
+else _text = string(text)
+
+Window.set(_text)
 Window.enabled = true
 Window.show = true
 
@@ -152,7 +158,7 @@ return "Set window text"
 
 
 
-function window_reset_pos(){				with o_console {
+function window_reset_pos(){ with o_console {
 
 Window.reset_pos()
 Window.enabled = true

@@ -89,7 +89,7 @@ else
 	for(var i = 0; i <= array_length(_hiddenargs)-1; i++) argtext += "("+_hiddenargs[i]+") "
 	
 	text = [
-		{str:"[COMMAND]", scr: command_help, output:true},{str:" "+command.scr, col:colors.script},hiddentext+argtext+"- "+command.desc
+		{str:"[COMMAND]", scr: command_help, output:true},{str:" "+command.scr, col:colors.method},hiddentext+argtext+"- "+command.desc
 	]
 }
 
@@ -103,16 +103,16 @@ function syntax_help(){ with o_console {
 	
 return format_output([ //note that this only takes the colors from the current color scheme; doesn't change with it
 	"Supported datatypes/references\n",
-	{str:"integers",col:colors.number}," - ",{str:"floats",col:colors.number}," - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.object}," - ",{str:"variables",col:colors.variable},"\n\n"+
+	{str:"integers",col:colors.real}," - ",{str:"floats",col:colors.real}," - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.instance}," - ",{str:"variables",col:colors.variable},"\n\n"+
 	
 	"- When variables are referenced in arguments, they return their value.\n"+
 	"- Note that if a script asks for a variable or command as an argument, it's likely\n"+
 	"  intended to be a string\n"+
 	
-	"\nSetting scope:     ",{str:"object",col:colors.object},
-	"\nGetting variables: ",{str:"object",col:colors.object},{str:".variable",col:colors.variable},
-	"\nSetting variables: ",{str:"object",col:colors.object},{str:".variable",col:colors.variable},{str:" value",col:colors.plain},
-	"\nRunning scripts:   ",{str:"script",col:colors.script},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},
+	"\nSetting scope:     ",{str:"object",col:colors.instance},
+	"\nGetting variables: ",{str:"object",col:colors.instance},{str:".variable",col:colors.variable},
+	"\nSetting variables: ",{str:"object",col:colors.instance},{str:".variable",col:colors.variable},{str:" value",col:colors.plain},
+	"\nRunning scripts:   ",{str:"script",col:colors.method},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},
 	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)."+
 	"\nKeep in mind, variables are substituted for their values during the compiling process,"+
 	"\nmeaning they all take place within the initial scope."
@@ -129,14 +129,14 @@ return format_output([
 	"- Shows static strings.\n"+
 	"- If it's enabled in settings, you can click on the output to quickly set the window to it.\n"+
 	"- Can be very helpful for keeping notes or navigating menus.\n"+
-	"Syntax: ",{str:"window ",col:colors.script},{str:"value",col:colors.plain},"\n"+
-	"Commands: ",{str:"window",col:colors.script},", ",{str:"window_reset_pos",col:colors.script},"\n\n"+
+	"Syntax: ",{str:"window ",col:colors.method},{str:"value",col:colors.plain},"\n"+
+	"Commands: ",{str:"window",col:colors.method},", ",{str:"window_reset_pos",col:colors.method},"\n\n"+
 
 	"The Display\n"+
 	"- Displays variables and their values.\n"+
 	"- Remember, though the argument references a variable, make sure the variable name is a string.\n"+
-	"Syntax: ",{str:"display ",col:colors.script},{str:"\"object.variable\"",col:colors.string},"\n"+
-	"Commands: ",{str:"display",col:colors.script},", ",{str:"displayds",col:colors.script},", ",{str:"display_clear",col:colors.script},", ",{str:"display_reset_pos",col:colors.script},", ",{str:"display_all",col:colors.script},", ",{str:"display_toggle_objects",col:colors.script},"\n\n"+
+	"Syntax: ",{str:"display ",col:colors.method},{str:"\"object.variable\"",col:colors.string},"\n"+
+	"Commands: ",{str:"display",col:colors.method},", ",{str:"displayds",col:colors.method},", ",{str:"display_clear",col:colors.method},", ",{str:"display_reset_pos",col:colors.method},", ",{str:"display_all",col:colors.method},", ",{str:"display_toggle_objects",col:colors.method},"\n\n"+
 	
 	"You can drag windows from their sidebar, and collapse them by clicking it.\n\n"+
 	

@@ -128,7 +128,6 @@ var comp_line = array_create(array_length(line)-1)
 var _arg = line[0]
 var arg
 var type = -1
-var b = false
 var value = undefined
 var error = undefined
 
@@ -153,21 +152,19 @@ else
 	
 	if type == -1 and not is_undefined(_macro)
 	{
-		b = variable_struct_exists_get(_macro, "b", false)
-		
-		if _macro.type == DT.NUMBER arg = string_format_float(_macro.value)
-		else						arg = string(_macro.value)
+		if _macro.type == dt_real arg = string_format_float(_macro.value)
+		else					  arg = string(_macro.value)
 		
 		type = _macro.type
 	}
 	else arg = _arg
 
-	if type == DT.STRING or (type == -1 and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\"")
+	if type == dt_string or (type == -1 and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\"")
 	{
-		if type != DT.STRING value = string_copy(arg, 2, string_length(arg)-2)
+		if type != dt_string value = string_copy(arg, 2, string_length(arg)-2)
 		else value = arg
 		
-		type = DT.STRING
+		type = dt_string
 	}
 
 	if (type == -1) and asset_get_index(arg) != -1
@@ -176,32 +173,32 @@ else
 		
 		switch asset_type
 		{
-		case asset_script:	type = DT.SCRIPT
+		case asset_script:	type = dt_method
 							value = asset_get_index(arg)
 		break
-		case asset_room:	type = DT.ROOM
+		case asset_room:	type = dt_room
 		break
 		case asset_object:
 			if instance_exists(asset_get_index(arg))
 			{
-				type = DT.OBJECT
+				type = dt_instance
 				value = asset_get_index(arg).id
 			}
 		}
 		
-		if type == -1 type = DT.ASSET
+		if type == -1 type = dt_asset
 	}
-	else if type == DT.SCRIPT value = real(arg)
+	else if type == dt_method and string_is_int(arg) value = real(arg)
 	
-	if (type == -1 or type == DT.OBJECT) and string_is_int(arg)
+	if (type == -1 or type == dt_instance) and string_is_int(arg)
 	{
 		if string_pos("0x", arg) 
 		{
-			type = DT.NUMBER
+			type = dt_real
 		}
 		else if instance_exists(real(arg)) or real(arg) == noone
 		{
-			type = DT.OBJECT
+			type = dt_instance
 			if object_exists(real(arg)) value = real(arg).id
 			else value = real(arg)
 		}
@@ -211,13 +208,13 @@ else
 		}
 	}
 	
-	if type == DT.NUMBER
+	if type == dt_real
 	{
 		if string_is_float(arg) value = string_format_float(arg)
 		else type = undefined
 	}
 	
-	if type == -1 or type == DT.VARIABLE 
+	if type == -1 or type == dt_variable 
 	{
 		var varstring = string_add_scope(arg, not iden)
 
@@ -225,14 +222,14 @@ else
 		{
 			var varstringvalue = variable_string_get(varstring)
 			
-			if type != DT.VARIABLE and is_method(varstringvalue)
+			if type != dt_variable and is_method(varstringvalue)
 			{
-				type = DT.SCRIPT
+				type = dt_method
 				value = varstringvalue
 			}
 			else
 			{
-				type = DT.VARIABLE
+				type = dt_variable
 				value = varstring
 			}
 		}
@@ -250,7 +247,6 @@ var subject = {
 	value: value,
 	type: type,
 	plain: line[0],
-	builtin: b,
 }
 #endregion
 
@@ -289,26 +285,26 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 		else arg = _arg
 	
 		//reeeeeally weird logic here, i swear its necessary
-		if (type == -1 or type == DT.STRING) and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\""
+		if (type == -1 or type == dt_string) and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\""
 		{
-			if type != DT.STRING arg = string_copy(arg, 2, string_length(arg)-2)
-			type = DT.STRING
+			if type != dt_string arg = string_copy(arg, 2, string_length(arg)-2)
+			type = dt_string
 		}
 		if (type == -1) and asset_get_index(arg) != -1
 		{
-			type = DT.ASSET
+			type = dt_asset
 		}
 		if (type == -1) and string_is_float(arg) 
 		{
-			type = DT.NUMBER
+			type = dt_real
 		}
-		if type == -1 or type == DT.VARIABLE
+		if type == -1 or type == dt_variable
 		{
 			var varstring = string_add_scope(arg, not iden)
 
 			if not is_undefined(varstring) and variable_string_exists(varstring)
 			{
-				type = DT.VARIABLE
+				type = dt_variable
 			}
 			else
 			{
@@ -320,13 +316,13 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	
 	switch type
 	{
-	case DT.NUMBER:		value = real(arg)
+	case dt_real:		value = real(arg)
 	break
-	case DT.STRING:		value = arg
+	case dt_string:		value = arg
 	break
-	case DT.ASSET:		value = asset_get_index(arg)
+	case dt_asset:		value = asset_get_index(arg)
 	break
-	case DT.VARIABLE:	value = variable_string_get( string_add_scope(arg) )
+	case dt_variable:	value = variable_string_get( string_add_scope(arg) )
 	break
 	case undefined:		value = "[SYNTAX ERROR] from \""+line[i]+"\""
 						error = value
