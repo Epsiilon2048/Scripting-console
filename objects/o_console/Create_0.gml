@@ -17,8 +17,6 @@ initialize_console_macros()
 
 initialize_console_graphics()
 
-var display_size = display_get_width()*display_get_height()
-
 space_sep = ds_list_create()
 ds_list_add(space_sep,
 	",",
@@ -39,15 +37,35 @@ identifiers = {
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
-#macro dt_real "real"
-#macro dt_string "string"
-#macro dt_asset "asset"
-#macro dt_variable "variable"
-#macro dt_method "method"
-#macro dt_instance "instance"
-#macro dt_room "room"
-#macro dt_unknown "plain"
+#macro dt_real		"real"
+#macro dt_string	"string"
+#macro dt_asset		"asset"
+#macro dt_variable	"variable"
+#macro dt_method	"method"
+#macro dt_instance	"instance"
+#macro dt_room		"room"
+#macro dt_tag		"tag"
+#macro dt_unknown	"plain"
 
+#macro vb_static	"static"
+#macro vb_scrubber	"scrubber"
+//#macro vb_counter	"counter"
+#macro vb_bool		"bool"
+//#macro vb_string	"string"
+//#macro vb_list		"list"		//arrays and ds lists
+//#macro vb_map		"map"		//structs and ds maps
+//#macro vb_grid		"grid"		//2d arrays and ds grids
+#macro vb_color		"color"
+
+event_commands = {
+	step:	  [],
+	step_end: [],
+	draw:	  [],
+	gui:	  [],
+}
+
+gui_mouse_x = gui_mx
+gui_mouse_y = gui_my
 
 color_schemes = {}
 
@@ -131,8 +149,6 @@ fleft		= 0
 fright		= 0
 fbackspace	= 0
 fdel		= 0
-
-separators = "not gonna do this yet, il;l add it later"
 
 object = noone  //object in scope
 mouse_over_object = false

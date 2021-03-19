@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Scripts.yy",
+    "name": "Sorted",
+    "path": "folders/Scripts/Sorted.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Script94",
+  "name": "initialize_console_graphics",
   "tags": [],
   "resourceType": "GMScript",
 }

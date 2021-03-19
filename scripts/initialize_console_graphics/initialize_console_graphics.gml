@@ -20,6 +20,13 @@ WINDOW = {}; with WINDOW {
 
 COLOR_PICKER = {}; with COLOR_PICKER {
 	
+	x = 0
+	y = 0
+	
+	mouse_on = false
+	
+	variable = ""
+	
 	sv_square = generate_satval_square()
 	h_strip	  = generate_hue_strip()
 	
@@ -48,6 +55,7 @@ VALUE_BOX = {}; with VALUE_BOX {
 	radius = 23
 	border = 9
 	border_w = 6
+	ext_border = 3
 	outline_dist = border-2
 	outline_radius1 = radius*(outline_dist/border)
 	outline_radius2 = radius*((outline_dist-1)/border)

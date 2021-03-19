@@ -6,7 +6,7 @@
     "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "draw_value_box",
+  "name": "value_box_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -2,14 +2,13 @@
 function color_console_string(command){ with o_console {
 
 static space_sep = " ,.()=:;/"
+static tag_sep   = " "
 
 try
 {
 if shave(" ", command) == "" return {text: "", colors: []}
 
 var color_list = []
-var _char = ""
-var char  = ""
 var marker = 0
 var in_string = false
 var _iden = -1
@@ -18,13 +17,46 @@ var _iden_string = false
 var instscope = ""
 var _col = dt_unknown
 
-for(var i = 1; i <= string_length(command)+1; i++)
-{	
-	_char = char
+var tag = ""
+var com_start = 1
+
+for(var i = 1; i <= string_pos("#", command); i++)
+{
 	char = string_char_at(command, i)
 	
-	if string_pos(char, space_sep) and string_pos(_char, space_sep) continue
-	
+	if char == "#"
+	{
+		i ++
+		do
+		{
+			char = string_char_at(command, i)
+			tag += char
+			i ++
+		}
+		until i > string_length(command)+1 or (string_lettersdigits(char) != char and char != "_")
+
+		if not (i > string_length(command)+1) tag = string_delete(tag, string_length(tag), 1)
+		
+		if is_undefined(event_commands[$ tag])
+		{
+			tag = ""
+		}
+		else 
+		{
+			com_start = i
+			array_push(color_list, {pos: i, col: dt_real})
+		}
+	}
+	else if not string_pos(char, tag_sep)
+	{
+		break
+	}
+}
+
+marker = com_start-1
+for(var i = com_start; i <= string_length(command)+1; i++)
+{	
+	var char = string_char_at(command, i)
 	var string_sep = false
 	var string_offset = 0
 	var string_onset  = 0 //lolidk
@@ -106,13 +138,18 @@ for(var i = 1; i <= string_length(command)+1; i++)
 							_asset = real(segment)
 							_asset_type = -1
 						}
-						else
+						else if segment == "global" 
 						{
+							_asset = global
+							_asset_type = asset_object
+						}
+						else
+						{	
 							_asset = asset_get_index(segment)
 							_asset_type = asset_get_type(segment) 
 						}
 						
-						if _prev_iden == dt_instance and _asset > -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
+						if _prev_iden == dt_instance and _asset != -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
 						{
 							_col = dt_instance
 							instscope = segment
@@ -135,8 +172,9 @@ for(var i = 1; i <= string_length(command)+1; i++)
 						}
 						else if _prev_iden == -1 and _asset_type != -1
 						{
-							if _asset_type == asset_object	
+							if _asset_type == asset_object
 							{
+								show_debug_message(segment)
 								_col = dt_instance
 								instscope = segment
 							}
@@ -178,7 +216,6 @@ for(var i = 1; i <= string_length(command)+1; i++)
 					else
 					{
 						instscope += "."+segment
-						show_debug_message(instscope)
 						
 						var _varstring = string_add_scope(instscope, _prev_iden == -1)
 						
@@ -209,11 +246,6 @@ for(var i = 1; i <= string_length(command)+1; i++)
 				array_push(color_list, {pos: i+(_iden != -1)+string_onset, col: _col})
 			}
 			
-			if array_length(color_list) > 1 and color_list[array_length(color_list)-2].col == _col
-			{
-				array_delete(color_list, array_length(color_list)-2, 1)
-			}
-			
 			marker = i-string_offset
 			
 			_iden = -1
@@ -226,6 +258,7 @@ return {text: command, colors: color_list}
 }
 catch(_exception)
 {
+	show_message(_exception.longMessage)
 	return {text: command, colors: [{pos: string_length(command)+1, col: "plain"}]}
 }
 }}

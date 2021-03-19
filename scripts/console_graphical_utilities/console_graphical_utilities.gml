@@ -196,7 +196,7 @@ return mouse_over
 
 
 
-function draw_color_picker(x, y, variable){ with o_console.COLOR_PICKER {
+function draw_color_picker(){ with o_console.COLOR_PICKER { if variable_string_exists(variable) {
 
 static mouse_on_h = false
 static mouse_on_sv = false
@@ -209,7 +209,7 @@ var _size = size/255
 var _h_strip_pos = 255+h_strip_dist
 var _border_color = -o_console.colors.body_real
 
-draw_console_bubble_body(
+mouse_on = draw_console_bubble_body(
 	x, 
 	y, 
 	x + (_h_strip_pos+h_strip_width)*_size, 
@@ -339,4 +339,4 @@ draw_set_color(_color)
 draw_rectangle(x1, y1, x2, y2, false)
 
 draw_reset_properties()
-}}
+}}}

@@ -17,13 +17,39 @@ console_macros [$ "variable_struct_exists"]		= {type: dt_method, value: variable
 console_macros [$ "variable_struct_get"]		= {type: dt_method, value: variable_struct_get}
 console_macros [$ "variable_struct_set"]		= {type: dt_method, value: variable_struct_exists}
 
+console_macros [$ "array_delete"]				= {type: dt_method, value: array_delete}
+console_macros [$ "array_insert"]				= {type: dt_method, value: array_insert}
+console_macros [$ "array_push"]					= {type: dt_method, value: array_push}
+
 console_macros [$ "asset_get_index"]			= {type: dt_method, value: asset_get_index}
 console_macros [$ "asset_get_type"]				= {type: dt_method, value: asset_get_type}
 
 console_macros [$ "real"]						= {type: dt_method, value: real}
 console_macros [$ "is_real"]					= {type: dt_method, value: is_real}
 
+console_macros [$ "draw_set_color"]				= {type: dt_method, value: draw_set_color}
+console_macros [$ "draw_set_alpha"]				= {type: dt_method, value: draw_set_alpha}
+console_macros [$ "draw_set_halign"]			= {type: dt_method, value: draw_set_halign}
+console_macros [$ "draw_set_valign"]			= {type: dt_method, value: draw_set_valign}
+console_macros [$ "draw_set_font"]				= {type: dt_method, value: draw_set_font}
+console_macros [$ "gpu_set_blendmode"]			= {type: dt_method, value: gpu_set_blendmode}
+console_macros [$ "draw_reset_properties"]		= {type: dt_method, value: draw_reset_properties}
 
+console_macros [$ "shader_reset"]				= {type: dt_method, value: shader_reset}
+console_macros [$ "shader_set"]					= {type: dt_method, value: shader_set}
+console_macros [$ "shader_set_uniform_f"]		= {type: dt_method, value: shader_set_uniform_f}
+console_macros [$ "clip_rect_cutout"]			= {type: dt_method, value: clip_rect_cutout}
+
+console_macros [$ "draw_line"]					= {type: dt_method, value: draw_line}
+console_macros [$ "draw_line_width"]			= {type: dt_method, value: draw_line_width}
+console_macros [$ "draw_point"]					= {type: dt_method, value: draw_point}
+console_macros [$ "draw_rectangle"]				= {type: dt_method, value: draw_rectangle}
+console_macros [$ "draw_circle"]				= {type: dt_method, value: draw_circle}
+console_macros [$ "draw_sprite"]				= {type: dt_method, value: draw_sprite}
+console_macros [$ "draw_sprite_ext"]			= {type: dt_method, value: draw_sprite_ext}
+console_macros [$ "draw_sprite_pos"]			= {type: dt_method, value: draw_sprite_pos}
+console_macros [$ "draw_sprite_general"]		= {type: dt_method, value: draw_sprite_general}
+console_macros [$ "draw_text"]					= {type: dt_method, value: draw_text}
 
 console_macros [$ "var"] = {type: dt_method, value: create_variable}
 
@@ -44,6 +70,13 @@ console_macros [$ "false"]	= {type: dt_real, value: false}
 console_macros [$ "global"]	= {type: dt_instance, value: global}
 console_macros [$ "noone"]	= {type: dt_instance, value: noone}
 console_macros [$ "all"]	= {type: dt_instance, value: all}
+
+console_macros [$ "mouse_x"]	= {type: dt_variable, value: "global.mouse_x"}
+console_macros [$ "mouse_y"]	= {type: dt_variable, value: "global.mouse_y"}
+
+console_macros [$ "gui_mx"]	= {type: dt_variable, value: "o_console.gui_mouse_x"}
+console_macros [$ "gui_my"]	= {type: dt_variable, value: "o_console.gui_mouse_y"}
+
 
 #region Colors
 console_macros [$ "c_white"]	= {type: dt_real, value: c_white}
@@ -82,6 +115,11 @@ console_macros [$ "dt_method"]		= {type: dt_string, value: "method"}
 console_macros [$ "dt_instance"]	= {type: dt_string, value: "instance"}
 console_macros [$ "dt_room"]		= {type: dt_string, value: "room"}
 console_macros [$ "dt_unknown"]		= {type: dt_string, value: "plain"}
+
+console_macros [$ "vb_bool"]		= {type: dt_string, value: vb_bool		}
+console_macros [$ "vb_color"]		= {type: dt_string, value: vb_color		}
+console_macros [$ "vb_scrubber"]	= {type: dt_string, value: vb_scrubber	}
+console_macros [$ "vb_static"]		= {type: dt_string, value: vb_static	}
 
 #region Virtual keys
 console_macros [$ "vk_anykey"]		= {type: dt_real, value: vk_anykey		}

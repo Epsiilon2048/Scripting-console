@@ -29,19 +29,52 @@ ARGUMENT INTERPRETATION
 */
 
 static space_sep = " ,()=:"
+static tag_sep   = " "
 
 if shave(" ", command) == "" return ""
 
 var _command = string_replace_all(command, "\\n", "\n")
 
+var char
+var tag = ""
+var com_start = 1
+
+for(var i = 1; i <= string_pos("#", _command); i++)
+{
+	char = string_char_at(_command, i)
+	
+	if char == "#"
+	{
+		i ++
+		do
+		{
+			char = string_char_at(_command, i)
+			tag += char
+			i ++
+		}
+		until i > string_length(_command) or (string_lettersdigits(char) != char and char != "_")
+
+		tag = string_delete(tag, string_length(tag), 1)
+		
+		if is_undefined(event_commands[$ tag])
+		{
+			tag = ""
+		}
+		else com_start = i
+	}
+	else if not string_pos(char, tag_sep)
+	{
+		break
+	}
+}
 
 #region Separate commands
 var command_split = []
 
-var marker = 1
+var marker = com_start
 var in_string = false
 
-for(var i = 1; i <= string_length(_command); i++)
+for(var i = com_start; i <= string_length(_command); i++)
 {
 	var char = string_char_at(_command, i)
 	
@@ -342,5 +375,5 @@ comp_lines[l] = {subject: subject, args: comp_line, error: error}
 #endregion
 
 
-return comp_lines
+return {tag: tag, commands: comp_lines, raw: string_copy(command, com_start, string_length(command)-com_start+1)}
 }}

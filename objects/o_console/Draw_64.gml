@@ -197,5 +197,7 @@ if output_as_window and Output.plaintext != ""
 	draw_console_window(Output_window)
 }
 
-if variable_string_exists(string(id) + color_picker_var) draw_color_picker(200, 200, string(id) + color_picker_var)
+if variable_string_exists(COLOR_PICKER.variable) draw_color_picker()
 #endregion
+
+event_commands_exec(event_commands.gui)

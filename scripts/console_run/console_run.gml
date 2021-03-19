@@ -15,7 +15,15 @@ UNDEFINED		Throw error
 
 try{
 	
-var com = compiled_command
+var com = compiled_command.commands
+var tag = compiled_command.tag
+
+if not is_undefined(event_commands[$ tag])
+{
+	array_push(event_commands[$ tag], compiled_command.raw)
+	return ["Added command to "+tag+" event"]
+}
+
 var output_string = array_create(array_length(com), "")
 
 for(var i = 0; i <= array_length(com)-1; i++)

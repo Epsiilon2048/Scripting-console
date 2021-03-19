@@ -7,6 +7,8 @@ if string_pos(".", str) == 1 return false
 var list = string_split(".", str)
 var object
 
+if array_length(list) < 2 return false
+
 var asset = asset_get_index(list[0])
 
 if string_is_int(list[0])
@@ -14,8 +16,7 @@ if string_is_int(list[0])
 	var r = real(list[0])
 	
 	if r == global object = global
-	else if object_exists(r) object = asset.id
-	else if instance_exists(r) object = r
+	else if instance_exists(r) object = r.id
 	else return false
 }
 else
@@ -24,8 +25,6 @@ else
 	else if instance_exists(asset) object = asset.id
 	else return false
 }
-
-if array_length(list) < 2 return false
 
 var variable = variable_instance_get( object, list[1] )
 
@@ -54,6 +53,8 @@ else if str == "" return undefined
 var list = string_split(".", str)
 var object = -1
 
+if array_length(list) < 2 return undefined
+
 var asset = asset_get_index(list[0])
 
 if string_is_int(list[0])
@@ -61,8 +62,7 @@ if string_is_int(list[0])
 	var r = real(list[0])
 	
 	if r == global object = global
-	else if object_exists(r) object = asset.id
-	else if instance_exists(r) object = r
+	else if instance_exists(r) object = r.id
 }
 else
 {
@@ -93,6 +93,8 @@ var list = string_split(".", str)
 var lenlist = array_length(list)
 var object = -1
 
+if lenlist < 2 return undefined
+
 var asset = asset_get_index(list[0])
 
 if string_is_int(list[0])
@@ -100,8 +102,7 @@ if string_is_int(list[0])
 	var r = real(list[0])
 	
 	if r == global object = global
-	else if object_exists(r) object = asset.id
-	else if instance_exists(r) object = r
+	else if instance_exists(r) object = r.id
 }
 else
 {

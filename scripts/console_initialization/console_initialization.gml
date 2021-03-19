@@ -26,7 +26,7 @@ asset
 
 var dark_blue    = RGB(34, 50, 66)
 var green	     = RGB(40, 235, 134)
-var slight_green = RGB(40, 80, 102)
+var slight_green = RGB(67, 88, 112)
 var white	     = c_white
 var black	     = c_black
 var yellow	     = RGB(252, 252, 0)
@@ -58,7 +58,7 @@ color_schemes[$ "greenbeans"] = {
 color_schemes.greenbeans[$ "room"] = red
 
 var dark_pink   = RGB(55,  34, 66)
-var slight_pink = 4466264
+var slight_pink = RGB(115, 61, 113)
 var pink	    = RGB(240, 58, 125)
 var white	    = c_white
 var purple	    = RGB(140, 62, 250)
@@ -118,7 +118,7 @@ color_schemes[$ "drowned"] = {
 }
 
 var dark_pink	= RGB(84, 35, 59)
-var slight_pink = 4994672
+var slight_pink = RGB(133, 62, 88)
 var orange		= RGB(242, 151, 37)
 var green		= RGB(60, 233, 137)
 var yellow		= RGB(246, 248, 44)

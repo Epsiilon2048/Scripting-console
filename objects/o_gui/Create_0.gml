@@ -1,6 +1,6 @@
 
 v = new Console_value_box()
-v.initialize(40, 40, "o_console.x")
+v.initialize(40, 40, "2.g", vb_bool)
 
 
 /*

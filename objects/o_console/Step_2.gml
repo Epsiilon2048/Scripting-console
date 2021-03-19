@@ -96,7 +96,7 @@ if console_toggle
 {
 	#region Apply inputs to console string
 	//figure out text stuff
-	var console_string_length = string_length(console_string)
+	var str_length = string_length(console_string)
 
 	fleft		= (keyboard_check(vk_left)+fleft)*keyboard_check(vk_left)
 	fright		= (keyboard_check(vk_right)+fright)*keyboard_check(vk_right)
@@ -110,8 +110,8 @@ if console_toggle
 	backspace	= (f and key_repeat < fbackspace) or keyboard_check_pressed(vk_backspace)
 	del			= (f and key_repeat < fdel) or keyboard_check_pressed(vk_delete)
 	enter		= keyboard_check_pressed(vk_enter)
-	home		= keyboard_check_pressed(vk_home)
-	
+	startln		= keyboard_check_pressed(vk_home)
+	endln		= keyboard_check_pressed(vk_end)
 	log_up		= keyboard_check_pressed(vk_up)
 	log_down	= keyboard_check_pressed(vk_down) and (input_log_index != -1 or ds_list_size(input_log) == 0)
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
@@ -123,7 +123,7 @@ if console_toggle
 	if select_all
 	{
 		char_pos1 = 1
-		char_pos2 = max(console_string_length, 1)
+		char_pos2 = max(str_length, 1)
 	}
 	if copy and char_pos1 != char_pos2
 	{
@@ -140,19 +140,29 @@ if console_toggle
 		}
 	
 		if not shift char_pos2 = char_pos1
-		else char_pos2 = min( max(1, console_string_length), char_pos2 )
+		else char_pos2 = min( max(1, str_length), char_pos2 )
 	}
 	if right
 	{
 		if shift and char_pos1 == char_pos2 char_pos_dir = 1
 	
-		if (char_pos_dir == 1 and char_pos1 != console_string_length+1) or not shift {
-			char_pos2 = min(console_string_length+(not shift), char_pos2+1)
-		} else if char_pos1 != console_string_length+1 {
+		if (char_pos_dir == 1 and char_pos1 != str_length+1) or not shift {
+			char_pos2 = min(str_length+(not shift), char_pos2+1)
+		} else if char_pos1 != str_length+1 {
 			char_pos1 ++
 		}
 	
 		if not shift char_pos1 = char_pos2
+	}
+	if endln
+	{
+		char_pos2 = str_length
+		if not shift char_pos1 = str_length
+	}
+	if startln
+	{
+		char_pos1 = 1
+		if not shift char_pos2 = 1
 	}
 	if (log_up or log_down) and ds_list_size(input_log) > 0
 	{
@@ -162,8 +172,8 @@ if console_toggle
 		else console_string = ds_list_find_value(input_log, input_log_index)
 		
 		keyboard_string = console_string
-		console_string_length = string_length(console_string)
-		char_pos1 = console_string_length+1
+		str_length = string_length(console_string)
+		char_pos1 = str_length+1
 		char_pos2 = char_pos1
 		color_string = color_console_string(console_string)
 	}
@@ -171,13 +181,13 @@ if console_toggle
 	{
 		console_string = ""
 		keyboard_string = ""
-		console_string_length = 0
+		str_length = 0
 		char_pos1 = 1
 		char_pos2 = 1
 		color_string = []
 	}
 
-	if console_string_length < string_length(keyboard_string) or (paste and clipboard_has_text()) //a char was added
+	if str_length < string_length(keyboard_string) or (paste and clipboard_has_text()) //a char was added
 	{
 		var char
 		
@@ -195,7 +205,7 @@ if console_toggle
 		console_string = string_insert(char, console_string, char_pos1)
 		char_pos1 += string_length(char)
 		char_pos2 += string_length(char)
-		console_string_length = string_length(console_string)
+		str_length = string_length(console_string)
 		keyboard_string = console_string
 		color_string = color_console_string(console_string)
 	}
@@ -205,16 +215,16 @@ if console_toggle
 		char_pos1 = max(1, char_pos1-(char_pos1 == char_pos2))
 		char_pos2 = char_pos1
 		keyboard_string = console_string
-		console_string_length = string_length(console_string)
+		str_length = string_length(console_string)
 		color_string = color_console_string(console_string)
 	}
-	if del and char_pos2 != console_string_length+1 {
+	if del and char_pos2 != str_length+1 {
 		input_log_index = -1
 		console_string = string_delete(console_string, char_pos2, 1)
-		char_pos2 = clamp(char_pos2, 1, console_string_length)
+		char_pos2 = clamp(char_pos2, 1, str_length)
 		char_pos1 = char_pos2
 		keyboard_string = console_string
-		console_string_length = string_length(console_string)
+		str_length = string_length(console_string)
 		color_string = color_console_string(console_string)
 	}
 	#endregion
@@ -225,7 +235,7 @@ if console_toggle
 		var _compile = console_compile(console_string)
 		var _output  = console_run(_compile)
 		
-		if is_array(_compile) 
+		if is_struct(_compile)
 		{
 			prev_command = console_string
 			prev_compile = _compile
@@ -269,3 +279,8 @@ for(var i = 0; i <= array_length(keybinds)-1; i++)
 
 run_in_console = false
 run_in_embed   = false
+
+gui_mouse_x = gui_mx
+gui_mouse_y = gui_my
+
+event_commands_exec(event_commands.step)
