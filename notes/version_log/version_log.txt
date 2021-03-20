@@ -36,7 +36,7 @@ Fixes & changes
  
 Known issues
  - Sometimes the color parser appears to add a space. This is only in very specific instances which would
-   throw errors anyway. You can disable the text colors by setting the console's console_colors to false.
+   throw errors anyway. You can disable the text colors by setting the console's command_colors to false.
  - Text color parsing doesn't separate via semi-colons
  - Command text parsing manages strings very poorly
  - Commas are ignored when on the ends of arguments, but still require spacing between
@@ -80,7 +80,7 @@ Fixes
  
 Known issues
  - Sometimes the color parser appears to add a space. This is only in very specific instances which would
-   throw errors anyway. You can disable the text colors by setting the console's console_colors to false.
+   throw errors anyway. You can disable the text colors by setting the console's command_colors to false.
  - Text color parsing doesn't separate via semi-colons
  - In some cases, the window doesn't respond to the mouse. I'm not sure what causes this, but you can fix 
    it by enabling the display. Probably a simple scripting issue, and I'll figure it out when I have more 

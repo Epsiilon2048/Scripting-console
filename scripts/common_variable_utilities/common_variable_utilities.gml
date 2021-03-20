@@ -88,6 +88,7 @@ return value
 function variable_string_set(str, val){
 
 if not is_string(str) return undefined
+if str == ""		  return undefined
 
 var list = string_split(".", str)
 var lenlist = array_length(list)

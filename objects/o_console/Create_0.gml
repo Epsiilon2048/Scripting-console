@@ -2,7 +2,6 @@
 #macro SCALE_ o_console.draw_scale.mult *
 
 #macro _BOOL_STRING ? "true" : "false"
-#macro _PLURAL == 1 ? "" : "s"
 #macro RGB make_color_rgb
 
 #macro gui_mx device_mouse_x_to_gui(0)
@@ -37,25 +36,34 @@ identifiers = {
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
-#macro dt_real		"real"
-#macro dt_string	"string"
-#macro dt_asset		"asset"
-#macro dt_variable	"variable"
-#macro dt_method	"method"
-#macro dt_instance	"instance"
-#macro dt_room		"room"
-#macro dt_tag		"tag"
-#macro dt_unknown	"plain"
+#macro dt_real			"real"
+#macro dt_string		"string"
+#macro dt_asset			"asset"
+#macro dt_variable		"variable"
+#macro dt_method		"method"
+#macro dt_instance		"instance"
+#macro dt_room			"room"
+#macro dt_tag			"tag"
+#macro dt_unknown		"plain"
+#macro dt_deprecated	"deprecated"
 
-#macro vb_static	"static"
-#macro vb_scrubber	"scrubber"
-//#macro vb_counter	"counter"
-#macro vb_bool		"bool"
-//#macro vb_string	"string"
-//#macro vb_list		"list"		//arrays and ds lists
-//#macro vb_map		"map"		//structs and ds maps
-//#macro vb_grid		"grid"		//2d arrays and ds grids
-#macro vb_color		"color"
+#macro cs_greenbeans	"greenbeans"
+#macro cs_royal			"royal"
+#macro cs_drowned		"drowned"
+#macro cs_helios		"helios"
+#macro cs_humanrights	"humanrights"
+
+#macro vb_static		"static"
+#macro vb_scrubber		"scrubber"
+#macro vb_bool			"bool"
+#macro vb_color			"color"
+
+//unfinished
+#macro vb_counter		"counter"
+#macro vb_string		"string"
+#macro vb_list			"list"		//arrays and ds lists
+#macro vb_map			"map"		//structs and ds maps
+#macro vb_grid			"grid"		//2d arrays and ds grids
 
 event_commands = {
 	step:	  [],
@@ -94,7 +102,7 @@ force_output_embed_body = false
 
 force_body_solid = false
 
-cs_index = "greenbeans"
+cs_index = cs_greenbeans
 
 console_color_interval = 300
 console_color_time = 0
@@ -229,77 +237,7 @@ instance_cursor = false
 
 color_string = []
 
-console_colors = true
-
-commands = [
-	{scr: "help", desc: "Returns console help and info. But surely you already know this command if you're viewing it?"},
-	{scr: "command_help", optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"},
-	{scr: "syntax_help", optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"},
-	{hidden: true, scr: "console_window_help", desc: "Returns an explanation of console windows"},
-	{hidden: true, scr: "embedded_text_help", desc: "Returns an explanation of text embedding"},
-	
-	{scr: "console_settings", desc: "Returns the console settings menu"},
-	{scr: "color_scheme", args:["color scheme index"], desc: "Sets the console color scheme to the specified index"},
-	{scr: "color_scheme_settings", desc: "Returns the color scheme settings menu"},
-	{hidden: true, scr: "console_videos", desc: "Returns a list of videos featuring the console"},
-	{hidden: true, scr: "initialize_color_schemes", desc: "Resets the color schemes"},
-	
-	{hidden: true, scr: "Epsiilon", desc: "Returns info about the creator of the console"},
-	{hidden: true, scr: "nice_thing", desc: "Why don't you run it and find out?"},
-	{hidden: true, scr: "destroy_console", hiddenargs: ["are you certain?"], desc: "please dont :/"},
-	
-	{scr: "error_report", desc: "Returns the longMessage of the previous error thrown by a console command"},
-	
-	{scr: "ar", args: ["array", "index"], optargs: ["value"], desc: "Returns the specified index of an array, or sets the specified index to a value"},
-	{scr: "addvar", args: ["variable"], optargs: ["value"], desc: "Adds a value to the specified variable; value defaults to 1"},
-	{scr: "togglevar", args: ["variable"], desc: "Toggles a boolean variable"},
-	
-	{scr: "roomobj", desc: "Returns all the instances in the room"},
-	{scr: "objvar", optargs: ["object"], desc: "Returns all the variables in the specified/scoped instance"},
-	
-	{scr: "select_obj", desc: "After running, click on an instance to set the console's scope"},
-	{scr: "reset_obj", optargs: ["object"], desc: "Destroys and recreates the specified/scoped instance"},
-	
-	{scr: "window", optargs: ["text"], desc: "Sets the Window text; if left blank, toggles the Window"},
-	{scr: "window_reset_pos", desc: "Resets the position of the Window"},
-	
-	{scr: "display", optargs: ["variable"], hiddenargs: ["enable?"], desc: "Puts a specified variable on the Display; if left blank, toggles the Display"},
-	{scr: "displayds", optargs: ["DS list"], hiddenargs: ["enable?"], desc: "Puts a specified DS list on the Display"},
-	{scr: "display_all", optargs: ["object"], hiddenargs: ["enable all?"], desc: "Puts all variables in the specified/scoped instance on the Display"},
-	{scr: "display_clear", desc: "Removes all variables from the Display"},
-	{scr: "display_reset_pos", desc: "Resets the position of the Display"},
-	
-	{scr: "bind",	  args: ["key", "command"], desc: "Binds a key to a command"},
-	{scr: "unbind",	  args: ["bind index"], hiddenargs: ["return bindings menu?"], desc: "Removes the binding in the specified index"},
-	{scr: "bindings", desc: "Returns the list of bindings"},
-
-	{scr: "vtv", optargs: ["to variable", "from variable"], desc: "Sets the 'to' variable to the 'from' variable every step; if left blank clears the previous vtv"},
-	{scr: "vt_mx", optargs: ["variable"], desc: "Sets the specified variable to mouse_x every step; if left blank clears the previous vt_mx"},
-	{scr: "vt_my", optargs: ["variable"], desc: "Sets the specified variable to mouse_y every step; if left blank clears the previous vt_my"},
-	{scr: "vtm_gui", desc: "Toggles between taking the regular/gui positions of the mouse for the var to mouse commands"},
-
-	{scr: "color_make", args: ["r", "g", "b"], desc: "Returns a color value and sets the scoped instance's _col variable to the return"},
-	{scr: "color_get",	optargs: ["color value"], desc: "Returns the RGB of a color value; if left blank returns the RBG of the scoped instance's _col variable"},
-]
-
-outdated = [
-	{name: "ar",					newname: "@",			ver: "Release 1.2"},
-	{name: "color",					newname: "color_make",	ver: "Early 1.2"},
-	{name: "obj_reset",				newname: "reset_obj",	ver: "Early 1.2"},
-	{name: "window_toggle",			newname: "window",		ver: "Early 1.2"},
-	{name: "display_all_variables", newname: "display_all", ver: "Early 1.2"},
-	{name: "select",				newname: "select_obj",	ver: "Unreleased 1.0"},
-	{name: "objects_in_room",		newname: "roomobj",		ver: "Unreleased 1.0"},
-	{name: "variables_in_object",	newname: "objvar",		ver: "Unreleased 1.0"},
-
-	{name: "vtv",					note: "Became obsolete with better parsing", ver: "Release 1.2"},
-	{name: "vt_mx",					note: "Became obsolete with better parsing", ver: "Release 1.2"},
-	{name: "vt_my",					note: "Became obsolete with better parsing", ver: "Release 1.2"},
-	{name: "var_to_mouse_x",		note: "Became obsolete with better parsing", ver: "Unreleased 1.0"},
-	{name: "var_to_mouse_y",		note: "Became obsolete with better parsing", ver: "Unreleased 1.0"},
-	{name: "var_to_var",			note: "Became obsolete with better parsing", ver: "Unreleased 1.0"},
-	{name: "create_camera_point",	note: "Was project specific",				 ver: "Unreleased 1.0"},
-]
+command_colors = true
 
 var greetings = [
 	"Hello!! Welcome to the console!",
@@ -317,4 +255,5 @@ output_set(greetings[irandom(array_length(greetings)-1)]+" Type \"help\" for a g
 Output.alpha = 0
 
 initialize_color_schemes()
+initialize_command_info()
 console_startup()

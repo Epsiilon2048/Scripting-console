@@ -8,6 +8,8 @@ try
 {
 if shave(" ", command) == "" return {text: "", colors: []}
 
+if not command_colors return {text: command, colors: [{pos: string_length(command)+1, col: "plain"}]}
+
 var color_list = []
 var marker = 0
 var in_string = false
@@ -44,7 +46,7 @@ for(var i = 1; i <= string_pos("#", command); i++)
 		else 
 		{
 			com_start = i
-			array_push(color_list, {pos: i, col: dt_real})
+			array_push(color_list, {pos: i, col: dt_tag})
 		}
 	}
 	else if not string_pos(char, tag_sep)
@@ -174,7 +176,6 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 						{
 							if _asset_type == asset_object
 							{
-								show_debug_message(segment)
 								_col = dt_instance
 								instscope = segment
 							}
@@ -195,11 +196,11 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 								instscope = segment
 							}
 						}
-						else if _macro_type == -1 or _macro_type == dt_variable
+						else if _macro_type == -1 or _macro_type == dt_variable or _macro_type == dt_method
 						{
 							var _varstring = string_add_scope(segment, _prev_iden == -1) 
 							
-							if variable_string_exists(_varstring)
+							if variable_string_exists(_varstring) and _macro_type != dt_method
 							{
 								if is_method(variable_string_get(_varstring))
 								{
@@ -210,6 +211,10 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 									_col = dt_variable
 								}
 								instscope = _varstring
+							}
+							else if _macro_type != dt_variable and ds_map_exists(deprecated_commands, segment)
+							{
+								_col = dt_deprecated
 							}
 						}
 					}

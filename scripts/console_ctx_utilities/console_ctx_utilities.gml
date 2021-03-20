@@ -1,6 +1,8 @@
 
 function Ctx_menu() constructor{
 
+scope = noone
+
 set = function(_items){
 	
 	items = _items
@@ -74,17 +76,14 @@ set_item = function(index, item){
 
 
 
-function ctx_menu_inputs(ctx){ with o_console.CTX_MENU {
+function ctx_menu_inputs(){ with o_console.CTX_MENU { if not is_undefined(ctx) {
 
 if not enabled
 {
-	if mouse_check_button_released(mb_right)
-	{
-		enabled = true
+	enabled = true
 		
-		x = device_mouse_x_to_gui(0)+1
-		y = device_mouse_y_to_gui(0)+1
-	}
+	x = device_mouse_x_to_gui(0)+1
+	y = device_mouse_y_to_gui(0)+1
 }
 
 if enabled
@@ -132,10 +131,24 @@ if enabled
 					var item = ctx.items[i]
 					
 					var _scr		= variable_struct_exists_get(item, "scr",		noscript)
+					var _variable	= variable_struct_exists_get(item, "variable",	"")
 					var _arg		= variable_struct_exists_get(item, "arg",		undefined)
 					var _args		= variable_struct_exists_get(item, "args",		[])
 					var _func		= variable_struct_exists_get(item, "func",		noscript)
 					var _checkbox	= variable_struct_exists_get(item, "checkbox",	"")
+					
+					if is_struct(ctx.scope) and not is_undefined(ctx.scope[$ _variable]) 
+					{
+						ctx.scope[$ _variable] = _arg
+					}
+					else if instance_exists(ctx.scope) 
+					{
+						variable_instance_set(ctx.scope, _variable, _arg)
+					}
+					else if is_string(_variable)
+					{
+						variable_string_set(_variable, _arg)
+					}
 					
 					if _scr != noscript
 					{
@@ -175,12 +188,14 @@ if enabled
 		}
 	}
 }
-}}
+
+else ctx = undefined
+}}}
 
 
 
 
-function draw_ctx_menu(ctx){ with o_console.CTX_MENU { if enabled {
+function draw_ctx_menu(){ with o_console.CTX_MENU { if not is_undefined(ctx) {
 
 draw_set_font(font)
 draw_set_align(fa_left, fa_middle)

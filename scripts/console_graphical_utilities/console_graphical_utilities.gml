@@ -198,7 +198,7 @@ return mouse_over
 
 function draw_color_picker(){ with o_console.COLOR_PICKER { if variable_string_exists(variable) {
 
-static mouse_on_h = false
+static mouse_on_h  = false
 static mouse_on_sv = false
 
 static u_position = shader_get_uniform(shd_hue, "u_Position")

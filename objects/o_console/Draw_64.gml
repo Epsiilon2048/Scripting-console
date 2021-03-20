@@ -1,6 +1,4 @@
 
-//if window_get_cursor() == cr_handpoint window_set_cursor(cr_default)
-
 #region Deal with mouse inputs
 if mouse_check_button_pressed(mb_left) and not Output.mouse_over_embed
 {
@@ -103,7 +101,7 @@ if console_toggle
 
 	draw_set_font(font)
 	draw_set_align(fa_left, fa_center)
-	if console_colors draw_console_text(console_text_x, console_text_y, color_string)
+	if command_colors draw_console_text(console_text_x, console_text_y, color_string)
 	else draw_text(console_text_x, console_text_y, console_string)
 	
 	draw_set_color(colors.plain)
@@ -196,8 +194,9 @@ if output_as_window and Output.plaintext != ""
 	Output.fade_time  = 0
 	draw_console_window(Output_window)
 }
-
-if variable_string_exists(COLOR_PICKER.variable) draw_color_picker()
 #endregion
+
+draw_color_picker()
+draw_ctx_menu()
 
 event_commands_exec(event_commands.gui)

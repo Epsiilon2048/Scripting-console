@@ -39,6 +39,7 @@
     {"id":{"name":"remove_syntax_errors","path":"scripts/remove_syntax_errors/remove_syntax_errors.yy",},"order":2,},
     {"id":{"name":"console_misc_utilities","path":"scripts/console_misc_utilities/console_misc_utilities.yy",},"order":4,},
     {"id":{"name":"initialize_console_macros","path":"scripts/initialize_console_macros/initialize_console_macros.yy",},"order":2,},
+    {"id":{"name":"initialize_command_info","path":"scripts/initialize_command_info/initialize_command_info.yy",},"order":2,},
     {"id":{"name":"version_log","path":"notes/version_log/version_log.yy",},"order":0,},
     {"id":{"name":"color_console_string47","path":"scripts/color_console_string47/color_console_string47.yy",},"order":26,},
     {"id":{"name":"s_collision9","path":"sprites/s_collision9/s_collision9.yy",},"order":0,},

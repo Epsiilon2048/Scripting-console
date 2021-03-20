@@ -22,6 +22,17 @@ function Console_value_box() constructor{
 		
 		self.selected = false
 		self.change = false
+		
+		self.right_mb = false
+		
+		self.ctx = new Ctx_menu()
+		self.ctx.scope = self
+		self.ctx.set([
+			{str: vb_static,	variable: "type",	arg: vb_static},
+			{str: vb_scrubber,	variable: "type",	arg: vb_scrubber},
+			{str: vb_bool,		variable: "type",	arg: vb_bool},
+			{str: vb_color,		variable: "type",	arg: vb_color},
+		])
 	}
 	
 	
@@ -32,6 +43,18 @@ function Console_value_box() constructor{
 	static vb = o_console.VALUE_BOX
 	
 	var mouse_on = gui_mouse_between(x-vb.border-vb.border_w, y-vb.border, x+width+vb.border+vb.border_w, y+vb.border+vb.text_h)
+	
+	if mouse_on
+	{
+		if mouse_check_button_pressed(mb_right) right_mb = true
+		else if right_mb and mouse_check_button_released(mb_right)
+		{
+			right_mb = false
+			o_console.CTX_MENU.ctx = ctx
+		}
+	}
+	
+	if right_mb and not mouse_check_button(mb_right) right_mb = false
 	
 	switch type
 	{
@@ -46,15 +69,9 @@ function Console_value_box() constructor{
 		if mouse_on and mouse_check_button_pressed(mb_left)
 		{
 			selected = true
-			value = not value
-			text = value ? "true" : "false"
 		}
 		
-		if selected
-		{
-			variable_string_set(variable, value)
-		}
-		else
+		if not selected
 		{
 			text = value ? "true" : "false"
 		}
@@ -62,6 +79,13 @@ function Console_value_box() constructor{
 		if selected and not mouse_check_button(mb_left)
 		{
 			selected = false
+			
+			if mouse_on 
+			{
+				value = not value
+				text = value ? "true" : "false"
+				variable_string_set(variable, value)
+			}
 		}
 	break
 	
@@ -88,7 +112,7 @@ function Console_value_box() constructor{
 				selected = false
 			}
 		}
-	
+
 		if not selected and change
 		{
 			change = false

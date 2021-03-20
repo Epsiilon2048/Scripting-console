@@ -96,6 +96,8 @@ CTX_MENU = {}; with CTX_MENU {
 	sep_spacing = 10
 	
 	font = o_console.font
+	
+	ctx = undefined
 }
 
 CTX_STRIP = {}; with CTX_STRIP {

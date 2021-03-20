@@ -240,6 +240,13 @@ if console_toggle
 			prev_command = console_string
 			prev_compile = _compile
 			prev_output  = _output
+			
+			var arlen = array_length(prev_output)
+			O1 = (arlen > 0) ? prev_output[0] : ""
+			O2 = (arlen > 1) ? prev_output[1] : ""
+			O3 = (arlen > 2) ? prev_output[2] : ""
+			O4 = (arlen > 3) ? prev_output[3] : ""
+			O5 = (arlen > 4) ? prev_output[4] : ""
 		}
 		
 		output_set_lines(_output)
@@ -282,5 +289,7 @@ run_in_embed   = false
 
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
+
+ctx_menu_inputs()
 
 event_commands_exec(event_commands.step)
