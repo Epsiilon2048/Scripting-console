@@ -15,6 +15,8 @@ UNDEFINED		Throw error
 
 try{
 	
+if compiled_command == "" return ""	
+
 var com = compiled_command.commands
 var tag = compiled_command.tag
 

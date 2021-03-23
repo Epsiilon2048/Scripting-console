@@ -84,15 +84,15 @@ if keyboard_check_multiple_pressed(console_key, vk_shift)
 {
 	output_set(help())
 }
-else if keyboard_check_pressed(console_key) or keyboard_check_pressed(vk_up)
+else if keyboard_check_pressed(console_key)
 {
-	console_toggle = not console_toggle or (keyboard_check_pressed(vk_up)) /*and updown_enables_console)*/
+	console_toggle = not console_toggle
 	keyboard_string = console_string
 }
 if keyboard_check_pressed(vk_escape) console_toggle = false
 #endregion
 
-if console_toggle
+if console_toggle and keyboard_scope == o_console
 {
 	#region Apply inputs to console string
 	//figure out text stuff
@@ -291,5 +291,6 @@ gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
 ctx_menu_inputs()
+value_box_inputs()
 
-event_commands_exec(event_commands.step)
+event_commands_exec(event_commands.step_end)

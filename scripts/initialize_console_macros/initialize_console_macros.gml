@@ -161,6 +161,11 @@ console_macros [$ "array_length"]				= {type: dt_method, value: array_length}
 console_macros [$ "variable_instance_exists"]	= {type: dt_method, value: variable_instance_exists}
 console_macros [$ "variable_instance_get"]		= {type: dt_method, value: variable_instance_get}
 console_macros [$ "variable_instance_set"]		= {type: dt_method, value: variable_instance_exists}
+
+console_macros [$ "variable_global_exists"]		= {type: dt_method, value: variable_global_exists}
+console_macros [$ "variable_global_get"]		= {type: dt_method, value: variable_global_get}
+console_macros [$ "variable_global_set"]		= {type: dt_method, value: variable_global_set}
+
 console_macros [$ "variable_struct_exists"]		= {type: dt_method, value: variable_struct_exists}
 console_macros [$ "variable_struct_get"]		= {type: dt_method, value: variable_struct_get}
 console_macros [$ "variable_struct_set"]		= {type: dt_method, value: variable_struct_exists}
@@ -174,6 +179,9 @@ console_macros [$ "asset_get_type"]				= {type: dt_method, value: asset_get_type
 
 console_macros [$ "real"]						= {type: dt_method, value: real}
 console_macros [$ "is_real"]					= {type: dt_method, value: is_real}
+
+console_macros [$ "is_string"]					= {type: dt_method, value: is_string}
+console_macros [$ "is_numeric"]					= {type: dt_method, value: is_numeric}
 
 console_macros [$ "draw_set_color"]				= {type: dt_method, value: draw_set_color}
 console_macros [$ "draw_set_alpha"]				= {type: dt_method, value: draw_set_alpha}

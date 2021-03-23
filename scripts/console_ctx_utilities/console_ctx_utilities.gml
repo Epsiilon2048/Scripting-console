@@ -1,4 +1,15 @@
 
+/*
+str
+scr
+arg
+args
+func
+checkbox
+shortcut
+variable
+*/
+
 function Ctx_menu() constructor{
 
 scope = noone
@@ -31,7 +42,7 @@ set = function(_items){
 		}
 		else 
 		{
-			if items[i] == o_console.CTX_MENU.SEPARATOR sep_count ++
+			if items[i] == ctx_separator sep_count ++
 		}
 	}
 }
@@ -137,13 +148,16 @@ if enabled
 					var _func		= variable_struct_exists_get(item, "func",		noscript)
 					var _checkbox	= variable_struct_exists_get(item, "checkbox",	"")
 					
-					if is_struct(ctx.scope) and not is_undefined(ctx.scope[$ _variable]) 
+					var _scope = ctx.scope
+					var _use_scope = is_struct(_scope) or (is_numeric(_scope) and instance_exists(_scope))
+					
+					if is_struct(_scope) and not is_undefined(_scope[$ _variable]) 
 					{
-						ctx.scope[$ _variable] = _arg
+						_scope[$ _variable] = _arg
 					}
-					else if instance_exists(ctx.scope) 
+					else if _use_scope
 					{
-						variable_instance_set(ctx.scope, _variable, _arg)
+						variable_instance_set(_scope, _variable, _arg)
 					}
 					else if is_string(_variable)
 					{
@@ -154,17 +168,20 @@ if enabled
 					{
 						if array_length(_args) > 0
 						{
-							script_execute_ext(_scr, _args)
+							if _use_scope	with _scope script_execute_ext(_scr, _args)
+							else			script_execute_ext(_scr, _args)
 						}
 						else
 						{
-							_scr(_arg)
+							if _use_scope	with _scope _scr(_arg)
+							else			_scr(_arg)
 						}
 					}
 					
 					if _func != noscript
 					{
-						_func()
+						if _use_scope	with _scope _func()
+						else			_func()
 					}
 					
 					if _checkbox != "" and variable_string_exists(_checkbox)
@@ -182,20 +199,20 @@ if enabled
 		
 			yy += ch + spacing
 		}
-		else if ctx.items[i] == SEPARATOR
+		else if ctx.items[i] == ctx_separator
 		{
 			yy += sep_spacing
 		}
 	}
 }
 
-else ctx = undefined
+if not enabled ctx = undefined
 }}}
 
 
 
 
-function draw_ctx_menu(){ with o_console.CTX_MENU { if not is_undefined(ctx) {
+function draw_ctx_menu(){ with o_console.CTX_MENU { if enabled and not is_undefined(ctx) {
 
 draw_set_font(font)
 draw_set_align(fa_left, fa_middle)
@@ -270,7 +287,7 @@ for(var i = 0; i <= array_length(ctx.items)-1; i++)
 		
 		yy += (ch + spacing)/2
 	}
-	else if ctx.items[i] == SEPARATOR
+	else if ctx.items[i] == ctx_separator
 	{
 		draw_set_color(o_console.colors.body_accent)
 		

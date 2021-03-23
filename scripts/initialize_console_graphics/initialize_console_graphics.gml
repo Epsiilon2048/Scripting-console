@@ -69,8 +69,6 @@ VALUE_BOX = {}; with VALUE_BOX {
 
 CTX_MENU = {}; with CTX_MENU {
 	
-	SEPARATOR = "separator"
-	
 	enabled = false
 	
 	x = 50

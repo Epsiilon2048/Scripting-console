@@ -1,15 +1,20 @@
 
 function Console_value_box() constructor{
 	
-	initialize = function(x, y, variable, type){
+	initialize = function(index, x, y, variable, type){
+		self.index = index
+		
 		self.x = x
 		self.y = y
 		self.variable = variable
 		
 		self.type = type
+		self.init_type = type
+		self.lock_type = false
 		
 		self.value = undefined
 		self.width = 0
+		self.value_width = 0
 		self.text = ""
 		
 		self.pivot = 0
@@ -17,21 +22,29 @@ function Console_value_box() constructor{
 		self.scrolling = false
 		
 		self.rounding = false
+		self.dragging = false
+		
+		self.color_picking = false
 		
 		self.prev_mx = 0
+		self.prev_my = 0
 		
 		self.selected = false
 		self.change = false
 		
 		self.right_mb = false
-		
+
+		self.destroy = false
+
 		self.ctx = new Ctx_menu()
 		self.ctx.scope = self
 		self.ctx.set([
-			{str: vb_static,	variable: "type",	arg: vb_static},
-			{str: vb_scrubber,	variable: "type",	arg: vb_scrubber},
-			{str: vb_bool,		variable: "type",	arg: vb_bool},
-			{str: vb_color,		variable: "type",	arg: vb_color},
+			{str: "Static",		variable: "type",	arg: vb_static},
+			{str: "Scrubber",	variable: "type",	arg: vb_scrubber},
+			{str: "Bool",		variable: "type",	arg: vb_bool},
+			{str: "Color",		variable: "type",	arg: vb_color},
+			ctx_separator,
+			{str: "Destroy", variable: "destroy", arg: true},
 		])
 	}
 	
@@ -42,9 +55,55 @@ function Console_value_box() constructor{
 	
 	static vb = o_console.VALUE_BOX
 	
-	var mouse_on = gui_mouse_between(x-vb.border-vb.border_w, y-vb.border, x+width+vb.border+vb.border_w, y+vb.border+vb.text_h)
+	var mouse_on = gui_mouse_between(
+		x-vb.border-vb.border_w, 
+		y-vb.border, 
+		x+width+value_width+vb.border, 
+		y+vb.border+vb.text_h
+	)
 	
-	if mouse_on
+	var mouse_on_value	= gui_mouse_between(
+		x+width-vb.outline_dist-vb.border_w, 
+		y-vb.outline_dist, 
+		x+width+value_width+vb.outline_dist,
+		y+vb.text_h+vb.outline_dist,
+	)
+	
+	if mouse_on and not mouse_on_value and not o_console.value_box_dragging and mouse_check_button_pressed(mb_left)
+	{
+		dragging = true
+		o_console.value_box_dragging = true
+		self.prev_mx = gui_mx
+		self.prev_my = gui_my
+		
+		var v = o_console.value_boxes[| 0]
+		ds_list_insert(o_console.value_boxes, 0, self)
+		ds_list_delete(o_console.value_boxes, index+1)
+		index = 0
+		
+		for(var i = 0; i <= ds_list_size(o_console.value_boxes)-1; i++)
+		{
+			if is_struct(o_console.value_boxes[| i]) o_console.value_boxes[| i].index = i
+		}
+	}
+	
+	if dragging
+	{
+		if mouse_check_button(mb_left)
+		{
+			x += gui_mx - prev_mx
+			y += gui_my - prev_my
+			
+			self.prev_mx = gui_mx
+			self.prev_my = gui_my
+		}
+		else
+		{
+			dragging = false
+		}
+	}
+	
+	if mouse_on and not lock_type
 	{
 		if mouse_check_button_pressed(mb_right) right_mb = true
 		else if right_mb and mouse_check_button_released(mb_right)
@@ -64,9 +123,8 @@ function Console_value_box() constructor{
 	break
 	
 	case vb_bool:
-		value = variable_string_get(variable)
-	
-		if mouse_on and mouse_check_button_pressed(mb_left)
+
+		if mouse_on_value and mouse_check_button_pressed(mb_left)
 		{
 			selected = true
 		}
@@ -80,25 +138,28 @@ function Console_value_box() constructor{
 		{
 			selected = false
 			
-			if mouse_on 
+			if mouse_on_value 
 			{
 				value = not value
 				text = value ? "true" : "false"
 				variable_string_set(variable, value)
 			}
 		}
+		
+		value = variable_string_get(variable)
 	break
 	
 	case vb_scrubber:
-		width = string_length(text)*vb.text_w
+		value_width = string_length(text)*vb.text_w
 	
-		if not is_real(value)
+		if not is_numeric(value)
 		{
 			selected = false
+			o_console.keyboard_scope = o_console
 		}
 		else if mouse_check_button_pressed(mb_left)
 		{
-			if mouse_on
+			if mouse_on_value
 			{
 				scrolling = true
 				pivot = gui_mx
@@ -110,6 +171,7 @@ function Console_value_box() constructor{
 			else
 			{
 				selected = false
+				o_console.keyboard_scope = o_console
 			}
 		}
 
@@ -121,11 +183,15 @@ function Console_value_box() constructor{
 		}
 		else if not selected value = variable_string_get(variable)
 	
-		if not is_real(value) scrolling = false
+		if not is_numeric(value) scrolling = false
 	
 		if scrolling and not mouse_check_button(mb_left)
 		{
-			if mouse_on selected = true
+			if mouse_on_value 
+			{
+				selected = true
+				o_console.keyboard_scope = self
+			}
 		
 			scrolling = false
 		}
@@ -147,7 +213,7 @@ function Console_value_box() constructor{
 	
 		if scrolling or not selected
 		{
-			if is_real(value) text = rounding ? string(round(value)) : value
+			if is_numeric(value) text = rounding ? string(round(value)) : value
 			else text = NaN
 		}
 	
@@ -158,7 +224,11 @@ function Console_value_box() constructor{
 			var valstring = string(text)
 			var _valstring = valstring
 		
-			if keyboard_check_pressed(vk_enter) selected = false
+			if keyboard_check_pressed(vk_enter) 
+			{
+				selected = false
+				o_console.keyboard_scope = o_console
+			}
 			else if	string_digits(keyboard_lastchar) == keyboard_lastchar or (keyboard_lastchar == "." and not string_pos(".", _valstring))
 			{
 				_valstring += keyboard_lastchar
@@ -188,41 +258,57 @@ function Console_value_box() constructor{
 			}
 		}
 	break
+	
 	case vb_color:
 		text = "  "
 		
 		value = variable_string_get(variable)
 		
-		if not is_real(value) 
+		if not is_numeric(value) 
 		{
 			value = o_console.colors.body_real
 			text = NaN
 		}
 		
-		if selected and o_console.COLOR_PICKER.variable != variable
+		if selected and not color_picking
 		{
 			selected = false
 		}
 		
 		if mouse_check_button_pressed(mb_left)
 		{
-			if mouse_on
+			if mouse_on_value
 			{
 				selected = true
+				color_picking = true
 				o_console.COLOR_PICKER.x = gui_mx+20
 				o_console.COLOR_PICKER.y = gui_my+20
 				o_console.COLOR_PICKER.variable = variable
 			}
-			else if selected and not o_console.COLOR_PICKER.mouse_on
-			{
-				selected = false
-				o_console.COLOR_PICKER.variable = ""
-			}
+		}
+		
+		if mouse_check_button_pressed(mb_any) and not mouse_on_value and selected and not o_console.COLOR_PICKER.mouse_on
+		{
+			selected = false
+			color_picking = false
+			o_console.COLOR_PICKER.variable = ""
 		}
 		
 	break
 	}
+	
+	if type != vb_color and color_picking
+	{
+		color_picking = false
+		selected = false
+		o_console.COLOR_PICKER.variable = ""
 	}
+
+	o_console.value_box_deleted = destroy
+	}
+	
+	
+	
 	
 	draw = function(){
 
@@ -232,38 +318,55 @@ function Console_value_box() constructor{
 
 	draw_set_align(fa_left, fa_middle)
 
-	width = string_length(text)*vb.text_w
+	width		= string_length(variable)*vb.text_w + vb.border_w*3 + vb.outline_dist+1
+	value_width = string_length(text)*vb.text_w + vb.border_w
 
 	draw_set_color(o_console.colors.body_real)
 	draw_roundrect_ext(
 		x-vb.border-vb.border_w, 
 		y-vb.border, 
-		x+width+vb.border+vb.border_w, 
+		x+width+value_width+vb.border, 
 		y+vb.text_h+vb.border, 
 		vb.radius, vb.radius, false
 	)
-
 	draw_set_color((selected or scrolling) ? o_console.colors.output : o_console.colors.body_accent)
 	draw_roundrect_ext(
-		x-vb.outline_dist-vb.border_w, 
+		x+width-vb.outline_dist-vb.border_w, 
 		y-vb.outline_dist, 
-		x+width+vb.outline_dist+vb.border_w, 
+		x+width+value_width+vb.outline_dist, 
 		y+vb.text_h+vb.outline_dist, 
 		vb.outline_radius1, vb.outline_radius1, false
 	)
-
 	draw_set_color((type == vb_color) ? value : o_console.colors.body_real)
 	draw_roundrect_ext(
-		x-vb.outline_dist-vb.border_w+1, 
+		x+width-vb.outline_dist-vb.border_w+1, 
 		y-vb.outline_dist+1, 
-		x+width+vb.border_w+vb.outline_dist-1, 
+		x+width+value_width+vb.outline_dist-1, 
 		y+vb.text_h+vb.outline_dist-1, 
 		vb.outline_radius2, vb.outline_radius2, false
 	)
 	
-	draw_set_color(o_console.colors.plain)
+	var _textcol = dt_unknown
+	
+	switch type
+	{
+		case vb_bool:		_textcol = dt_real
+		break
+		case vb_scrubber:	_textcol = dt_real
+		break
+		case vb_color:		_textcol = dt_real
+	}
+	
+	draw_set_color(o_console.colors.output)
 	draw_text(
-		x+1, 
+		x+1,
+		floor(y+vb.text_h/2)+2,
+		variable
+	)
+	
+	draw_set_color(o_console.colors[$ _textcol])
+	draw_text(
+		x+width+1, 
 		floor(y+vb.text_h/2)+2, 
 		text
 	)

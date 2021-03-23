@@ -57,7 +57,7 @@ var y2 = y + (condensed ? o_console.SLIDER.height_condensed : o_console.SLIDER.h
 
 var curvalue = variable_string_get(variable)
 
-if not meter and (o_console.SLIDER.correct_not_real or is_real(curvalue))
+if not meter and (o_console.SLIDER.correct_not_real or is_numeric(curvalue))
 {
 	if gui_mouse_between(x, y, x2, y2) and mouse_check_button_pressed(mb_left)
 	{
@@ -100,7 +100,7 @@ if not meter and (o_console.SLIDER.correct_not_real or is_real(curvalue))
 			curvalue = newvalue
 		}
 	}
-	else if is_real(curvalue)
+	else if is_numeric(curvalue)
 	{
 		value = clamp( (curvalue - var_min)/(var_max-var_min) , 0, 1)
 	}
@@ -112,7 +112,7 @@ if not meter and (o_console.SLIDER.correct_not_real or is_real(curvalue))
 
 var text = NaN
 
-if is_real(curvalue) 
+if is_numeric(curvalue) 
 {
 	//if o_console.SLIDER.text_fill_places text = float_fill_places(curvalue, var_places)
 	//else

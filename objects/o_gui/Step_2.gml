@@ -1,2 +1,0 @@
-
-v.get_input()

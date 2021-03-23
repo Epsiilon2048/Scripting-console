@@ -35,25 +35,24 @@ return str
 	
 function string_split(substr, str){ //splits a string into an array by a separator
 
-var list = array_create(string_count(substr, str), "")
-var len = string_length(substr)
+static rl = ds_list_create()
 
-var i = 0; while str != ""
-{
-	if string_pos(substr, str) != 0
-	{
-		list[i] = string_copy(str, 1, string_pos(substr, str)-1)
-		str = string_delete(str, 1, string_pos(substr, str)+len-1)
-	}
-	else
-	{
-		list[i] = str
-		str = ""
-	}
-	
-	i++
+var p = string_pos(substr, str)
+var o = 1
+var substrlen = string_length(substr);
+
+ds_list_clear(rl);
+if (substrlen) while (p) {
+    ds_list_add(rl, string_copy(str, o, p - o));
+    o = p + substrlen;
+    p = string_pos_ext(substr, str, o);
 }
-return list
+ds_list_add(rl, string_delete(str, 1, o - 1));
+// create an array and store results:
+var rn = ds_list_size(rl);
+var rw = array_create(rn);
+for (p = 0; p < rn; p++) rw[p] = rl[|p];
+return rw;
 }
 
 

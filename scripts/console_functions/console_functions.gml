@@ -75,7 +75,7 @@ else
 		if is_array(_output) text = text + array_to_string(_output, "\n")
 		
 		plaintext = text
-		text = [shave("\n", text)]
+		text = [text]
 	}
 		
 	alpha		= 1
@@ -169,7 +169,7 @@ else
 		if is_array(_output) text = text + array_to_string(_output, "\n")
 		
 		plaintext = text
-		text = [shave("\n", text)]
+		text = [text]
 	}
 		
 	alpha		= 1

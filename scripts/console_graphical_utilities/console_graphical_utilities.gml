@@ -55,6 +55,7 @@ draw_reset_properties()
 
 
 
+
 function draw_embedded_text(x, y, text, plain){
 //pretty messy, ill clean it up at some point lol
 //only supports alignment top left :(
@@ -129,9 +130,8 @@ for(var i = 0; i <= array_length(text)-1; i++)
 		{
 			_col = _scrcol
 			mouse_over = true
-			//window_set_cursor(cr_handpoint)
 		
-			if not clicking and mouse_check_button_pressed(mb_left) 
+			if not clicking and mouse_check_button_pressed(mb_left)
 			{
 				clicking = true
 			
@@ -196,18 +196,22 @@ return mouse_over
 
 
 
-function draw_color_picker(){ with o_console.COLOR_PICKER { if variable_string_exists(variable) {
-
+function draw_color_picker(){ 
+	
 static mouse_on_h  = false
 static mouse_on_sv = false
 
 static u_position = shader_get_uniform(shd_hue, "u_Position")
 
 static _color = 0
+	
+with o_console.COLOR_PICKER { if variable_string_exists(variable) {
 
 var _size = size/255
 var _h_strip_pos = 255+h_strip_dist
 var _border_color = -o_console.colors.body_real
+
+var clicking_ctx = o_console.CTX_MENU.clicking_on
 
 mouse_on = draw_console_bubble_body(
 	x, 
@@ -216,7 +220,7 @@ mouse_on = draw_console_bubble_body(
 	y + round( (255+color_bar_dist+color_bar_height)*_size )
 )
 
-if mouse_check_button_pressed(mb_left)
+if mouse_check_button_pressed(mb_left) and not clicking_ctx
 {
 	if gui_mouse_between(x+255*_size, y, x+(_h_strip_pos+h_strip_width)*_size, y+255*_size)
 	{
@@ -227,7 +231,7 @@ if mouse_check_button_pressed(mb_left)
 		mouse_on_sv = true
 	}
 }
-if (mouse_on_h or mouse_on_sv) and mouse_check_button(mb_left)
+if (mouse_on_h or mouse_on_sv) and mouse_check_button(mb_left) and not clicking_ctx
 {
 	if mouse_on_h
 	{

@@ -11,7 +11,7 @@ if array_length(list) < 2 return false
 
 var asset = asset_get_index(list[0])
 
-if string_is_int(list[0])
+if first_is_digit(list[0])
 {
 	var r = real(list[0])
 	
@@ -47,8 +47,7 @@ return true
 
 function variable_string_get(str){
 
-if not is_string(str) return undefined
-else if str == "" return undefined
+if not is_string(str) or str == "" return undefined
 
 var list = string_split(".", str)
 var object = -1
@@ -57,7 +56,7 @@ if array_length(list) < 2 return undefined
 
 var asset = asset_get_index(list[0])
 
-if string_is_int(list[0])
+if first_is_digit(list[0])
 {
 	var r = real(list[0])
 	
@@ -87,8 +86,7 @@ return value
 
 function variable_string_set(str, val){
 
-if not is_string(str) return undefined
-if str == ""		  return undefined
+if not is_string(str) or str == "" return undefined
 
 var list = string_split(".", str)
 var lenlist = array_length(list)
@@ -98,7 +96,7 @@ if lenlist < 2 return undefined
 
 var asset = asset_get_index(list[0])
 
-if string_is_int(list[0])
+if first_is_digit(list[0])
 {
 	var r = real(list[0])
 	

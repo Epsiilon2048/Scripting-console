@@ -126,7 +126,7 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 				
 							if not is_undefined(_macro)
 							{
-								segment = _macro.value
+								segment = string(_macro.value)
 								if _macro.type != -1 _col = _macro.type
 								_macro_type = _col
 							}
@@ -140,7 +140,7 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 							_asset = real(segment)
 							_asset_type = -1
 						}
-						else if segment == "global" 
+						else if segment == string(global)
 						{
 							_asset = global
 							_asset_type = asset_object

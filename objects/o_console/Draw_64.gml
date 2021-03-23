@@ -196,7 +196,9 @@ if output_as_window and Output.plaintext != ""
 }
 #endregion
 
+draw_value_boxes()
 draw_color_picker()
 draw_ctx_menu()
+value_box_dragging = false
 
 event_commands_exec(event_commands.gui)

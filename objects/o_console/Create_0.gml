@@ -1,28 +1,15 @@
 
-#macro SCALE_ o_console.draw_scale.mult *
-
-#macro _BOOL_STRING ? "true" : "false"
-#macro RGB make_color_rgb
-
-#macro gui_mx device_mouse_x_to_gui(0)
-#macro gui_my device_mouse_y_to_gui(0)
 
 include_niche_virtual_keys = false
 console_macros = {}
 
 color_picker_var = ""
 
+keyboard_scope = o_console
+
 initialize_console_macros()
 
 initialize_console_graphics()
-
-space_sep = ds_list_create()
-ds_list_add(space_sep,
-	",",
-	"(",
-	")",
-	"="
-)
 
 identifiers = {
 	r: dt_real,
@@ -35,6 +22,14 @@ identifiers = {
 }
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
+
+#macro SCALE_ o_console.draw_scale.mult *
+
+#macro _BOOL_STRING ? "true" : "false"
+#macro RGB make_color_rgb
+
+#macro gui_mx device_mouse_x_to_gui(0)
+#macro gui_my device_mouse_y_to_gui(0)
 
 #macro dt_real			"real"
 #macro dt_string		"string"
@@ -61,9 +56,13 @@ enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 //unfinished
 #macro vb_counter		"counter"
 #macro vb_string		"string"
+#macro vb_variable		"variable"
+#macro vb_asset			"variable"
 #macro vb_list			"list"		//arrays and ds lists
 #macro vb_map			"map"		//structs and ds maps
 #macro vb_grid			"grid"		//2d arrays and ds grids
+
+#macro ctx_separator	"separator"
 
 event_commands = {
 	step:	  [],
@@ -83,8 +82,6 @@ old_obj_identifier = "o_"
 
 show_hidden_commands = false
 show_hidden_args = false
-
-updown_enables_console = false
 
 embed_text = true
 window_embed_text = true
@@ -236,8 +233,14 @@ inst_selecting_name = ""
 instance_cursor = false
 
 color_string = []
+command_log = ds_list_create()
+error_log = ds_list_create()
 
 command_colors = true
+
+value_boxes = ds_list_create()
+value_box_dragging = false
+value_box_deleted = false
 
 var greetings = [
 	"Hello!! Welcome to the console!",
@@ -247,6 +250,12 @@ var greetings = [
 	"Ay how's it goin?",
 	"Heloooooo,"
 ]
+
+O1 = ""
+O2 = ""
+O3 = ""
+O4 = ""
+O5 = ""
 
 run_in_embed   = false
 run_in_console = false

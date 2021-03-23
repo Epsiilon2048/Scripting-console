@@ -59,7 +59,7 @@ for(var i = 1; i <= argument_count-2; i+=2)
 function dealwith_ds_list(ds_list, index, value){
 
 if is_undefined(ds_list) return "Must provide ds list!"
-if not is_real(ds_list) or not ds_exists(ds_list, ds_type_list) return stitch("\"",ds_list,"\""+" is not a ds list")
+if not is_numeric(ds_list) or not ds_exists(ds_list, ds_type_list) return stitch("\"",ds_list,"\""+" is not a ds list")
 
 if is_undefined(index) return ds_list_to_array(ds_list)
 if is_undefined(value) return ds_list[| index]
