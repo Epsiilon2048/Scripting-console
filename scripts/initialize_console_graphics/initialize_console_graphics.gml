@@ -53,6 +53,7 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 VALUE_BOX = {}; with VALUE_BOX {
 	
 	radius = 23
+	border_radius = 20
 	border = 9
 	border_w = 6
 	ext_border = 3

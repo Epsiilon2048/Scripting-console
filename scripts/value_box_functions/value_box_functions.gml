@@ -1,14 +1,22 @@
 
 function Console_value_box() constructor{
 	
+	set = function(variable){
+		self.variable = variable
+		self.varname = string_copy( variable, string_pos(".", variable)+1, string_length(variable) )
+	}
+	
+	
 	initialize = function(index, x, y, variable, type){
 		self.index = index
 		
 		self.x = x
 		self.y = y
-		self.variable = variable
+		
+		self.set(variable)
 		
 		self.type = type
+		self.prev_type = type
 		self.init_type = type
 		self.lock_type = false
 		
@@ -55,6 +63,11 @@ function Console_value_box() constructor{
 	
 	static vb = o_console.VALUE_BOX
 	
+	if prev_type != type
+	{
+		selected = false
+	}
+	
 	var mouse_on = gui_mouse_between(
 		x-vb.border-vb.border_w, 
 		y-vb.border, 
@@ -69,12 +82,15 @@ function Console_value_box() constructor{
 		y+vb.text_h+vb.outline_dist,
 	)
 	
+	if mouse_on o_console.value_box_mouse_on = true
+	
 	if mouse_on and not mouse_on_value and not o_console.value_box_dragging and mouse_check_button_pressed(mb_left)
 	{
 		dragging = true
 		o_console.value_box_dragging = true
-		self.prev_mx = gui_mx
-		self.prev_my = gui_my
+		
+		prev_mx = gui_mx
+		prev_my = gui_my
 		
 		var v = o_console.value_boxes[| 0]
 		ds_list_insert(o_console.value_boxes, 0, self)
@@ -94,12 +110,14 @@ function Console_value_box() constructor{
 			x += gui_mx - prev_mx
 			y += gui_my - prev_my
 			
-			self.prev_mx = gui_mx
-			self.prev_my = gui_my
+			prev_mx = gui_mx
+			prev_my = gui_my
 		}
 		else
 		{
 			dragging = false
+			x = clamp( x, 0, gui_width-30 )
+			y = clamp( y, 0, gui_height-30 )
 		}
 	}
 	
@@ -256,6 +274,8 @@ function Console_value_box() constructor{
 				text = _valstring
 				change = true
 			}
+		
+			prev_type = type
 		}
 	break
 	
@@ -318,7 +338,7 @@ function Console_value_box() constructor{
 
 	draw_set_align(fa_left, fa_middle)
 
-	width		= string_length(variable)*vb.text_w + vb.border_w*3 + vb.outline_dist+1
+	width		= string_length(varname)*vb.text_w + vb.border_w*3 + vb.outline_dist+1
 	value_width = string_length(text)*vb.text_w + vb.border_w
 
 	draw_set_color(o_console.colors.body_real)
@@ -327,7 +347,7 @@ function Console_value_box() constructor{
 		y-vb.border, 
 		x+width+value_width+vb.border, 
 		y+vb.text_h+vb.border, 
-		vb.radius, vb.radius, false
+		vb.border_radius, vb.border_radius, false
 	)
 	draw_set_color((selected or scrolling) ? o_console.colors.output : o_console.colors.body_accent)
 	draw_roundrect_ext(
@@ -361,7 +381,7 @@ function Console_value_box() constructor{
 	draw_text(
 		x+1,
 		floor(y+vb.text_h/2)+2,
-		variable
+		varname
 	)
 	
 	draw_set_color(o_console.colors[$ _textcol])

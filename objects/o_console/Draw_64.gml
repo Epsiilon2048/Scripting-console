@@ -97,7 +97,7 @@ if console_toggle
 	draw_console_body(console_left, console_top, console_right, console_bottom)
 
 	draw_set_color(colors.plain)
-	draw_line_width(console_left, console_bottom, console_left, console_top, 2)
+	draw_rectangle(console_left, console_bottom+1, console_left+prompt_bar_width, console_top-1, false)
 
 	draw_set_font(font)
 	draw_set_align(fa_left, fa_center)
@@ -156,7 +156,7 @@ if Display.enabled and ds_list_size(display_list) > 0
 	
 		for(var i = 0; i <= ds_list_size(display_list)-1; i++)
 		{
-			var obj = string_split(".", display_list[| i].variable)[0]
+			var obj = string_copy(display_list[| i].variable, 1, string_pos(".", display_list[| i].variable)-1)//string_split(".", display_list[| i].variable)[0]
 			var variable = string_copy(display_list[| i].variable, string_pos(".", display_list[| i].variable)+1, string_length(display_list[| i].variable))
 			
 			var value = variable_string_get(display_list[| i].variable)

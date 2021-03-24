@@ -147,6 +147,9 @@ if enabled
 					var _args		= variable_struct_exists_get(item, "args",		[])
 					var _func		= variable_struct_exists_get(item, "func",		noscript)
 					var _checkbox	= variable_struct_exists_get(item, "checkbox",	"")
+					var _output		= variable_struct_exists_get(item, "output", false)
+					
+					var _o = []
 					
 					var _scope = ctx.scope
 					var _use_scope = is_struct(_scope) or (is_numeric(_scope) and instance_exists(_scope))
@@ -168,20 +171,20 @@ if enabled
 					{
 						if array_length(_args) > 0
 						{
-							if _use_scope	with _scope script_execute_ext(_scr, _args)
-							else			script_execute_ext(_scr, _args)
+							if _use_scope	with _scope array_push(_o, script_execute_ext(_scr, _args))
+							else			array_push(_o, script_execute_ext(_scr, _args))
 						}
 						else
 						{
-							if _use_scope	with _scope _scr(_arg)
-							else			_scr(_arg)
+							if _use_scope	with _scope array_push(_o, _scr(_arg))
+							else			array_push(_o, _scr(_arg))
 						}
 					}
 					
 					if _func != noscript
 					{
-						if _use_scope	with _scope _func()
-						else			_func()
+						if _use_scope	with _scope array_push(_o, _func())
+						else			array_push(_o, _func())
 					}
 					
 					if _checkbox != "" and variable_string_exists(_checkbox)
@@ -189,8 +192,9 @@ if enabled
 						variable_string_set(_checkbox, not variable_string_get(_checkbox))
 					}
 					
+					if _output output_set_lines(_o)
 					
-					enabled = variable_struct_exists_get(item, "stay", false)
+					enabled = variable_struct_exists_get(item, "stay", variable_struct_exists(item, "checkbox"))
 				}
 				
 				mouse_item = i
@@ -275,7 +279,7 @@ for(var i = 0; i <= array_length(ctx.items)-1; i++)
 		{
 			var _var = variable_string_get(_checkbox)
 			
-			if is_bool(_var)
+			if is_numeric(_var)
 			{
 				draw_circle(left, yy, 5, not _var)
 			}

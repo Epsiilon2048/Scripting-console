@@ -16,9 +16,6 @@ return -1
 
 function draw_console_window(win){
 
-var win_w = display_get_gui_width()
-var win_h = display_get_gui_height()
-
 var sidebar_width	   = SCALE_ 2
 var sidebar_width_max  = SCALE_ 4
 var sidebar_width_lerp = .4
@@ -30,60 +27,51 @@ var border_y = SCALE_ 9
 
 var mouse_over_embed = false
 
-var sidebar_x1
-var sidebar_y1
-var sidebar_x2
-var sidebar_y2
-
 var left
 var right
 var top
 var bottom
 	
-if win.side != SIDES.RIGHT//win.side = SIDES.LEFT or win.side = SIDES.TOP
+if win.side != SIDES.RIGHT
 {
 	left   = win.x
 	top    = win.y
-	//right  = win.x + win.width  + border_x*2
-	//bottom = win.y + win.height + border_y*2
 	right  = win.x + win.text_w + border_x*2
 	bottom = win.y + win.text_h + border_y*2
 }
 else if win.side == SIDES.RIGHT
 {
-	//left   = win.x - win.width  - border_x*2
 	left   = win.x - win.text_w - border_x*2
 	top    = win.y
 	right  = win.x
-	//bottom = win.y + win.height + border_y*2
 	bottom = win.y + win.text_h + border_y*2
 }
 
-sidebar_x1 = win.x-1 + win.sidebar/2*signbool(win.side == SIDES.LEFT)
-sidebar_y1 = top-1
-sidebar_x2 = sidebar_x1
-sidebar_y2 = bottom
-	
+//sidebar_width+win.sidebar
+var r = (win.side == SIDES.RIGHT)
+
+var sidebar_x1 = win.x + r
+var sidebar_y1 = top
+var sidebar_x2 = sidebar_x1 + (sidebar_width*(r+1) + win.sidebar)*signbool(not r)
+var sidebar_y2 = bottom
+
 if win.mouse_over_sidebar and mouse_check_button(mb_left)
-{
-	var mx = device_mouse_x_to_gui(0)
-	var my = device_mouse_y_to_gui(0)
-		
+{		
 	if mouse_check_button_pressed(mb_left)
 	{
-		mouse_x_previous = mx
-		mouse_y_previous = my
+		mouse_x_previous = gui_mx
+		mouse_y_previous = gui_my
 	}
 		
-	win.x += mx-mouse_x_previous
-	win.y += my-mouse_y_previous
-	mouse_x_previous = mx
-	mouse_y_previous = my
+	win.x += gui_mx-mouse_x_previous
+	win.y += gui_my-mouse_y_previous
+	mouse_x_previous = gui_mx
+	mouse_y_previous = gui_my
 }
 else
 {
-	win.x = clamp(win.x, sidebar_width, win_w-sidebar_width)
-	win.y = clamp(win.y, -win.text_h, win_h-string_height(" "))
+	win.x = clamp(win.x, sidebar_width, gui_width-sidebar_width)
+	win.y = clamp(win.y, -win.text_h, gui_height-string_height(" "))
 }
 
 if not o_console.collapse_windows win.show = true
@@ -107,7 +95,7 @@ if win.show
 	
 draw_set_color(colors.output)
 draw_set_alpha(1)
-draw_line_width(sidebar_x1, sidebar_y1, sidebar_x2, sidebar_y2, sidebar_width+win.sidebar)
+draw_rectangle(sidebar_x1, sidebar_y1, sidebar_x2, sidebar_y2, false)
 draw_set_color(c_white)
 
 if not mouse_over_embed

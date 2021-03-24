@@ -60,24 +60,6 @@ if inst_select
 }
 #endregion
 
-#region Var to var and var to mouse
-
-if to_mouse_x != ""
-{
-	if to_mouse_gui variable_instance_set(to_mouse_x_object, to_mouse_x, device_mouse_x_to_gui(0))
-	else variable_instance_set(to_mouse_x_object, to_mouse_x, mouse_x)
-}
-if to_mouse_y != ""
-{
-	if to_mouse_gui variable_instance_set(to_mouse_y_object, to_mouse_y, device_mouse_y_to_gui(0))
-	else variable_instance_set(to_mouse_y_object, to_mouse_y, mouse_y)
-}
-if to_var != ""
-{
-	variable_instance_set(to_object, to_var, variable_instance_get(from_object, from_var))
-}
-#endregion
-
 #region Enable console
 
 if keyboard_check_multiple_pressed(console_key, vk_shift)
@@ -292,5 +274,23 @@ gui_mouse_y = gui_my
 
 ctx_menu_inputs()
 value_box_inputs()
+
+if (console_toggle or Output.mouse_over) and not value_box_mouse_on and mouse_check_button_pressed(mb_right)
+{
+	right_mb = true
+}
+
+else if (console_toggle or Output.mouse_over) and not value_box_mouse_on and right_mb and is_undefined(CTX_MENU.ctx) and not mouse_check_button(mb_right)
+{
+	CTX_MENU.ctx = ctx
+	CTX_MENU.x = gui_mx + 10
+	CTX_MENU.y = gui_my + 10
+}
+else if right_mb and not mouse_check_button(mb_right)
+{
+	right_mb = false
+}
+
+value_box_mouse_on = false
 
 event_commands_exec(event_commands.step_end)

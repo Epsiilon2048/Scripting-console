@@ -112,20 +112,6 @@ return "Display position reset"
 
 
 
-function display_toggle_objects(toggle){ with o_console {
-
-_toggle = toggle
-
-if is_undefined(_toggle) _toggle = not display_show_objects 
-
-display_show_objects = _toggle
-
-return "Toggled display objects"
-}}
-
-
-
-
 function window(text){ with o_console {
 
 if is_undefined(text)
@@ -135,7 +121,7 @@ if is_undefined(text)
 }
 
 var _text
-if variable_struct_exists_get(text, "__embedded__", false)
+if variable_struct_exists(text, "o")
 {
 	_text = text.o
 }

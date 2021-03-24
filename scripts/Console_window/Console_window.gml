@@ -32,7 +32,7 @@ function Console_window() constructor{
 		else self.plaintext = _plaintext
 		
 		self.text_w = string_width(plaintext)
-		self.text_h = string_height(" ")*(string_count("\n", shave("\n", plaintext))+1)
+		self.text_h = string_height(" ")*(string_count("\n", plaintext)+1)
 	}
 	reset_pos = function(){
 		if self.side == SIDES.LEFT

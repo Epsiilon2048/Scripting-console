@@ -31,6 +31,12 @@ enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 #macro gui_mx device_mouse_x_to_gui(0)
 #macro gui_my device_mouse_y_to_gui(0)
 
+#macro win_width  window_get_width()
+#macro win_height window_get_height()
+
+#macro gui_width  display_get_gui_width()
+#macro gui_height display_get_gui_height()
+
 #macro dt_real			"real"
 #macro dt_string		"string"
 #macro dt_asset			"asset"
@@ -71,6 +77,21 @@ event_commands = {
 	gui:	  [],
 }
 
+ctx = new Ctx_menu()
+ctx.scope = o_console
+ctx.set([
+	{str: "Room instances",		scr: roomobj,			output: true},
+	{str: "Instance variables",	scr: objvar,			output: true},
+	ctx_separator,
+	{str: "Help",			scr: help,					output: true},
+	{str: "Commands",		scr: command_help,			output: true},
+	{str: "Settings",		scr: console_settings,		output: true},
+	{str: "Color schemes",	scr: color_scheme_settings,	output: true},
+	{str: "Nice thing",		scr: nice_thing,			output: true},
+	{str: "Clear output",								output: true},
+	{str: "Always Show output", checkbox: "o_console.force_output"},
+])
+
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
@@ -103,6 +124,8 @@ cs_index = cs_greenbeans
 
 console_color_interval = 300
 console_color_time = 0
+
+right_mb = false
 
 keybinds = []
 
@@ -256,6 +279,8 @@ O2 = ""
 O3 = ""
 O4 = ""
 O5 = ""
+
+prompt_bar_width = 1
 
 run_in_embed   = false
 run_in_console = false

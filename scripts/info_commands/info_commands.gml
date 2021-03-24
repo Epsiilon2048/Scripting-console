@@ -277,7 +277,7 @@ function nice_thing(){
 
 //uhhhh hi person looking into this code, hope you're doing well
 
-var _nice_things = [
+static _nice_things = [
 	"You're super cool!",
 	"Hope you finish whatever you're working on!",
 	"You're simply amazin'",
@@ -285,9 +285,17 @@ var _nice_things = [
 	"Drink some water!!",
 	"You are a beautiful person!",
 	"Remember to take breaks from time to time!",
+	"yooooo you're sick as hell",
 ]
 
-var _nice_thing = _nice_things[irandom(array_length(_nice_things)-1)]
+static prev_nice_thing = ""
+
+var _nice_thing = ""
+
+do _nice_thing = _nice_things[irandom(array_length(_nice_things)-1)]
+until _nice_thing != prev_nice_thing
+
+prev_nice_thing = _nice_thing
 
 if o_console.run_in_embed and o_console.Output.tag != -1
 {
