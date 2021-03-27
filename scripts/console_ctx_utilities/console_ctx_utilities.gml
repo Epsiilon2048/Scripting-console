@@ -281,7 +281,7 @@ for(var i = 0; i <= array_length(ctx.items)-1; i++)
 			
 			if is_numeric(_var)
 			{
-				draw_circle(left, yy, 5, not _var)
+				draw_checkbox(left, yy-floor(o_console.CHECKBOX.width/2), _var, mouse_item == i)
 			}
 			else
 			{

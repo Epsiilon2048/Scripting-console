@@ -60,23 +60,15 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				{
 					if instance_exists(object) with object
 					{ 
-						if subject.value < 100000 
-							{ output_string[i] = script_execute_ext_builtin(subject.value, a) }
-						else   
-							{ output_string[i] = script_execute_ext(subject.value, a) }
+						output_string[i] = script_execute_ext_builtin(subject.value, a)
 					}
 					else 
 					{
-						if subject.value < 100000 
-							{ output_string[i] = script_execute_ext_builtin(subject.value, a) }
-						else
-							{ output_string[i] = script_execute_ext(subject.value, a) }
+						script_execute_ext_builtin(subject.value, a)
 					}
 				
-					if is_undefined(output_string[i]) 
-						{ output_string[i] = "" }
-					else if is_real(output_string[i]) 
-						{ output_string[i] = string_format_float(output_string[i]) }
+					if is_undefined(output_string[i]) output_string[i] = ""
+					else if is_real(output_string[i]) output_string[i] = string_format_float(output_string[i])
 				}
 				catch(_exception)
 				{

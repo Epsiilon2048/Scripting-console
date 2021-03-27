@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Game",
-    "path": "folders/Objects/Game.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
   "name": "compile_report",

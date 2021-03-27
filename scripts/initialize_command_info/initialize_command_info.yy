@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Debugging",
-    "path": "folders/Objects/Debugging.yy",
+    "path": "folders/Console/Debugging.yy",
   },
   "resourceVersion": "1.0",
   "name": "initialize_command_info",

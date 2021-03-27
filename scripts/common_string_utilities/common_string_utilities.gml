@@ -151,6 +151,12 @@ return false
 }
 	
 	
+
+function string_pos_pop(substr, str)
+{
+return string_pos_index(substr, str, string_count(substr, str))
+}
+	
 	
 	
 function string_pop(str){ //returns the last character of a string

@@ -37,11 +37,11 @@ return string_copy(str, string_length(separator)+1, string_length(str)-1)
 	
 function ds_list_to_array(ds_list){
 
-var array = []
+var array = array_create(ds_list_size(ds_list))
 
 for(var i = 0; i <= ds_list_size(ds_list)-1; i++)
 {
-	array[i] = ds_list_find_value(ds_list, i)
+	array[i] = ds_list[| i]
 }
 return array
 }

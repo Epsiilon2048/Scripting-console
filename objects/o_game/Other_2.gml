@@ -1,11 +1,4 @@
 
-#region Game properties
-
-macros()
-global.grav = .43
-
-#endregion
-
 #region Window scale
 
 global.win_sc = 3

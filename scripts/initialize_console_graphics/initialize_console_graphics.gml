@@ -12,6 +12,11 @@ font = draw_scale.font
 
 draw_set_font(font)
 
+CHECKBOX = {}; with CHECKBOX {
+	
+	width = 17
+}
+
 WINDOW = {}; with WINDOW {
 	
 	width = 400

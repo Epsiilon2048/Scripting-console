@@ -1,7 +1,7 @@
 {
   "parent": {
-    "name": "Notes",
-    "path": "folders/Notes.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.1",
   "name": "version_log",

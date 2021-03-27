@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Shaders",
-    "path": "folders/Shaders.yy",
+    "path": "folders/Console/Shaders.yy",
   },
   "resourceVersion": "1.0",
   "name": "clip_rect_cutout",

@@ -66,16 +66,17 @@ function Console_value_box() constructor{
 	if prev_type != type
 	{
 		selected = false
+		color_picking = false
 	}
 	
-	var mouse_on = gui_mouse_between(
+	var mouse_on = not o_console.COLOR_PICKER.mouse_on and gui_mouse_between(
 		x-vb.border-vb.border_w, 
 		y-vb.border, 
 		x+width+value_width+vb.border, 
 		y+vb.border+vb.text_h
 	)
 	
-	var mouse_on_value	= gui_mouse_between(
+	var mouse_on_value = mouse_on and gui_mouse_between(
 		x+width-vb.outline_dist-vb.border_w, 
 		y-vb.outline_dist, 
 		x+width+value_width+vb.outline_dist,
@@ -92,7 +93,6 @@ function Console_value_box() constructor{
 		prev_mx = gui_mx
 		prev_my = gui_my
 		
-		var v = o_console.value_boxes[| 0]
 		ds_list_insert(o_console.value_boxes, 0, self)
 		ds_list_delete(o_console.value_boxes, index+1)
 		index = 0
@@ -274,8 +274,6 @@ function Console_value_box() constructor{
 				text = _valstring
 				change = true
 			}
-		
-			prev_type = type
 		}
 	break
 	
@@ -295,16 +293,13 @@ function Console_value_box() constructor{
 			selected = false
 		}
 		
-		if mouse_check_button_pressed(mb_left)
+		if mouse_check_button_pressed(mb_left) and mouse_on_value
 		{
-			if mouse_on_value
-			{
 				selected = true
 				color_picking = true
 				o_console.COLOR_PICKER.x = gui_mx+20
 				o_console.COLOR_PICKER.y = gui_my+20
 				o_console.COLOR_PICKER.variable = variable
-			}
 		}
 		
 		if mouse_check_button_pressed(mb_any) and not mouse_on_value and selected and not o_console.COLOR_PICKER.mouse_on
@@ -325,6 +320,7 @@ function Console_value_box() constructor{
 	}
 
 	o_console.value_box_deleted = destroy
+	prev_type = type
 	}
 	
 	

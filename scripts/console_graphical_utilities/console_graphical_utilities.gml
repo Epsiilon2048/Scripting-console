@@ -98,16 +98,23 @@ if gui_mouse_between(x, y, x+string_width(plain), y+string_height(plain))
 
 for(var i = 0; i <= array_length(text)-1; i++)
 {
-	var _str	  =  variable_struct_exists_get(text[i], "str",			text[i])
-	var _col	  =  variable_struct_exists_get(text[i], "col",			col)
-	var _scr	  =  variable_struct_exists_get(text[i], "scr",			-1)
-	var _func	  =  variable_struct_exists_get(text[i], "func",		-1)
-	var _linkcol  =  variable_struct_exists_get(text[i], "linkcol",		o_console.colors.embed)
-	var _scrcol   =  variable_struct_exists_get(text[i], "scrcol",		o_console.colors.embed_hover)
-	var _arg	  =  variable_struct_exists_get(text[i], "arg",			undefined)
-	var _args	  =  variable_struct_exists_get(text[i], "args",		[])
-	var _output   =  variable_struct_exists_get(text[i], "output",		false)
-	var _checkbox =  variable_struct_exists_get(text[i], "checkbox",	"")
+	if not is_struct(text[i])
+	{
+		var _str=text[i], _col=col, _scr=-1, _func=-1, _linkcol=0, _scrcol=0, _arg=0, _args=0, _output=false, _checkbox=""
+	}
+	else
+	{
+		var _str	  =  variable_struct_exists_get(text[i], "str",			text[i])
+		var _col	  =  variable_struct_exists_get(text[i], "col",			col)
+		var _scr	  =  variable_struct_exists_get(text[i], "scr",			-1)
+		var _func	  =  variable_struct_exists_get(text[i], "func",		-1)
+		var _linkcol  =  variable_struct_exists_get(text[i], "linkcol",		o_console.colors.embed)
+		var _scrcol   =  variable_struct_exists_get(text[i], "scrcol",		o_console.colors.embed_hover)
+		var _arg	  =  variable_struct_exists_get(text[i], "arg",			undefined)
+		var _args	  =  variable_struct_exists_get(text[i], "args",		[])
+		var _output   =  variable_struct_exists_get(text[i], "output",		false)
+		var _checkbox =  variable_struct_exists_get(text[i], "checkbox",	"")
+	}
 	
 	if _checkbox != "" 
 	{
@@ -146,7 +153,7 @@ for(var i = 0; i <= array_length(text)-1; i++)
 		}
 	}
 	
-	var _list = string_split_keep("\n", _str)
+	var _list = string_split_keep("\n", _str)//string_split_keep("\n", _str)
 	draw_set_color(_col)
 
 	for(var j = 0; j <= array_length(_list)-1; j++)
@@ -155,7 +162,7 @@ for(var i = 0; i <= array_length(text)-1; i++)
 		line_width += string_width(_list[j])
 		char += string_length(_list[j])-string_count("\n", _list[j])
 		
-		if string_count("\n", _list[j])
+		if string_pos("\n", _list[j])
 		{
 			line_width  =  0
 			line_height += string_height(" ")

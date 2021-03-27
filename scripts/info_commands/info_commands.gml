@@ -102,23 +102,34 @@ return format_output(text, true, command_help)
 function syntax_help(){ with o_console {
 	
 return format_output([ //note that this only takes the colors from the current color scheme; doesn't change with it
-	"Supported datatypes/references\n",
-	{str:"integers",col:colors.real}," - ",{str:"floats",col:colors.real}," - ",{str:"strings",col:colors.string}," - ",{str:"objects",col:colors.instance}," - ",{str:"variables",col:colors.variable},"\n\n"+
+	"Basic GMCL syntax\n\n"+
 	
-	"- When variables are referenced in arguments, they return their value.\n"+
-	"- Note that if a script asks for a variable or command as an argument, it's likely\n"+
-	"  intended to be a string\n"+
+	"Setting scope:     ",{str:"instance",col:colors.instance},"\n"+
+	"Getting variables: ",{str:"instance",col:colors.instance},{str:".",col:colors.plain},{str:"variable",col:colors.variable},"\n"+
+	"Setting variables: ",{str:"instance",col:colors.instance},{str:".",col:colors.plain},{str:"variable",col:colors.variable},{str:" value",col:colors.plain},"\n"+
+	"Running methods:   ",{str:"method",col:colors.method},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},"\n"+
+	"Changing room:     ",{str:"room",col:colors[$ dt_room]},"\n\n"+
 	
-	"\nSetting scope:     ",{str:"object",col:colors.instance},
-	"\nGetting variables: ",{str:"object",col:colors.instance},{str:".variable",col:colors.variable},
-	"\nSetting variables: ",{str:"object",col:colors.instance},{str:".variable",col:colors.variable},{str:" value",col:colors.plain},
-	"\nRunning scripts:   ",{str:"script",col:colors.method},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},
-	"\n\nMultiple commands can be run in a single line when separated by semi-colons (;)."+
-	"\nKeep in mind, variables are substituted for their values during the compiling process,"+
-	"\nmeaning they all take place within the initial scope."
+	"Notes\n"+
+	"- Multiple commands can be run in a single line when separated by semi-colons (;)\n"+
+	"- While custom methods are automatically detected, builtin gml functions have to be\n"+
+	"  manually added to the console_macros list\n"+
+	"- If a method asks for a variable as an argument, it's likely intended to be a string\n\n"+
+	
+	{str: "Advanced syntax & naming conflicts", scr: adv_syntax_help, output: true},
 ], true, syntax_help)
 }}
 
+
+function adv_syntax_help(){ with o_console {
+	
+//var o = [
+//	"Advanced GMCL syntax\n\n"+
+//	
+//	"Datatype identifiers are useful primarily for avoiding naming conflicts.\n"+
+//	"\n"
+//])
+}}
 
 
 
