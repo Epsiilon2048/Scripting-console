@@ -14,7 +14,7 @@ function Console_window() constructor{
 		self.width	= o_console.WINDOW.width
 		self.height	= o_console.WINDOW.height
 		
-		self.text		= []
+		self.text = new Embedded_text()
 		self.plaintext  = ""
 		self.text_w = 0
 		self.text_h = 0
@@ -24,12 +24,10 @@ function Console_window() constructor{
 		self.mouse_over_sidebar = false
 		self.sidebar			= 0
 	}
-	set = function(_text, _plaintext){
-		draw_set_font(o_console.font)
-		self.text = _text
+	set = function(_text){
+		self.text.set(_text)
 		
-		if is_undefined(_plaintext) self.plaintext = embedded_text_get_plain(_text)
-		else self.plaintext = _plaintext
+		self.plaintext = text.plaintext
 		
 		self.text_w = string_width(plaintext)
 		self.text_h = string_height(" ")*(string_count("\n", plaintext)+1)
@@ -44,11 +42,6 @@ function Console_window() constructor{
 		{
 			self.x = display_get_gui_width() - self.starting_x
 			self.y = self.starting_y
-		}
-		else if self.side == SIDES.BOTTOM
-		{
-			self.x = self.starting_x
-			self.y = display_get_gui_height() - self.starting_y
 		}
 	}
 	destroy = function(){

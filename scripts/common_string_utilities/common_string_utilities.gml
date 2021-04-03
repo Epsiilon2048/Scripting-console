@@ -38,6 +38,9 @@ function string_split(substr, str){ //splits a string into an array by a separat
 static rl = ds_list_create()
 
 var p = string_pos(substr, str)
+
+if not p return [str]
+
 var o = 1
 var substrlen = string_length(substr);
 
@@ -138,22 +141,21 @@ else return stitch(whole, shave("0", string_format(decimal, 0, 6)))
 
 function string_pos_index(substr, str, index){ //returns the nth instance of the substr in the str
 
-var count = 0
-for(var i = 1; i <= string_length(str); i++)
+var pos = string_pos(substr, str)
+if not (pos or index) return 0
+
+repeat index-1
 {
-	if string_char_at(str, i) == substr
-	{
-		count ++
-		if count == index return i
-	}
+	pos = string_pos_ext(substr, str, pos)
+	if not pos return 0
 }
-return false
+
+return pos
 }
 	
 	
 
-function string_pos_pop(substr, str)
-{
+function string_pos_pop(substr, str){
 return string_pos_index(substr, str, string_count(substr, str))
 }
 	
@@ -161,27 +163,4 @@ return string_pos_index(substr, str, string_count(substr, str))
 	
 function string_pop(str){ //returns the last character of a string
 return string_char_at(str, string_length(str))
-}
-
-
-
-
-function string_pos_multiple(substrs, str){
-
-var bestpos = string_length(str)+1
-
-for(var i = 0; i <= array_length(substrs)-1; i++)
-{
-	var pos = string_pos(substrs[i], str)
-	
-	if pos != 0 and pos < bestpos
-	{
-		bestpos = pos
-	}
-}
-if bestpos == string_length(str)+1 
-{
-	return 0
-}
-else return bestpos
 }

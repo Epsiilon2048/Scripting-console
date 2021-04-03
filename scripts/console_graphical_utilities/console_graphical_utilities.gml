@@ -56,7 +56,7 @@ draw_reset_properties()
 
 
 
-function draw_embedded_text(x, y, text, plain){
+function draw_embedded_text_old(x, y, text, plain){
 //pretty messy, ill clean it up at some point lol
 //only supports alignment top left :(
 
@@ -269,6 +269,8 @@ else
 	mouse_on_h  = false
 	mouse_on_sv = false
 }
+
+
 
 //Draw sv square
 var x1 = x

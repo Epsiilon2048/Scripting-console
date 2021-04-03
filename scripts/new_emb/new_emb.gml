@@ -2,15 +2,15 @@
 function Embedded_text() constructor{
 
 set = function(text) {
-	//nm	name of struct variable
-	//ne	value if struct variable doesn't exist
-	//cl	makes text clickable
 
-	static _colors_list		= ds_list_create()
-	static _clickable_list	= ds_list_create()
-	static _dynamic_list	= ds_list_create()
-
-	var _text = is_array(text) ? text : [text]
+	static _colors_list			= ds_list_create()
+	static _clickable_list		= ds_list_create()
+	static _subclickable_list	= ds_list_create()
+	static _dynamic_list		= ds_list_create()
+	
+	var _text = variable_struct_exists_get(text, "o", text)
+	
+	_text = is_array(_text) ? _text : [ is_undefined(_text) ? "" : _text ]
 
 	self.plaintext = ""
 	self.colortext = ""
@@ -39,31 +39,60 @@ set = function(text) {
 			_clickable = (
 				variable_struct_exists(_text[i], "func") or 
 				variable_struct_exists(_text[i], "vari") or
-				variable_struct_exists(_text[i], "cbox")
+				variable_struct_exists(_text[i], "cbox") or 
+				variable_struct_exists(_text[i], "outp") or
+				
+				variable_struct_exists(_text[i], "checkbox") or
+				variable_struct_exists(_text[i], "outout") or
+				variable_struct_exists(_text[i], "scr")
 			)
 			   
 			s.func	= variable_struct_exists_get(_text[i], "func",	noscript	)
 			s.vari	= variable_struct_exists_get(_text[i], "vari",	""			)
 			s.cbox	= variable_struct_exists_get(_text[i], "cbox",	""			)
-			
-			s.str	= variable_struct_exists_get(_text[i], "str",	""			)
+
 			s.arg	= variable_struct_exists_get(_text[i], "arg",	undefined	)
 			s.args	= variable_struct_exists_get(_text[i], "args",	[s.arg]		)
 			s.outp	= variable_struct_exists_get(_text[i], "outp",	false		)
+			
+			//original names, kept for backwards compatability
+			if s.cbox == ""			s.cbox	= variable_struct_exists_get(_text[i], "checkbox",	"")
+			if s.outp == false		s.outp	= variable_struct_exists_get(_text[i], "output",	false)
+			if s.func == noscript	s.func	= variable_struct_exists_get(_text[i], "scr",		noscript)
 				 
 			if _clickable
 			{
-				s.x = _width
-				s.y = self.height
+				var j = 1
+				
+				if _newlines
+				{ 
+					while string_char_at(_str, j) == "\n"
+					{
+						_width = 0
+						j++
+					}
+				}
+				
+				s.x  = _width
+				s.y  = self.height
 				s.id = _click_id
 				
-				s.length = not _newlines ? string_length(_str) : string_length(
-					string_copy(
-						_str,
-						1,
-						string_pos(_str, "\n")-1
-					)
-				)
+				if _newlines
+				{
+					var line_split = string_split("\n", _str)
+					
+					s.length = string_length(line_split[0])
+					
+					for(var j = 1; j <= array_length(line_split)-1; j++)
+					{
+						if line_split[j] != "" ds_list_add(_subclickable_list, {
+							id: _click_id,
+							y:	s.y+j,
+							length: string_length(line_split[j]),
+						})
+					}
+				}
+				else s.length = string_length(_str)
 			
 				ds_list_add(_clickable_list, s)
 			}
@@ -83,15 +112,14 @@ set = function(text) {
 		
 			if not _newlines self.colortext += string_repeat(" ", string_length(_str))
 			else 
-			{
+			{ //ughhhhhhhhhh im soooo tired of this part im just gonna go with the really garbage way of doing it
 				var _colorstr = ""
 				
 				for(var j = 1; j <= string_length(_str); j++)
 				{
-					if string_char_at(_str, j) == "\\" and string_char_at(_str, j) == "\n"
+					if string_char_at(_str, j) == "\n"
 					{
 						_colorstr += "\n"
-						j += 2
 					}
 					else _colorstr += " "
 				}
@@ -101,7 +129,7 @@ set = function(text) {
 		}
 		else
 		{
-			_str = is_string(_text[i]) ? _text[i] : string(_text[i])
+			_str = string(_text[i])
 			var _newlines = string_count("\n", _str)
 			self.colortext += _str
 		}
@@ -119,20 +147,22 @@ set = function(text) {
 		) - (_newlines > 0)
 	}
 
-	self.colors		= ds_list_to_array(_colors_list)
-	self.clickable	= ds_list_to_array(_clickable_list)
-	self.dynamic	= ds_list_to_array(_dynamic_list)
+	self.colors			= ds_list_to_array(_colors_list)
+	self.clickable		= ds_list_to_array(_clickable_list)
+	self.subclickable	= ds_list_to_array(_subclickable_list)
+	self.dynamic		= ds_list_to_array(_dynamic_list)
 
 	self.height += 1
 	self.width = string_width(self.plaintext)/string_width(" ")
 
 	ds_list_clear(_colors_list)
 	ds_list_clear(_clickable_list)
+	ds_list_clear(_subclickable_list)
 	ds_list_clear(_dynamic_list)
 	}
 }
 
-function draw_embedded_text_new(x, y, text){
+function draw_embedded_text(x, y, text){
 
 var cw = string_width (" ")
 var ch = string_height(" ")
@@ -143,60 +173,95 @@ draw_set_align(fa_left, fa_top)
 
 var _col = o_console.colors.output
 
+draw_set_color(_col)
 if not is_struct(text)
 {
-	draw_text_color(x, y, text, _col, _col, _col, _col, 1)
+	draw_text(x, y, text,) //_col, _col, _col, _col, 1)
 	draw_set_align(prev_halign, prev_valign)
 	return false
 }
 
-draw_text_color(x, y, text.colortext, _col, _col, _col, _col, 1)
+draw_text(x, y, text.colortext,)// _col, _col, _col, _col, 1)
 
 var mouse_on = gui_mouse_between(x, y, x+text.width*cw, y+text.height*ch)
+var mouse_on_item = false
 
-var i = (text.click_index == -1) ? 0 : text.click_index
+text.mouse_index = -1
 
-if mouse_on for(; i <= array_length(text.clickable)-1; i++)
+if mouse_on
 {
-	var c = text.clickable[i]
+	var i = 0
 	
-	if gui_mouse_between(
-		x + c.x*cw, 
-		y + c.y*ch,
-		x + (c.x + c.length)*cw,
-		y + c.y*ch + ch
-	)
+	for(var j = 0; j <= array_length(text.subclickable)-1; j++)
 	{
-		text.mouse_index = c.id
-		if mouse_check_button_pressed(mb_left)
-		{
-			text.click_index = c.id
-		}
-		else if text.click_index == c.id and not mouse_check_button(mb_left)
-		{
-			text.click_index = -1
-			
-			//Run method
-			var _output = script_execute_ext_builtin(c.func, c.args)
-			
-			//Set variable
-			variable_string_set(c.vari, c.arg)
-			
-			//Set checkbox
-			var _check	= variable_string_get(c.cbox)
-			if is_numeric(_check) variable_string_set(c.cbox, not _check)
-			
-			//Set output
-			if c.outp output_set(_output)
-		}
+		var c = text.subclickable[j]
 		
-		if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
-		break
+		if gui_mouse_between(
+			x,
+			y + c.y*ch,
+			x + c.length*cw,
+			y + c.y*ch + ch
+		){
+			text.mouse_index = c.id
+			i = c.id
+			break
+		}
 	}
-	else 
+	
+	for(; i <= array_length(text.clickable)-1; i++)
 	{
-		if text.mouse_index == c.id text.mouse_index = -1
-		if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
+		var c = text.clickable[i]
+
+		if text.mouse_index == c.id or (c.length and gui_mouse_between(
+			x + c.x*cw, 
+			y + c.y*ch,
+			x + (c.x + c.length)*cw,
+			y + c.y*ch + ch
+		)){
+			text.mouse_index = c.id
+			
+			if mouse_check_button_pressed(mb_left)
+			{
+				text.click_index = c.id
+			}
+			else if text.click_index == c.id and not mouse_check_button(mb_left)
+			{
+				text.click_index = -1
+			
+				//Run method
+				o_console.run_in_embed = true
+				var _output = script_execute_ext_builtin(c.func, c.args)
+				o_console.run_in_embed = false
+				
+				//Set variable
+				variable_string_set(c.vari, c.arg)
+			
+				//Set checkbox
+				var _check	= variable_string_get(c.cbox)
+				if is_numeric(_check) variable_string_set(c.cbox, not _check)
+			
+				//Set output
+				if c.outp 
+				{
+					if keyboard_check(vk_shift) output_set(_output)
+					else
+					{
+						text.set(_output)
+						exit
+					}
+				}
+			}
+		
+			if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
+		
+			mouse_on_item = true
+			break
+		}
+		else 
+		{
+			if text.mouse_index == c.id text.mouse_index = -1
+			if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
+		}
 	}
 }
 else 
@@ -229,7 +294,7 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 	
 	if nl draw_text_color(
 		x, y + c.y*ch + ch,
-		string_copy(c.str, nl+2, string_length(c.str)),
+		string_copy(c.str, nl+1, string_length(c.str)),
 		_col, _col, _col, _col, 1
 	)
 }

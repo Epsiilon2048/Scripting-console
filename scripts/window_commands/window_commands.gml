@@ -49,7 +49,7 @@ if not is_undefined(toggle)
 	}
 }
 
-else displaying = currently_displayed == -1
+else displaying = (not run_in_console) or (currently_displayed == -1)
 
 if displaying
 {

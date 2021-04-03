@@ -31,12 +31,12 @@ with o_console
 function output_set(output){ with o_console.Output {
 
 var _output = output
-	
+
+var _text
+
 if is_undefined(_output) or _output == "" or _output == [] or _output == {}
 {
-	text = []
-	plaintext = ""
-	text_embedding = false
+	_text = []
 }
 else
 {	
@@ -44,20 +44,16 @@ else
 	
 	if variable_struct_exists_get(_output, "__embedded__", false)
 	{
-		text_embedding = true
-		
-		text = _output.o
+		_text = _output.o
 
-		if not is_array(text) text = [text]
+		if not is_array(_text) _text = [_text]
 
-		array_push(text, "\n")
-		
-		plaintext = embedded_text_get_plain(text)
+		array_push(_text, "\n")
 	}
 	else
 	{
 		text_embedding = false
-		text = ""
+		_text = ""
 		
 		_output = variable_struct_exists_get(_output, "o", _output)
 			
@@ -67,22 +63,22 @@ else
 				
 			for(var i = 0; i <= array_length(structnames)-1; i++)
 			{
-				text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
+				_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
 			}
 		}
-		else text = string(_output)
+		else _text = string(_output)
 		
-		if is_array(_output) text = text + array_to_string(_output, "\n")
-		
-		plaintext = text
-		text = [text]
+		if is_array(_output) _text = _text + array_to_string(_output, "\n")
+
+		_text = [_text]
 	}
 		
 	alpha		= 1
 	fade_time	= 0
 		
-	o_console.Output_window.set(text)
+	o_console.Output_window.set(_text)
 }
+text.set(_text)
 return _output
 }}
 
@@ -93,9 +89,11 @@ function output_set_lines(output){ with o_console.Output {
 
 var _output = output
 	
+var _text
+	
 if is_undefined(_output) or _output == "" or _output == [] or _output == {}
 {
-	text = []
+	_text = []
 	plaintext = ""
 	text_embedding = false
 }
@@ -121,27 +119,27 @@ else
 	
 	if text_embedding
 	{
-		text = []
+		_text = []
 		
 		for(var i = 0; i <= array_length(_output)-1; i++)
 		{
 			if variable_struct_exists_get(_output[i], "__embedded__", false)
 			{
-				array_copy(text, array_length(text), _output[i].o, 0, array_length(_output[i].o))
-				if i != array_length(_output)-1 array_push(text, "\n")
+				array_copy(_text, array_length(_text), _output[i].o, 0, array_length(_output[i].o))
+				if i != array_length(_output)-1 array_push(_text, "\n")
 			}
 			else
 			{
 				_output[i] = variable_struct_exists_get(_output[i], "o", _output[i])
-				array_push(text, string(_output[i])+"\n")
+				array_push(_text, string(_output[i])+"\n")
 			}
 		}
 		
-		plaintext = embedded_text_get_plain(text)
+		plaintext = embedded_text_get_plain(_text)
 	}
 	else
 	{
-		text = ""
+		_text = ""
 		
 		if array_length(_output) == 1
 		{
@@ -153,10 +151,10 @@ else
 				
 				for(var i = 0; i <= array_length(structnames)-1; i++)
 				{
-					text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
+					_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
 				}
 			}
-			else if not is_array(_output) text = string(_output)
+			else if not is_array(_output) _text = string(_output)
 		}
 		else
 		{
@@ -166,17 +164,18 @@ else
 			}
 		}
 		
-		if is_array(_output) text = text + array_to_string(_output, "\n")
+		if is_array(_output) _text = _text + array_to_string(_output, "\n")
 		
-		plaintext = text
-		text = [text]
+		plaintext = _text
+		_text = [_text]
 	}
 		
 	alpha		= 1
 	fade_time	= 0
 		
-	o_console.Output_window.set(text)
+	o_console.Output_window.set(_text)
 }
+text.set(_text)
 return _output
 
 }}

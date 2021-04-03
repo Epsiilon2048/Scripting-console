@@ -10,15 +10,15 @@ var color_old = draw_get_color()
 var alpha_old = draw_get_alpha()
 var bm_old = gpu_get_blendmode()
 
-draw_set_color(colors.body)
-
 if not force_body_solid 
 {
 	gpu_set_blendmode(colors.body_bm)
 	draw_set_alpha(colors.body_alpha)
 }
 
-draw_rectangle(_x1, _y1, _x2, _y2, false)
+var c = colors.body
+
+draw_rectangle_color(_x1, _y1, _x2, _y2, c, c, c, c, false)
 
 draw_set_color(color_old)
 draw_set_alpha(alpha_old)

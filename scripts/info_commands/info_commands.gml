@@ -108,7 +108,7 @@ return format_output([ //note that this only takes the colors from the current c
 	"Getting variables: ",{str:"instance",col:colors.instance},{str:".",col:colors.plain},{str:"variable",col:colors.variable},"\n"+
 	"Setting variables: ",{str:"instance",col:colors.instance},{str:".",col:colors.plain},{str:"variable",col:colors.variable},{str:" value",col:colors.plain},"\n"+
 	"Running methods:   ",{str:"method",col:colors.method},{str:" argument0",col:colors.plain},{str:" argument1 (...)",col:colors.plain},"\n"+
-	"Changing room:     ",{str:"room",col:colors[$ dt_room]},"\n\n"+
+	"Changing room:     ",{str:"room",col:"room"},"\n\n"+
 	
 	"Notes\n"+
 	"- Multiple commands can be run in a single line when separated by semi-colons (;)\n"+

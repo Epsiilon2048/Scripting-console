@@ -3,8 +3,6 @@
 include_niche_virtual_keys = false
 console_macros = {}
 
-color_picker_var = ""
-
 keyboard_scope = o_console
 
 initialize_console_macros()
@@ -213,7 +211,7 @@ Output = {}; with Output {
 	border_w = SCALE_ 6
 	border_h = SCALE_ 5
 	
-	text			= []
+	text			= new Embedded_text()
 	plaintext		= ""
 	text_embedding	= false
 	
@@ -265,15 +263,6 @@ value_boxes = ds_list_create()
 value_box_dragging = false
 value_box_deleted = false
 
-var greetings = [
-	"Hello!! Welcome to the console!",
-	"Afternoon! Or morning! Or whenever!",
-	"Howsya day going?",
-	"Hiya!",
-	"Ay how's it goin?",
-	"Heloooooo,"
-]
-
 O1 = ""
 O2 = ""
 O3 = ""
@@ -285,7 +274,17 @@ prompt_bar_width = 1
 run_in_embed   = false
 run_in_console = false
 
-output_set(greetings[irandom(array_length(greetings)-1)]+" Type \"help\" for a general guide.")
+var greetings = [
+	"I hope you're having a wonderful day!",
+	"Afternoon! Or morning! Or whenever!",
+	"Howsya day going?",
+	"Hiya!",
+	"Ay how's it goin?",
+	"Remember to take breaks from time to time!",
+	"yooooooo sup",
+]
+
+output_set(greetings[irandom(array_length(greetings)-1)])
 Output.alpha = 0
 
 initialize_color_schemes()

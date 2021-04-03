@@ -14,8 +14,8 @@ else if mouse_check_button_released(mb_left) and
 	else if Window.enabled and Window.mouse_over_sidebar	Window.show = not Window.show
 	else if Output.mouse_over and not Output.mouse_over_embed and output_set_window and not output_as_window
 	{
-		window( format_output( Output.text, Output.text_embedding, -1) )
-		output_set("")
+		//Window.text = Output.text
+		//output_set("")
 	}
 }
 
@@ -34,7 +34,7 @@ else if instance_cursor and instance_exists(object) {
 	//make it so that you can see the cursor even if its out of frame
 }
 
-if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_output) and Output.plaintext != ""
+if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_output) and Output.text.plaintext != ""
 {
 	
 	draw_set_font(font)
@@ -56,8 +56,8 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 		Output.alpha	 = max(force_output, Output.alpha - Output.alpha_dec*(Output.fade_time >= Output.time))
 	}
 
-	var x2 = Output.x+string_width (Output.plaintext)+Output.border_w
-	var y2 = Output.y-string_height(Output.plaintext)-Output.border_h
+	var x2 = Output.x+Output.text.width*char_width+Output.border_w
+	var y2 = Output.y-Output.text.height*char_height-Output.border_h
 
 	draw_set_color(colors.ex_output)
 	
@@ -76,15 +76,7 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 
 	draw_set_alpha(Output.alpha)
 	
-	if embed_text
-	{
-		Output.mouse_over_embed = draw_embedded_text(Output.x, Output.y-string_height(Output.plaintext)+1, Output.text, Output.plaintext)
-	}
-	else
-	{
-		draw_text(Output.x, Output.y-string_height(Output.plaintext)+1, Output.plaintext)
-		Output.mouse_over_embed = false
-	}
+	Output.mouse_over_embed = draw_embedded_text(Output.x, Output.y-Output.text.height*char_height, Output.text)
 	
 	draw_set_alpha(1)
 	draw_set_color(c_white)
@@ -175,6 +167,8 @@ if Display.enabled and ds_list_size(display_list) > 0
 			}
 			display_string += variable+" "+value+"\n"
 		}
+		
+		display_string = shave("\n", display_string)
 		
 		Display.set(display_string, display_string)
 	}

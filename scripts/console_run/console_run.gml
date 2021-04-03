@@ -64,7 +64,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					}
 					else 
 					{
-						script_execute_ext_builtin(subject.value, a)
+						output_string[i] = script_execute_ext_builtin(subject.value, a)
 					}
 				
 					if is_undefined(output_string[i]) output_string[i] = ""
