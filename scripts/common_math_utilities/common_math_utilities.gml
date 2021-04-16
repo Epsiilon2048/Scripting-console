@@ -78,3 +78,21 @@ var _g = r & 255
 var _b = r & 255
 return dec_to_hex(_r << 16 | _g << 8 | _b, 1)
 }
+	
+	
+	
+
+function hex_to_color(hex){
+	
+return dec_to_hex( string_copy(hex, 5, 2)+string_copy(hex, 3, 2)+string_copy(hex, 1, 2) )
+}
+	
+	
+	
+	
+function color_to_hex(color){
+
+var hex = dec_to_hex(color, 6)
+
+return string_copy(hex, 5, 2)+string_copy(hex, 3, 2)+string_copy(hex, 1, 2)
+}

@@ -110,7 +110,7 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 				{	
 					if _iden_string _col = dt_string
 					
-					if string_pos("\"", segment) == 1 and string_pop(segment) == "\""
+					if string_pos("\"", segment) == 1 //and string_pop(segment) == "\""
 					{
 						_col = dt_string
 					}

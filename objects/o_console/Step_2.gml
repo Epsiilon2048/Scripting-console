@@ -229,17 +229,14 @@ if console_toggle and keyboard_scope == o_console
 			O3 = (arlen > 2) ? prev_output[2] : ""
 			O4 = (arlen > 3) ? prev_output[3] : ""
 			O5 = (arlen > 4) ? prev_output[4] : ""
+			
+			ds_list_insert(input_log, 0, console_string)
+			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
+			
+			console_log_input(console_string, _output)
 		}
 		
 		output_set_lines(_output)
-		
-		var _console_string = string_split(";", console_string)
-		
-		if array_length(_console_string) > 0
-		{
-			ds_list_insert(input_log, 0, console_string)
-			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit)
-		}
 		
 		console_string = ""
 		keyboard_string = ""

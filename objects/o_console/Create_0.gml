@@ -45,6 +45,13 @@ enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"
 
+#macro lg_whitespace	"whitespace"
+#macro lg_userinput		"user input"
+#macro lg_bindinput		"bind input"
+#macro lg_output		"output"
+#macro lg_embed			"embed"
+#macro lg_message		"message"
+
 #macro cs_greenbeans	"greenbeans"
 #macro cs_royal			"royal"
 #macro cs_drowned		"drowned"
@@ -235,16 +242,7 @@ Output = {}; with Output {
 Output_window = new Console_window()
 Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)
 
-to_mouse_x_object = noone
-to_mouse_y_object = noone
-to_mouse_x = ""
-to_mouse_y = ""
-to_mouse_gui = false
-
-to_var		= ""
-from_var	= ""
-to_object	= noone
-from_object = noone
+log = ds_list_create()
 
 inst_select = false
 inst_selecting = noone
