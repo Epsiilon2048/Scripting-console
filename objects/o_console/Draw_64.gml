@@ -58,8 +58,6 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 
 	var x2 = Output.x+Output.text.width*char_width+Output.border_w
 	var y2 = Output.y-Output.text.height*char_height-Output.border_h
-
-	draw_set_color(colors.ex_output)
 	
 	Output.mouse_over = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 	if Output.mouse_over or force_output_body or (Output.text_embedding and force_output_embed_body)
@@ -71,7 +69,6 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 			Output.alpha = 1
 			Output.fade_time  = 0
 		}
-		draw_set_color(colors.output)
 	}
 
 	draw_set_alpha(Output.alpha)
@@ -79,7 +76,6 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	Output.mouse_over_embed = draw_embedded_text(Output.x, Output.y-Output.text.height*char_height, Output.text)
 	
 	draw_set_alpha(1)
-	draw_set_color(c_white)
 }
 else Output.mouse_over = false
 
@@ -88,31 +84,31 @@ if console_toggle
 	//Draw console
 	draw_console_body(console_left, console_top, console_right, console_bottom)
 
-	draw_set_color(colors.plain)
-	draw_rectangle(console_left, console_bottom+1, console_left+prompt_bar_width, console_top-1, false)
+	draw_rectangle_color(
+		console_left, console_bottom+1, console_left+prompt_bar_width, console_top-1, 
+		colors.plain, colors.plain, colors.plain, colors.plain, false
+	)
 
 	draw_set_font(font)
 	draw_set_align(fa_left, fa_center)
 	if command_colors draw_console_text(console_text_x, console_text_y, color_string)
 	else draw_text(console_text_x, console_text_y, console_string)
 	
-	draw_set_color(colors.plain)
-	draw_rectangle(
+	draw_rectangle_color(
 		console_text_x + char_width*(char_pos1-(char_pos1-char_pos2)), console_text_y + char_height/2,
 		console_text_x + char_width*(char_pos1-1), console_text_y - char_height/2,
-		false
+		colors.plain, colors.plain, colors.plain, colors.plain, false
 	)
 	if string_length(console_string) > char_pos1-1
 	{
-		draw_set_color(colors.selection)
-		draw_text(
+		draw_text_color(
 			console_text_x + char_width*(char_pos1-1), 
 			console_text_y, 
-			string_copy(console_string, char_pos1, char_pos2-char_pos1+1)
+			string_copy(console_string, char_pos1, char_pos2-char_pos1+1),
+			colors.selection, colors.selection, colors.selection, colors.selection, 1
 		)
 	}
 
-	draw_set_color(colors.output)
 	draw_set_halign(fa_right)
 	draw_set_valign(fa_center)
 	var object_text
@@ -124,16 +120,16 @@ if console_toggle
 		if mouse_over_object
 		{
 			draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
-			draw_set_color(colors.output)
 			draw_set_halign(fa_right)
 			draw_set_valign(fa_center)
 		}
 	}
 	else object_text = "Noone"
 	
-	draw_text(console_object_x, console_text_y, object_text)
-		
-	draw_set_color(c_white)
+	draw_text_color(
+		console_object_x, console_text_y, object_text,
+		colors.output, colors.output, colors.output, colors.output, 1
+	)
 	
 	if not Output.mouse_over Output.alpha = 0
 }
@@ -143,7 +139,6 @@ if Display.enabled and ds_list_size(display_list) > 0
 {
 	if Display.show and step mod display_update == 0
 	{
-		draw_set_font(font)
 		display_string = ""
 	
 		for(var i = 0; i <= ds_list_size(display_list)-1; i++)

@@ -3,6 +3,9 @@ function draw_console_text(x, y, console_text){
 
 if not is_struct(console_text) or array_length(console_text.colors) < 1 return undefined
 
+var old_font   = draw_get_font()
+var old_halign = draw_get_halign()
+
 draw_set_font(o_console.font)
 draw_set_halign(fa_left)
 
@@ -10,16 +13,17 @@ var lastpos = 1
 
 for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 {
-	draw_set_color( o_console.colors[$ console_text.colors[i].col] )
-	
+	var c =  o_console.colors[$ console_text.colors[i].col]
 	var _text = string_copy( console_text.text, lastpos, console_text.colors[i].pos - lastpos )
 	
-	draw_text( x, y, _text )
+	draw_text_color(x, y, _text, c, c, c, c, 1)
 	
 	x += o_console.char_width*string_length(_text)
-	
 	lastpos = console_text.colors[i].pos
 }
+
+draw_set_font(old_font)
+draw_set_halign(old_halign)
 }
 
 
@@ -27,31 +31,36 @@ for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 
 function draw_instance_cursor(x, y, text){
 
-var text_dampner = 1.3
-var text_offsetx = 7
-var triangle_size = 9
-var line_width = 2
-var box_col  = o_console.colors.body
-var text_col = o_console.colors.output
+static text_dampner = 1.3
+static text_offsetx = 7
+static triangle_size = 9
+static line_width = 2
 
-draw_set_font(o_console.font)
-draw_set_align(fa_left, fa_bottom)
+with o_console {
 
-draw_set_color(box_col)
-gpu_set_blendmode(o_console.colors.body_bm)
-draw_rectangle(x, y, x+text_offsetx+string_width(text)+3, y-string_height(text)-3, false)
+var old_font	= draw_get_font()
+var old_halign	= draw_get_halign()
+var old_valign	= draw_get_valign()
 
-gpu_set_blendmode(bm_normal)
-draw_set_color(text_col)
+var text_height	= string_height(text)
+var text_width	= string_width(text)
 
-draw_roundline(x, y, x+text_offsetx+string_width(text)/text_dampner, y, line_width)
-draw_roundline(x, y, x, y-string_height(text), line_width)
-draw_triangle(x, y, x+triangle_size, y, x, y-triangle_size, false)
+draw_console_body(x, y, x+text_offsetx+text_width+3, y-text_height-3)
 
-draw_text(x+text_offsetx, y, text)
+draw_line_color(x, y, x+text_offsetx+text_width/text_dampner, y, line_width, colors.output, colors.output)
+draw_line_color(x, y, x, y-text_height, line_width, colors.output, colors.output)
+draw_triangle_color(x, y, x+triangle_size, y, x, y-triangle_size, colors.output, colors.output, colors.output, false)
 
-draw_reset_properties()
-}
+draw_set_font(font)
+draw_set_halign(fa_left)
+draw_set_valign(fa_bottom)
+
+draw_text_color(x+text_offsetx, y, text, colors.output, colors.output, colors.output, colors.output, 1)
+
+draw_set_font(old_font)
+draw_set_halign(old_halign)
+draw_set_valign(old_valign)
+}}
 
 
 

@@ -6,9 +6,9 @@ var _y1 = y1
 var _x2 = x2
 var _y2 = y2
 
-var color_old = draw_get_color()
-var alpha_old = draw_get_alpha()
-var bm_old = gpu_get_blendmode()
+var old_color = draw_get_color()
+var old_alpha = draw_get_alpha()
+var old_bm	  = gpu_get_blendmode()
 
 if not force_body_solid 
 {
@@ -20,8 +20,8 @@ var c = colors.body
 
 draw_rectangle_color(_x1, _y1, _x2, _y2, c, c, c, c, false)
 
-draw_set_color(color_old)
-draw_set_alpha(alpha_old)
-gpu_set_blendmode(bm_old)
+draw_set_color(old_color)
+draw_set_alpha(old_alpha)
+gpu_set_blendmode(old_bm)
 
 }}

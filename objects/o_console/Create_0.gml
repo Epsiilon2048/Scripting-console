@@ -1,5 +1,4 @@
 
-
 include_niche_virtual_keys = false
 console_macros = {}
 
