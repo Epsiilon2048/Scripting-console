@@ -1,7 +1,7 @@
 
 function color_console_string(command){ with o_console {
 
-static space_sep = " ,.()=:;/"
+static space_sep = " ,.()[]=:;/"
 static tag_sep   = " "
 
 try
@@ -85,7 +85,7 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 				var segment = string_copy(command, marker+1, i-marker-1+string_onset)
 				var is_int = string_is_int(segment)
 				
-				if char == "." and is_int and (string_is_int( string_char_at(command, i+1) ) or string_char_at(command, i+1) == "")
+				if char == "." and (is_int or segment == "") and (string_is_int( string_char_at(command, i+1) ) or string_char_at(command, i+1) == "")
 				{
 					continue
 				}
@@ -108,6 +108,8 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 				}
 				else
 				{	
+					if _iden_string _col = dt_string
+					
 					if string_pos("\"", segment) == 1 and string_pop(segment) == "\""
 					{
 						_col = dt_string
@@ -117,8 +119,6 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 						//yandere dev pls hire me
 						
 						var _macro_type = -1
-					
-						if _iden_string _col = dt_string
 					
 						if _prev_iden == -1
 						{

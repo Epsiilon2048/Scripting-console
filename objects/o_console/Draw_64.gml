@@ -1,4 +1,10 @@
 
+var old_color  = draw_get_color()
+var old_alpha  = draw_get_alpha()
+var old_font   = draw_get_font()
+var old_halign = draw_get_halign()
+var old_valign = draw_get_valign()
+
 #region Deal with mouse inputs
 if mouse_check_button_pressed(mb_left) and not Output.mouse_over_embed
 {
@@ -117,12 +123,8 @@ if console_toggle
 	{
 		object_text = object_get_name(object.object_index)
 		mouse_over_object = gui_mouse_between(console_object_x+3, console_text_y-string_height(object_text)/2-3, console_object_x-string_width(object_text)-3, console_text_y+string_height(object_text)/2+3)
-		if mouse_over_object
-		{
-			draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
-			draw_set_halign(fa_right)
-			draw_set_valign(fa_center)
-		}
+		
+		if mouse_over_object draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
 	}
 	else object_text = "Noone"
 	
@@ -192,3 +194,9 @@ draw_ctx_menu()
 value_box_dragging = false
 
 event_commands_exec(event_commands.gui)
+
+draw_set_color(old_color)
+draw_set_alpha(old_alpha)
+draw_set_font(old_font)
+draw_set_halign(old_halign)
+draw_set_valign(old_valign)

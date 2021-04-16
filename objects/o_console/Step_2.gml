@@ -173,7 +173,7 @@ if console_toggle and keyboard_scope == o_console
 	{
 		var char
 		
-		if paste char = clipboard_get_text()
+		if paste char = string_replace_all( clipboard_get_text(), "\n", ";" )
 		else char = keyboard_lastchar
 		
 		input_log_index = -1

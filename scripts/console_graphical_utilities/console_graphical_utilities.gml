@@ -47,8 +47,8 @@ var text_width	= string_width(text)
 
 draw_console_body(x, y, x+text_offsetx+text_width+3, y-text_height-3)
 
-draw_line_color(x, y, x+text_offsetx+text_width/text_dampner, y, line_width, colors.output, colors.output)
-draw_line_color(x, y, x, y-text_height, line_width, colors.output, colors.output)
+draw_line_width_color(x, y, x+text_offsetx+text_width/text_dampner, y, line_width, colors.output, colors.output)
+draw_line_width_color(x, y, x, y-text_height, line_width, colors.output, colors.output)
 draw_triangle_color(x, y, x+triangle_size, y, x, y-triangle_size, colors.output, colors.output, colors.output, false)
 
 draw_set_font(font)
@@ -223,6 +223,8 @@ static _color = 0
 	
 with o_console.COLOR_PICKER { if variable_string_exists(variable) {
 
+var old_alpha = draw_get_alpha()
+
 var _size = size/255
 var _h_strip_pos = 255+h_strip_dist
 var _border_color = -o_console.colors.body_real
@@ -288,13 +290,15 @@ var x2 = x + size
 var y1 = y
 var y2 = y + size
 
-draw_set_properties(_border_color, border_alpha, undefined)
-draw_rectangle(x1-border_width, y1-border_width, x2+border_width-1, y2+border_width-1, false)
+draw_set_alpha(border_alpha)
+draw_rectangle_color(
+	x1-border_width, y1-border_width, x2+border_width-1, y2+border_width-1,
+	_border_color, _border_color, _border_color, _border_color, false
+)
 
+draw_set_alpha(1)
 shader_set(shd_hue)
 shader_set_uniform_f(u_position, (-hue/255)*(pi*2))
-draw_set_alpha(1)
-draw_set_color(c_white)
 draw_sprite_pos(sv_square, 0, x1, y1, x2, y1, x2, y2, x1, y2, 1)
 shader_reset()
 
@@ -306,11 +310,13 @@ var x2 = x + round( (_h_strip_pos+h_strip_width)*_size )
 var y1 = y
 var y2 = y + round( 255*_size )
 
-draw_set_properties(_border_color, border_alpha, undefined)
-draw_rectangle(x1-border_width, y1-border_width, x2+border_width-1, y2+border_width-1, false)
+draw_set_alpha(border_alpha)
+draw_rectangle_color(
+	x1-border_width, y1-border_width, x2+border_width-1, y2+border_width-1, 
+	_border_color, _border_color, _border_color, _border_color, false
+)
 
 draw_set_alpha(1)
-draw_set_color(c_white)
 draw_sprite_pos(h_strip, 0, x1, y1, x2, y1, x2, y2, x1, y2, 1)
 
 
@@ -321,14 +327,12 @@ var x2 = x2-1
 var y1 = max(y1+1, y + (hue - h_strip_bar_height/2)*_size - 1)
 var y2 = min(y2-1, y + (hue + h_strip_bar_height/2)*_size + 1)
 
-draw_set_color(c_black)
-draw_rectangle(x1, y1-1, x2, y2+1, true)
+draw_rectangle_color(x1, y1-1, x2, y2+1, c_black, c_black, c_black, c_black, true)
 
-draw_set_color(make_color_hsv(hue, 255, 255))
-draw_rectangle(x1, y1, x2, y2, false)
+var c = make_color_hsv(hue, 255, 255)
+draw_rectangle_color(x1, y1, x2, y2, c, c, c, c, false)
 
-draw_set_color(c_white)
-draw_rectangle(x1+1, y1, x2-1, y2, true)
+draw_rectangle_color(x1+1, y1, x2-1, y2, c_white, c_white, c_white, c_white, true)
 
 
 //Draw hv square dropper
@@ -336,14 +340,9 @@ var r  = round(sv_square_dropper_radius*_size)
 var x1 = round( x+sat*_size )
 var y1 = round( y+(255-val)*_size )
 
-draw_set_color(c_black)
-draw_circle(x1, y1, r+2+round(.5*_size), false)
-
-draw_set_color(c_white)
-draw_circle(x1, y1, r+1,  false)
-
-draw_set_color(_color)
-draw_circle(x1, y1,r-round(.5*_size),  false)
+draw_circle_color(x1, y1, r+2+round(.5*_size), c_black, c_black, false)
+draw_circle_color(x1, y1, r+1, c_white, c_white, false)
+draw_circle_color(x1, y1,r-round(.5*_size), _color, _color, false)
 
 
 //Draw color bar
@@ -353,12 +352,11 @@ var x2 = x + round( (_h_strip_pos+h_strip_width)*_size )
 var y1 = y + round( (255+color_bar_dist)*_size )
 var y2 = y + round( (255+color_bar_dist+color_bar_height)*_size )
 
-draw_set_properties(_border_color, border_alpha, undefined)
-draw_rectangle(x1-border_width, y1-border_width, x2+border_width, y2+border_width, false)
+draw_set_alpha(border_alpha)
+draw_rectangle_color(x1-border_width, y1-border_width, x2+border_width, y2+border_width, _border_color, _border_color, _border_color, _border_color, false)
 
 draw_set_alpha(1)
-draw_set_color(_color)
-draw_rectangle(x1, y1, x2, y2, false)
+draw_rectangle_color(x1, y1, x2, y2, _color, _color, _color, _color, false)
 
-draw_reset_properties()
+draw_set_alpha(old_alpha)
 }}}
