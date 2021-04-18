@@ -14,6 +14,7 @@ console_macros [$ "~"]			= {type: dt_instance, value: o_console}
 
 console_macros [$ "Display"]	= {type: dt_variable, value: "o_console.Display"}
 console_macros [$ "Window"]		= {type: dt_variable, value: "o_console.Window"}
+console_macros [$ "Output"]		= {type: dt_variable, value: "o_console.Output"}
 
 console_macros [$ "O1"]			= {type: dt_variable, value: "o_console.O1"}
 console_macros [$ "O2"]			= {type: dt_variable, value: "o_console.O2"}
@@ -174,11 +175,9 @@ console_macros [$ "array_delete"]				= {type: dt_method, value: array_delete}
 console_macros [$ "array_insert"]				= {type: dt_method, value: array_insert}
 console_macros [$ "array_push"]					= {type: dt_method, value: array_push}
 
-console_macros [$ "asset_get_index"]			= {type: dt_method, value: asset_get_index}
 console_macros [$ "asset_get_type"]				= {type: dt_method, value: asset_get_type}
 
 console_macros [$ "real"]						= {type: dt_method, value: real}
-console_macros [$ "is_real"]					= {type: dt_method, value: is_real}
 
 console_macros [$ "is_string"]					= {type: dt_method, value: is_string}
 console_macros [$ "is_numeric"]					= {type: dt_method, value: is_numeric}

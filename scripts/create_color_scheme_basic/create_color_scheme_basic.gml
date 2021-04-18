@@ -30,7 +30,6 @@ return create_color_scheme_full(
 
 
 
-
 function create_color_scheme7(main, body, body_accent, plaintext, exposedtext, specialtext, method){
 
 return create_color_scheme_full(
@@ -52,7 +51,6 @@ return create_color_scheme_full(
 	plaintext
 )
 }
-
 
 
 
@@ -89,7 +87,6 @@ return create_color_scheme_full(
 	plaintext
 )
 }
-
 
 
 

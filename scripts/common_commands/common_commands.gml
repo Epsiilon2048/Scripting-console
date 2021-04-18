@@ -110,7 +110,6 @@ return stitch("Added ",_amount," to "+variable+" (",value,")")
 
 
 
-
 function togglevar(variable){
 	
 if not is_string(variable) return "Must provide variable name as string"
@@ -126,7 +125,6 @@ variable_string_set(_variable, toggle)
 
 return stitch("Toggled "+variable+" (",toggle _BOOL_STRING,")")
 }
-
 
 
 
@@ -154,7 +152,6 @@ text[array_length(text)] = "\nClick on an ID to set the console scope"
 
 return format_output(text, true, roomobj)
 }
-
 
 
 
@@ -246,6 +243,7 @@ if is_undefined(_col) _col = object._col
 	
 return stitch(
 	"RBG ",color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"+
-	"HEX ",dec_to_hex(_col, 6)
+	"HSV ",color_get_hue(_col),", ",color_get_saturation(_col),", ",color_get_value(_col),"\n"+
+	"HEX ",color_to_hex(_col)
 )
 }}

@@ -15,7 +15,6 @@ identifiers = {
 	v: dt_variable,
 	m: dt_method,
 	i: dt_instance,
-	n: dt_room,
 }
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
@@ -120,7 +119,7 @@ output_set_window = true
 output_as_window = false
 force_output = false
 force_output_body = false //this sounds pretty yikesy thinking of it now
-force_output_embed_body = false
+force_output_embed_body = true
 
 force_body_solid = false
 
@@ -139,6 +138,7 @@ checkboxes_like_this_one = false
 
 prev_exception = {longMessage: "No errors yet! Yay!!"}
 
+var old_font = draw_get_font()
 draw_set_font(font)
 
 step = 0
@@ -155,6 +155,7 @@ console_bottom	= win_h-50
 console_text_x	= console_left + 18
 console_text_y	= console_bottom + (console_top-console_bottom)/2
 console_object_x = console_right - 18
+console_object_border = 25
 
 console_string = ""
 char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
@@ -181,6 +182,8 @@ fleft		= 0
 fright		= 0
 fbackspace	= 0
 fdel		= 0
+
+draw_set_font(old_font)
 
 object = noone  //object in scope
 mouse_over_object = false

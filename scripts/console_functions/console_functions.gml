@@ -44,11 +44,10 @@ else
 	
 	if variable_struct_exists_get(_output, "__embedded__", false)
 	{
+		text_embedding = true
 		_text = _output.o
 
 		if not is_array(_text) _text = [_text]
-
-		array_push(_text, "\n")
 	}
 	else
 	{

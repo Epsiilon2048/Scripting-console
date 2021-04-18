@@ -30,7 +30,6 @@ var dark_blue    = RGB(34, 50, 66)
 var green	     = RGB(40, 235, 134)
 var slight_blue  = RGB(67, 88, 112)
 var white	     = c_white
-var black	     = c_black
 var yellow	     = RGB(252, 252, 0)
 var red		     = RGB(247, 116, 129)
 var cyan	     = RGB(64, 220, 255)
@@ -58,6 +57,8 @@ color_schemes[$ cs_greenbeans] = create_color_scheme_full(
 )
 color_schemes[$ cs_greenbeans].__builtin__ = true
 
+
+
 var dark_pink   = RGB(55,  34, 66)
 var slight_pink = RGB(115, 61, 113)
 var pink	    = RGB(240, 58, 125)
@@ -65,58 +66,38 @@ var white	    = c_white
 var purple	    = RGB(140, 62, 250)
 var yellow	    = RGB(250, 221, 35)
 
-color_schemes[$ cs_royal] = {
-	body:		-dark_pink,
-	body_real:	 dark_pink,
-	body_bm:	 bm_subtract,
-	body_alpha:  1,
-	body_accent: slight_pink,
-	output:		 pink,
-	ex_output:	 white,
-	embed:		 yellow,
-	embed_hover: purple,
-	plain:		 pink,
-	selection:	 dark_pink,
-	variable:	 purple,
-	instance:	 purple,
-	string:		 yellow,
-	real:		 pink,
-	method:		 purple,
-//	room:		 purple,
-	asset:		 purple,
-	
-	__builtin__ : true
-}
+color_schemes[$ cs_royal] = create_color_scheme7(
+	pink,
+	dark_pink,
+	slight_pink,
+	pink,
+	white,
+	purple,
+	yellow
+)
+color_schemes[$ cs_royal].__builtin__ = true
+
+
 
 var dark_blue	= RGB(43, 52, 82)
-var slight_blue = 8087596
+var slight_blue = RGB(44, 104, 123)
 var cyan		= RGB(58, 240, 206)
 var white		= c_white
 var pink		= RGB(214, 94, 220)
 var yellow		= RGB(250, 221, 35)
 
-color_schemes[$ cs_drowned] = {
-	body:		-dark_blue,
-	body_real:	 dark_blue,
-	body_bm:	 bm_subtract,
-	body_alpha:  1,
-	body_accent: slight_blue,
-	output:		 cyan,
-	ex_output:	 white,
-	embed:		 yellow,
-	embed_hover: pink,
-	plain:		 cyan,
-	selection:	 dark_blue,
-	variable:	 pink,
-	instance:	 pink,
-	string:		 yellow,
-	real:		 cyan,
-	method:		 pink,
-//	room:		 pink,
-	asset:		 pink,
-	
-	__builtin__ : true
-}
+color_schemes[$ cs_drowned] = create_color_scheme7(
+	cyan,
+	dark_blue,
+	slight_blue,
+	cyan,
+	white,
+	pink,
+	yellow
+)
+color_schemes[$ cs_drowned].__builtin__ = true
+
+
 
 var dark_pink	= RGB(84, 35, 59)
 var slight_pink = RGB(133, 62, 88)
@@ -124,57 +105,46 @@ var orange		= RGB(242, 151, 37)
 var green		= RGB(60, 233, 137)
 var yellow		= RGB(246, 248, 44)
 
-color_schemes[$ cs_helios] = {
-	body:		-dark_pink,
-	body_real:	 dark_pink,
-	body_bm:	 bm_subtract,
-	body_alpha:  1,
-	body_accent: slight_pink,
-	output:		 orange,
-	ex_output:	 white,
-	embed:		 yellow,
-	embed_hover: green,
-	plain:		 orange,
-	selection:	 dark_pink,
-	variable:	 green,
-	instance:	 green,
-	string:		 yellow,
-	real:		 orange,
-	method:		 green,
-//	room:		 green,
-	asset:		 green,
-	
-	__builtin__ : true
-}
+color_schemes[$ cs_helios] = create_color_scheme7(
+	orange,
+	dark_pink,
+	slight_pink,
+	orange,
+	white,
+	green,
+	yellow
+)
+color_schemes[$ cs_helios].__builtin__ = true
+
+
 
 var dark_pink	= RGB(44, 34, 54)
 var slight_blue = 9261387
+var slight_pink = 15429439
 var pink		= RGB(255, 159, 255)
 var blue		= RGB(127, 225, 255)
 var white		= c_white
 
-color_schemes[$ cs_humanrights] = {
-	body:		-dark_pink,
-	body_real:	 dark_pink,
-	body_bm:	 bm_subtract,
-	body_alpha:  1,
-	body_accent: slight_blue,
-	output:		 pink,
-	ex_output:	 white,
-	embed:		 blue,
-	embed_hover: white,
-	plain:		 white,
-	selection:	 dark_pink,
-	variable:	 blue,
-	instance:	 blue,
-	string:		 pink,
-	real:		 pink,
-	method:		 blue,
-//	room:		 pink,
-	asset:		 pink,
-	
-	__builtin__ : true
-}
+color_schemes[$ cs_humanrights] = create_color_scheme_full(
+	dark_pink,
+	slight_pink,
+	bm_subtract,
+	.7,
+	blue,
+	blue,
+	pink,
+	blue,
+	white,
+	blue,
+	pink,
+	blue,
+	blue,
+	blue,
+	slight_pink,
+	white
+)
+color_schemes[$ cs_humanrights].__builtin__ = true
+
 
 o_console.rainbow = false
 color_scheme(cs_index)

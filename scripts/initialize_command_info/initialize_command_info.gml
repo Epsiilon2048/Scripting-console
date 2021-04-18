@@ -2,67 +2,76 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function initialize_command_info(){
 
-commands = [
-	{scr: "help", desc: "Returns console help and info. But surely you already know this command if you're viewing it?"},
-	{scr: "command_help", optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"},
-	{scr: "syntax_help", optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"},
-	{hidden: true, scr: "console_window_help", desc: "Returns an explanation of console windows"},
-	{hidden: true, scr: "embedded_text_help", desc: "Returns an explanation of text embedding"},
-	
-	{scr: "console_settings", desc: "Returns the console settings menu"},
-	{scr: "color_scheme", args:["color scheme index"], desc: "Sets the console color scheme to the specified index"},
-	{scr: "color_scheme_settings", desc: "Returns the color scheme settings menu"},
-	{hidden: true, scr: "console_videos", desc: "Returns a list of videos featuring the console"},
-	{hidden: true, scr: "initialize_color_schemes", desc: "Resets the color schemes"},
-	
-	{hidden: true, scr: "Epsiilon", desc: "Returns info about the creator of the console"},
-	{hidden: true, scr: "nice_thing", desc: "Why don't you run it and find out?"},
-	{hidden: true, scr: "destroy_console", hiddenargs: ["are you certain?"], desc: "please dont :/"},
-	
-	{scr: "error_report", desc: "Returns the longMessage of the previous error thrown by a console command"},
-	
-	{scr: "ar", args: ["array", "index"], optargs: ["value"], desc: "Returns the specified index of an array, or sets the specified index to a value"},
-	{scr: "addvar", args: ["variable"], optargs: ["value"], desc: "Adds a value to the specified variable; value defaults to 1"},
-	{scr: "togglevar", args: ["variable"], desc: "Toggles a boolean variable"},
-	
-	{scr: "roomobj", desc: "Returns all the instances in the room"},
-	{scr: "objvar", optargs: ["object"], desc: "Returns all the variables in the specified/scoped instance"},
-	
-	{scr: "select_obj", desc: "After running, click on an instance to set the console's scope"},
-	{scr: "reset_obj", optargs: ["object"], desc: "Destroys and recreates the specified/scoped instance"},
-	
-	{scr: "window", optargs: ["text"], desc: "Sets the Window text; if left blank, toggles the Window"},
-	{scr: "window_reset_pos", desc: "Resets the position of the Window"},
-	
-	{scr: "display", optargs: ["variable"], hiddenargs: ["enable?"], desc: "Puts a specified variable on the Display; if left blank, toggles the Display"},
-	{scr: "displayds", optargs: ["DS list"], hiddenargs: ["enable?"], desc: "Puts a specified DS list on the Display"},
-	{scr: "display_all", optargs: ["object"], hiddenargs: ["enable all?"], desc: "Puts all variables in the specified/scoped instance on the Display"},
-	{scr: "display_clear", desc: "Removes all variables from the Display"},
-	{scr: "display_reset_pos", desc: "Resets the position of the Display"},
-	
-	{scr: "bind",	  args: ["key", "command"], desc: "Binds a key to a command"},
-	{scr: "unbind",	  args: ["bind index"], hiddenargs: ["return bindings menu?"], desc: "Removes the binding in the specified index"},
-	{scr: "bindings", desc: "Returns the list of bindings"},
+commands = ds_map_create()
+command_order = ds_list_create()
 
-	{scr: "vtv", optargs: ["to variable", "from variable"], desc: "Sets the 'to' variable to the 'from' variable every step; if left blank clears the previous vtv"},
-	{scr: "vt_mx", optargs: ["variable"], desc: "Sets the specified variable to mouse_x every step; if left blank clears the previous vt_mx"},
-	{scr: "vt_my", optargs: ["variable"], desc: "Sets the specified variable to mouse_y every step; if left blank clears the previous vt_my"},
-	{scr: "vtm_gui", desc: "Toggles between taking the regular/gui positions of the mouse for the var to mouse commands"},
+com_add_category("Help & info")
+com_add("help", {desc: "Returns console help and info. But surely you already know this command if you're viewing it?"})
+com_add("command_help", {optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"})
+com_add("syntax_help", {hidden: true, desc: "Returns an explanation of basic GMCL syntax"})
+com_add("adv_syntax_help", {hidden: true, desc: "Returns an explanation of advanced GMCL syntax"})
+com_add("console_window_help", {hidden: true, desc: "Returns an explanation of console windows"})
+com_add("embedded_text_help", {hidden: true, desc: "Returns an explanation of text embedding"})
+com_add("Epsiilon", {hidden: true, desc: "Returns info about the creator of the console"})
+com_add("nice_thing", {hidden: true, desc: "Why don't you run it and find out?"})
 
-	{scr: "color_make", args: ["r", "g", "b"], desc: "Returns a color value and sets the scoped instance's _col variable to the return"},
-	{scr: "color_get",	optargs: ["color value"], desc: "Returns the RGB of a color value; if left blank returns the RBG of the scoped instance's _col variable"},
-]
+com_add_category("Settings")
+com_add("console_settings", {desc: "Returns the console settings menu"})
+com_add("color_scheme", {args:["color scheme index"], desc: "Sets the console color scheme to the specified index"})
+com_add("color_scheme_settings", {hidden: true, desc: "Returns the color scheme settings menu"})
+com_add("console_videos", {hidden: true, desc: "Returns a list of videos featuring the console"})
+com_add("initialize_color_schemes", {hidden: true, desc: "Resets the color schemes"})
+com_add("destroy_console", {hidden: true, hiddenargs: ["are you certain?"], desc: "please dont :/"})
 
+com_add_category("Logging")
+com_add("error_report", {desc: "Returns the exception of the previous error thrown by a console command"})
+com_add("compile_report", {desc: "Returns a report of how the previous command was interpreted"})
+
+com_add_category("Variable operations")
+com_add("addvar", {args: ["variable"], optargs: ["value"], desc: "Adds a value to the specified variable; value defaults to 1"})
+com_add("togglevar", {args: ["variable"], desc: "Toggles a boolean variable"})
+
+com_add_category("Data structure access", true)
+com_add("dealwith_array", {hidden: true, args: ["array"], optargs: ["index", "value"], desc: "Returns an array, returns an item off an array, or sets an array item to a value"})
+com_add("dealwith_struct", {hidden: true, args: ["struct"], optargs: ["key1", "value1 (...)"], desc: "Returns a struct or allows you to set key/value pairs"})
+com_add("dealwith_ds_list", {hidden: true, args: ["ds_list"], optargs: ["index", "value"], desc: "Returns a ds list, returns an item off a ds list, or sets a ds list item to a value"})
+com_add("create_variable", {hidden: true, args: ["name"], optargs: ["value"], desc: "Declares a variable within the specified/scoped instance"})
+
+com_add_category("Objects")
+com_add("roomobj", {desc: "Returns all the instances in the room"})
+com_add("objvar", {optargs: ["instance"], desc: "Returns all the variables in the specified/scoped instance"})
+com_add("select_obj", {desc: "After running, click on an instance to set the console's scope"})
+com_add("reset_obj", {optargs: ["instance"], desc: "Destroys and recreates the specified/scoped instance"})
+
+com_add_category("Window commands")
+com_add("window", {optargs: ["text"], desc: "Sets the Window text; if left blank, toggles the Window"})
+com_add("window_reset_pos", {desc: "Resets the position of the Window"})
+
+com_add_category("Display commands")
+com_add("display", {optargs: ["variable"], hiddenargs: ["enable?"], desc: "Puts a specified variable on the Display; if left blank, toggles the Display"})
+com_add("display_all", {optargs: ["object"], hiddenargs: ["enable all?"], desc: "Puts all variables in the specified/scoped instance on the Display"})
+com_add("display_clear", {desc: "Removes all variables from the Display"})
+com_add("display_reset_pos", {desc: "Resets the position of the Display"})
+
+com_add_category("Console key binds")
+com_add("bind", {args: ["key", "command"], desc: "Binds a key to a command"})
+com_add("unbind", {args: ["bind index"], hiddenargs: ["return bindings menu?"], desc: "Removes the binding in the specified index"})
+com_add("bindings", {desc: "Returns the list of bindings"})
+
+com_add_category("Color operations")
+com_add("color_make", {args: ["r", "g", "b"], desc: "Returns a color value and sets the scoped instance's _col variable to the return"})
+com_add("color_get", {optargs: ["color value"], desc: "Returns the RGB, HSV, and hex of a color value; if left blank returns the RBG of the scoped instance's _col variable"})
+
+com_add_category("Draw functions")
+com_add("clip_rect_cutout", {args: ["x1", "y1", "x2", "y2"], desc: "Iinitializes a retangular clip mask shader"})
 
 deprecated_commands = ds_map_create()
 var o = deprecated_commands
 
 o[? "ar"]						= {newname: "@",							ver: "Release 1.2"}
-o[? "color"]					= {newname: "color_make",					ver: "Early 1.2"}
 o[? "obj_reset"]				= {newname: "reset_obj",					ver: "Early 1.2"}
 o[? "window_toggle"]			= {newname: "window",						ver: "Early 1.2"}
 o[? "display_all_variables"]	= {newname: "display_all",					ver: "Early 1.2"}
-o[? "select"]					= {newname: "select_obj",					ver: "Unreleased 1.0"}
 o[? "objects_in_room"]			= {newname: "roomobj",						ver: "Unreleased 1.0"}
 o[? "variables_in_object"]		= {newname: "objvar",						ver: "Unreleased 1.0"}
 

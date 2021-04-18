@@ -95,6 +95,33 @@ if console_toggle
 		colors.plain, colors.plain, colors.plain, colors.plain, false
 	)
 
+	draw_set_halign(fa_right)
+	draw_set_valign(fa_center)
+	var object_text
+	
+	if instance_exists(object) 
+	{
+		object_text = object_get_name(object.object_index)
+		
+		var object_text_width = string_width(object_text)
+		
+		mouse_over_object = gui_mouse_between(console_object_x+3, console_text_y-char_height/2-3, console_object_x-object_text_width-3, console_text_y+char_height/2+3)
+		
+		if mouse_over_object draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
+	}
+	else 
+	{
+		object_text = "Noone"
+		var object_text_width = string_width(object_text)
+	}
+	
+	draw_text_color(
+		console_object_x, console_text_y, object_text,
+		colors.output, colors.output, colors.output, colors.output, 1
+	)
+
+	clip_rect_cutout(console_left, console_top, console_right-object_text_width-console_object_border, console_bottom)
+	
 	draw_set_font(font)
 	draw_set_align(fa_left, fa_center)
 	if command_colors draw_console_text(console_text_x, console_text_y, color_string)
@@ -114,24 +141,8 @@ if console_toggle
 			colors.selection, colors.selection, colors.selection, colors.selection, 1
 		)
 	}
-
-	draw_set_halign(fa_right)
-	draw_set_valign(fa_center)
-	var object_text
 	
-	if instance_exists(object) 
-	{
-		object_text = object_get_name(object.object_index)
-		mouse_over_object = gui_mouse_between(console_object_x+3, console_text_y-string_height(object_text)/2-3, console_object_x-string_width(object_text)-3, console_text_y+string_height(object_text)/2+3)
-		
-		if mouse_over_object draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
-	}
-	else object_text = "Noone"
-	
-	draw_text_color(
-		console_object_x, console_text_y, object_text,
-		colors.output, colors.output, colors.output, colors.output, 1
-	)
+	shader_reset()
 	
 	if not Output.mouse_over Output.alpha = 0
 }

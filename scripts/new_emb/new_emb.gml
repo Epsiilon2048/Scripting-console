@@ -29,7 +29,7 @@ set = function(text) {
 
 		if is_struct(_text[i])
 		{
-			_str = variable_struct_exists_get(_text[i], "str", "")
+			_str = variable_struct_exists_get(_text[i], "str", variable_struct_exists_get(_text[i], "s", ""))
 			var _newlines = string_count("\n", _str)
 		
 			if variable_struct_exists(_text[i], "cbox") _str = _str + "[/]"
@@ -190,8 +190,6 @@ text.mouse_index = -1
 
 if mouse_on
 {
-	var i = 0
-	
 	for(var j = 0; j <= array_length(text.subclickable)-1; j++)
 	{
 		var c = text.subclickable[j]
@@ -203,12 +201,11 @@ if mouse_on
 			y + c.y*ch + ch
 		){
 			text.mouse_index = c.id
-			i = c.id
 			break
 		}
 	}
 	
-	for(; i <= array_length(text.clickable)-1; i++)
+	for(var i = 0; i <= array_length(text.clickable)-1; i++)
 	{
 		var c = text.clickable[i]
 
@@ -241,7 +238,7 @@ if mouse_on
 				if is_numeric(_check) variable_string_set(c.cbox, not _check)
 			
 				//Set output
-				if c.outp 
+				if c.outp
 				{
 					if keyboard_check(vk_shift) output_set(_output)
 					else
@@ -255,7 +252,6 @@ if mouse_on
 			if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
 		
 			mouse_on_item = true
-			break
 		}
 		else 
 		{
@@ -278,9 +274,9 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 	
 	if is_string(c.col)
 	{
-		if text.click_index == c.id _col = o_console.colors.plain
-		else if text.click_index == -1 and text.mouse_index == c.id _col = o_console.colors.embed_hover
-		else _col = o_console.colors[$ c.col]
+		if		c.id != -1 and text.click_index == c.id								_col = o_console.colors.plain
+		else if c.id != -1 and text.click_index == -1 and text.mouse_index == c.id	_col = o_console.colors.embed_hover
+		else																		_col = o_console.colors[$ c.col]
 	}
 	else _col = c.col
 	

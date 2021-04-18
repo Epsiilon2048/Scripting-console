@@ -172,9 +172,18 @@ if console_toggle and keyboard_scope == o_console
 	if str_length < string_length(keyboard_string) or (paste and clipboard_has_text()) //a char was added
 	{
 		var char
-		
-		if paste char = string_replace_all( clipboard_get_text(), "\n", ";" )
+
+		if paste  // For some reason there's an invisible character behind newlines when pasting, so I cant use string_replace_all :/
+		{
+			char = string_replace_all( clipboard_get_text(), "	", "")
+			while string_pos("\n", char)
+			{
+				char = string_delete(string_replace(char, "\n", "; "), string_pos("\n", char)-1, 1)
+			}
+		}
 		else char = keyboard_lastchar
+		
+		output_set(string_count("\n", char))
 		
 		input_log_index = -1
 		
@@ -191,6 +200,7 @@ if console_toggle and keyboard_scope == o_console
 		keyboard_string = console_string
 		color_string = color_console_string(console_string)
 	}
+	
 	if backspace and (char_pos1 != 1 or (char_pos1 == 1 and char_pos1 != char_pos2)) {
 		input_log_index = -1
 		console_string = string_delete(console_string, max(char_pos1-(char_pos1 == char_pos2), (char_pos1 == 1)), char_pos2-char_pos1+1)
@@ -200,6 +210,7 @@ if console_toggle and keyboard_scope == o_console
 		str_length = string_length(console_string)
 		color_string = color_console_string(console_string)
 	}
+	
 	if del and char_pos2 != str_length+1 {
 		input_log_index = -1
 		console_string = string_delete(console_string, char_pos2, 1)

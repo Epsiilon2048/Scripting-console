@@ -1,14 +1,19 @@
 
 function color_console_string(command){ with o_console {
 
+static max_length = 700
 static space_sep = " ,.()[]=:;/"
 static tag_sep   = " "
 
 try
 {
-if shave(" ", command) == "" return {text: "", colors: []}
+var _command
+	
+if string_length(command) > max_length _command = string_copy(command, 1, max_length)
+else if shave(" ", command) == "" return {text: "", colors: []}
+else _command = command
 
-if not command_colors return {text: command, colors: [{pos: string_length(command)+1, col: "plain"}]}
+if not command_colors return {text: _command, colors: [{pos: string_length(_command)+1, col: "plain"}]}
 
 var color_list = []
 var marker = 0
@@ -22,22 +27,22 @@ var _col = dt_unknown
 var tag = ""
 var com_start = 1
 
-for(var i = 1; i <= string_pos("#", command); i++)
+for(var i = 1; i <= string_pos("#", _command); i++)
 {
-	char = string_char_at(command, i)
+	char = string_char_at(_command, i)
 	
 	if char == "#"
 	{
 		i ++
 		do
 		{
-			char = string_char_at(command, i)
+			char = string_char_at(_command, i)
 			tag += char
 			i ++
 		}
-		until i > string_length(command)+1 or (string_lettersdigits(char) != char and char != "_")
+		until i > string_length(_command)+1 or (string_lettersdigits(char) != char and char != "_")
 
-		if not (i > string_length(command)+1) tag = string_delete(tag, string_length(tag), 1)
+		if not (i > string_length(_command)+1) tag = string_delete(tag, string_length(tag), 1)
 		
 		if is_undefined(event_commands[$ tag])
 		{
@@ -56,14 +61,14 @@ for(var i = 1; i <= string_pos("#", command); i++)
 }
 
 marker = com_start-1
-for(var i = com_start; i <= string_length(command)+1; i++)
+for(var i = com_start; i <= string_length(_command)+1; i++)
 {	
-	var char = string_char_at(command, i)
+	var char = string_char_at(_command, i)
 	var string_sep = false
 	var string_offset = 0
 	var string_onset  = 0 //lolidk
 	
-	if char == "\\" and in_string and i != string_length(command)
+	if char == "\\" and in_string and i != string_length(_command)
 	{
 		i++
 	}
@@ -78,14 +83,14 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 			string_onset  = not in_string
 		}
 		
-		if string_sep or (not in_string and (string_pos(char, space_sep))) or i == string_length(command)+1
+		if string_sep or (not in_string and (string_pos(char, space_sep))) or i == string_length(_command)+1
 		{	
 			if marker != i
 			{
-				var segment = string_copy(command, marker+1, i-marker-1+string_onset)
+				var segment = string_copy(_command, marker+1, i-marker-1+string_onset)
 				var is_int = string_is_int(segment)
 				
-				if char == "." and (is_int or segment == "") and (string_is_int( string_char_at(command, i+1) ) or string_char_at(command, i+1) == "")
+				if char == "." and (is_int or segment == "") and (string_is_int( string_char_at(_command, i+1) ) or string_char_at(_command, i+1) == "")
 				{
 					continue
 				}
@@ -257,13 +262,16 @@ for(var i = com_start; i <= string_length(command)+1; i++)
 		}
 	}
 }
+
+if string_length(command) > max_length array_push(color_list, {pos: string_length(command), col: dt_unknown})
+
 console_color_time = 0
 
-return {text: command, colors: color_list}
+return {text: _command, colors: color_list}
 }
 catch(_exception)
 {
 	show_message(_exception.longMessage)
-	return {text: command, colors: [{pos: string_length(command)+1, col: "plain"}]}
+	return {text: _command, colors: [{pos: string_length(_command)+1, col: "plain"}]}
 }
 }}
