@@ -96,7 +96,7 @@ return format_output([
 	"- While custom methods are automatically detected, builtin gml functions have to be\n"+
 	"  manually added to the console_macros list\n"+
 	"- Characters such as parenthesis and commas are treated the same as spaces. This means\n"+
-	"  GML code is often compatible with GMCL."+
+	"  GML code is often compatible with GMCL.\n"+
 	"- If a method asks for a variable as an argument, it's likely intended to be a string\n\n",
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", scr: tag_help, output: true}
@@ -263,7 +263,7 @@ array_push(text,
 
 return format_output(text, true, color_scheme_settings)
 }}
-	
+
 	
 	
 	

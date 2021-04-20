@@ -78,6 +78,15 @@ else
 	o_console.Output_window.set(_text)
 }
 text.set(_text)
+with o_console
+{
+	prev_output = _output
+	O1 = _output
+	O2 = ""
+	O3 = ""
+	O4 = ""
+	O5 = ""
+}
 return _output
 }}
 
@@ -175,6 +184,17 @@ else
 	o_console.Output_window.set(_text)
 }
 text.set(_text)
+
+with o_console
+{
+	prev_output = _output
+	var arlen = array_length(_output)
+	O1 = (arlen > 0) ? prev_output[0] : ""
+	O2 = (arlen > 1) ? prev_output[1] : ""
+	O3 = (arlen > 2) ? prev_output[2] : ""
+	O4 = (arlen > 3) ? prev_output[3] : ""
+	O5 = (arlen > 4) ? prev_output[4] : ""
+}
 return _output
 
 }}

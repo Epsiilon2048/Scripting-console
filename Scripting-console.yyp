@@ -13,7 +13,7 @@
     {"id":{"name":"common_commands","path":"scripts/common_commands/common_commands.yy",},"order":1,},
     {"id":{"name":"console_ctx_utilities","path":"scripts/console_ctx_utilities/console_ctx_utilities.yy",},"order":3,},
     {"id":{"name":"console_embedded_text_utilities","path":"scripts/console_embedded_text_utilities/console_embedded_text_utilities.yy",},"order":2,},
-    {"id":{"name":"console_command_add","path":"scripts/console_command_add/console_command_add.yy",},"order":21,},
+    {"id":{"name":"console_command_add","path":"scripts/console_command_add/console_command_add.yy",},"order":16,},
     {"id":{"name":"shd_clip_rect","path":"shaders/shd_clip_rect/shd_clip_rect.yy",},"order":1,},
     {"id":{"name":"window_embed","path":"scripts/window_embed/window_embed.yy",},"order":5,},
     {"id":{"name":"parse_console_string_old","path":"scripts/parse_console_string_old/parse_console_string_old.yy",},"order":2,},

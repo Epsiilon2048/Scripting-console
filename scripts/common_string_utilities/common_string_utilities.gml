@@ -152,14 +152,9 @@ repeat index-1
 
 return pos
 }
-	
-	
 
-function string_pos_pop(substr, str){
-return string_pos_index(substr, str, string_count(substr, str))
-}
-	
-	
+
+
 	
 function string_pop(str){ //returns the last character of a string
 return string_char_at(str, string_length(str))

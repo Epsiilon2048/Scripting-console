@@ -133,14 +133,24 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#region Asset
 			case dt_asset:
 				var _asset = string_delete(subject.plain, 1, string_pos("/", subject.plain))
-	
-				output_string[i] = "Asset index "+string(asset_get_index(_asset))
+
+				if string_is_int(_asset)
+				{
+					if object_exists(real(_asset))	output_string[i] = "Object "+object_get_name(real(_asset))
+					else							output_string[i] = "Noone"
+				}
+				else 
+				{
+					if asset_get_index(_asset) != -1	output_string[i] = "Asset index "+string(asset_get_index(_asset))
+					else								output_string[i] = "Asset does not exist"
+				}
 			break
 			#endregion
 	
 			#region String
 			case dt_string:
-				output_string[i] = "\""+subject.value+"\""
+				if string_pos("\n", subject.value)	output_string[i] = subject.value
+				else								output_string[i] = "\""+subject.value+"\""
 			break
 			#endregion
 	

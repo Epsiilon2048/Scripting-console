@@ -42,7 +42,7 @@ else if instance_cursor and instance_exists(object) {
 
 if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_output) and Output.text.plaintext != ""
 {
-	
+	draw_set_color(c_white)
 	draw_set_font(font)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top) //manually drawn from bottom however
@@ -79,7 +79,7 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 
 	draw_set_alpha(Output.alpha)
 	
-	Output.mouse_over_embed = draw_embedded_text(Output.x, Output.y-Output.text.height*char_height, Output.text)
+	Output.mouse_over_embed = draw_embedded_text(Output.x, Output.y-Output.text.height*char_height, Output.text, undefined, Output.alpha)
 	
 	draw_set_alpha(1)
 }
@@ -88,6 +88,7 @@ else Output.mouse_over = false
 if console_toggle
 {
 	//Draw console
+	draw_set_color(c_white)
 	draw_console_body(console_left, console_top, console_right, console_bottom)
 
 	draw_rectangle_color(

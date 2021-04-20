@@ -1,6 +1,9 @@
 
 function draw_checkbox(x, y, enabled, invert){ with o_console.CHECKBOX {
 
+var old_swf_aa = draw_get_swf_aa_level()
+draw_set_swf_aa_level(2)
+
 var _invert = is_undefined(invert) ? false : invert
 
 if enabled
@@ -30,4 +33,6 @@ else //if disabled
 		col1, 1
 	)
 }
+
+draw_set_swf_aa_level(old_swf_aa)
 }}

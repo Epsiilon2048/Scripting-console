@@ -33,12 +33,13 @@ static tag_sep   = " "
 
 if shave(" ", command) == "" return ""
 
-var _command = string_replace_all(command, "\\n", "\n")
+var _command = command
 
 var char
 var tag = ""
 var com_start = 1
 
+#region Compiler instructions
 for(var i = 1; i <= string_pos("#", _command); i++)
 {
 	char = string_char_at(_command, i)
@@ -67,6 +68,7 @@ for(var i = 1; i <= string_pos("#", _command); i++)
 		break
 	}
 }
+#endregion
 
 #region Separate commands
 var command_split = []
@@ -80,7 +82,8 @@ for(var i = com_start; i <= string_length(_command); i++)
 	
 	if char == "\\" and in_string
 	{
-		i++
+		if string_char_at(_command, i+1) == "n" _command = string_replace(_command, "\\n", "\n")
+		else i++
 	}
 	else
 	{
@@ -200,7 +203,7 @@ else
 		type = dt_string
 	}
 
-	if (type == -1) and asset_get_index(arg) != -1
+	if (type == -1 or type == dt_instance) and asset_get_index(arg) != -1
 	{
 		var asset_type = asset_get_type(arg)
 		

@@ -93,7 +93,7 @@ if console_toggle and keyboard_scope == o_console
 	del			= (f and key_repeat < fdel) or keyboard_check_pressed(vk_delete)
 	enter		= keyboard_check_pressed(vk_enter)
 	startln		= keyboard_check_pressed(vk_home)
-	endln		= keyboard_check_pressed(vk_end)
+	endln		= keyboard_check_pressed(vk_end) and str_length > 0 and char_pos2 != str_length+1
 	log_up		= keyboard_check_pressed(vk_up)
 	log_down	= keyboard_check_pressed(vk_down) and (input_log_index != -1 or ds_list_size(input_log) == 0)
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
@@ -138,13 +138,14 @@ if console_toggle and keyboard_scope == o_console
 	}
 	if endln
 	{
-		char_pos2 = str_length
-		if not shift char_pos1 = str_length
+		char_pos2 = str_length + not shift
+		if not shift char_pos1 = char_pos2
 	}
 	if startln
 	{
 		char_pos1 = 1
-		if not shift char_pos2 = 1
+		if shift char_pos2 -= (char_pos2 > str_length)
+		else char_pos2 = 1
 	}
 	if (log_up or log_down) and ds_list_size(input_log) > 0
 	{
@@ -182,8 +183,6 @@ if console_toggle and keyboard_scope == o_console
 			}
 		}
 		else char = keyboard_lastchar
-		
-		output_set(string_count("\n", char))
 		
 		input_log_index = -1
 		
@@ -232,22 +231,15 @@ if console_toggle and keyboard_scope == o_console
 		{
 			prev_command = console_string
 			prev_compile = _compile
-			prev_output  = _output
 			
-			var arlen = array_length(prev_output)
-			O1 = (arlen > 0) ? prev_output[0] : ""
-			O2 = (arlen > 1) ? prev_output[1] : ""
-			O3 = (arlen > 2) ? prev_output[2] : ""
-			O4 = (arlen > 3) ? prev_output[3] : ""
-			O5 = (arlen > 4) ? prev_output[4] : ""
+			output_set_lines(_output)
 			
 			ds_list_insert(input_log, 0, console_string)
 			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
 			
 			console_log_input(console_string, _output)
 		}
-		
-		output_set_lines(_output)
+		else output_set_lines(_output)
 		
 		console_string = ""
 		keyboard_string = ""

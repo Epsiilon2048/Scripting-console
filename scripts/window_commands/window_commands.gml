@@ -132,7 +132,7 @@ else if is_array(text)
 }
 else _text = string(text)
 
-Window.set(_text)
+Window.text.set(_text)
 Window.enabled = true
 Window.show = true
 
@@ -141,6 +141,12 @@ window_reset_pos()
 return "Set window text"
 }}
 
+
+
+function window_set_output(){ with o_console {
+
+window(prev_output)
+}}
 
 
 

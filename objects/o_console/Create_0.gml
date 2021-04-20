@@ -91,7 +91,8 @@ ctx.set([
 	{str: "Settings",		scr: console_settings,		output: true},
 	{str: "Color schemes",	scr: color_scheme_settings,	output: true},
 	{str: "Nice thing",		scr: nice_thing,			output: true},
-	{str: "Clear output",								output: true},
+	{str: "Clear output",	scr: window_set_output,		output: true},
+	{str: "Set window to output", scr: window},
 	{str: "Always Show output", checkbox: "o_console.force_output"},
 ])
 
