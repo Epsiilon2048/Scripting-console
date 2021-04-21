@@ -1,5 +1,4 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function Console_window() constructor{
 	// str, scr, args, col, scrcol
 
@@ -25,12 +24,20 @@ function Console_window() constructor{
 		self.sidebar			= 0
 	}
 	set = function(_text){
-		self.text.set(_text)
+		
+		if is_struct(_text) and asset_get_index( instanceof(_text) ) == Embedded_text
+		{
+			self.text = struct_copy(_text)
+		}
+		else
+		{
+			self.text.set(_text)
+		}
 		
 		self.plaintext = text.plaintext
 		
-		self.text_w = string_width(plaintext)
-		self.text_h = string_height(" ")*(string_count("\n", plaintext)+1)
+		self.text_w = text.width*string_width(" ")
+		self.text_h = text.height*string_height(" ")
 	}
 	reset_pos = function(){
 		if self.side == SIDES.LEFT

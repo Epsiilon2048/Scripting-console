@@ -23,7 +23,7 @@ for(var i = 0; i <= array_length(_console_string)-1; i++)
 		{
 			if string_pos("\"", str) != 0 and string_pos("\"", str) < string_pos(" ", str) out = string_pos_index("\"", str, 2) //if a " before a space
 			else out = string_pos(" ", str)-1
-			parse_error = parse_console_string(string_copy(str, 1, out), (str == _console_string[i]))
+			parse_error = parse_console_string_old(string_copy(str, 1, out), (str == _console_string[i]))
 			if parse_error != false
 			{
 				_output_string[i] = parse_error
@@ -35,7 +35,7 @@ for(var i = 0; i <= array_length(_console_string)-1; i++)
 		}
 		else
 		{
-			parse_error = parse_console_string(str, (str == _console_string[i]))
+			parse_error = parse_console_string_old(str, (str == _console_string[i]))
 			if parse_error != false
 			{
 				_output_string[i] = parse_error

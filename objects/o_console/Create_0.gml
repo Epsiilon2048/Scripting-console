@@ -1,11 +1,12 @@
 
+font_size = 11
+
 include_niche_virtual_keys = false
 console_macros = {}
 
 keyboard_scope = o_console
 
 initialize_console_macros()
-
 initialize_console_graphics()
 
 identifiers = {
@@ -83,6 +84,10 @@ event_commands = {
 ctx = new Ctx_menu()
 ctx.scope = o_console
 ctx.set([
+	{str: "Set window to output",	scr: window_set_output				},
+	{str: "Always Show output",		checkbox: "o_console.force_output"	},
+	{str: "Clear output",			output: true						},
+	ctx_separator,
 	{str: "Room instances",		scr: roomobj,			output: true},
 	{str: "Instance variables",	scr: objvar,			output: true},
 	ctx_separator,
@@ -91,9 +96,6 @@ ctx.set([
 	{str: "Settings",		scr: console_settings,		output: true},
 	{str: "Color schemes",	scr: color_scheme_settings,	output: true},
 	{str: "Nice thing",		scr: nice_thing,			output: true},
-	{str: "Clear output",	scr: window_set_output,		output: true},
-	{str: "Set window to output", scr: window},
-	{str: "Always Show output", checkbox: "o_console.force_output"},
 ])
 
 gui_mouse_x = gui_mx
@@ -211,21 +213,21 @@ Window.initialize("Window", 23, 23, SIDES.RIGHT)
 
 Output = {}; with Output {
 	console_x	= o_console.console_text_x
-	console_y	= o_console.console_top - SCALE_ 12
+	console_y	= o_console.console_top - SCALE_ 15
 	noconsole_x	= o_console.console_text_x
 	noconsole_y	= o_console.console_text_y
 	
 	x = console_x
 	y = noconsole_y
 	
-	border_w = SCALE_ 6
-	border_h = SCALE_ 5
+	border_w = 11
+	border_h = 7
 	
 	text			= new Embedded_text()
 	plaintext		= ""
 	text_embedding	= false
 	
-	time			 = 3*60
+	time			 = 6*60
 	fade_time		 = 0
 	alpha			 = 0
 	alpha_dec		 = .04

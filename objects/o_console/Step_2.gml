@@ -10,6 +10,8 @@ if rainbow
 		plain		= color_add_hue(plain, 1)
 		body		= color_add_hue(body, 1)
 		selection	= color_add_hue(selection, 1)
+		embed		= color_add_hue(embed, 1)
+		embed_hover	= color_add_hue(embed_hover, 1)
 	}
 }
 
@@ -29,7 +31,7 @@ Output.noconsole_x = console_text_x
 Output.noconsole_y = console_text_y
 
 Output.console_x = console_text_x
-Output.console_y = console_top - SCALE_ 12
+Output.console_y = console_top - SCALE_ 15
 
 console_object_x = console_right - SCALE_ 18
 #endregion
@@ -237,7 +239,7 @@ if console_toggle and keyboard_scope == o_console
 			ds_list_insert(input_log, 0, console_string)
 			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
 			
-			console_log_input(console_string, _output)
+			console_log_input(console_string, _output, false)
 		}
 		else output_set_lines(_output)
 		

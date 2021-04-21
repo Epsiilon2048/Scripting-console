@@ -16,7 +16,7 @@ if is_undefined(_variable)
 	}
 }
 
-_variable = string_add_scope(_variable)
+_variable = string_add_scope(_variable, true)
 
 if is_undefined(_variable)
 {
@@ -34,6 +34,8 @@ if obj == string(o_console.id) and firstscope == "Display"
 	//later: add a blacklist of variables instead of just removing the entire display
 }
 
+if run_in_console and is_undefined(toggle) toggle = true
+
 var displaying = toggle
 
 if not is_undefined(toggle)
@@ -49,7 +51,7 @@ if not is_undefined(toggle)
 	}
 }
 
-else displaying = (not run_in_console) or (currently_displayed == -1)
+else displaying = currently_displayed == -1
 
 if displaying
 {
@@ -121,7 +123,7 @@ if is_undefined(text)
 }
 
 var _text
-if variable_struct_exists(text, "o")
+if is_struct(text) and variable_struct_exists_get(text, "__embedded__", false) and variable_struct_exists(text, "o")
 {
 	_text = text.o
 }
@@ -132,7 +134,7 @@ else if is_array(text)
 }
 else _text = string(text)
 
-Window.text.set(_text)
+Window.set(text)
 Window.enabled = true
 Window.show = true
 
@@ -145,7 +147,9 @@ return "Set window text"
 
 function window_set_output(){ with o_console {
 
-window(prev_output)
+window(Output.text)
+output_set("Set window to output")
+return "Set window to output"
 }}
 
 

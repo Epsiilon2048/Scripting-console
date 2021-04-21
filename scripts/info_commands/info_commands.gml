@@ -1,28 +1,24 @@
 
-
-
 function help(){
 
 return format_output([
 	"Help & info\n",
-	{str: "Basic syntax & usage", scr: syntax_help, output: true},
-	{str: "\nCommand list", scr: command_help, output: true},
-	{str: "\nConsole windows", scr: console_window_help, output: true},
-	{str: "\nEmbedded text", scr: embedded_text_help, output: true},
-	{str: "\nVideos", scr: console_videos, output: true},
+	{str: "Basic syntax & usage\n", scr: syntax_help, output: true},
+	{str: "Command list\n", scr: command_help, output: true},
+	{str: "Console windows\n", scr: console_window_help, output: true},
+	{str: "Embedded text\n", scr: embedded_text_help, output: true},
+	{str: "Videos\n\n", scr: console_videos, output: true},
 	
-	"\n\nOptions\n",
-	{str: "General settings", scr: console_settings, output: true},
-	{str: "\nColor schemes", scr: color_scheme_settings, output: true},
+	"Options\n",
+	{str: "General settings\n", scr: console_settings, output: true},
+	{str: "Color schemes\n\n", scr: color_scheme_settings, output: true},
 	
-	"\n\nOther stuff\n",
-	{str: "Instances in room", scr: roomobj, output: true},
-	{str: "\nSay a nice thing!", scr: nice_thing, output: true},
-	{str: "\nGithub page", scr: url_open, arg: "https://github.com/Epsiilon2048/gms-script-console"}," [link]",
-	{str: "\nCreator info", scr: Epsiilon, output: true},
+	"Other stuff\n",
+	{str: "Say a nice thing!\n", scr: nice_thing, output: true},
+	{str: "Github page", scr: url_open, arg: "https://github.com/Epsiilon2048/gms-script-console"}," [link]\n",
+	{str: "Credits\n\n", scr: Epsiilon, output: true},
 	
-	"\n\nNote, you can press [shift+console_key]\n"+
-	"to quickely return to this menu!"
+	{str: "Help menu", col: "embed_hover"}
 ], true, help)
 }
 
@@ -49,11 +45,13 @@ if is_undefined(_command)
 		
 			if show_hidden_commands or not _hidden
 			{
-				array_push(text, {str: " "+c+"\n", scr: command_help, arg: c, output: true})
+				array_push(text, {str: "- "+c+"\n", scr: command_help, arg: c, output: true})
 			}
 		}
 	}
-	array_push(text, "\nClick on a command for usage!")
+	array_push(text, 
+		{str: "\nHelp menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
+	)
 }
 else
 {
@@ -63,15 +61,25 @@ else
 	var _args		= variable_struct_exists_get(command, "args",	 [])
 	var _optargs	= variable_struct_exists_get(command, "optargs", [])
 	var _hiddenargs = show_hidden_args ? variable_struct_exists_get(command, "hiddenargs", []) : []
+	var _moreargs	= variable_struct_exists_get(command, "moreargs", false)
 	
-	var hiddentext	= _hidden ? " {hidden} " : " "
-	var argtext = ""
+	var hiddentext	= _hidden ? "{hidden} " : ""
+	var argtext = "("
+
+	for(var i = 0; i <= array_length(_args)-1; i++)		  argtext += _args[i]+","
+	for(var i = 0; i <= array_length(_optargs)-1; i++)	  argtext += "["+_optargs[i]   +"],"
+	for(var i = 0; i <= array_length(_hiddenargs)-1; i++) argtext += "<"+_hiddenargs[i]+">,"
 	
-	for(var i = 0; i <= array_length(_args)-1; i++)		  argtext += "<"+_args[i]      +"> "
-	for(var i = 0; i <= array_length(_optargs)-1; i++)	  argtext += "["+_optargs[i]   +"] "
-	for(var i = 0; i <= array_length(_hiddenargs)-1; i++) argtext += "("+_hiddenargs[i]+") "
+	if _moreargs argtext += "..."
+	else if argtext != "(" argtext = string_delete(argtext, string_length(argtext), 1)
+	argtext += ")"
 	
-	text = [{str:"[COMMAND]", scr: command_help, output:true},{str:" "+_command, col: dt_method},hiddentext+argtext+"- "+command.desc]
+	text = [
+		{str: _command, col: dt_method},{str: argtext+"\n", col: dt_unknown},
+		{str: hiddentext, col: dt_tag},command.desc+"\n\n",
+		
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: _command, col: "embed_hover"}
+	]
 }
 
 return format_output(text, true, command_help)
@@ -93,6 +101,7 @@ return format_output([
 	
 	"Notes\n"+
 	"- Multiple commands can be run in a single line when separated by semi-colons (;)\n"+
+	"- The scope of the console only changes after every line has been run\n"+
 	"- While custom methods are automatically detected, builtin gml functions have to be\n"+
 	"  manually added to the console_macros list\n"+
 	"- Characters such as parenthesis and commas are treated the same as spaces. This means\n"+
@@ -102,6 +111,7 @@ return format_output([
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", scr: tag_help, output: true}
 ], true, syntax_help)
 }}
+
 
 
 
@@ -130,6 +140,8 @@ return format_output([
 }
 
 
+
+
 function tag_help(){
 
 return format_output([
@@ -146,9 +158,11 @@ return format_output([
 	
 	"Supported events are step, step_end, draw, and draw_gui.\n\n",
 	
-{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", col: "embed_hover"}
+	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", col: "embed_hover"}
 ], true, tag_help)
 }
+
+
 
 
 function console_window_help(){
@@ -169,7 +183,9 @@ return format_output([
 	
 	"You can drag windows from their sidebar, and collapse them by clicking it.\n\n"+
 	
-	"Click to show ",{str: "Window", scr: window, arg: "This is the Window!"}, " - ",{str: "Display", scr: display, arg: "o_console.is_this_the_display"},
+	"Click to show ",{str: "Window", scr: window, arg: "This is the Window!"}, " - ",{str: "Display\n\n", scr: display, arg: "o_console.is_this_the_display"},
+	
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Windows", col: "embed_hover"}
 ], true, console_window_help)
 }
 
@@ -193,7 +209,9 @@ return format_output([
 	
 	"Note that the console input colors are not embeds.\n\n"+
 
-	"Embeds can be disabled in ",{str: "general settings", scr: console_settings, output: true},"."
+	"Embeds can be disabled in ",{str: "general settings", scr: console_settings, output: true},".\n\n",
+	
+	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}
 ], true, embedded_text_help)
 }}
 
@@ -206,19 +224,19 @@ return format_output([
 	{str: "", checkbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
 	{str: "", checkbox: "o_console.embed_text"}, " Text embedding - WILL MAKE THIS WINDOW UNUSABLE IF DISABLED\n",
 	{str: "", checkbox: "o_console.window_embed_text"}, " Window text embedding\n\n",
-	{str: "", checkbox: "o_console.output_as_window", func: function(){o_console.Output_window.reset_pos()}}, " Output as window\n\n",
-	{str: "", checkbox: "o_console.output_set_window"}, " Click output to set window\n",
+	{str: "", checkbox: "o_console.output_as_window", func: o_console.Output_window.reset_pos()}, " Output as window\n\n",
+	
 	{str: "", checkbox: "o_console.force_output"}, " Always show output\n",
 	{str: "", checkbox: "o_console.force_output_body"}, " Always show output background\n",
 	{str: "", checkbox: "o_console.force_output_embed_body"}, " Show output background when it displays embedded text\n\n",
 	
 	{str: "", checkbox: "o_console.show_hidden_commands"}, " Show hidden commands in command help menu\n",
 	{str: "", checkbox: "o_console.show_hidden_args"}, " Show hidden args in command help menu\n\n",
-	
-	{str: "Color schemes", scr: color_scheme_settings, output: true},"\n\n",
 
 	{str: "Reset console\n", scr: reset_obj, arg: o_console},
-	{str: "Destroy console", scr: destroy_console},
+	{str: "Destroy console\n\n", scr: destroy_console},
+	
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Settings", col: "embed_hover"}," / ",{str: "Color schemes", scr: color_scheme_settings, output: true}
 ], true, console_settings)
 }}
 	
@@ -254,11 +272,12 @@ if array_length(notbuiltin) > 0
 }
 
 array_push(text, 
-	"\n\n", {str: "", checkbox: "o_console.rainbow"}, " gamer mode"+
 	"\n\n",
-	{str: "Regenerate color schemes", scr: initialize_color_schemes},
+	{str: "", checkbox: "o_console.rainbow"}, " gamer mode\n\n",
+
+	{str: "Regenerate color schemes\n\n", scr: initialize_color_schemes},
 	
-	"\n\nClick on a color scheme to try it out!"
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Settings", scr: console_settings, output: true}," / ",{str: "Color schemes", col: "embed_hover"}
 )
 
 return format_output(text, true, color_scheme_settings)
@@ -275,9 +294,11 @@ return format_output([
 	"[links] ",
 	{str: "Twitter",	scr: url_open, arg: "https://twitter.com/epsiilon2048"}," - ",
 	{str: "Youtube",	scr: url_open, arg: "https://www.youtube.com/channel/UCA4znMVFR0P0V6ZitJhi2bA"}," - ",
-	{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},
+	{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},"\n\n"+
 	
-	"\n\nThank you so much for your interest and support! My only hope is that someone\ncan make some use out of this little project of mine."
+	"Thank you so much for your interest and support! My only hope is that someone\ncan make some use out of this little project of mine.\n\n",
+	
+	{str:"Help menu", scr: help, output: true}," / ",{str: "Credits", col: "embed_hover"}
 ], true, Epsiilon)
 }
 	
@@ -290,8 +311,10 @@ return format_output([
 	"Video explaining the new updates soon (hopefully)!\n\n"+
 	"[links]\n",
 	{str: "1.0 Demonstration", scr: url_open, arg:"https://www.youtube.com/watch?v=DePksU_vjRY&t=2s"}," (quite old)\n",
-	{str: "1.1 Colors", scr: url_open, arg:"https://www.youtube.com/watch?v=rz2lvfYwHyQ"},
-	{str: "\n1.2 Color schemes", scr: url_open, arg: "https://youtu.be/QCn5csFYYgA"}
+	{str: "1.1 Colors\n", scr: url_open, arg:"https://www.youtube.com/watch?v=rz2lvfYwHyQ"},
+	{str: "1.2 Color schemes\n\n", scr: url_open, arg: "https://youtu.be/QCn5csFYYgA"},
+	
+	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}
 ], true, console_videos)
 }}
 

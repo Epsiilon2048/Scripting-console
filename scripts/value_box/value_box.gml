@@ -7,7 +7,7 @@ static vb_y = 30
 if is_undefined(variable) return "Must specify a variable"
 else if not is_string(variable) return "Must provide variable as string"
 
-var _variable = string_add_scope(variable)
+var _variable = string_add_scope(variable, false)
 
 if (is_undefined(toggle) or not toggle) and not variable_string_exists(_variable) return variable+" does not exist"
 

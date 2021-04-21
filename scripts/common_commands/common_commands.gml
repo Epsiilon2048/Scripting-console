@@ -8,7 +8,7 @@ var _array_name = ""
 
 if is_string(array) 
 {
-	_array_name = string_add_scope(array)
+	_array_name = string_add_scope(array, true)
 	
 	if is_undefined(_array_name)				return "Missing variable scope"
 	if not variable_string_exists(_array_name)	return array+" doesn't exist"
@@ -35,7 +35,7 @@ if is_undefined(struct) return "Must provide struct!"
 
 if is_string(struct)
 {
-	var varstring = string_add_scope(struct)
+	var varstring = string_add_scope(struct, true)
 	
 	if not variable_string_exists(varstring)
 	{
@@ -72,11 +72,11 @@ return stitch("Set item ",value," in datastructure ",ds_list," to ",value)
 
 function create_variable(name, value){
 
-var _name = string_add_scope(name)
+var _name = string_add_scope(name, true)
 
 if not is_undefined(_name)
 {
-	var _existed = variable_string_exists(_name, value)
+	var _existed = variable_string_exists(_name)
 	
 	variable_string_set(_name, value)
 	
@@ -93,7 +93,7 @@ function addvar(variable, amount){
 
 if not is_string(variable) return "Must provide variable name as string"
 
-var _variable = string_add_scope(variable)
+var _variable = string_add_scope(variable, true)
 var _amount = amount
 
 if is_undefined(amount) _amount = 1
@@ -114,7 +114,7 @@ function togglevar(variable){
 	
 if not is_string(variable) return "Must provide variable name as string"
 
-var _variable = string_add_scope(variable)
+var _variable = string_add_scope(variable, true)
 
 if is_undefined(_variable)				 return "Missing variable scope"
 if not variable_string_exists(_variable) return "Variable "+variable+" doesn't exist"

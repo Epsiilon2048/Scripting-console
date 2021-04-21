@@ -1,5 +1,5 @@
 
-function color_scheme(value){				with o_console {
+function color_scheme(value){ with o_console {
 
 if not is_undefined(color_schemes[$ value])
 {

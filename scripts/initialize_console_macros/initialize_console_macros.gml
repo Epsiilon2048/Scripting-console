@@ -25,6 +25,9 @@ console_macros [$ "O5"]			= {type: dt_variable, value: "o_console.O5"}
 console_macros [$ "mouse_x"]	= {type: dt_variable, value: "global.mouse_x"}
 console_macros [$ "mouse_y"]	= {type: dt_variable, value: "global.mouse_y"}
 
+console_macros [$ "fps"]		= {type: dt_variable, value: "global.fps"}
+console_macros [$ "fps_real"]	= {type: dt_variable, value: "global.fps_real"}
+
 console_macros [$ "gui_mx"]		= {type: dt_variable, value: "o_console.gui_mouse_x"}
 console_macros [$ "gui_my"]		= {type: dt_variable, value: "o_console.gui_mouse_y"}
 #endregion
@@ -158,6 +161,8 @@ console_macros [$ "show_message"]				= {type: dt_method, value: show_message}
 console_macros [$ "power"]						= {type: dt_method, value: power}
 
 console_macros [$ "array_length"]				= {type: dt_method, value: array_length}
+
+console_macros [$ "instanceof"]					= {type: dt_method, value: instanceof}
 
 console_macros [$ "variable_instance_exists"]	= {type: dt_method, value: variable_instance_exists}
 console_macros [$ "variable_instance_get"]		= {type: dt_method, value: variable_instance_get}

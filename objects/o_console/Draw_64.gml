@@ -5,6 +5,17 @@ var old_font   = draw_get_font()
 var old_halign = draw_get_halign()
 var old_valign = draw_get_valign()
 
+
+
+//
+font = asset_get_index("fnt_debug"+string(floor(font_size)))
+draw_set_font(font)
+char_width = string_width(" ")
+char_height = string_height(" ")
+//
+
+
+
 #region Deal with mouse inputs
 if mouse_check_button_pressed(mb_left) and not Output.mouse_over_embed
 {

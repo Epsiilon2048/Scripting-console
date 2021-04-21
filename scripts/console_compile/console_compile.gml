@@ -326,11 +326,11 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 			if type != dt_string arg = string_copy(arg, 2, string_length(arg)-2)
 			type = dt_string
 		}
-		if (type == -1) and asset_get_index(arg) != -1
+		if (type == -1 or type == dt_asset or type == dt_room or type == dt_method or type == dt_instance) and asset_get_index(arg) != -1
 		{
 			type = dt_asset
 		}
-		if (type == -1) and string_is_float(arg) 
+		if (type == -1 or type == dt_real or type == dt_instance or type == dt_method or type == dt_room or type == dt_asset) and string_is_float(arg) 
 		{
 			type = dt_real
 		}
@@ -347,7 +347,6 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 				type = undefined
 			}
 		}
-		
 	}
 	
 	switch type
@@ -358,7 +357,9 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	break
 	case dt_asset:		value = asset_get_index(arg)
 	break
-	case dt_variable:	value = variable_string_get( string_add_scope(arg) )
+	case dt_variable:	value = variable_string_get( string_add_scope(arg, true) )
+	break
+	case dt_instance:	value = asset_get_index(arg)
 	break
 	case undefined:		value = "[SYNTAX ERROR] from \""+line[i]+"\""
 						error = value

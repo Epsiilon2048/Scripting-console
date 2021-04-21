@@ -84,7 +84,7 @@ return dec_to_hex(_r << 16 | _g << 8 | _b, 1)
 
 function hex_to_color(hex){
 	
-return dec_to_hex( string_copy(hex, 5, 2)+string_copy(hex, 3, 2)+string_copy(hex, 1, 2) )
+return dec_to_hex( string_copy(hex, 5, 2)+string_copy(hex, 3, 2)+string_copy(hex, 1, 2), 6 )
 }
 	
 	

@@ -11,7 +11,6 @@ var color_list = []
 var marker = 0
 var in_string = false
 var _iden = -1
-var _prev_iden = -1
 var instscope = ""
 var _col = "plain"
 
@@ -88,7 +87,7 @@ for(var i = 1; i <= string_length(command)+1; i++)
 						var varstring
 					
 						if instscope != "" varstring = instscope + "." + segment
-						else			   varstring = string_add_scope(segment)
+						else			   varstring = string_add_scope(segment, true)
 					
 						if not is_undefined(varstring) and variable_string_exists(varstring)
 						{
@@ -127,6 +126,7 @@ return {text: command, colors: color_list}
 }
 catch(_exception)
 {
+	_=_exception //to clear the "syntax error!"
 	return {text: command, colors: [{pos: string_length(command)+1, col: "plain"}]}
 }
 }}
