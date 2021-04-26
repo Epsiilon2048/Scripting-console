@@ -58,8 +58,7 @@ com_add("unbind", {args: ["bind index"], hiddenargs: ["return bindings menu?"], 
 com_add("bindings", {desc: "Returns the list of bindings"})
 
 com_add_category("Color operations", false)
-com_add("color_make", {args: ["r", "g", "b"], desc: "Returns a color value and sets the scoped instance's _col variable to the return"})
-com_add("color_get", {optargs: ["color value"], desc: "Returns the RGB, HSV, and hex of a color value; if left blank returns the RBG of the scoped instance's _col variable"})
+com_add("color_get", {args: ["color value"], desc: "Returns the properties of a color value; if left blank returns the RBG of the scoped instance's _col variable"})
 
 com_add_category("Draw functions", false)
 com_add("clip_rect_cutout", {args: ["x1", "y1", "x2", "y2"], desc: "Initializes a retangular clip mask shader"})

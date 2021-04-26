@@ -5,17 +5,6 @@ var old_font   = draw_get_font()
 var old_halign = draw_get_halign()
 var old_valign = draw_get_valign()
 
-
-
-//
-font = asset_get_index("fnt_debug"+string(floor(font_size)))
-draw_set_font(font)
-char_width = string_width(" ")
-char_height = string_height(" ")
-//
-
-
-
 #region Deal with mouse inputs
 if mouse_check_button_pressed(mb_left) and not Output.mouse_over_embed
 {
@@ -111,7 +100,7 @@ if console_toggle
 	draw_set_valign(fa_center)
 	var object_text
 	
-	if instance_exists(object) 
+	if not is_undefined(object) and instance_exists(object) 
 	{
 		object_text = object_get_name(object.object_index)
 		
@@ -127,9 +116,9 @@ if console_toggle
 		var object_text_width = string_width(object_text)
 	}
 	
-	draw_text_color(
+	draw_set_color(colors.output)
+	draw_text(
 		console_object_x, console_text_y, object_text,
-		colors.output, colors.output, colors.output, colors.output, 1
 	)
 
 	clip_rect_cutout(console_left, console_top, console_right-object_text_width-console_object_border, console_bottom)
@@ -137,20 +126,25 @@ if console_toggle
 	draw_set_font(font)
 	draw_set_align(fa_left, fa_center)
 	if command_colors draw_console_text(console_text_x, console_text_y, color_string)
-	else draw_text(console_text_x, console_text_y, console_string)
 	
-	draw_rectangle_color(
+	draw_set_color(colors.plain)
+	if not command_colors 
+	{
+		draw_set_color(colors.plain)
+		draw_text(console_text_x, console_text_y, console_string)
+	}
+	draw_rectangle(
 		console_text_x + char_width*(char_pos1-(char_pos1-char_pos2)), console_text_y + char_height/2,
 		console_text_x + char_width*(char_pos1-1), console_text_y - char_height/2,
-		colors.plain, colors.plain, colors.plain, colors.plain, false
+		false
 	)
 	if string_length(console_string) > char_pos1-1
 	{
-		draw_text_color(
+		draw_set_color(colors.selection)
+		draw_text(
 			console_text_x + char_width*(char_pos1-1), 
 			console_text_y, 
-			string_copy(console_string, char_pos1, char_pos2-char_pos1+1),
-			colors.selection, colors.selection, colors.selection, colors.selection, 1
+			string_copy(console_string, char_pos1, char_pos2-char_pos1+1)
 		)
 	}
 	

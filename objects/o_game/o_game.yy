@@ -29,8 +29,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Game",
-    "path": "folders/Objects/Game.yy",
+    "name": "Scripting-console",
+    "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
   "name": "o_game",

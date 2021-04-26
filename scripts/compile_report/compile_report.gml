@@ -19,7 +19,7 @@ if is_undefined(compile)
 	_output  = prev_output
 }
 
-var _lines = array_length(_compile)
+var _lines = array_length(_compile.commands)
 
 if not is_undefined(_command) str += "Input: \""+_command+"\"\n"
 
@@ -30,16 +30,18 @@ var _script_exists = false
 
 for(var l = 0; l <= _lines-1; l++)
 {
+	var line = _compile.commands[l]
+	
 	var _str = ""
 	
 	if _lines > 1 _str += "\n\n===== LINE "+string(l)+" =====\n"
 	
-	if not is_struct(_compile[l]) _str += "\nWhitespace"
+	if not is_struct(line) _str += "\nWhitespace"
 	else {
 	
-	var _error   = _compile[l].error
-	var _subject = _compile[l].subject
-	var _args	 = _compile[l].args
+	var _error   = line.error
+	var _subject = line.subject
+	var _args	 = line.args
 	
 	var _plainstr = "Parsed command: "+_subject.plain
 	var _valstr   = ""

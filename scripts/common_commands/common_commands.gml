@@ -123,7 +123,7 @@ var toggle = not variable_string_get(_variable)
 
 variable_string_set(_variable, toggle)
 
-return stitch("Toggled "+variable+" (",toggle _BOOL_STRING,")")
+return stitch("Toggled "+variable+" (",toggle ? "true" : "false",")")
 }
 
 
@@ -158,16 +158,44 @@ return format_output(text, true, roomobj)
 function objvar(obj){ with o_console {
 
 if is_undefined(obj) obj = object
-var list = variable_instance_get_names(obj)
+
+var _obj
+var struct
+if is_string(obj)
+{
+	var varscope = string_add_scope(obj, true)
+	if is_undefined(varscope) return "Missing scope"
+	if not variable_string_exists(varscope) return obj+" does not exist"
+	
+	_obj = variable_string_get(varscope)
+	if not is_struct(_obj) return "Must provide struct or instance"
+	
+	struct = true
+}
+else if is_numeric(obj) or is_struct(obj)
+{
+	struct = is_struct(obj)
+	
+	if not struct and not instance_exists(obj) return "Must profide struct or instance"
+	
+	_obj = obj
+}
+else return "Must profide struct or instance"
+
+var list = struct ? variable_struct_get_names(_obj) : variable_instance_get_names(_obj)
 array_sort(list, true)
 
-for(var i = 0; i <= array_length(list)-1; i++)
+if not (struct and not is_string(obj)) 
 {
-	list[i] = {str: list[i]+"\n", scr: display, arg: string(obj)+"."+list[i]}
+	for(var i = 0; i <= array_length(list)-1; i++)
+	{
+		list[i] = {str: list[i]+"\n", scr: value_box, arg: string(obj)+"."+list[i]}
+	}
+	
+	array_push(list, "\nClick on a variable to create a value box")
 }
-
-list[array_length(list)] = "\nClick on a variable to add to the display"
-return format_output(list, true, -1)
+	
+return format_output(list, not (struct and not is_string(obj)), -1, "Variables in "+(struct ? "struct" : "instance "+string(_obj)))
 }}
 
 
@@ -214,36 +242,14 @@ return _output
 
 
 
-function color_make(r, g, b){ with o_console {
+function color_get(_col){
 
-if is_undefined(r) r = 0
-if is_undefined(g) g = 0
-if is_undefined(b) b = 0
-
-var _col = make_color_rgb(r, g, b)
-var box = {str: "color ", col: _col}
-
-if instance_exists(object)
-{
-	object._col = _col
-	return {__embedded__: true, o: [box, stitch(object_get_name(object.asset_index),"._col set to ",_col)]}
+return format_output([
+	{str: "[COLOR]\n", col: _col},
+	{str: "GML       ", col: "embed_hover"},string(_col)+"\n",
+	{str: "RBG       ", col: "embed_hover"},stitch(color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"),
+	{str: "HSV (255) ", col: "embed_hover"},stitch(color_get_hue(_col),", ",color_get_saturation(_col),", ",color_get_value(_col),"\n"),
+	{str: "HSV (100) ", col: "embed_hover"},stitch(color_get_hue(_col)/2.55,", ",color_get_saturation(_col)/2.55,", ",color_get_value(_col)/2.55,"\n"),
+	{str: "HEX       ", col: "embed_hover"},color_to_hex(_col)
+], true, -1, "Color properties of "+string(_col))
 }
-else
-{
-	return {__embedded__: true, o: [box, string(_col)]}
-}
-}}
-
-
-
-
-function color_get(_col){ with o_console {
-
-if is_undefined(_col) _col = object._col
-	
-return stitch(
-	"RBG ",color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"+
-	"HSV ",color_get_hue(_col),", ",color_get_saturation(_col),", ",color_get_value(_col),"\n"+
-	"HEX ",color_to_hex(_col)
-)
-}}

@@ -13,9 +13,11 @@ else
 	
 	for(var i = 0; i <= array_length(output)-1; i++)
 	{
-		if variable_struct_exists_get(output[i], "__embedded__", false) ds_list_add(log, {
-			type: lg_embed, 
-			value: is_undefined(output[@ i][$ "name"]) ? "Unidentified" : output[i].name
+		var is_embed = variable_struct_exists_get(output[i], "__embedded__", false)
+		
+		if is_embed or (is_struct(output[i]) and variable_struct_exists(output[i], "__name__")) ds_list_add(log, {
+			type: is_embed ? lg_embed : lg_output, 
+			value: is_undefined(output[@ i][$ "__name__"]) ? "Unidentified" : output[i].__name__
 		})
 		
 		else ds_list_add(log, {

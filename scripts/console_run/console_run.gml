@@ -46,7 +46,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			{
 			#region Real
 			case dt_real:
-				output_string[i] = subject.value
+				output_string[i] = real(subject.value)
 			break
 			#endregion
 

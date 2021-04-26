@@ -3,6 +3,7 @@ function draw_console_text(x, y, console_text){
 
 if not is_struct(console_text) or array_length(console_text.colors) < 1 return undefined
 
+var old_color  = draw_get_color()
 var old_font   = draw_get_font()
 var old_halign = draw_get_halign()
 
@@ -13,15 +14,18 @@ var lastpos = 1
 
 for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 {
-	var c =  o_console.colors[$ console_text.colors[i].col]
 	var _text = string_copy( console_text.text, lastpos, console_text.colors[i].pos - lastpos )
 	
-	draw_text_color(x, y, _text, c, c, c, c, 1)
+	var c = console_text.colors[i].col
+	
+	draw_set_color( is_string(c) ? o_console.colors[$ c] : c )
+	draw_text(x, y, _text)
 	
 	x += o_console.char_width*string_length(_text)
 	lastpos = console_text.colors[i].pos
 }
 
+draw_set_color(old_color)
 draw_set_font(old_font)
 draw_set_halign(old_halign)
 }
@@ -38,6 +42,7 @@ static line_width = 2
 
 with o_console {
 
+var old_color	= draw_get_color()
 var old_font	= draw_get_font()
 var old_halign	= draw_get_halign()
 var old_valign	= draw_get_valign()
@@ -51,12 +56,14 @@ draw_line_width_color(x, y, x+text_offsetx+text_width/text_dampner, y, line_widt
 draw_line_width_color(x, y, x, y-text_height, line_width, colors.output, colors.output)
 draw_triangle_color(x, y, x+triangle_size, y, x, y-triangle_size, colors.output, colors.output, colors.output, false)
 
+draw_set_color(colors.output)
 draw_set_font(font)
 draw_set_halign(fa_left)
 draw_set_valign(fa_bottom)
 
-draw_text_color(x+text_offsetx, y, text, colors.output, colors.output, colors.output, colors.output, 1)
+draw_text(x+text_offsetx, y, text)
 
+draw_set_color(old_color)
 draw_set_font(old_font)
 draw_set_halign(old_halign)
 draw_set_valign(old_valign)

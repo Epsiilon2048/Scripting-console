@@ -43,7 +43,7 @@ return create_color_scheme_full(
 	specialtext,
 	plaintext,
 	specialtext,
-	specialtext,
+	method,
 	specialtext,
 	method,
 	specialtext,

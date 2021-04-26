@@ -1,6 +1,4 @@
 
-font_size = 11
-
 include_niche_virtual_keys = false
 console_macros = {}
 
@@ -16,14 +14,12 @@ identifiers = {
 	v: dt_variable,
 	m: dt_method,
 	i: dt_instance,
+	c: dt_color,
 }
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
 #macro SCALE_ o_console.draw_scale.mult *
-
-#macro _BOOL_STRING ? "true" : "false"
-#macro RGB make_color_rgb
 
 #macro gui_mx device_mouse_x_to_gui(0)
 #macro gui_my device_mouse_y_to_gui(0)
@@ -41,6 +37,7 @@ enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 #macro dt_method		"method"
 #macro dt_instance		"instance"
 #macro dt_room			"room"
+#macro dt_color			"color"	// Only used for identifiers
 #macro dt_tag			"tag"
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"
@@ -287,8 +284,7 @@ var greetings = [
 	"yooooooo sup",
 ]
 
-output_set(greetings[irandom(array_length(greetings)-1)])
-Output.alpha = 0
+output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
 
 initialize_color_schemes()
 initialize_command_info()

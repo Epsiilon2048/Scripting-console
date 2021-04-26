@@ -28,8 +28,14 @@ ARGUMENT INTERPRETATION
 7: If none of these, it is marked as a syntax error
 */
 
-static space_sep = " ,()=:"
-static tag_sep   = " "
+// The compiler isn't very efficient at all. At the moment however, it probably doesn't need to be.
+// Many commands can still be compiled per step without a frame drop. Given how most commands are
+// going to be quite short, and how it's rarely ever going to compile a command more than one time
+// per step, it probably isn't a worthwhile investment.
+
+static space_sep = " ,=():"
+static iden_sep	 = " ;,=()"
+static tag_sep   = " ;"
 
 if shave(" ", command) == "" return ""
 
@@ -75,27 +81,35 @@ var command_split = []
 
 var marker = com_start
 var in_string = false
+var in_string_iden = false
 
 for(var i = com_start; i <= string_length(_command); i++)
 {
 	var char = string_char_at(_command, i)
 	
-	if char == "\\" and in_string
+	if (in_string or in_string_iden) and char == "\\"
 	{
 		if string_char_at(_command, i+1) == "n" _command = string_replace(_command, "\\n", "\n")
 		else i++
 	}
-	else
+	else if char == "\""
 	{
-		if char == "\""
-		{
-			in_string = not in_string
-		}
-		else if not in_string and char == ";"
-		{
-			array_push(command_split, string_copy(_command, marker, i-marker) )
-			marker = i+1
-		}
+		in_string = not in_string
+	}
+	else if not in_string and char == "/" and string_char_at(_command, i-1) == "s"
+	{
+		in_string_iden = true
+	}
+	else if not in_string and char == ";"
+	{
+		in_string_iden = false
+		
+		array_push(command_split, string_copy(_command, marker, i-marker) )
+		marker = i+1
+	}
+	else if not in_string and in_string_iden and string_pos(char, iden_sep)
+	{
+		in_string_iden = false
 	}
 }
 
@@ -116,32 +130,37 @@ var arg_split = []
 
 var marker = 1
 var in_string = false
+var in_string_iden = false
 
 for(var i = 1; i <= string_length(line); i++)
 {
 	var char = string_char_at(line, i)
 	
-	if char == "\\" and in_string
+	if char == "\\" and (in_string or in_string_iden)
 	{
-		line = string_delete(line, i, 1)
-		//i++
+		line = string_delete(line, i, 1) 
 	}
-	else
+	else if char == "\""
 	{
-		if char == "\""
+		if not (in_string_iden and not in_string)
 		{
 			if marker != i array_push(arg_split, string_copy(line, marker, i-marker+in_string))
 			marker = i+in_string
+		}
 			
-			in_string = not in_string
-		}
-		else if not in_string and string_pos(char, space_sep)
-		{
-			if marker != i array_push(arg_split, string_copy(line, marker, i-marker))
-			marker = i+1
-		}
-		
+		in_string = not in_string
 	}
+	else if not in_string and char == "/" and string_char_at(line, i-1) == "s"
+	{
+		in_string_iden = true
+	}
+	else if not in_string and string_pos(char, space_sep)
+	{
+		in_string_iden = in_string_iden and not (string_pos(char, iden_sep) and string_char_at(line, i-1) != "\\")
+			
+		if marker != i array_push(arg_split, string_copy(line, marker, i-marker))
+		marker = i+1
+	}	
 }
 
 if marker != i array_push(arg_split, string_copy(line, marker, string_length(line)-marker+1))
@@ -156,135 +175,12 @@ for(var l = 0; l <= array_length(lines)-1; l++)
 if array_length(lines[l]) > 0
 {
 	
-#region Interpret subject
 var line = lines[l]
 
 var comp_line = array_create(array_length(line)-1)
 
-var _arg = line[0]
-var arg
-var type = -1
-var value = undefined
-var error = undefined
-
-var iden = false
-
-if string_char_at(_arg, 2) == "/" and variable_struct_exists(identifiers, string_char_at(_arg, 1))
-{
-	type = identifiers[$ string_char_at(_arg, 1)]
-	_arg = string_copy(_arg, 3, string_length(_arg))
-	iden = true
-}
-
-if _arg == "" 
-{
-	type = undefined
-	arg = line[0]
-}
-else
-{
-
-	var _macro = console_macros[$ _arg]
-	
-	if type == -1 and not is_undefined(_macro)
-	{
-		if _macro.type == dt_real arg = string_format_float(_macro.value)
-		else					  arg = string(_macro.value)
-		
-		type = _macro.type
-	}
-	else arg = _arg
-
-	if type == dt_string or (type == -1 and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\"")
-	{
-		if type != dt_string value = string_copy(arg, 2, string_length(arg)-2)
-		else value = arg
-		
-		type = dt_string
-	}
-
-	if (type == -1 or type == dt_instance) and asset_get_index(arg) != -1
-	{
-		var asset_type = asset_get_type(arg)
-		
-		switch asset_type
-		{
-		case asset_script:	type = dt_method
-							value = asset_get_index(arg)
-		break
-		case asset_room:	type = dt_room
-		break
-		case asset_object:
-			if instance_exists(asset_get_index(arg))
-			{
-				type = dt_instance
-				value = asset_get_index(arg).id
-			}
-		}
-		
-		if type == -1 type = dt_asset
-	}
-	else if type == dt_method and string_is_int(arg) value = real(arg)
-	
-	if (type == -1 or type == dt_instance) and string_is_int(arg)
-	{
-		if string_pos("0x", arg) 
-		{
-			type = dt_real
-		}
-		else if instance_exists(real(arg)) or real(arg) == noone
-		{
-			type = dt_instance
-			if object_exists(real(arg)) value = real(arg).id
-			else value = real(arg)
-		}
-		else 
-		{
-			type = undefined
-		}
-	}
-	
-	if type == dt_real
-	{
-		if string_is_float(arg) value = string_format_float(arg)
-		else type = undefined
-	}
-	
-	if type == -1 or type == dt_variable 
-	{
-		var varstring = string_add_scope(arg, not iden)
-
-		if not is_undefined(varstring) and variable_string_exists(varstring)
-		{
-			var varstringvalue = variable_string_get(varstring)
-			
-			if type != dt_variable and is_method(varstringvalue)
-			{
-				type = dt_method
-				value = varstringvalue
-			}
-			else
-			{
-				type = dt_variable
-				value = varstring
-			}
-		}
-		else
-		{
-			type = undefined
-		}
-	}
-	
-}
-
-if is_undefined(type) error = "[SYNTAX ERROR] from \""+arg+"\""
-
-var subject = {
-	value: value,
-	type: type,
-	plain: line[0],
-}
-#endregion
+var subject = gmcl_interpret_subject(line[0], array_length(line))
+var error = subject.error
 
 
 #region Interpret arguments
@@ -317,11 +213,13 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 		{
 			if is_real(_macro) arg = string_format_float(_macro.value)
 			else			   arg = string(_macro.value)
+			
+			type = _macro.type
 		}
 		else arg = _arg
 	
 		//reeeeeally weird logic here, i swear its necessary
-		if (type == -1 or type == dt_string) and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\""
+		if type == dt_string or (type == -1 and string_char_at(arg, 1) == "\"" and string_pop(arg) == "\"")
 		{
 			if type != dt_string arg = string_copy(arg, 2, string_length(arg)-2)
 			type = dt_string

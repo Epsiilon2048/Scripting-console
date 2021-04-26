@@ -6,7 +6,7 @@ with o_console
 	input_log_index = -1
 	console_toggle = true
 	
-	if not add 
+	if is_undefined(add) or not add 
 	{
 		ds_list_insert(input_log, 0, console_string)
 		console_string = str
@@ -81,7 +81,7 @@ text.set(_text)
 with o_console
 {
 	prev_output = _output
-	O1 = _output
+	O1 = output
 	O2 = ""
 	O3 = ""
 	O4 = ""
@@ -187,8 +187,8 @@ text.set(_text)
 
 with o_console
 {
-	prev_output = _output
-	var arlen = array_length(_output)
+	prev_output = output
+	var arlen = array_length(prev_output)
 	O1 = (arlen > 0) ? prev_output[0] : ""
 	O2 = (arlen > 1) ? prev_output[1] : ""
 	O3 = (arlen > 2) ? prev_output[2] : ""

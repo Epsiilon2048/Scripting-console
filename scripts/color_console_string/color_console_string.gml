@@ -2,8 +2,9 @@
 function color_console_string(command){ with o_console {
 
 static max_length = 700
-static space_sep = " ,.()[]=:;/"
-static tag_sep   = " "
+static space_sep = " ./;,=()[]:"
+static iden_sep	 = " ;,=()"
+static tag_sep   = " ;"
 
 try
 {
@@ -29,7 +30,7 @@ var com_start = 1
 
 for(var i = 1; i <= string_pos("#", _command); i++)
 {
-	char = string_char_at(_command, i)
+	var char = string_char_at(_command, i)
 	
 	if char == "#"
 	{
@@ -60,6 +61,8 @@ for(var i = 1; i <= string_pos("#", _command); i++)
 	}
 }
 
+var prev_char = ""
+
 marker = com_start-1
 for(var i = com_start; i <= string_length(_command)+1; i++)
 {	
@@ -74,7 +77,6 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 	}
 	else
 	{
-		
 		if char == "\""
 		{
 			in_string = not in_string
@@ -86,11 +88,11 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 		if string_sep or (not in_string and (string_pos(char, space_sep))) or i == string_length(_command)+1
 		{	
 			if marker != i
-			{
+			{			
 				var segment = string_copy(_command, marker+1, i-marker-1+string_onset)
 				var is_int = string_is_int(segment)
 				
-				if char == "." and (is_int or segment == "") and (string_is_int( string_char_at(_command, i+1) ) or string_char_at(_command, i+1) == "")
+				if char == "." and _prev_iden != dt_variable and (is_int or segment == "") and (string_is_int( string_char_at(_command, i+1) ) or string_pos( string_char_at(_command, i+1), space_sep ) or string_char_at(_command, i+1) == "")
 				{
 					continue
 				}
@@ -101,21 +103,12 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				{
 					_col  = identifiers[$ segment]
 					_iden = identifiers[$ segment]
-					
-					if _iden == dt_string
-					{
-						_iden_string = true
-					}
-					else
-					{
-						_prev_iden = _iden
-					}
 				}
-				else
+				else 
 				{	
 					if _iden_string _col = dt_string
 					
-					if string_pos("\"", segment) == 1 //and string_pop(segment) == "\""
+					if string_pos("\"", segment) == 1
 					{
 						_col = dt_string
 					}
@@ -156,7 +149,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 							_asset_type = asset_get_type(segment) 
 						}
 						
-						if _prev_iden == dt_instance and _asset != -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
+						if (_prev_iden == dt_instance or (_prev_iden == dt_variable and _asset_type == asset_object)) and _asset != -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
 						{
 							_col = dt_instance
 							instscope = segment
@@ -193,11 +186,18 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 								_col = dt_asset
 							}
 						}
-						else if _prev_iden == dt_real or (_prev_iden == -1 and string_is_float(segment) and (_macro_type == -1 or _macro_type == dt_real))
+						else if _prev_iden == dt_real or ((_prev_iden == -1 or _prev_iden == dt_variable) and string_is_float(segment) and (_macro_type == -1 or _macro_type == dt_real))
 						{
 							if string_is_float(segment)
 							{
-								_col = dt_real
+								if _prev_iden == dt_real _col = dt_real
+								else if char == "." or _prev_iden == dt_variable
+								{
+									if instance_exists(real(segment)) _col = dt_instance
+									else _col = _iden_string ? dt_string : dt_unknown
+								}
+								else _col = dt_real
+								
 								instscope = segment
 							}
 						}
@@ -205,19 +205,17 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						{
 							var _varstring = string_add_scope(segment, _prev_iden == -1) 
 							
-							if variable_string_exists(_varstring) and _macro_type != dt_method
+							if variable_string_exists(_varstring) and _macro_type != dt_method and not (prev_char == "." and instscope == "")
 							{
-								if is_method(variable_string_get(_varstring))
-								{
-									_col = dt_method
-								}
-								else
-								{
-									_col = dt_variable
-								}
+								var value = variable_string_get(_varstring)
+								
+								if is_struct(value)			_col = dt_instance
+								else if is_method(value)	_col = dt_method
+								else						_col = dt_variable
+								
 								instscope = _varstring
 							}
-							else if _macro_type != dt_variable and ds_map_exists(deprecated_commands, segment)
+							else if _macro_type == -1 and ds_map_exists(deprecated_commands, segment)
 							{
 								_col = dt_deprecated
 							}
@@ -231,29 +229,47 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						
 						if variable_string_exists(_varstring)
 						{
-							_col = dt_variable
+							var value = variable_string_get(_varstring)
+							
+							if is_struct(value)			_col = dt_instance
+							else if is_method(value)	_col = dt_method
+							else						_col = dt_variable
 						}
-						else instscope = ""
 					}
 					
-					if char != "." 
+					if string_pos(char, iden_sep)
 					{
-						_iden_string = false
+						_iden_string = string_char_at(segment, string_length(segment)) == "\\"
 						_prev_iden = -1
 					}
 				}
 				
-				if marker != 0
-				{
-					array_push(color_list, {pos: marker+1, col: _iden_string ? dt_string : dt_unknown})
+				static push_combine = function(list, pos, col){
+					
+					var list_len = array_length(list)
+					
+					if list_len > 0 and list[list_len-1].col == col
+					{
+						list[list_len-1].pos = pos
+					}
+					else
+					{
+						array_push(list, {pos: pos, col: col})
+					}
 				}
 				
-				if char != "."
+				if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
+				if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col)
+				
+				if _iden == dt_string _iden_string = true
+				else _prev_iden = _iden
+				
+				if char != "." or not (_prev_iden == -1 or _prev_iden == dt_variable or _prev_iden == dt_string)
 				{
 					instscope = ""
 				}
 				
-				array_push(color_list, {pos: i+(_iden != -1)+string_onset, col: _col})
+				prev_char = char
 			}
 			
 			marker = i-string_offset
@@ -271,7 +287,6 @@ return {text: _command, colors: color_list}
 }
 catch(_exception)
 {
-	show_message(_exception.longMessage)
 	return {text: _command, colors: [{pos: string_length(_command)+1, col: "plain"}]}
 }
 }}
