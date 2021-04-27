@@ -3,7 +3,7 @@ function initialize_command_info(){
 
 static com_add = function(name, details){
 
-commands[? name] = details
+command_doc_add(name, details)
 ds_list_add(command_order, {str: name, cat: false})
 }
 

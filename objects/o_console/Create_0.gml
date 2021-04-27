@@ -1,5 +1,7 @@
 
-include_niche_virtual_keys = false
+var initial_time = get_timer()
+
+include_builtin_functions = true
 console_macros = {}
 
 keyboard_scope = o_console

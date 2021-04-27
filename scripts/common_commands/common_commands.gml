@@ -130,27 +130,87 @@ return stitch("Toggled "+variable+" (",toggle ? "true" : "false",")")
 
 function roomobj(){
 
-var text = []
+static obj_collumn	= "name"
+static ind_collumn	= "ind"
+static id_collumn	= "id"
 
-for (i = 0; i <= instance_count-1; i++)
+var longest_object = string_length(obj_collumn)+2
+var longest_index = string_length(ind_collumn)+2
+
+for (var i = 0; i <= instance_count-1; i++)
 {
 	var inst = instance_id[i]
-	var name = object_get_name(inst.object_index)
-	var entry = {}; with entry
-	{
-		id   = inst
-		str  = stitch("(",id,")")
-		func = function(){o_console.object = id; output_set(roomobj())}
-	}
 	
-	var scoped_text = ""
-	if inst == o_console.object scoped_text = " - current scope"
+	var objlen = string_length(object_get_name(inst.object_index))
+	var indlen = string_length(inst.object_index)
 	
-    array_push(text, name+" ", entry, scoped_text+"\n")
+	if longest_object < objlen	longest_object = objlen+2
+	if longest_index < indlen	longest_object = indlen+2
 }
-text[array_length(text)] = "\nClick on an ID to set the console scope"
 
-return format_output(text, true, roomobj)
+var obj_spaces = string_repeat(" ", longest_object - string_length( obj_collumn ))
+var ind_spaces = string_repeat(" ", longest_index - string_length( ind_collumn ))
+//var text = ["  "+obj_collumn+obj_spaces+ind_collumn+ind_spaces+id_collumn+"\n"]
+
+//for (var i = 0; i <= instance_count-1; i++)
+//{
+//	var inst = instance_id[i]
+//	
+//	var selected = inst == o_console.object 
+//	
+//	var scoped_before
+//	var scoped_after
+//	var entry = {}
+//	
+//	var obj_spaces = string_repeat(" ", longest_object - string_length( object_get_name(inst.object_index) ))
+//	var ind_spaces = string_repeat(" ", longest_index - string_length( inst.object_index ))
+//	
+//	if selected
+//	{
+//		scoped_before = {str: "[ ", col: dt_unknown}
+//		scoped_after = {str: " ]", col: dt_unknown}
+//		
+//		entry = {str: object_get_name(inst.object_index), col: "embed_hover"}
+//	}
+//	else
+//	{
+//		var scoped_before = "  "
+//		var scoped_after = ""
+//		
+//		with entry
+//		{
+//			str = object_get_name(inst.object_index)
+//			scr = roomobj
+//			vari = "o_console.object"
+//			arg = inst
+//			output = true
+//		}
+//	}
+//	
+//    array_push(text, scoped_before,entry,{str: stitch(obj_spaces,inst.object_index,ind_spaces,inst), col: selected ? "embed_hover" : "output"},scoped_after,"\n")
+//}
+
+var instances = array_create(instance_count)
+
+for (var i = 0; i <= instance_count-1; i++)
+{
+	instances[i] = 
+	{
+		name: object_get_name(instance_id[i].object_index),
+		ind: instance_id[i].object_index,
+		id: instance_id[i],
+		__selected__: instance_exists(object) and instance_id[i] == object.id
+	}
+}
+
+var text = generate_list(instances, ["name", "ind", "id"], {scr: roomobj, vari: "o_console.object", arg: inst, output: true}, "id")
+
+array_push(text, 
+	((instance_count == 1) ? "\nIt's just me!\n" : "\n"),
+	"Click on an object to set the console scope"
+)
+
+return format_output(text, true, roomobj, "Instances in room")
 }
 
 

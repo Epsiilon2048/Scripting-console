@@ -9,6 +9,7 @@
     {"id":{"name":"create_color_scheme_basic","path":"scripts/create_color_scheme_basic/create_color_scheme_basic.yy",},"order":42,},
     {"id":{"name":"fnt_debug3x","path":"fonts/fnt_debug3x/fnt_debug3x.yy",},"order":58,},
     {"id":{"name":"s_checkbox_full","path":"sprites/s_checkbox_full/s_checkbox_full.yy",},"order":4,},
+    {"id":{"name":"make_embed_list","path":"scripts/make_embed_list/make_embed_list.yy",},"order":65,},
     {"id":{"name":"rm_start","path":"rooms/rm_start/rm_start.yy",},"order":5,},
     {"id":{"name":"color_console_string","path":"scripts/color_console_string/color_console_string.yy",},"order":45,},
     {"id":{"name":"common_commands","path":"scripts/common_commands/common_commands.yy",},"order":14,},

@@ -38,7 +38,7 @@ set = function(text) {
 
 		if is_struct(_text[i])
 		{
-			_str = variable_struct_exists_get(_text[i], "str", variable_struct_exists_get(_text[i], "s", ""))
+			_str = string( variable_struct_exists_get(_text[i], "str", variable_struct_exists_get(_text[i], "s", "")) )
 			var _newlines = string_count("\n", _str)
 		
 			var s = {}
@@ -64,6 +64,7 @@ set = function(text) {
 			
 			//original names, kept for backwards compatability
 			if s.cbox == ""			s.cbox	= variable_struct_exists_get(_text[i], "checkbox",	"")
+			if s.vari == ""			s.vari	= variable_struct_exists_get(_text[i], "variable",	"")
 			if s.outp == false		s.outp	= variable_struct_exists_get(_text[i], "output",	false)
 			if s.func == noscript	s.func	= variable_struct_exists_get(_text[i], "scr",		noscript)
 			
@@ -243,17 +244,17 @@ if mouse_on
 			{
 				text.click_index = -1
 			
-				//Run method
-				o_console.run_in_embed = true
-				var _output = script_execute_ext_builtin(c.func, c.args)
-				o_console.run_in_embed = false
-				
 				//Set variable
 				variable_string_set(c.vari, c.arg)
 			
 				//Set checkbox
 				var _check = variable_string_get(c.cbox)
 				if is_numeric(_check) variable_string_set(c.cbox, not _check)
+				
+				//Run method
+				o_console.run_in_embed = true
+				var _output = script_execute_ext_builtin(c.func, c.args)
+				o_console.run_in_embed = false
 			
 				//Set output
 				set_text = c.outp
