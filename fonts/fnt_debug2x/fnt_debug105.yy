@@ -127,11 +127,11 @@
   "canGenerateBitmap": true,
   "maintainGms1Font": false,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "group1",
+    "path": "folders/Console/group1.yy",
   },
   "resourceVersion": "1.0",
-  "name": "fnt_debug1x",
+  "name": "fnt_debug105",
   "tags": [],
   "resourceType": "GMFont",
 }

@@ -151,6 +151,15 @@ win_h = display_get_gui_height()
 
 console_toggle = false	//where the user inputs commands
 
+console_left	= 50
+console_right	= win_w-50
+console_top		= win_h-90
+console_bottom	= win_h-50
+console_text_x	= console_left + 18
+console_text_y	= console_bottom + (console_top-console_bottom)/2
+console_object_x = console_right - 18
+console_object_border = 25
+
 console_string = ""
 char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
 char_height = string_height(" ")

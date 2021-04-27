@@ -7,19 +7,22 @@ if is_undefined(scale) scale = 3
 SCALE = {}
 	
 SCALE[$ 1] = {mult: 11/15, font: fnt_debug1x}
+SCALE[$ 2] = {mult: 13/15, font: fnt_debug2x}
 SCALE[$ 3] = {mult: 1,	   font: fnt_debug3x}
+SCALE[$ 4] = {mult: 18/15, font: fnt_debug4x}
+SCALE[$ 5] = {mult: 21/15, font: fnt_debug5x}
 
 draw_scale = SCALE[$ scale]
 font = draw_scale.font
 
 draw_set_font(font)
 
-char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
+char_width	= string_width(" ")
 char_height = string_height(" ")
 
 BAR = {}; with BAR {
 	
-	char_height = 23 //font size 15
+	char_height = 23
 	height = 17
 	sep = 3
 	win_dist = 50

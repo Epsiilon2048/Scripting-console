@@ -87,11 +87,10 @@ else Output.mouse_over = false
 
 if console_toggle
 {
-	var object_text 
-	if not is_undefined(object) and instance_exists(object) object_text = object_get_name( object.object_index )
-	else object_text = "noone"
+	if not is_undefined(object) and instance_exists(object) sidetext_string = object_get_name( object.object_index )
+	else sidetext_string = "noone"
 	
-	draw_console_bar(console_string, color_string, object_text, char_pos1, char_pos2, undefined, undefined, undefined)
+	draw_console_bar(undefined, undefined, undefined)
 	
 	if not Output.mouse_over Output.alpha = 0
 }

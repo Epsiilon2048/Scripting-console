@@ -131,7 +131,7 @@
     "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "fnt_debug1x",
+  "name": "fnt_debug10",
   "tags": [],
   "resourceType": "GMFont",
 }
