@@ -38,6 +38,7 @@
     {"id":{"name":"common_input_utilities","path":"scripts/common_input_utilities/common_input_utilities.yy",},"order":21,},
     {"id":{"name":"draw_console_bubble_body","path":"scripts/draw_console_bubble_body/draw_console_bubble_body.yy",},"order":49,},
     {"id":{"name":"first_is_digit","path":"scripts/first_is_digit/first_is_digit.yy",},"order":24,},
+    {"id":{"name":"draw_console_prompt","path":"scripts/draw_console_prompt/draw_console_prompt.yy",},"order":66,},
     {"id":{"name":"console_exec_old","path":"scripts/console_exec_old/console_exec_old.yy",},"order":1,},
     {"id":{"name":"console_initialization","path":"scripts/console_initialization/console_initialization.yy",},"order":32,},
     {"id":{"name":"color_console_string_old","path":"scripts/color_console_string_old/color_console_string_old.yy",},"order":0,},

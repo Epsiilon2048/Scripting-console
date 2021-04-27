@@ -87,73 +87,14 @@ else Output.mouse_over = false
 
 if console_toggle
 {
-	//Draw console
-	draw_console_body(console_left, console_top, console_right, console_bottom)
-
-	draw_set_color(colors.plain)
-	draw_rectangle(
-		console_left, console_bottom+1, console_left+prompt_bar_width, console_top-1, false
-	)
-
-	draw_set_halign(fa_right)
-	draw_set_valign(fa_center)
-	var object_text
+	var object_text 
+	if not is_undefined(object) and instance_exists(object) object_text = object_get_name( object.object_index )
+	else object_text = "noone"
 	
-	if not is_undefined(object) and instance_exists(object) 
-	{
-		object_text = object_get_name(object.object_index)
-		
-		var object_text_width = string_width(object_text)
-		
-		mouse_over_object = gui_mouse_between(console_object_x+3, console_text_y-char_height/2-3, console_object_x-object_text_width-3, console_text_y+char_height/2+3)
-		
-		if mouse_over_object draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
-	}
-	else 
-	{
-		object_text = "Noone"
-		var object_text_width = string_width(object_text)
-	}
-	
-	draw_set_color(colors.output)
-	draw_text(
-		console_object_x, console_text_y, object_text,
-	)
-
-	clip_rect_cutout(console_left, console_top, console_right-object_text_width-console_object_border, console_bottom)
-	
-	draw_set_font(font)
-	draw_set_align(fa_left, fa_center)
-	if command_colors draw_console_text(console_text_x, console_text_y, color_string)
-	
-	draw_set_color(colors.plain)
-	if not command_colors 
-	{
-		draw_set_color(colors.plain)
-		draw_text(console_text_x, console_text_y, console_string)
-	}
-	draw_rectangle(
-		console_text_x + char_width*(char_pos1-(char_pos1-char_pos2)), 
-		console_text_y + char_height/2,
-		console_text_x + char_width*(char_pos1-1), 
-		console_text_y - char_height/2,
-		false
-	)
-	if string_length(console_string) > char_pos1-1
-	{
-		draw_set_color(colors.selection)
-		draw_text(
-			console_text_x + char_width*(char_pos1-1), 
-			console_text_y, 
-			string_copy(console_string, char_pos1, char_pos2-char_pos1+1)
-		)
-	}
-	
-	shader_reset()
+	draw_console_bar(console_string, color_string, object_text, char_pos1, char_pos2, undefined, undefined, undefined)
 	
 	if not Output.mouse_over Output.alpha = 0
 }
-
 #region Draw display
 if Display.enabled and ds_list_size(display_list) > 0
 {
@@ -163,7 +104,7 @@ if Display.enabled and ds_list_size(display_list) > 0
 	
 		for(var i = 0; i <= ds_list_size(display_list)-1; i++)
 		{
-			var obj = string_copy(display_list[| i].variable, 1, string_pos(".", display_list[| i].variable)-1)//string_split(".", display_list[| i].variable)[0]
+			var obj = string_copy(display_list[| i].variable, 1, string_pos(".", display_list[| i].variable)-1)
 			var variable = string_copy(display_list[| i].variable, string_pos(".", display_list[| i].variable)+1, string_length(display_list[| i].variable))
 			
 			var value = variable_string_get(display_list[| i].variable)

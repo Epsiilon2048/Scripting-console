@@ -94,13 +94,13 @@ keybinds[array_length(keybinds)] =
 	built_in: false
 }
 
-return {__embedded__: true, o: [{str:"[BINDINGS]", scr: bindings, output: true}," Bound "+_keyname+" to \""+command+"\""]}
+return format_output([{str:"[BINDINGS]", scr: bindings, output: true}," Bound "+string(_keyname)+" to \""+string(command)+"\""], true, -1, "Bind key")
 }}
 
 
 
 
-function unbind(index, show_bindings){		with o_console {
+function unbind(index, show_bindings){ with o_console {
 	
 var keybind = keybinds[index]
 	
@@ -113,7 +113,7 @@ else return {__embedded__: true, o: [{str: "[BINDINGS]", scr: bindings, output: 
 
 
 
-function bindings(){						with o_console {
+function bindings(){ with o_console {
 
 if array_length(keybinds) > 0
 {

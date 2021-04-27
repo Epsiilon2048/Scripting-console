@@ -20,13 +20,6 @@ win_h = display_get_gui_height()
 
 #region Redefine scaled variables
 //lazy, please make better
-console_right	= win_w - SCALE_ 50
-console_top		= win_h - SCALE_ 90
-console_bottom	= win_h - SCALE_ 50
-
-console_text_x	= console_left + SCALE_ 18
-console_text_y	= console_bottom + (console_top-console_bottom)/2
-
 Output.noconsole_x = console_text_x
 Output.noconsole_y = console_text_y
 

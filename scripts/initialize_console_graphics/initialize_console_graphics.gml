@@ -1,16 +1,32 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function initialize_console_graphics(){ with o_console {
+function initialize_console_graphics(scale){ with o_console {
+
+if is_undefined(scale) scale = 3
 
 SCALE = {}
 	
 SCALE[$ 1] = {mult: 11/15, font: fnt_debug1x}
 SCALE[$ 3] = {mult: 1,	   font: fnt_debug3x}
 
-draw_scale = SCALE[$ 1]
+draw_scale = SCALE[$ scale]
 font = draw_scale.font
 
 draw_set_font(font)
+
+char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
+char_height = string_height(" ")
+
+BAR = {}; with BAR {
+	
+	char_height = 23 //font size 15
+	height = 17
+	sep = 3
+	win_dist = 50
+	
+	text_dist = 18
+	sidebar_width = 2
+}
 
 CHECKBOX = {}; with CHECKBOX {
 	
