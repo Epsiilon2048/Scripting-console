@@ -88,12 +88,11 @@ else Output.mouse_over = false
 if console_toggle
 {
 	//Draw console
-	draw_set_color(c_white)
 	draw_console_body(console_left, console_top, console_right, console_bottom)
 
-	draw_rectangle_color(
-		console_left, console_bottom+1, console_left+prompt_bar_width, console_top-1, 
-		colors.plain, colors.plain, colors.plain, colors.plain, false
+	draw_set_color(colors.plain)
+	draw_rectangle(
+		console_left, console_bottom+1, console_left+prompt_bar_width, console_top-1, false
 	)
 
 	draw_set_halign(fa_right)
@@ -134,8 +133,10 @@ if console_toggle
 		draw_text(console_text_x, console_text_y, console_string)
 	}
 	draw_rectangle(
-		console_text_x + char_width*(char_pos1-(char_pos1-char_pos2)), console_text_y + char_height/2,
-		console_text_x + char_width*(char_pos1-1), console_text_y - char_height/2,
+		console_text_x + char_width*(char_pos1-(char_pos1-char_pos2)), 
+		console_text_y + char_height/2,
+		console_text_x + char_width*(char_pos1-1), 
+		console_text_y - char_height/2,
 		false
 	)
 	if string_length(console_string) > char_pos1-1

@@ -1,7 +1,5 @@
 
-function input_set(str, add){
-
-with o_console
+function input_set(str, add){ with o_console
 {
 	input_log_index = -1
 	console_toggle = true
@@ -19,11 +17,10 @@ with o_console
 	}
 
 	keyboard_string = console_string
-	color_string = color_console_string(console_string)
+	color_string = color_console_string(console_string, char_pos1)
 	char_pos1 = string_length(console_string)+1
 	char_pos2 = char_pos1
-}
-}
+}}
 
 
 

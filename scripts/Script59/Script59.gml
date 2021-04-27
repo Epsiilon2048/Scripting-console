@@ -66,12 +66,32 @@ else
 		
 		if type == -1 type = dt_asset
 	}
-	else if type == dt_instance and not string_is_int(arg) type = undefined
-	else if type == dt_method and string_is_int(arg) value = real(arg)
+	else if type == dt_instance and not string_is_int(arg) 
+	{
+		type = undefined
+		error = "Object with name "+arg+" does not exist"
+	}
+	else if type == dt_method
+	{
+		if string_is_int(arg)
+		{
+			if not is_method(real(arg)) and not script_exists(real(arg)) and is_undefined(_macro)
+			{
+				type = undefined
+				error = "Method with ID "+string(real(arg))+" does not exist"
+			}
+			else value = real(arg)
+		}
+		else if is_undefined(_macro)
+		{
+			type = undefined
+			error = "Method with name "+arg+" does not exist"
+		}
+	}
 	
 	if (type == -1 or type == dt_instance) and string_is_int(arg)
 	{
-		if string_pos("0x", arg) 
+		if type != dt_instance and string_pos("0x", arg)
 		{
 			type = dt_real
 		}
@@ -84,6 +104,7 @@ else
 		else 
 		{
 			type = undefined
+			error = "Instance with ID "+string(real(arg))+" does not exist"
 		}
 	}
 	
@@ -122,31 +143,28 @@ else
 
 var description
 
-if is_undefined(type) error = "[SYNTAX ERROR] from \""+arg+"\""
+if is_undefined(type) and is_undefined(error) error = "Syntax error from \""+arg+"\""
 
 switch type
 {
-case dt_asset:		description = "Returning asset index"
+case dt_asset:		description = "Return object index"
 break
-case dt_color:		description = "Returning color value properties"
+case dt_color:		description = "Return color value properties"
 break
-case dt_deprecated: description = ""
+case dt_instance:	description = "Set console scope to "+object_get_name(value.object_index)
 break
-case dt_instance:	description = "Setting console scope to "+subject
+case dt_method:		if is_undefined(commands[? _arg]) description = "Execute"+((value > 10000) ? "" : " builtin")+" method "+(string_is_int(arg) ? script_get_name(real(arg)) : arg)
+					else description = command_doc(_arg)+((commands[? _arg].desc == "") ? "" : " - "+commands[? _arg].desc)
 break
-case dt_method:		description = "Executing method "+subject
+case dt_real:		description = "Return real value of "+arg
 break
-case dt_real:		description = "Returning real value of "+subject
+case dt_room:		description = "Set room to "+room_get_name(value)
 break
-case dt_room:		description = "Switching to room "+room_get_name(value)
+case dt_string:		description = "Echo string"
 break
-case dt_string:		description = "Echoing string "+subject
+case dt_variable:	description = is_undefined(argument_total) ? "Get or set variable "+arg : ((argument_total > 1) ? "Set variable "+arg : "Get variable "+arg)
 break
-case dt_unknown:	description = "Unrecognized"
-break
-case dt_variable:	description = is_undefined(argument_total) ? "Getting or setting variable "+subject : ((argument_total > 1) ? "Setting variable "+subject : "Getting variable "+subject)
-break
-case undefined:		description = "Unrecognized"
+case undefined:		description = ds_map_exists(deprecated_commands, arg) ? command_doc(arg) : "Unrecognized"
 break
 }
 

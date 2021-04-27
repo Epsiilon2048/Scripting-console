@@ -174,14 +174,13 @@ for(var l = 0; l <= array_length(lines)-1; l++)
 {
 if array_length(lines[l]) > 0
 {
-	
+
 var line = lines[l]
 
 var comp_line = array_create(array_length(line)-1)
 
 var subject = gmcl_interpret_subject(line[0], array_length(line))
 var error = subject.error
-
 
 #region Interpret arguments
 if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)

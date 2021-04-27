@@ -2,6 +2,7 @@
   "resources": [
     {"id":{"name":"Console_window","path":"scripts/Console_window/Console_window.yy",},"order":10,},
     {"id":{"name":"t_tiles","path":"tilesets/t_tiles/t_tiles.yy",},"order":2,},
+    {"id":{"name":"command_doc","path":"scripts/command_doc/command_doc.yy",},"order":64,},
     {"id":{"name":"common_misc_utilities","path":"scripts/common_misc_utilities/common_misc_utilities.yy",},"order":23,},
     {"id":{"name":"readme","path":"notes/readme/readme.yy",},"order":56,},
     {"id":{"name":"o_console","path":"objects/o_console/o_console.yy",},"order":0,},

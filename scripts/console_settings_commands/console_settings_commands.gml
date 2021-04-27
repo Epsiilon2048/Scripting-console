@@ -5,7 +5,7 @@ if not is_undefined(color_schemes[$ value])
 {
 	colors = color_schemes[$ value]
 	
-	color_string = color_console_string(console_string)
+	color_string = color_console_string(console_string, char_pos1)
 	cs_index = value
 
 	if run_in_embed and (Output.tag == color_scheme_settings)

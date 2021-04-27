@@ -19,6 +19,8 @@ identifiers = {
 
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
+#macro script_exists better_script_exists
+
 #macro SCALE_ o_console.draw_scale.mult *
 
 #macro gui_mx device_mouse_x_to_gui(0)

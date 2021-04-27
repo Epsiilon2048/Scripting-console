@@ -1,15 +1,16 @@
 
-function color_console_string(command){ with o_console {
+function color_console_string(command, char_pos){ with o_console {
 
 static max_length = 700
 static space_sep = " ./;,=()[]:"
 static iden_sep	 = " ;,=()"
+static subj_sep	 = " ,=():"
 static tag_sep   = " ;"
 
 try
 {
 var _command
-	
+
 if string_length(command) > max_length _command = string_copy(command, 1, max_length)
 else if shave(" ", command) == "" return {text: "", colors: []}
 else _command = command
@@ -18,10 +19,13 @@ if not command_colors return {text: _command, colors: [{pos: string_length(_comm
 
 var color_list = []
 var marker = 0
+var _char_pos = is_undefined(char_pos) ? string_length(command) : char_pos
+var subject_interpret = ""
 var in_string = false
 var _iden = -1
 var _prev_iden = -1
 var _iden_string = false
+var _iden_name = ""
 var instscope = ""
 var _col = dt_unknown
 
@@ -62,6 +66,7 @@ for(var i = 1; i <= string_pos("#", _command); i++)
 }
 
 var prev_char = ""
+var subject = true
 
 marker = com_start-1
 for(var i = com_start; i <= string_length(_command)+1; i++)
@@ -88,8 +93,9 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 		if string_sep or (not in_string and (string_pos(char, space_sep))) or i == string_length(_command)+1
 		{	
 			if marker != i
-			{			
+			{		
 				var segment = string_copy(_command, marker+1, i-marker-1+string_onset)
+				var plain_segment = segment
 				var is_int = string_is_int(segment)
 				
 				if char == "." and _prev_iden != dt_variable and (is_int or segment == "") and (string_is_int( string_char_at(_command, i+1) ) or string_pos( string_char_at(_command, i+1), space_sep ) or string_char_at(_command, i+1) == "")
@@ -103,6 +109,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				{
 					_col  = identifiers[$ segment]
 					_iden = identifiers[$ segment]
+					_iden_name = segment+"/"
 				}
 				else 
 				{	
@@ -124,6 +131,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				
 							if not is_undefined(_macro)
 							{
+								plain_segment = segment
 								segment = string(_macro.value)
 								if _macro.type != -1 _col = _macro.type
 								_macro_type = _col
@@ -154,10 +162,10 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 							_col = dt_instance
 							instscope = segment
 						}
-						else if _prev_iden == dt_instance and object_exists(_asset) and (is_int or _asset_type == asset_object) and (_macro_type == -1 or _macro_type == dt_instance)
-						{
-							_col = dt_asset
-						}
+						//else if _prev_iden == dt_instance and object_exists(_asset) and (is_int or _asset_type == asset_object) and (_macro_type == -1 or _macro_type == dt_instance)
+						//{
+						//	_col = dt_asset
+						//}
 						else if _prev_iden == dt_method and script_exists(_asset) and (is_int or _asset_type == asset_script) and (_macro_type == -1 or _macro_type == dt_method)
 						{
 							_col = dt_method
@@ -166,7 +174,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						{
 							_col = dt_room
 						}
-						else if _prev_iden == dt_asset and _asset > -1 and (_macro_type == -1 or _macro_type == dt_asset)
+						else if _prev_iden == dt_asset and _asset != -1 and (_macro_type == -1 or _macro_type == dt_asset) and (not is_int or object_exists(_asset))
 						{
 							_col = dt_asset
 						}
@@ -252,7 +260,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					{
 						list[list_len-1].pos = pos
 					}
-					else
+					else if not (list_len > 0 and list[list_len-1].pos == pos)
 					{
 						array_push(list, {pos: pos, col: col})
 					}
@@ -260,6 +268,18 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				
 				if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
 				if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col)
+				
+				if subject and segment != "" and (string_pos(char, subj_sep) or i == string_length(_command)+1)
+				{
+					if _char_pos <= i 
+					{
+						subject_interpret = gmcl_interpret_subject( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment) )
+					}
+					
+					subject = false
+				}
+				
+				if char == ";" and subject_interpret == "" subject = true
 				
 				if _iden == dt_string _iden_string = true
 				else _prev_iden = _iden
@@ -283,10 +303,12 @@ if string_length(command) > max_length array_push(color_list, {pos: string_lengt
 
 console_color_time = 0
 
-return {text: _command, colors: color_list}
+output_set(subject_interpret)
+return {text: _command, colors: color_list, subject_interpret: subject_interpret}
 }
 catch(_exception)
 {
+	output_set(_exception)
 	return {text: _command, colors: [{pos: string_length(_command)+1, col: "plain"}]}
 }
 }}
