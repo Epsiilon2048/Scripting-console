@@ -95,7 +95,7 @@ else
 		{
 			type = dt_real
 		}
-		else if instance_exists(real(arg)) or real(arg) == noone
+		else if better_instance_exists(real(arg)) or real(arg) == noone
 		{
 			type = dt_instance
 			if object_exists(real(arg)) value = real(arg).id

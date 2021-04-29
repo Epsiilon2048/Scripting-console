@@ -2,9 +2,55 @@
 var initial_time = get_timer()
 
 include_builtin_functions = true
+
+builtin_exclude = [
+//	"string",
+//	"array",
+//	"ads",
+//	"ds",
+//	"ds_list",
+//	"ds_map",
+	"ds_grid",
+	"ds_priority",
+	"ds_queue",
+	"ds_stack",
+	"layer",
+	"gesture",
+	"keyboard",
+	"font",
+	"part",			// Particles
+	"steam",	
+	"xboxone",	 
+	"xboxlive",	 
+	"switch",		// Of the nintendo variety
+	"psn",		
+	"winphone",	 
+	"win8",		 
+	"vertex",		 
+	"uwp",		
+	"iap",
+	"sprite",		 
+	"skeleton",	 
+	"sequence",	  
+	"physics",	 
+	"path",		 
+	"matchmaking", 
+	"gpu",
+	"file",
+	"draw",		 
+	"display",	 
+	"date",		 
+	"camera",		 
+	"buffer",		 
+	"audio",		 
+	"achievement", 
+]
+
 console_macros = {}
 
 keyboard_scope = o_console
+
+console_macro_order = ds_list_create()
 
 initialize_console_macros()
 initialize_console_graphics()

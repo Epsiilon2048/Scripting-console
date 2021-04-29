@@ -21,6 +21,7 @@
     {"id":{"name":"struct_copy","path":"scripts/struct_copy/struct_copy.yy",},"order":11,},
     {"id":{"name":"parse_console_string_old","path":"scripts/parse_console_string_old/parse_console_string_old.yy",},"order":2,},
     {"id":{"name":"easing_functions","path":"scripts/easing_functions/easing_functions.yy",},"order":12,},
+    {"id":{"name":"select_items_in_macros","path":"scripts/select_items_in_macros/select_items_in_macros.yy",},"order":70,},
     {"id":{"name":"value_box_functions","path":"scripts/value_box_functions/value_box_functions.yy",},"order":6,},
     {"id":{"name":"console_graphical_utilities","path":"scripts/console_graphical_utilities/console_graphical_utilities.yy",},"order":13,},
     {"id":{"name":"console_window_utilities","path":"scripts/console_window_utilities/console_window_utilities.yy",},"order":26,},

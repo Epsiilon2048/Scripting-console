@@ -33,8 +33,8 @@ var bottom	= y+_char_height+_height
 var text_x = left+_text_dist
 var text_y = ceil(bottom - _height/2)+1
 
-draw_console_body(left, top, right-sidetext_width-_text_dist*2-_sep, bottom)	// Draw bar
-draw_console_body(right-sidetext_width-_text_dist*2, top, right, bottom)		// Draw sidetext bar
+draw_console_body(left, top, right-sidetext_width-_text_dist*2-_sep-1, bottom)	// Draw bar
+draw_console_body(right-sidetext_width-_text_dist*2-1, top, right, bottom)		// Draw sidetext bar
 
 clip_rect_cutout(left, top, right-sidetext_width-_text_dist*3-_sep+1, bottom+1)
 draw_set_valign(fa_bottom)

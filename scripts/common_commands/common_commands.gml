@@ -11,7 +11,7 @@ if is_string(array)
 	_array_name = string_add_scope(array, true)
 	
 	if is_undefined(_array_name)				return "Missing variable scope"
-	if not variable_string_exists(_array_name)	return array+" doesn't exist"
+	if not variable_string_exists(_array_name)	return "Array "+array+" doesn't exist"
 	
 	_array = variable_string_get(_array_name)
 }
@@ -37,11 +37,8 @@ if is_string(struct)
 {
 	var varstring = string_add_scope(struct, true)
 	
-	if not variable_string_exists(varstring)
-	{
-		variable_string_set(varstring, {})
-		if argument_count == 1 return ""
-	}
+	if is_undefined(varstring)					return "Missing variable scope"
+	if not variable_string_exists(varstring)	return "Struct "+struct+" doesn't exist"
 	
 	struct = variable_string_get(varstring)
 }
@@ -51,6 +48,7 @@ if argument_count == 1 return struct
 for(var i = 1; i <= argument_count-2; i+=2)
 {
 	variable_struct_set(struct, argument[i], argument[i+1])
+	return "Set struct values"
 }
 }
 
@@ -67,6 +65,7 @@ if is_undefined(value) return ds_list[| index]
 ds_list[| index] = value
 return stitch("Set item ",value," in datastructure ",ds_list," to ",value)
 }
+
 
 
 
