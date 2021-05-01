@@ -90,7 +90,7 @@ if console_toggle
 	if not is_undefined(object) and instance_exists(object) sidetext_string = object_get_name( object.object_index )
 	else sidetext_string = "noone"
 	
-	draw_console_bar(undefined, undefined, undefined)
+	draw_console_bar(bar_x, bar_y, bar_width)
 	
 	if not Output.mouse_over Output.alpha = 0
 }

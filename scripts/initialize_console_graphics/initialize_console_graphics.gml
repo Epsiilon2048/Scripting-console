@@ -2,17 +2,27 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function initialize_console_graphics(scale){ with o_console {
 
-if is_undefined(scale) scale = 3
-
-SCALE = {}
+if is_undefined(scale)
+{
+	var display_w = display_get_width()
 	
-SCALE[$ 1] = {mult: 11/15, font: fnt_debug1x}
-SCALE[$ 2] = {mult: 13/15, font: fnt_debug2x}
-SCALE[$ 3] = {mult: 1,	   font: fnt_debug3x}
-SCALE[$ 4] = {mult: 18/15, font: fnt_debug4x}
-SCALE[$ 5] = {mult: 21/15, font: fnt_debug5x}
+	scale = (display_w < 1920) + (display_w < 2560) + (display_w < 3840)
+	
+	// Below 1080p	1x
+	// 1080p		2x
+	// 2k			3x
+	// 4k and above	4x
+}
 
-draw_scale = SCALE[$ scale]
+SCALE[0] = undefined
+	
+SCALE[1] = {mult: 11/15, font: fnt_debug1x}
+SCALE[2] = {mult: 13/15, font: fnt_debug2x}
+SCALE[3] = {mult: 1,	 font: fnt_debug3x}
+SCALE[4] = {mult: 18/15, font: fnt_debug4x}
+SCALE[5] = {mult: 21/15, font: fnt_debug5x}
+
+draw_scale = SCALE[scale]
 font = draw_scale.font
 
 draw_set_font(font)

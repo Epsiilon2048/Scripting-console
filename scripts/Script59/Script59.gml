@@ -7,6 +7,7 @@ var arg
 var type = -1
 var value = undefined
 var error = undefined
+var description = undefined
 
 var iden = false
 
@@ -62,9 +63,14 @@ else
 				type = dt_instance
 				value = asset_index.id
 			}
+			else description = "Object index "+string(asset_index)+" (no instance)"
 		}
 		
-		if type == -1 type = dt_asset
+		if type == -1 
+		{
+			type = dt_asset
+			description = "Asset index "+string(asset_index)
+		}
 	}
 	else if type == dt_instance and not string_is_int(arg) 
 	{
@@ -141,12 +147,10 @@ else
 	
 }
 
-var description
-
 if is_undefined(type) and is_undefined(error) error = "Syntax error from \""+arg+"\""
 
-switch type
-{
+if is_undefined(description) switch type
+{ 
 case dt_asset:		description = "Return object index"
 break
 case dt_color:		description = "Return color value properties"

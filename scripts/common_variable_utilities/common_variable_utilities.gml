@@ -26,9 +26,9 @@ else
 	else return false
 }
 
-var variable = variable_instance_get( object, list[1] )
+if array_length(list) == 2 return variable_instance_exists( object, list[1] )
 
-if is_undefined( variable ) return false
+var variable = variable_instance_get( object, list[1] )
 
 for(var i = 2; i <= array_length(list)-1; i++)
 {

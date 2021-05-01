@@ -6,12 +6,12 @@ return format_output([
 	{str: "Basic syntax & usage\n", scr: syntax_help, output: true},
 	{str: "Command list\n", scr: command_help, output: true},
 	{str: "Console windows\n", scr: console_window_help, output: true},
-	{str: "Embedded text\n", scr: embedded_text_help, output: true},
 	{str: "Videos\n\n", scr: console_videos, output: true},
 	
 	"Options\n",
 	{str: "General settings\n", scr: console_settings, output: true},
-	{str: "Color schemes\n\n", scr: color_scheme_settings, output: true},
+	{str: "Color schemes\n", scr: color_scheme_settings, output: true},
+	{str: "Color scheme editor\n\n", scr: color_scheme_editor, output: true},
 	
 	"Other stuff\n",
 	{str: "Say a nice thing!\n", scr: nice_thing, output: true},
@@ -35,9 +35,9 @@ if is_undefined(_command)
 	{
 		var c = command_order[| i].str
 		
-		if command_order[| i].cat and (not command_order[| i].hidden or show_hidden_commands)
+		if command_order[| i].cat
 		{
-			array_push(text, c+"\n")
+			if not command_order[| i].hidden or show_hidden_commands array_push(text, c+"\n")
 		}
 		else
 		{
@@ -49,13 +49,17 @@ if is_undefined(_command)
 			}
 		}
 	}
-	array_push(text, 
-		{str: "\nHelp menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
+	array_push(text,
+		"\n",
+		{cbox: "o_console.show_hidden_commands", scr: command_help, output: true}," Show hidden commands\n\n",
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
 	)
 }
 else
 {
 	var command = commands[? _command]
+	
+	var has_hidden_args = variable_struct_exists(command, "hiddenargs")
 	
 	var _hidden		= variable_struct_exists_get(command, "hidden",  false)
 	var _args		= variable_struct_exists_get(command, "args",	 [])
@@ -77,12 +81,18 @@ else
 	text = [
 		{str: _command, col: dt_method},{str: argtext+"\n", col: dt_unknown},
 		{str: hiddentext, col: dt_tag},command.desc+"\n\n",
-		
-		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: _command, col: "embed_hover"}
 	]
+	
+	if has_hidden_args array_push(text, 
+		{cbox: "o_console.show_hidden_args", scr: command_help, arg: _command, output: true}," Show hidden arguments\n\n"
+	)
+	
+	array_push(text, 
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: _command, col: "embed_hover"}
+	)
 }
 
-return format_output(text, true, command_help)
+return format_output(text, true, command_help, "Command list")
 }}
 
 
@@ -96,8 +106,7 @@ return format_output([
 	"Setting scope:     ",{str:"instance",col: dt_instance},"\n"+
 	"Getting variables: ",{str:"instance",col: dt_instance},{str:".",col: dt_unknown},{str:"variable",col: dt_variable},"\n"+
 	"Setting variables: ",{str:"instance",col: dt_instance},{str:".",col: dt_unknown},{str:"variable",col: dt_variable},{str:" value",col: dt_unknown},"\n"+
-	"Running methods:   ",{str:"method",col: dt_method},{str:" argument0",col: dt_unknown},{str:" argument1 (...)",col: dt_unknown},"\n"+
-	"Changing room:     ",{str:"room",col:"room"},"\n\n"+
+	"Running methods:   ",{str:"method",col: dt_method},{str:" argument0",col: dt_unknown},{str:" argument1 (...)",col: dt_unknown},"\n\n"+ 
 	
 	"Notes\n"+
 	"- Multiple commands can be run in a single line when separated by semi-colons (;)\n"+
@@ -109,7 +118,7 @@ return format_output([
 	"- If a method asks for a variable as an argument, it's likely intended to be a string\n\n",
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", scr: tag_help, output: true}
-], true, syntax_help)
+], true, syntax_help, "GMCL syntax documentation")
 }}
 
 
@@ -136,7 +145,7 @@ return format_output([
 	"  ",{s:"console_macro",col: dt_instance}," - ",{s:"v/console_macro\n\n",col: dt_variable},
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", col: "embed_hover"}," / ",{str: "Event tags", scr: tag_help, output: true}
-], true, adv_syntax_help)
+], true, adv_syntax_help, "Advanced GMCL syntax documentation")
 }
 
 
@@ -159,7 +168,7 @@ return format_output([
 	"Supported events are step, step_end, draw, and draw_gui.\n\n",
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", col: "embed_hover"}
-], true, tag_help)
+], true, tag_help, "Compiler instructions documentation")
 }
 
 
@@ -186,58 +195,31 @@ return format_output([
 	"Click to show ",{str: "Window", scr: window, arg: "This is the Window!"}, " - ",{str: "Display\n\n", scr: display, arg: "o_console.is_this_the_display"},
 	
 	{str: "Help menu", scr: help, output: true}," / ",{str: "Windows", col: "embed_hover"}
-], true, console_window_help)
+], true, console_window_help, "IDE window documentation")
 }
-
-
-
-
-function embedded_text_help(){ with o_console {
-
-return format_output([
-	"Text embedding is used everywhere for menus and interactive elements.\n\n"+
-	
-	"It's used to change the color of or bind scripts to text, and it also\n"+
-	"supports checkboxes ",{checkbox:"o_console.checkboxes_like_this_one", str: " like this one"}," which can manipulate boolean variables.\n\n"+
-	
-	"However it is quite costly, and all settings can be manually edited\n"+
-	"from the console.\n\n"+
-	
-	"As it stands, when embedding is disabled, all these menus are unchanged\n"+
-	"in content, making them very difficult to navigate.\n"+
-	"This will be fixed soon hopefully.\n\n"+
-	
-	"Note that the console input colors are not embeds.\n\n"+
-
-	"Embeds can be disabled in ",{str: "general settings", scr: console_settings, output: true},".\n\n",
-	
-	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}
-], true, embedded_text_help)
-}}
-
 
 
 
 function console_settings(){ with o_console {
 	
+static icg = initialize_console_graphics
+	
 return format_output([
-	{str: "", checkbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
-	{str: "", checkbox: "o_console.embed_text"}, " Text embedding - WILL MAKE THIS WINDOW UNUSABLE IF DISABLED\n",
-	{str: "", checkbox: "o_console.window_embed_text"}, " Window text embedding\n\n",
-	{str: "", checkbox: "o_console.output_as_window", func: o_console.Output_window.reset_pos()}, " Output as window\n\n",
+	"UI scale: ",{str: "1x", scr: icg, arg: 1}," ",{str: "2x", scr: icg, arg: 2}," ",{str: "3x", scr: icg, arg: 3}," ",{str: "4x", scr: icg, arg: 4}," ",{str: "5x", scr: icg, arg: 5},
+	"\n\n",
 	
-	{str: "", checkbox: "o_console.force_output"}, " Always show output\n",
-	{str: "", checkbox: "o_console.force_output_body"}, " Always show output background\n",
-	{str: "", checkbox: "o_console.force_output_embed_body"}, " Show output background when it displays embedded text\n\n",
+	{cbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
+	{cbox: "o_console.output_as_window", scr: o_console.Output_window.reset_pos}, " Output as window\n\n",
 	
-	{str: "", checkbox: "o_console.show_hidden_commands"}, " Show hidden commands in command help menu\n",
-	{str: "", checkbox: "o_console.show_hidden_args"}, " Show hidden args in command help menu\n\n",
+	{cbox: "o_console.force_output"}, " Always show output\n",
+	{cbox: "o_console.force_output_body"}, " Always show output background\n",
+	{cbox: "o_console.force_output_embed_body"}, " Show output background when it displays embedded text\n\n",
 
 	{str: "Reset console\n", scr: reset_obj, arg: o_console},
 	{str: "Destroy console\n\n", scr: destroy_console},
 	
 	{str: "Help menu", scr: help, output: true}," / ",{str: "Settings", col: "embed_hover"}," / ",{str: "Color schemes", scr: color_scheme_settings, output: true}
-], true, console_settings)
+], true, console_settings, "IDE settings")
 }}
 	
 
@@ -254,11 +236,17 @@ for(var i = 0; i <= array_length(cs_list)-1; i++)
 {
 	if variable_struct_exists_get(color_schemes[$ cs_list[i]], "__builtin__", false)
 	{
-		array_push(builtin, {str: "\n "+cs_list[i], scr: color_scheme, arg: cs_list[i]})
+		if cs_list[i] == cs_index	array_push(builtin, {str: "\n> ", col: dt_unknown})
+		else						array_push(builtin, "\n  ")
+		
+		array_push(builtin, {str: cs_list[i], scr: color_scheme, arg: cs_list[i], outp: true})
 	}
 	else
 	{
-		array_push(notbuiltin, {str: "\n "+cs_list[i], scr: color_scheme, arg: cs_list[i]})
+		if cs_list[i] == cs_index	array_push(notbuiltin, {str: "\n> ", col: dt_unknown})
+		else						array_push(notbuiltin, "\n  ")
+		
+		array_push(notbuiltin, {str: cs_list[i], scr: color_scheme, arg: cs_list[i], outp: true})
 	}
 }
 
@@ -275,15 +263,50 @@ array_push(text,
 	"\n\n",
 	{str: "", checkbox: "o_console.rainbow"}, " gamer mode\n\n",
 
-	{str: "Regenerate color schemes\n\n", scr: initialize_color_schemes},
+	{str: "New color scheme\n", scr: new_color_scheme, outp: true},
+	{str: "Regenerate default color schemes\n\n", scr: initialize_color_schemes},
 	
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Settings", scr: console_settings, output: true}," / ",{str: "Color schemes", col: "embed_hover"}
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", col: "embed_hover"}," / ",{str: "Color scheme editor", scr: color_scheme_editor, output: true},
 )
 
 return format_output(text, true, color_scheme_settings)
 }}
 
 	
+function color_scheme_editor(){ with o_console {
+
+return format_output([
+	"IDE colors",
+	{str: "\nbody        ",	scr: value_box,	args: ["o_console.colors.body",				vb_color]},"(the color behind text)",
+	{str: "\nbody_bm     ",	scr: input_set, args: ["o_console.colors.body_bm ",			true]},
+	{str: "\nbody_alpha  ",	scr: value_box,	args: ["o_console.colors.body_alpha",		vb_scrubber]},
+	{str: "\nbody_real   ",	scr: value_box,	args: ["o_console.colors.body_real",		vb_color]},"(body color when blendmode/alpha aren't applied)",
+	{str: "\nbody_accent ",	scr: value_box,	args: ["o_console.colors.body_accent",		vb_color]},"(the secondary body color)",
+	{str: "\noutput      ",	scr: value_box,	args: ["o_console.colors.output",			vb_color]},"(the 'main' color)",
+	{str: "\nex_output   ",	scr: value_box,	args: ["o_console.colors.ex_output",		vb_color]},"(output text color when exposed)",
+	{str: "\nembed       ",	scr: value_box,	args: ["o_console.colors.embed",			vb_color]},
+	{str: "\nembed_hover ",	scr: value_box,	args: ["o_console.colors.embed_hover",		vb_color]},
+	{str: "\nselection   ",	scr: value_box,	args: ["o_console.colors.selection",		vb_color]},"\n\n"+
+	
+	"Text colors",
+	{str: "\nplain       ",	scr: value_box,	args: ["o_console.colors.plain",			vb_color]},
+	{str: "\nreal        ",	scr: value_box, args: ["o_console.colors."+dt_real,			vb_color]},
+	{str: "\nstring      ",	scr: value_box, args: ["o_console.colors."+dt_string,		vb_color]},
+	{str: "\nasset       ",	scr: value_box, args: ["o_console.colors."+dt_asset,		vb_color]},
+	{str: "\nvariable    ",	scr: value_box, args: ["o_console.colors."+dt_variable,		vb_color]},
+	{str: "\nmethod      ",	scr: value_box, args: ["o_console.colors."+dt_method,		vb_color]},
+	{str: "\ninstance    ",	scr: value_box, args: ["o_console.colors."+dt_instance,		vb_color]},
+	{str: "\nroom        ",	scr: value_box, args: ["o_console.colors."+dt_room,			vb_color]},
+	{str: "\ntag         ",	scr: value_box, args: ["o_console.colors."+dt_tag,			vb_color]},"(compiler instructions)",
+	{str: "\ndeprecated  ",	scr: value_box, args: ["o_console.colors."+dt_deprecated,	vb_color]},"(commands no longer in use)\n\n",
+
+	"All color scheme variables are stored in o_console.colors\n\n",
+	
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", scr: color_scheme_settings, output: true}," / ",{str: "Color scheme editor", col: "embed_hover"},
+	
+], true, color_scheme_editor, "Color scheme editor")
+}}
+
 	
 	
 function Epsiilon(){

@@ -1,15 +1,15 @@
 
 function initialize_console_macros(){
 
-#region Commands
+#region Shortcuts
 console_macro_add("var",				dt_method, create_variable)
-										
+			
 console_macro_add("@",					dt_method, dealwith_array)
 console_macro_add("$",					dt_method, dealwith_struct)	
 console_macro_add("|",					dt_method, dealwith_ds_list)
-#endregion
+console_macro_add("?",					dt_method, dealwith_ds_map)
+console_macro_add("#",					dt_method, dealwith_ds_grid)
 
-#region Shortcuts
 console_macro_add("Display",			dt_variable, "o_console.Display")
 console_macro_add("Window",				dt_variable, "o_console.Window")
 console_macro_add("Output",				dt_variable, "o_console.Output")

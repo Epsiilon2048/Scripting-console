@@ -42,6 +42,8 @@ function console_macro_add_builtin(criteria){ with o_console {
 
 if is_undefined(criteria) criteria = ""
 
+var added = 0
+
 for(var i = 0; i <= 10000; i++)
 {
 	var name = script_get_name(i)
@@ -66,7 +68,13 @@ for(var i = 0; i <= 10000; i++)
 			}
 		}
 		
-		if not excluded console_macro_add(name, dt_method, i)
+		if not excluded 
+		{
+			console_macro_add(name, dt_method, i)
+			added ++
+		}
 	}
 }
+
+return "Added "+string(added)+" builtin function"+((added == 1) ? "" : "s")
 }}

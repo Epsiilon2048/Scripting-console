@@ -45,7 +45,7 @@ if not command_colors draw_text(text_x, text_y, console_string)					// Draw cons
 																				
 draw_rectangle(left, top, left+_sidebar_width, bottom, false)					// Draw sidebar
 draw_rectangle(																	// Draw selection
-	text_x + _char_width*(char_pos1-(char_pos1-char_pos2)), 
+	text_x + _char_width*(char_pos1-(char_pos1-char_pos2))-1, 
 	text_y - _char_height,
 	text_x + _char_width*(char_pos1-1), 
 	text_y - 2,

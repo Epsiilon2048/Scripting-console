@@ -353,7 +353,7 @@ function Console_value_box() constructor{
 		y+vb.text_h+vb.outline_dist, 
 		vb.outline_radius1, vb.outline_radius1, false
 	)
-	draw_set_color((type == vb_color) ? value : o_console.colors.body_real)
+	draw_set_color((type == vb_color and not is_undefined(value)) ? value : o_console.colors.body_real)
 	draw_roundrect_ext(
 		x+width-vb.outline_dist-vb.border_w+1, 
 		y-vb.outline_dist+1, 

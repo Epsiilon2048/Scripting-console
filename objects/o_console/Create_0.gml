@@ -55,6 +55,10 @@ console_macro_order = ds_list_create()
 initialize_console_macros()
 initialize_console_graphics()
 
+bar_x = undefined
+bar_y = undefined
+bar_width = undefined
+
 identifiers = {
 	r: dt_real,
 	s: dt_string,
@@ -131,9 +135,10 @@ event_commands = {
 ctx = new Ctx_menu()
 ctx.scope = o_console
 ctx.set([
+	{str: "Clear output", output: true},
+	{str: "Copy output", scr: function(){ clipboard_set_text(o_console.O1) }},
 	{str: "Set window to output",	scr: window_set_output				},
 	{str: "Always Show output",		checkbox: "o_console.force_output"	},
-	{str: "Clear output",			output: true						},
 	ctx_separator,
 	{str: "Room instances",		scr: roomobj,			output: true},
 	{str: "Instance variables",	scr: objvar,			output: true},
@@ -322,6 +327,8 @@ prompt_bar_width = 1
 
 run_in_embed   = false
 run_in_console = false
+
+cs_template = cs_greenbeans
 
 var greetings = [
 	"I hope you're having a wonderful day!",

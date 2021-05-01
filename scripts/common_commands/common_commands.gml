@@ -38,35 +38,128 @@ if is_string(struct)
 	var varstring = string_add_scope(struct, true)
 	
 	if is_undefined(varstring)					return "Missing variable scope"
-	if not variable_string_exists(varstring)	return "Struct "+struct+" doesn't exist"
+	if not variable_string_exists(varstring)	return "Struct \""+struct+"\" doesn't exist"
 	
 	struct = variable_string_get(varstring)
 }
 
+if not is_struct(struct) return "Variable is not a struct"
+
 if argument_count == 1 return struct
+
+if argument_count == 2
+{
+	if variable_struct_exists(struct, argument[1])	return struct[$ argument[1]]
+	else											return "Key "+string(argument[1])+" in struct does not exist"
+}
 
 for(var i = 1; i <= argument_count-2; i+=2)
 {
-	variable_struct_set(struct, argument[i], argument[i+1])
-	return "Set struct values"
+	struct[$ argument[i]] = argument[i+1]
 }
+return "Set struct values"
 }
 
+	
+	
+	
+function dealwith_ds_map(ds_map){
+
+if is_undefined(ds_map) return "Must provide ds_map! (if you're looking for the help command, type \"help\"!)"
+
+if is_string(ds_map)
+{
+	var varstring = string_add_scope(ds_map, true)
+	
+	if is_undefined(varstring)					return "Missing variable scope"
+	if not variable_string_exists(varstring)	return "ds map \""+ds_map+"\" doesn't exist"
+	
+	ds_map = variable_string_get(varstring)
+}
+
+if not is_numeric(ds_map)				return "Invalid ds map index"
+if not ds_exists(ds_map, ds_type_map)	return "ds map at index "+string(ds_map)+" does not exist"
+
+if argument_count == 1 return ds_map_to_struct(ds_map)
+
+if argument_count == 2 
+{
+	if ds_map_exists(ds_map, argument[1])	return ds_map[? argument[1]]
+	else									return "Key "+string(argument[1])+" in ds map does not exist"
+}
+
+for(var i = 1; i <= argument_count-2; i+=2)
+{
+	ds_map[? argument[i]] = argument[i+1]
+}
+return "Set ds map values"
+}
+
+	
 	
 	
 function dealwith_ds_list(ds_list, index, value){
 
 if is_undefined(ds_list) return "Must provide ds list!"
-if not is_numeric(ds_list) or not ds_exists(ds_list, ds_type_list) return stitch("\"",ds_list,"\""+" is not a ds list")
 
-if is_undefined(index) return ds_list_to_array(ds_list)
-if is_undefined(value) return ds_list[| index]
+if is_string(ds_list)
+{
+	var varstring = string_add_scope(ds_list, true)
+	
+	if is_undefined(varstring)					return "Missing variable scope"
+	if not variable_string_exists(varstring)	return "ds list \""+ds_list+"\" doesn't exist"
+	
+	ds_list = variable_string_get(varstring)
+}
+
+if not is_numeric(ds_list)				return "Invalid ds list index"
+if not ds_exists(ds_list, ds_type_list) return "ds list at index "+string(ds_list)+" doesn't exist"
+
+if is_undefined(index)	return ds_list_to_array(ds_list)
+if index < 0			return "Invalid index"
+
+if is_undefined(value) 
+{
+	if index >= ds_list_size(ds_list)	return stitch("Index ",index," exceeds ds list size (",ds_list_size(ds_list),")")
+	else								return ds_list[| index]
+}
 
 ds_list[| index] = value
-return stitch("Set item ",value," in datastructure ",ds_list," to ",value)
+return stitch("Set item ",value," in ds list to ",value)
 }
 
 
+function dealwith_ds_grid(ds_grid, x, y, value){
+
+if is_undefined(ds_grid) return "Must provide ds grid!"
+
+if is_string(ds_grid)
+{
+	var varstring = string_add_scope(ds_grid, true)
+	
+	if is_undefined(varstring)					return "Missing variable scope"
+	if not variable_string_exists(varstring)	return "ds grid \""+ds_grid+"\" doesn't exist"
+	
+	ds_grid = variable_string_get(varstring)
+}
+
+if not is_numeric(ds_grid)				return "Invalid coordinates"
+if not ds_exists(ds_grid, ds_type_grid)	return "ds grid at index "+string(ds_grid)+" doesn't exist"
+
+if is_undefined(x)							return "Hey, uh, haven't quite worked out how ds grids are gonna be displayed, give it a bit of time, yeah?"
+if is_undefined(y)							return "Must provide y coordinate!"
+
+if not is_numeric(x) or not is_numeric(y) or x < 0 or y < 0	return "Invalid ds grid coordinates"
+
+if is_undefined(value)
+{
+	if x >= ds_grid_width(ds_grid) or y >= ds_grid_height(ds_grid)	return stitch("Index (",x,", ",y,") exceeds ds grid boundaries (",ds_grid_width(ds_grid),", ",ds_grid_height(ds_grid),")")
+	else															return ds_grid[# x, y]
+}
+
+ds_grid[# x, y] = value
+return stitch("Set position (",x,", ",y,") in ds grid to ",value)
+}
 
 
 function create_variable(name, value){
@@ -95,17 +188,94 @@ if not is_string(variable) return "Must provide variable name as string"
 var _variable = string_add_scope(variable, true)
 var _amount = amount
 
-if is_undefined(amount) _amount = 1
-
 if is_undefined(_variable)				 return "Missing variable scope"
 if not variable_string_exists(_variable) return "Variable "+variable+" doesn't exist"
+
+if is_string(amount)
+{
+	var varstring = string_add_scope(amount, true)
+	
+	if is_undefined(varstring)					return "Missing variable scope for amount"
+	if not variable_string_exists(varstring)	return "Variable "+amount+" doesn't exist"
+	
+	_amount = variable_string_get(varstring)
+}
+else if is_undefined(amount) 
+{
+	amount = 1
+	_amount = 1
+}
 
 var value = variable_string_get(_variable) + _amount
 
 variable_string_set(_variable, value)
 
-return stitch("Added ",_amount," to "+variable+" (",value,")")
+return stitch("Added ",amount," to "+variable+" (",value,")")
 }
+
+
+
+
+function divvar(variable, amount){
+
+if not is_string(variable)	return "Must provide variable name as string"
+if is_undefined(amount)		return "Must provide value to divide by"
+
+var _variable = string_add_scope(variable, true)
+var _amount = amount
+
+if is_undefined(_variable)				 return "Missing variable scope"
+if not variable_string_exists(_variable) return "Variable "+variable+" doesn't exist"
+
+if is_string(amount)
+{
+	var varstring = string_add_scope(amount, true)
+	
+	if is_undefined(varstring)					return "Missing variable scope for amount"
+	if not variable_string_exists(varstring)	return "Variable "+amount+" doesn't exist"
+	
+	_amount = variable_string_get(varstring)
+}
+
+if _amount == 0 return "Cannot divide by 0!"
+
+var value = variable_string_get(_variable) / _amount
+
+variable_string_set(_variable, value)
+
+return stitch("Divided ",variable," by ",amount," (",value,")")
+}
+
+
+
+function multvar(variable, amount){
+
+if not is_string(variable)	return "Must provide variable name as string"
+if is_undefined(amount)		return "Must provide value to multiply by"
+
+var _variable = string_add_scope(variable, true)
+var _amount = amount
+
+if is_undefined(_variable)				 return "Missing variable scope"
+if not variable_string_exists(_variable) return "Variable "+variable+" doesn't exist"
+
+if is_string(amount)
+{
+	var varstring = string_add_scope(amount, true)
+	
+	if is_undefined(varstring)					return "Missing variable scope for amount"
+	if not variable_string_exists(varstring)	return "Variable "+amount+" doesn't exist"
+	
+	_amount = variable_string_get(varstring)
+}
+
+var value = variable_string_get(_variable) * _amount
+
+variable_string_set(_variable, value)
+
+return stitch("Multiplied ",variable," by ",amount," (",value,")")
+}
+
 
 
 
@@ -124,7 +294,6 @@ variable_string_set(_variable, toggle)
 
 return stitch("Toggled "+variable+" (",toggle ? "true" : "false",")")
 }
-
 
 
 function roomobj(){

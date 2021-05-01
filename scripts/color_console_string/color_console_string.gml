@@ -299,12 +299,10 @@ if string_length(command) > max_length array_push(color_list, {pos: string_lengt
 
 console_color_time = 0
 
-output_set(subject_interpret)
 return {text: _command, colors: color_list, subject_interpret: subject_interpret}
 }
 catch(_exception)
 {
-	output_set(_exception)
 	return {text: _command, colors: [{pos: string_length(_command)+1, col: "plain"}]}
 }
 }}

@@ -10,6 +10,9 @@ var old_halign = draw_get_halign()
 draw_set_font(o_console.font)
 draw_set_halign(fa_left)
 
+var char_width = string_width(" ")
+var char_height = string_height(" ")
+
 var lastpos = 1
 
 for(var i = 0; i <= array_length(console_text.colors)-1; i++)
@@ -21,7 +24,7 @@ for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 	draw_set_color( is_string(c) ? o_console.colors[$ c] : c )
 	draw_text(x, y, _text)
 	
-	x += o_console.char_width*string_length(_text)
+	x += char_width*string_length(_text)
 	lastpos = console_text.colors[i].pos
 }
 
