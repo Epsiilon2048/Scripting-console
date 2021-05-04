@@ -52,7 +52,7 @@ if inst_select
 		{
 			output_set(stitch("Seeking variables in ",object_get_name(inst_selecting.object_index)," ",inst_selecting))
 			object = inst_selecting
-			color_string = color_console_string(console_string, char_pos1)
+			color_string = gmcl_string_color(console_string, char_pos1)
 		}
 		else
 		{
@@ -160,7 +160,7 @@ if console_toggle and keyboard_scope == o_console
 		str_length = string_length(console_string)
 		char_pos1 = str_length+1
 		char_pos2 = char_pos1
-		color_string = color_console_string(console_string, char_pos1)
+		color_string = gmcl_string_color(console_string, char_pos1)
 	}
 	else if log_down
 	{
@@ -199,7 +199,7 @@ if console_toggle and keyboard_scope == o_console
 		char_pos2 += string_length(char)
 		str_length = string_length(console_string)
 		keyboard_string = console_string
-		color_string = color_console_string(console_string, char_pos1)
+		color_string = gmcl_string_color(console_string, char_pos1)
 	}
 	
 	if backspace and (char_pos1 != 1 or (char_pos1 == 1 and char_pos1 != char_pos2)) {
@@ -209,7 +209,7 @@ if console_toggle and keyboard_scope == o_console
 		char_pos2 = char_pos1
 		keyboard_string = console_string
 		str_length = string_length(console_string)
-		color_string = color_console_string(console_string, char_pos1)
+		color_string = gmcl_string_color(console_string, char_pos1)
 	}
 	
 	if del and char_pos2 != str_length+1 {
@@ -219,15 +219,15 @@ if console_toggle and keyboard_scope == o_console
 		char_pos1 = char_pos2
 		keyboard_string = console_string
 		str_length = string_length(console_string)
-		color_string = color_console_string(console_string, char_pos1)
+		color_string = gmcl_string_color(console_string, char_pos1)
 	}
 	#endregion
 	
 	#region Parse command
 	if enter
 	{	
-		var _compile = console_compile(console_string)
-		var _output  = console_run(_compile)
+		var _compile = gmcl_compile(console_string)
+		var _output  = gmcl_run(_compile)
 		
 		if is_struct(_compile)
 		{
@@ -251,7 +251,7 @@ if console_toggle and keyboard_scope == o_console
 	}
 	#endregion
 	
-	if console_color_time == console_color_interval color_string = color_console_string(console_string, char_pos1)
+	if console_color_time == console_color_interval color_string = gmcl_string_color(console_string, char_pos1)
 	console_color_time ++
 }
 

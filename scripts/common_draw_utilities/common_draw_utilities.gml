@@ -1,14 +1,4 @@
 
-function draw_set_properties(color, alpha, blendmode){
-
-draw_set_color(color)
-if not is_undefined(alpha)	   draw_set_alpha(alpha)
-if not is_undefined(blendmode) gpu_set_blendmode(blendmode)
-}
-
-
-
-
 function draw_reset_properties(){ // resets color, alpha, circle precision, blendmode, and shader
 
 draw_set_color(c_white)

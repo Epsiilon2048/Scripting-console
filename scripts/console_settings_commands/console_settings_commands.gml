@@ -5,7 +5,7 @@ if not is_undefined(color_schemes[$ value])
 {
 	colors = color_schemes[$ value]
 	
-	color_string = color_console_string(console_string, char_pos1)
+	color_string = gmcl_string_color(console_string, char_pos1)
 	cs_index = value
 
 	if run_in_embed// and (Output.tag == color_scheme_settings)
@@ -90,7 +90,7 @@ keybinds[array_length(keybinds)] =
 	name: command,
 	key: _key,
 	keyname: _keyname,
-	action: function(){ console_exec(name) },
+	action: function(){ gmcl_exec(name) },
 	built_in: false
 }
 

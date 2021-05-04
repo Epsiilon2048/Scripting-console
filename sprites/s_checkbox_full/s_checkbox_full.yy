@@ -67,9 +67,10 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"b1dcd9cf-b97d-4770-a224-74d5deb4b6cf","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Sprites",
+    "path": "folders/Console/IDE components/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "s_checkbox_full",

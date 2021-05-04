@@ -7,7 +7,7 @@ if array_length(event) > 0
 	
 	for(var i = 0; i <= array_length(event)-1; i++)
 	{
-		console_exec(event[i])
+		gmcl_exec(event[i])
 	}
 	
 	draw_reset_properties()

@@ -371,7 +371,7 @@ for (var i = 0; i <= instance_count-1; i++)
 	}
 }
 
-var text = generate_list(instances, ["name", "ind", "id"], {scr: roomobj, vari: "o_console.object", arg: inst, output: true}, "id")
+var text = generate_embed_list(instances, ["name", "ind", "id"], {scr: roomobj, vari: "o_console.object", arg: inst, output: true}, "id")
 
 array_push(text, 
 	"\n"+((instance_count == 1) ? "\nIt's just me!" : "")+"\n",

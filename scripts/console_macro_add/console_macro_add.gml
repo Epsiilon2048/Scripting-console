@@ -1,14 +1,4 @@
 
-function better_script_exists(ind){
-
-return 0 <= ind and ind <= 0xfffffffb and script_get_name(ind) != "<unknown>" and script_get_name(ind) != "<undefined>"
-}
-
-function better_instance_exists(obj) {
-
-return obj < 0xfffffffb and instance_exists(obj)
-}
-
 function ds_list_file(id, value){
 
 for(var i = 0; i <= ds_list_size(id)-1; i++)

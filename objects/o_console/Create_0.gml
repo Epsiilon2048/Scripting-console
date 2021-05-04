@@ -336,5 +336,6 @@ var greetings = [
 output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
 
 initialize_color_schemes()
-initialize_command_info()
-console_startup()
+initialize_console_docs()
+
+startup = true

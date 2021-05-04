@@ -127,8 +127,8 @@
   "canGenerateBitmap": true,
   "maintainGms1Font": false,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Fonts",
+    "path": "folders/Console/IDE components/Fonts.yy",
   },
   "resourceVersion": "1.0",
   "name": "fnt_debug5x",

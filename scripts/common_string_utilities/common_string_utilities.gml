@@ -61,32 +61,6 @@ return ds_list_to_array(split)
 
 
 
-
-function string_split_keep(substr, str){ //splits a string into an array by a separator, but keeping it
-
-var list = array_create(string_count(substr, str), "")
-var len = string_length(substr)
-
-var i = 0; while str != ""
-{
-	if string_pos(substr, str) != 0 
-	{
-		list[i] = string_copy(str, 1, string_pos(substr, str)+len-1)
-		str = string_delete(str, 1, string_pos(substr, str)+len-1)
-	}
-	else
-	{
-		list[i] = str
-		str = ""
-	}
-	
-	i++
-}
-return list
-}
-	
-	
-	
 	
 function string_is_int(str){ //returns true if a string is a base10 or base16 integer
 
@@ -157,6 +131,42 @@ return pos
 
 
 	
-function string_pop(str){ //returns the last character of a string
+function string_last(str){ //returns the last character of a string
 return string_char_at(str, string_length(str))
+}
+
+
+
+
+function first_is_digit(str){
+
+var char = string_char_at(str, 1)
+
+if char == "-" char = string_char_at(str, 2)
+
+return ( string_digits(char) == char )
+}
+	
+	
+	
+	
+function bm_to_string(blendmode){
+	
+switch blendmode
+{
+case bm_normal:			return "bm_normal"
+case bm_add:			return "bm_add"
+case bm_subtract:		return "bm_subtract"
+case bm_max:			return "bm_max"
+case bm_dest_alpha:		return "bm_dest_alpha"
+case bm_dest_color:		return "bm_dest_color"
+case bm_inv_dest_alpha:	return "bm_inv_dest_alpha"
+case bm_inv_dest_color:	return "bm_inv_dest_color"
+case bm_src_alpha:		return "bm_src_alpha"
+case bm_src_alpha_sat:	return "bm_src_alpha_sat"
+case bm_inv_src_alpha:	return "bm_inv_src_alpha"
+case bm_inv_src_color:	return "bm_inv_src_color"
+}
+
+return "<unknown>"
 }
