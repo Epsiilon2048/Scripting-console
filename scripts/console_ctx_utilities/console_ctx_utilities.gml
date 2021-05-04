@@ -219,7 +219,8 @@ if not enabled ctx = undefined
 function draw_ctx_menu(){ with o_console.CTX_MENU { if enabled and not is_undefined(ctx) {
 
 draw_set_font(font)
-draw_set_align(fa_left, fa_middle)
+draw_set_halign(fa_left)
+draw_set_valign(fa_middle)
 var cw = string_width(" ")
 var ch = string_height(" ")
 
@@ -317,7 +318,8 @@ function draw_ctx_strip(x, y, string){ with o_console.CTX_STRIP {
 if is_string(string) and string != ""
 {
 draw_set_font(font)
-draw_set_align(fa_left, fa_top)
+draw_set_halign(fa_left)
+draw_set_valign(fa_top)
 
 var w = string_width (string)
 var h = string_height(string)

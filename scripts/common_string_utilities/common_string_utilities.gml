@@ -35,27 +35,28 @@ return str
 	
 function string_split(substr, str){ //splits a string into an array by a separator
 
-static rl = ds_list_create()
+static split = ds_list_create()
 
-var p = string_pos(substr, str)
+var pos = string_pos(substr, str)
+if not pos return [str]
 
-if not p return [str]
+var marker = 1
+var substrlen = string_length(substr)
 
-var o = 1
-var substrlen = string_length(substr);
+ds_list_clear(split)
 
-ds_list_clear(rl);
-if (substrlen) while (p) {
-    ds_list_add(rl, string_copy(str, o, p - o));
-    o = p + substrlen;
-    p = string_pos_ext(substr, str, o);
+if substrlen while pos
+{	
+	var item = string_copy(str, marker, pos - marker)
+	
+    ds_list_add(split, item)
+	
+    marker = pos + substrlen
+    pos = string_pos_ext(substr, str, marker)
 }
-ds_list_add(rl, string_delete(str, 1, o - 1));
-// create an array and store results:
-var rn = ds_list_size(rl);
-var rw = array_create(rn);
-for (p = 0; p < rn; p++) rw[p] = rl[|p];
-return rw;
+ds_list_add(split, string_delete(str, 1, marker - 1))
+
+return ds_list_to_array(split)
 }
 
 

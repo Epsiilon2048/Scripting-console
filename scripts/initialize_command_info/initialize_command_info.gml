@@ -72,7 +72,7 @@ com_add("unbind", {args: ["bind index"], hiddenargs: ["return bindings menu?"], 
 com_add("bindings", {desc: "Returns the list of bindings"})
 
 com_add_category("Colors", false)
-com_add("color_get", {args: ["color value"], desc: "Returns the properties of a color value; if left blank returns the RBG of the scoped instance's _col variable"})
+com_add("color_get", {args: ["color value"], desc: "Returns the properties of a color value"})
 com_add("create_color_scheme4", {hidden: true, args: ["main", "body", "plaintext", "specialtext"], desc: "Builds a color scheme from 4 colors"})
 com_add("create_color_scheme7", {hidden: true, args: ["main", "body", "body_accent", "plaintext", "exposedtext", "specialtext", "method"], desc: "Builds a color scheme from 7 colors"})
 com_add("create_color_scheme10", {hidden: true, args: ["main", "body", "body_accent", "plaintext", "exposedtext", "specialtext", "variable", "method", "asset", "string"], desc: "Builds a color scheme from 10 colors"})
@@ -81,10 +81,12 @@ com_add("create_color_scheme_full", {args: ["body", "body_accent", "body_bm", "b
 com_add_category("Draw functions", false)
 com_add("clip_rect_cutout", {args: ["x1", "y1", "x2", "y2"], desc: "Initializes a retangular clip mask shader"})
 
+command_doc_add("var", commands[? "create_variable"])
 command_doc_add("@", commands[? "dealwith_array"])
 command_doc_add("|", commands[? "dealwith_ds_list"])
 command_doc_add("$", commands[? "dealwith_struct"])
-command_doc_add("var", commands[? "create_variable"])
+command_doc_add("?", commands[? "dealwith_ds_map"])
+command_doc_add("#", commands[? "dealwith_ds_grid"])
 
 command_doc_add("instance_create_layer", {args: ["x", "y", "layer_id_or_name", "obj"], desc: ""})
 command_doc_add("instance_create_depth", {args: ["x", "y", "depth", "obj"], desc: ""})

@@ -3,8 +3,9 @@ function help(){
 
 return format_output([
 	"Help & info\n",
-	{str: "Basic syntax & usage\n", scr: syntax_help, output: true},
+	{str: "GMCL syntax\n", scr: syntax_help, output: true},
 	{str: "Command list\n", scr: command_help, output: true},
+	{str: "Shortcuts\n", scr: shortcut_help, output: true},
 	{str: "Console windows\n", scr: console_window_help, output: true},
 	{str: "Videos\n\n", scr: console_videos, output: true},
 	
@@ -52,7 +53,8 @@ if is_undefined(_command)
 	array_push(text,
 		"\n",
 		{cbox: "o_console.show_hidden_commands", scr: command_help, output: true}," Show hidden commands\n\n",
-		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
+		
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}," / ",{str: "Shortcuts", scr: shortcut_help, outp: true}
 	)
 }
 else
@@ -88,7 +90,7 @@ else
 	)
 	
 	array_push(text, 
-		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: _command, col: "embed_hover"}
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: "Shortcuts", scr: shortcut_help, outp: true}," / ",{str: _command, col: "embed_hover"}
 	)
 }
 
@@ -169,6 +171,27 @@ return format_output([
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", col: "embed_hover"}
 ], true, tag_help, "Compiler instructions documentation")
+}
+
+
+
+function shortcut_help(){
+
+return format_output([
+	"GMCL shortcuts\n\n"+
+	
+	"Data structure accessors\n"+
+	"Many types of data structures have accessors which make them easier to read from or write to.\n\n"+
+	"The symbols used are parallel to GML's ds identifiers, and they're functionally just methods with shortcuts.\n\n",
+	
+	{str: "  @", arg: "@", scr: command_help, outp: true},": arrays\n",
+	{str: "  |", arg: "|", scr: command_help, outp: true},": ds lists\n",
+	{str: "  $", arg: "$", scr: command_help, outp: true},": structs\n",
+	{str: "  ?", arg: "?", scr: command_help, outp: true},": ds maps\n",
+	{str: "  #", arg: "#", scr: command_help, outp: true},": ds grids\n\n",
+
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: "Shortcuts", col: "embed_hover"}
+], true, shortcut_help, "Shortcut list")
 }
 
 
@@ -314,12 +337,13 @@ function Epsiilon(){
 return format_output([
 	"This scripting console was developed by Epsiilon2048, with help from the \nGMS community\n\n",
 	
-	"[links] ",
-	{str: "Twitter",	scr: url_open, arg: "https://twitter.com/epsiilon2048"}," - ",
-	{str: "Youtube",	scr: url_open, arg: "https://www.youtube.com/channel/UCA4znMVFR0P0V6ZitJhi2bA"}," - ",
-	{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},"\n\n"+
+	"[links] ",{str: "Twitter",	scr: url_open, arg: "https://twitter.com/epsiilon2048"}," - ",{str: "Youtube",	scr: url_open, arg: "https://www.youtube.com/channel/UCA4znMVFR0P0V6ZitJhi2bA"}," - ",{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},"\n\n"+
+
+	"With scripts from:\n",
+	{str: "yellowafterlife", scr: url_open, arg: "https://yal.cc/"}," (",{str: "string_split", scr: url_open, arg: "https://yal.cc/gamemaker-split-string/"},")\n",
+	{str: "GMLscripts.com",	scr: url_open, arg: "https://GMLscripts.com/"}," / Schreib & xot (",{str: "dec_to_hex", scr: url_open, arg: "https://www.gmlscripts.com/script/dec_to_hex"},", ",{str: "hex_to_dec", scr: url_open, arg: "https://www.gmlscripts.com/script/hex_to_dec"},", ",{str: "rgb_to_hex", scr: url_open, arg: "https://www.gmlscripts.com/script/rgb_to_hex"},")\n\n",
 	
-	"Thank you so much for your interest and support! My only hope is that someone\ncan make some use out of this little project of mine.\n\n",
+	"Thank you so much for your interest and support!\n\n",
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Credits", col: "embed_hover"}
 ], true, Epsiilon)
@@ -368,12 +392,5 @@ until _nice_thing != prev_nice_thing
 
 prev_nice_thing = _nice_thing
 
-if o_console.run_in_embed and o_console.Output.tag != -1
-{
-	return format_output([{str: "<back>", scr: previous_menu, output: true}, " "+_nice_thing], true, nice_thing)
-}
-else
-{
-	return format_output(_nice_thing, false, nice_thing)
-}
+return format_output([{str: "Help menu", scr: help, output: true}," / ",{str: _nice_thing, scr: nice_thing, outp: true}], true, nice_thing, _nice_thing)
 }

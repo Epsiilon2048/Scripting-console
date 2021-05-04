@@ -33,6 +33,7 @@ set = function(text) {
 	{
 		var _str
 		var _clickable = false
+		var _color = false
 		var cbox_length = 0
 		var cbox_space = ""
 
@@ -42,6 +43,7 @@ set = function(text) {
 			var _newlines = string_count("\n", _str)
 		
 			var s = {}
+			var c = {}
 
 			_clickable = (
 				variable_struct_exists(_text[i], "func") or 
@@ -52,6 +54,13 @@ set = function(text) {
 				variable_struct_exists(_text[i], "checkbox") or
 				variable_struct_exists(_text[i], "outout") or
 				variable_struct_exists(_text[i], "scr")
+			)
+			
+			_color = _clickable or (
+				variable_struct_exists(_text[i], "col") or 
+				
+				variable_struct_exists(_text[i], "ul") or 
+				variable_struct_exists(_text[i], "hl")
 			)
 			   
 			s.func	= variable_struct_exists_get(_text[i], "func",	noscript	)
@@ -67,6 +76,10 @@ set = function(text) {
 			if s.vari == ""			s.vari	= variable_struct_exists_get(_text[i], "variable",	"")
 			if s.outp == false		s.outp	= variable_struct_exists_get(_text[i], "output",	false)
 			if s.func == noscript	s.func	= variable_struct_exists_get(_text[i], "scr",		noscript)
+			
+			c.col	= variable_struct_exists_get(_text[i], "col",	_clickable ? "embed" : "output"	)
+			c.ul	= variable_struct_exists_get(_text[i], "ul",	undefined	)
+			c.hl	= variable_struct_exists_get(_text[i], "hl",	undefined	)
 			
 			cbox_length = (s.cbox != "") ? string_length(cbox_true) : 0
 			cbox_space = (s.cbox != "") ? string_repeat(" ", string_length(cbox_true)) : ""
@@ -96,7 +109,7 @@ set = function(text) {
 					
 					for(var j = 1; j <= array_length(line_split)-1; j++)
 					{
-						if line_split[j] != "" ds_list_add(_subclickable_list, {
+						ds_list_add(_subclickable_list, {
 							id: _click_id,
 							y:	s.y+j,
 							length: string_length(line_split[j]),
@@ -108,16 +121,16 @@ set = function(text) {
 				ds_list_add(_clickable_list, s)
 			}
 		
-			if _clickable or variable_struct_exists(_text[i], "col")
+			if _color
 			{
-				var col = variable_struct_exists_get(_text[i], "col", "embed")
-				
 				ds_list_add(_colors_list, {
 					x: _width,
 					y: self.height,
 					id: _clickable ? _click_id++ : -1,
 					str: _str,
-					col: col,
+					col: c.col,
+					ul: c.ul,
+					hl: c.hl,
 					cbox: s.cbox,
 				})
 			}
@@ -171,7 +184,7 @@ set = function(text) {
 
 function draw_embedded_text(x, y, text, plaintext_color, alpha){
 
-var cw = string_width (" ")
+var cw = string_width(" ")
 var ch = string_height(" ")
 
 var old_halign = draw_get_halign()
@@ -180,7 +193,8 @@ var old_alpha = draw_get_alpha()
 
 if is_undefined(alpha) alpha = 1
 
-draw_set_align(fa_left, fa_top)
+draw_set_halign(fa_left)
+draw_set_valign(fa_top)
 draw_set_alpha(alpha)
 
 var set_text = false
@@ -190,13 +204,16 @@ draw_set_color(plain_col)
 if not is_struct(text)
 {
 	draw_text(x, y, text)
-	draw_set_align(old_halign, old_valign)
+	draw_set_halign(old_halign)
+	draw_set_valign(old_valign)
+	
 	return undefined
 }
 else if not o_console.embed_text
 {
 	draw_text(x, y, text.plaintext)
-	draw_set_align(old_halign, old_valign)
+	draw_set_halign(old_halign)
+	draw_set_valign(old_valign)
 	return undefined
 }
 
@@ -281,7 +298,75 @@ else
 for(var i = 0; i <= array_length(text.colors)-1; i++)
 {
 	var c = text.colors[i]
-	var _col
+	
+	var nl = string_pos("\n", c.str)
+	var cbox = ""
+	
+	if not is_undefined(c.hl) or not is_undefined(c.ul)
+	{
+		var hl = is_string(c.hl) ? o_console.colors[$ c.hl] : c.hl
+		var ul = is_string(c.ul) ? o_console.colors[$ c.ul] : c.ul
+		
+		var len = nl ? nl-1 : string_length(c.str)
+		
+		var nl_count = nl ? string_count("\n", c.str) : 0
+		
+		if not is_undefined(hl)
+		{
+			draw_set_color(hl)
+			draw_rectangle(	
+				x + c.x*cw,			y + c.y*ch, 
+				x + (c.x+len)*cw,	y + (c.y+1)*ch - 1,
+				false
+			)
+		}
+		if not is_undefined(ul)
+		{
+			draw_set_color(ul)
+			draw_line(
+				x + c.x*cw - 1,			y + (c.y+1)*ch - 3,
+				x + (c.x+len)*cw - 1,	y + (c.y+1)*ch - 3
+			)
+		}
+			
+		var prev_nl = nl
+		var _nl
+			
+		for(var i = 2; i <= nl_count+1; i++)
+		{
+			if i == nl_count+1
+			{
+				len = string_length(c.str) - string_last_pos("\n", c.str)
+			}
+			else
+			{
+				_nl = string_pos_index("\n", c.str, i)
+				len = _nl - prev_nl - 1
+				prev_nl = _nl
+			}
+				
+			if len > 0 
+			{
+				if not is_undefined(hl)
+				{
+					draw_set_color(hl)
+					draw_rectangle(
+						x,			y + (c.y+i-1)*ch, 
+						x + len*cw,	y + (c.y+i)*ch - 1,
+						false
+					)
+				}
+				if not is_undefined(ul)
+				{
+					draw_set_color(ul)
+					draw_line(
+						x - 1,			y + (c.y+i)*ch - 3, 
+						x + len*cw - 1,	y + (c.y+i)*ch - 3
+					)
+				}
+			}
+		}
+	}
 	
 	if is_string(c.col)
 	{
@@ -291,9 +376,6 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 		else																		_col = plain_col
 	}
 	else _col = c.col
-	
-	var nl = string_pos("\n", c.str)
-	var cbox = ""
 	
 	if c.cbox != ""
 	{
@@ -317,7 +399,8 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 
 if set_text text.set(_output)
 
-draw_set_align(old_halign, old_valign)
+draw_set_valign(old_halign)
+draw_set_halign(old_valign)
 draw_set_alpha(old_alpha)
 return mouse_on
 }

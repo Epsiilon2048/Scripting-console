@@ -332,7 +332,8 @@ function Console_value_box() constructor{
 
 	draw_set_font(o_console.font)
 
-	draw_set_align(fa_left, fa_middle)
+	draw_set_halign(fa_left)
+	draw_set_valign(fa_middle)
 
 	width		= string_length(varname)*vb.text_w + vb.border_w*3 + vb.outline_dist+1
 	value_width = string_length(text)*vb.text_w + vb.border_w

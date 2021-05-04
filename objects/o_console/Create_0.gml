@@ -1,19 +1,16 @@
 
-var initial_time = get_timer()
-
 include_builtin_functions = true
 
 builtin_exclude = [
 //	"string",
 //	"array",
-//	"ads",
-//	"ds",
 //	"ds_list",
 //	"ds_map",
 	"ds_grid",
 	"ds_priority",
 	"ds_queue",
 	"ds_stack",
+	"ads",
 	"layer",
 	"gesture",
 	"keyboard",
@@ -53,7 +50,7 @@ keyboard_scope = o_console
 console_macro_order = ds_list_create()
 
 initialize_console_macros()
-initialize_console_graphics()
+initialize_console_graphics( undefined )
 
 bar_x = undefined
 bar_y = undefined
@@ -135,8 +132,8 @@ event_commands = {
 ctx = new Ctx_menu()
 ctx.scope = o_console
 ctx.set([
-	{str: "Clear output", output: true},
-	{str: "Copy output", scr: function(){ clipboard_set_text(o_console.O1) }},
+	{str: "Clear output",			output: true},
+	{str: "Copy output",			scr: function(){ clipboard_set_text(o_console.O1) }},
 	{str: "Set window to output",	scr: window_set_output				},
 	{str: "Always Show output",		checkbox: "o_console.force_output"	},
 	ctx_separator,
@@ -209,7 +206,6 @@ console_bottom	= win_h-50
 console_text_x	= console_left + 18
 console_text_y	= console_bottom + (console_top-console_bottom)/2
 console_object_x = console_right - 18
-console_object_border = 25
 
 console_string = ""
 char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
@@ -240,7 +236,6 @@ fdel		= 0
 draw_set_font(old_font)
 
 object = noone  //object in scope
-mouse_over_object = false
 
 mouse_starting_x = undefined
 mouse_starting_y = undefined
@@ -322,8 +317,6 @@ O2 = ""
 O3 = ""
 O4 = ""
 O5 = ""
-
-prompt_bar_width = 1
 
 run_in_embed   = false
 run_in_console = false

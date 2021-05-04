@@ -128,7 +128,8 @@ if value_show and not condensed
 {
 	draw_set_color(o_console.colors.output)
 	draw_set_font(o_console.font)
-	draw_set_align(fa_left, fa_center)
+	draw_set_halign(fa_left)
+	draw_set_valign(fa_middle)
 
 	clip_rect_cutout(x, y, x2+1, y2)
 	draw_text(x+o_console.SLIDER.text_offset, y+o_console.SLIDER.height/2+1, text)
