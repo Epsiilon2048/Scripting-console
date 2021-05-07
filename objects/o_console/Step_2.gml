@@ -221,6 +221,9 @@ if console_toggle and keyboard_scope == o_console
 		str_length = string_length(console_string)
 		color_string = gmcl_string_color(console_string, char_pos1)
 	}
+	
+	if string_length(console_string) > 0 output_set_lines([select_items_in_macros(console_string)])
+	else output_set()
 	#endregion
 	
 	#region Parse command
