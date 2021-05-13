@@ -1,5 +1,4 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function initialize_console_graphics(scale){ with o_console {
 
 if is_undefined(scale)
@@ -26,6 +25,7 @@ draw_scale = SCALE[scale]
 font = draw_scale.font
 
 draw_set_font(font)
+draw_enable_swf_aa(true)
 
 char_width	= string_width(" ")
 char_height = string_height(" ")
@@ -39,6 +39,51 @@ BAR = {}; with BAR {
 	
 	text_dist = 18
 	sidebar_width = 2
+}
+
+SCROLLBAR = {}; with SCROLLBAR {
+	
+	char_height = 17
+	
+	width = 20
+	min_height = 18
+	
+	scroll_step = char_height*4
+	
+	resize_border = 6
+}
+
+AUTOFILL_LIST = {}; with AUTOFILL_LIST {
+	
+	char_height = 17
+	
+	width = 300
+	height = 220
+	width_min = 76
+	height_min = char_height*1.5
+	
+	sidetext_bar = 5
+	sidetext_width = 150
+	sidetext_border = 7
+	
+	sidetext_hue = -6
+	sidetext_saturation = -7
+	sidetext_value = -159
+	
+	border_w = 1
+	border_h = 1
+	
+	text_sep = 1
+	
+	mouse_on = false
+	
+	mouse_border = 6
+	mouse_dragging_top = false
+	mouse_dragging_right = false
+	
+	scrollbar = new Console_scrollbar()
+	scrollbar.initialize(0, 0, 0, 0, width, height, fa_right, fa_bottom)
+	scrollbar.resize = true
 }
 
 CHECKBOX = {}; with CHECKBOX {

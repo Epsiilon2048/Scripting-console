@@ -1,5 +1,5 @@
 
-function draw_console_text(x, y, console_text){
+function draw_console_text(x, y, console_text, font){
 
 if not is_struct(console_text) or array_length(console_text.colors) < 1 return undefined
 
@@ -7,7 +7,7 @@ var old_color  = draw_get_color()
 var old_font   = draw_get_font()
 var old_halign = draw_get_halign()
 
-draw_set_font(o_console.font)
+draw_set_font(is_undefined(font)?o_console.font:font)
 draw_set_halign(fa_left)
 
 var char_width = string_width(" ")
@@ -24,7 +24,7 @@ for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 	draw_set_color( is_string(c) ? o_console.colors[$ c] : c )
 	draw_text(x, y, _text)
 	
-	x += char_width*string_length(_text)
+	x += string_width(_text)//char_width*string_length(_text)
 	lastpos = console_text.colors[i].pos
 }
 
@@ -306,7 +306,7 @@ draw_set_alpha(old_alpha)
 function draw_checkbox(x, y, enabled, invert){ with o_console.CHECKBOX {
 
 var old_swf_aa = draw_get_swf_aa_level()
-draw_set_swf_aa_level(2)
+draw_set_swf_aa_level(1)
 
 var _invert = is_undefined(invert) ? false : invert
 

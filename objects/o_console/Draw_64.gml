@@ -18,11 +18,6 @@ else if mouse_check_button_released(mb_left) and
 {
 	if Display.enabled and Display.mouse_over_sidebar	Display.show = not Display.show
 	else if Window.enabled and Window.mouse_over_sidebar	Window.show = not Window.show
-	else if Output.mouse_over and not Output.mouse_over_embed and output_set_window and not output_as_window
-	{
-		//Window.text = Output.text
-		//output_set("")
-	}
 }
 
 else if not mouse_check_button(mb_left)
@@ -145,6 +140,7 @@ if output_as_window and Output.plaintext != ""
 }
 #endregion
 
+draw_autofill_list()
 draw_value_boxes()
 draw_color_picker()
 draw_ctx_menu()

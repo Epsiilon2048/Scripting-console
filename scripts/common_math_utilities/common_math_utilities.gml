@@ -15,6 +15,21 @@ return make_color_hsv(
 )
 }
 	
+
+	
+function color_add_hsv(col, hue, saturation, value){ //returns a color with added hue
+
+if is_undefined(hue) hue = 0
+if is_undefined(saturation) saturation = 0
+if is_undefined(value) value = 0
+
+return make_color_hsv(
+	color_get_hue(col)+hue, 
+	color_get_saturation(col)+saturation,
+	color_get_value(col)+value
+)
+}
+	
 	
 	
 	

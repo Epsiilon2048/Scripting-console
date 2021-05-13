@@ -57,6 +57,5 @@ return (y-cy)*display_scaley
 	
 function gui_mouse_between(x1, y1, x2, y2){ //checks if the mouse is between the given coords on the gui
 
-return	(min(x1, x2) <= gui_mx and gui_mx <= max(x1, x2) and 
-		 min(y1, y2) <= gui_my and gui_my <= max(y1, y2))
+return point_in_rectangle(gui_mx, gui_my, min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
 }

@@ -3,12 +3,12 @@ function initialize_console_macros(){
 
 #region Shortcuts
 
-console_macro_add("con",				dt_variable, "o_console")
+console_macro_add("con",				dt_instance, "o_console")
 
 console_macro_add("var",				dt_method, create_variable)
 			
 console_macro_add("@",					dt_method, dealwith_array)
-console_macro_add("$",					dt_method, dealwith_struct)	
+console_macro_add("$",					dt_method, dealwith_struct)
 console_macro_add("|",					dt_method, dealwith_ds_list)
 console_macro_add("?",					dt_method, dealwith_ds_map)
 console_macro_add("#",					dt_method, dealwith_ds_grid)
@@ -115,7 +115,9 @@ console_macro_add("vk_tab",				dt_real, vk_tab)
 console_macro_add("vk_shift",			dt_real, vk_shift)
 console_macro_add("vk_control",			dt_real, vk_control)
 console_macro_add("vk_alt",				dt_real, vk_alt)
-										
+
+console_macro_add("vk_tilde",			dt_real, vk_tilde)
+
 console_macro_add("vk_add",				dt_real, vk_add)
 console_macro_add("vk_decimal",			dt_real, vk_decimal)
 console_macro_add("vk_delete",			dt_real, vk_delete)

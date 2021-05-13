@@ -79,15 +79,18 @@ for(var i = 0; i <= array_length(com)-1; i++)
 		
 			break
 			#endregion
-	
+			
 			#region Object
 			case dt_instance:
-				object = subject.value
+				object = instance_exists(subject.value) ? subject.value : noone
+				instance_variables = variable_instance_get_names(object)
+				array_sort(instance_variables, true)
 			
 				if subject.value == noone output_string[i] = "Reset console scope"
 				else output_string[i] = (
-					"Scope set to "+stitch(object_get_name(subject.value.object_index)," ",subject.value)
-				)
+						"Scope set to "+stitch(object_get_name(subject.value.object_index)," ",subject.value)
+					)
+			
 			break
 			#endregion
 

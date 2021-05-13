@@ -2,53 +2,79 @@
 include_builtin_functions = true
 
 builtin_exclude = [
+
 //	"string",
 //	"array",
 //	"ds_list",
 //	"ds_map",
-	"ds_grid",
-	"ds_priority",
-	"ds_queue",
-	"ds_stack",
-	"ads",
-	"layer",
-	"gesture",
-	"keyboard",
-	"font",
-	"part",			// Particles
-	"steam",	
-	"xboxone",	 
-	"xboxlive",	 
-	"switch",		// Of the nintendo variety
-	"psn",		
-	"winphone",	 
-	"win8",		 
-	"vertex",		 
-	"uwp",		
-	"iap",
-	"sprite",		 
-	"skeleton",	 
-	"sequence",	  
-	"physics",	 
-	"path",		 
-	"matchmaking", 
-	"gpu",
-	"file",
-	"draw",		 
-	"display",	 
-	"date",		 
-	"camera",		 
-	"buffer",		 
-	"audio",		 
-	"achievement", 
+	"ds_grid_",
+	"ds_priority_",
+	"ds_queue_",
+	"ds_stack_",
+	"ads_",
+	"layer_",
+	"gesture_",
+	"keyboard_",
+	"font_",
+	"part_",			// Particles
+	"steam_",	
+	"xboxone_",	 
+	"xboxlive_",	 
+	"switch_",		// Of the nintendo variety
+	"psn_",		
+	"winphone_",	 
+	"win8_",		 
+	"vertex_",		 
+	"uwp_",		
+	"iap_",
+	"sprite_",		 
+	"skeleton_",	 
+	"sequence_",	  
+	"physics_",	 
+	"path_",		 
+	"matchmaking_", 
+	"gpu_",
+	"file_",
+	"draw_",		 
+	"display_",	 
+	"date_",		 
+	"camera_",		 
+	"buffer_",		 
+	"audio_",		 
+	"achievement_", 
+
+	// These are all odd builtin GML functions which aren't allowed in the studio, but are picked up when
+	// indexing all the builtin functions. All of them are either useless or have GML counterparts.
+	"ds_list_set_",		//ds_list_set_pre & ds_list_set_post 
+	"ds_map_set_",		//ds_map_set_pre & ds_map_set_post 
+	"ds_grid_set_p",	//ds_grid_set_pre & ds_grid_set_post
+	"array_set_",		//array_set_pre, array_set_post, array_set_2D_pre, array_set_2D_post, & array_set_2D
+	"@@",
+	"yyAsm",
+	"YoYo_",
+	"$",				//$PRINT, $FAIL, $ERROR
+	"sleep",
 ]
+
+macro_list = ds_list_create()
+method_list = ds_list_create()
+instance_variables = []
+scope_variables = []
+suggestions = ds_list_create()
+
+autofill = {}; with autofill {
+	macros = -1
+	methods = -1
+	instance = -1
+	scope = -1
+	suggestions = -1
+}
 
 console_macros = {}
 
 keyboard_scope = o_console
 
-console_macro_order = ds_list_create()
-
+index_functions()
 initialize_console_macros()
 initialize_console_graphics( undefined )
 
@@ -69,6 +95,8 @@ identifiers = {
 enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 
 #macro script_exists better_script_exists
+
+#macro vk_tilde 192
 
 #macro SCALE_ o_console.draw_scale.mult *
 
@@ -151,7 +179,7 @@ gui_mouse_y = gui_my
 
 color_schemes = {}
 
-console_key = vk_tab
+console_key = vk_tilde
 
 old_obj_identifier = "o_"
 
