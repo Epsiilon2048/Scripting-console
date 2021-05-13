@@ -2,10 +2,6 @@
 function autofill_in_list(array_or_ds_list, criteria){ with global.scrvar {
 
 criteria = string(criteria)
-if string_letters(string_char_at(criteria, 1)) == "" and string_char_at(criteria, 1) != "_"
-{
-	return -1
-}
 
 i = 1
 list = array_or_ds_list
@@ -47,8 +43,8 @@ for(i = 1; i <= c_len; i++)
 	
 		if c_ord != m_ord
 		{
-			if c_ord > m_ord			_min = index+1
-			else /*if c_ord < m_ord*/	_max = index-1
+			if c_ord > m_ord			_min = min(index+1, list_size-1)
+			else /*if c_ord < m_ord*/	_max = max(index-1, 0)
 			
 			if _max-_min <= 1
 			{
@@ -56,10 +52,6 @@ for(i = 1; i <= c_len; i++)
 				var min_is = (string_pos(criteria, access(_min)) == 1)
 				
 				if not (max_is or min_is) return -1
-				
-				//if		not min_is _min = _max
-				//else if	not max_is _max = _min
-
 				break
 			}
 			

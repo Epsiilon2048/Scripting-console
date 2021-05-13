@@ -60,6 +60,8 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	var x2 = Output.x+Output.text.width*char_width+Output.border_w
 	var y2 = Output.y-Output.text.height*char_height-Output.border_h
 	
+	var output_body = false
+	
 	Output.mouse_over = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
 	if Output.mouse_over or force_output_body or (Output.text_embedding and force_output_embed_body)
 	{
@@ -70,11 +72,43 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 			Output.alpha = 1
 			Output.fade_time  = 0
 		}
+		
+		output_body = true
 	}
 
-	draw_set_alpha(Output.alpha)
+	var _text_x = Output.x
+	var _text_y = Output.y-Output.text.height*char_height
 	
-	Output.mouse_over_embed = draw_embedded_text(Output.x, Output.y-Output.text.height*char_height, Output.text, undefined, Output.alpha)
+	if text_outline and not output_body and Output.text.plaintext != ""
+	{
+		draw_set_color(colors.selection)
+		
+		draw_text(_text_x+1, _text_y-1, Output.text.plaintext)
+		if text_outline > 1 
+		{
+			draw_text(_text_x-1, _text_y+1, Output.text.plaintext)
+			if text_outline > 2
+			{
+				draw_text(_text_x+1, _text_y+1, Output.text.plaintext)
+				if text_outline > 3
+				{
+					draw_text(_text_x-1, _text_y-1, Output.text.plaintext)
+					if text_outline > 4
+					{
+						draw_text(_text_x-1, _text_y,	Output.text.plaintext)
+						if text_outline > 5
+						{
+							draw_text(_text_x,	 _text_y+1, Output.text.plaintext)
+							if text_outline > 6
+							{
+								draw_text(_text_x,	 _text_y-1, Output.text.plaintext)
+								if text_outline > 7
+								{
+									draw_text(_text_x+1, _text_y,	Output.text.plaintext)
+	}}}}}}}
+	}
+	
+	Output.mouse_over_embed = draw_embedded_text(_text_x, _text_y, Output.text, undefined, Output.alpha)
 	
 	draw_set_alpha(1)
 }

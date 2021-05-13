@@ -48,6 +48,34 @@ ds_list_sort(method_list, true)
 }
 
 
+function index_assets(){
+	
+static asset = [
+	{exists: animcurve_exists,	get_name: function(curve_id){ return animcurve_get(curve_id).name }},
+	{exists: font_exists,		get_name: font_get_name},
+	{exists: object_exists,		get_name: object_get_name},
+	{exists: path_exists,		get_name: path_get_name},
+	{exists: room_exists,		get_name: room_get_name},
+	{exists: sequence_exists,	get_name: function(sequence_id){ return sequence_get(sequence_id).name }},
+	//{exists: shader_get_name(shader), get_name: },
+	{exists: audio_exists,		get_name: audio_get_name},
+	{exists: sprite_exists,		get_name: sprite_get_name},
+	//{exists: tileset, get_name: },
+	{exists: timeline_exists,	get_name: timeline_get_name},
+]
+
+for(var i = 0; i <= array_length(asset)-1; i++)
+{
+	var j = 0
+	while asset[i].exists(j)
+	{
+		ds_list_add(asset_list, asset[i].get_name(j++))
+	}
+}
+
+ds_list_sort(asset_list, true)
+}
+
 
 function console_macro_add_builtin(criteria){ with o_console {
 
@@ -67,9 +95,9 @@ for(var i = 0; i <= 10000; i++)
 		{
 			if string_pos(criteria, name) != 1 excluded = true
 		}
-		else for(var j = 0; j <= array_length(builtin_exclude)-1; j++)
+		else for(var j = 0; j <= ds_list_size(builtin_excluded)-1; j++)
 		{
-			if string_pos(builtin_exclude[j], name) == 1 
+			if string_pos(builtin_excluded[| j], name) == 1 
 			{
 				excluded = true
 				break
@@ -78,11 +106,17 @@ for(var i = 0; i <= 10000; i++)
 		
 		if not excluded 
 		{
-			console_macro_add(name, dt_method, i)
-			added ++
+			console_macros[$ name] = {type: dt_method, value: i}
+			
+			if ds_list_find_index(macro_list, name) == -1 
+			{
+				ds_list_add(macro_list, name)
+				added ++
+			}
 		}
 	}
 }
 
+ds_list_sort(macro_list, true)
 return "Added "+string(added)+" builtin function"+((added == 1) ? "" : "s")
 }}

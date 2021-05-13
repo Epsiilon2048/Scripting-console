@@ -1,12 +1,15 @@
 
+char_pos_arg = ""
+
 include_builtin_functions = true
 
-builtin_exclude = [
+builtin_excluded = ds_list_create()
+ds_list_add(builtin_excluded,
 
-//	"string",
-//	"array",
-//	"ds_list",
-//	"ds_map",
+	"string",
+	"array",
+	"ds_list",
+	"ds_map",
 	"ds_grid_",
 	"ds_priority_",
 	"ds_queue_",
@@ -54,10 +57,24 @@ builtin_exclude = [
 	"YoYo_",
 	"$",				//$PRINT, $FAIL, $ERROR
 	"sleep",
-]
+	"testFailed",
+)
+
+ds_indexes = ds_map_create()
+ds_names = {}
+
+ds_names[$ ds_type_grid]		= []
+ds_names[$ ds_type_list]		= []
+ds_names[$ ds_type_map]			= []
+ds_names[$ ds_type_priority]	= []
+ds_names[$ ds_type_queue]		= []
+ds_names[$ ds_type_stack]		= []
+
+test = ds_create(ds_type_list, "0.test")
 
 macro_list = ds_list_create()
 method_list = ds_list_create()
+asset_list = ds_list_create()
 instance_variables = []
 scope_variables = []
 suggestions = ds_list_create()
@@ -65,6 +82,7 @@ suggestions = ds_list_create()
 autofill = {}; with autofill {
 	macros = -1
 	methods = -1
+	assets = -1
 	instance = -1
 	scope = -1
 	suggestions = -1
@@ -74,7 +92,19 @@ console_macros = {}
 
 keyboard_scope = o_console
 
+BAR = {}
+SCROLLBAR = {}
+AUTOFILL_LIST = {}
+CHECKBOX = {}
+WINDOW = {}
+COLOR_PICKER = {}
+VALUE_BOX = {}
+CTX_MENU = {}
+CTX_STRIP = {}
+SLIDER = {}
+
 index_functions()
+index_assets()
 initialize_console_macros()
 initialize_console_graphics( undefined )
 
@@ -191,9 +221,11 @@ window_embed_text = true
 collapse_windows = true
 
 display_show_objects = false
-display_update = 1
+display_update = 3
 
 output_set_window = true
+
+text_outline = 8
 
 output_as_window = false
 force_output = false

@@ -58,7 +58,7 @@ var _min_height = sb.min_height*asp
 
 var mouse_on_window = gui_mouse_between(x1, y1, x2, y2)
 
-if mw_scroll and mouse_on_window scroll += scroll_step * (mouse_wheel_up()-mouse_wheel_down())
+if mw_scroll and mouse_on_window scroll += scroll_step * (mouse_wheel_up()-mouse_wheel_down()) + sb.key_scroll_step * (keyboard_check(vk_up)-keyboard_check(vk_down))
 
 var height = clamp( (y2-y1)/page_height*(y2-y1), _min_height, (y2-y1) )
 

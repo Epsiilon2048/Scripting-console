@@ -155,7 +155,7 @@ case dt_asset:		description = "Return object index"
 break
 case dt_color:		description = "Return color value properties"
 break
-case dt_instance:	description = "Set console scope to "+object_get_name(value.object_index)
+case dt_instance:	description = (value == noone) ? "Reset console scope" : ("Set console scope to "+object_get_name(value.object_index))
 break
 case dt_method:		if is_undefined(commands[? _arg]) description = "Execute"+((value > 10000) ? "" : " builtin")+" method "+(string_is_int(arg) ? script_get_name(real(arg)) : arg)
 					else description = command_doc(_arg)+((commands[? _arg].desc == "") ? "" : " - "+commands[? _arg].desc)

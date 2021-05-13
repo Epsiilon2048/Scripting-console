@@ -9,5 +9,7 @@ ds_list_destroy(command_order)
 ds_list_destroy(macro_list)
 ds_list_destroy(suggestions)
 ds_list_destroy(method_list)
+ds_list_destroy(asset_list)
 
+ds_map_destroy(ds_indexes)
 ds_map_destroy(commands)

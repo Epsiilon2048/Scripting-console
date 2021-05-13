@@ -96,8 +96,8 @@ if console_toggle and keyboard_scope == o_console
 	enter		= keyboard_check_pressed(vk_enter)
 	startln		= keyboard_check_pressed(vk_home)
 	endln		= keyboard_check_pressed(vk_end) and str_length > 0 and char_pos2 != str_length+1
-	log_up		= keyboard_check_pressed(vk_up)
-	log_down	= keyboard_check_pressed(vk_down) and (input_log_index != -1 or ds_list_size(input_log) == 0)
+	log_up		= keyboard_check_pressed(vk_up) and not AUTOFILL_LIST.mouse_on
+	log_down	= keyboard_check_pressed(vk_down) and not AUTOFILL_LIST.mouse_on and (input_log_index != -1 or ds_list_size(input_log) == 0)
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
 	copy		= keyboard_check_multiple_pressed(vk_control, ord("C"))
 	paste		= keyboard_check_multiple_pressed(vk_control, ord("V"))
@@ -222,9 +222,25 @@ if console_toggle and keyboard_scope == o_console
 		color_string = gmcl_string_color(console_string, char_pos1)
 	}
 	
-	autofill.macros = autofill_in_list(macro_list, console_string)
-	autofill.methods = autofill_in_list(method_list, console_string)
-	autofill.instance = autofill_in_list(instance_variables, console_string)
+	char_pos_arg = gmcl_get_argument(console_string, char_pos1)
+	
+	var sc = char_pos_arg.scope != ""
+	if sc 
+	{		
+		if is_real(char_pos_arg.scope) scope_variables = variable_instance_get_names(char_pos_arg.scope)
+		else scope_variables = variable_struct_get_names(variable_string_get(char_pos_arg.scope))
+		
+		array_sort(scope_variables, true)
+		
+		if char_pos_arg.variable == "" autofill.scope = {min: 0, max: array_length(scope_variables)-1}
+		else autofill.scope = autofill_in_list(scope_variables, char_pos_arg.variable)
+	}
+	else autofill.scope = -1
+	
+	autofill.macros		=  sc ? -1 : autofill_in_list(macro_list, char_pos_arg.variable)
+	autofill.methods	=  sc ? -1 : autofill_in_list(method_list, char_pos_arg.variable)
+	autofill.assets		=  sc ? -1 : autofill_in_list(asset_list, char_pos_arg.variable)
+	autofill.instance	=  sc ? -1 : autofill_in_list(instance_variables, char_pos_arg.variable)
 	
 	#endregion
 	

@@ -18,8 +18,10 @@ var ch = string_height(" ")
 
 var entries = (
 	((autofill.macros == -1) ? 0 : (autofill.macros.max - autofill.macros.min+1)) +
-	((autofill.instance == -1) ? 0 : (autofill.instance.max - autofill.instance.min+1)) + 
-	((autofill.methods == -1) ? 0 : (autofill.methods.max - autofill.methods.min+1))
+	((autofill.methods == -1) ? 0 : (autofill.methods.max - autofill.methods.min+1)) +
+	((autofill.assets == -1) ? 0 : (autofill.assets.max - autofill.assets.min+1)) +
+	((autofill.instance == -1) ? 0 : (autofill.instance.max - autofill.instance.min+1)) +
+	((autofill.scope == -1) ? 0 : (autofill.scope.max - autofill.scope.min+1))  
 )-1
 
 if entries <= -1 return -1
@@ -29,14 +31,14 @@ var _text_sep = ceil(at.text_sep*asp)
 var entries_height = (entries+1)*ch + (entries-1)*(_text_sep)
 
 var _width = at.width*asp
-var _height = ceil( min(entries_height+2, at.height*asp) )
+var _height = ceil( min(entries_height+1, at.height*asp) )
 var _border_w = round(at.border_w*asp)
 var _border_h = round(at.border_h*asp)
 
 var x1 = Output.x
 var y1 = Output.y
 var x2 = x1 + _width + _border_w*2
-var y2 = y1 - _height - _border_h*2
+var y2 = y1 - _height - _border_h*2 - 1
 
 at.mouse_on = gui_mouse_between(x1, y1, x2, y2)
 
@@ -121,7 +123,7 @@ var access = is_array(list) ? array_get : ds_list_find_value
 
 for(var i = range.min; i <= range.max; i++)
 {	
-	if text_y-ch < y1
+	if text_y-ch < y1-1
 	{
 		var this = color_method(access(list, i))
 
@@ -130,6 +132,14 @@ for(var i = range.min; i <= range.max; i++)
 		
 		draw_set_color(o_console.colors[$ this.entry_color])
 		draw_rectangle(sidetext_x, text_y, sidetext_x+_sidetext_bar, text_y-ch-1, false)
+		
+		if at.dropshadow
+		{
+			draw_set_color(c_black)
+			draw_text(sidetext_x+_sidetext_bar+_sidetext_border+1, text_y+2, this.text)
+		}
+		
+		draw_set_color(o_console.colors[$ this.entry_color])
 		draw_text(sidetext_x+_sidetext_bar+_sidetext_border, text_y+1, this.text)
 		
 		draw_text(text_x, text_y+1, access(list, i))
@@ -176,7 +186,45 @@ static macro_color = function(item){
 
 
 static method_color	= function(item){ 
-	return {entry_color: dt_method, text: "Method"}
+	return {entry_color: dt_method, text: "Function"}
+}
+
+
+static asset_color = function(item){
+
+	var index = asset_get_index(item)
+	var type = asset_get_type(item)
+	var entry_color = dt_asset
+	var type_name = "Asset"
+	
+	if type == asset_object and instance_exists(index) entry_color = dt_instance
+	
+	switch type
+	{
+	case asset_animationcurve: type_name = "Anim curve"
+	break
+	case asset_font: type_name = "Font"
+	break
+	case asset_object: type_name = "Object"
+	break
+	case asset_path: type_name = "Path"
+	break
+	case asset_room: type_name = "Room"
+	break
+	case asset_script: type_name = "Script"
+	break
+	case asset_sequence: type_name = "Sequence"
+	break
+	case asset_shader: type_name = "Shader"
+	break
+	case asset_sound: type_name = "Sound"
+	break
+	case asset_tiles: type_name = "Tiles"
+	break
+	case asset_timeline: type_name = "Timeline"
+	}
+	
+	return {entry_color: entry_color, text: type_name}
 }
 
 
@@ -195,12 +243,43 @@ static variable_color = function(item){
 	{
 		text = "Array"
 	}
+	else if is_real(value) and ds_map_exists(o_console.ds_indexes, string(o_console.object.id)+"."+item)
+	{
+		text = "DS"
+	}
 	
 	return {entry_color: entry_color, text: text}
 }
 
 
+static scope_color = function(item){
+	
+	var varstring = string_scope_to_id(string(o_console.char_pos_arg.scope)+"."+item)
+	var value = variable_string_get(varstring)
+	var text = "Variable"
+	var entry_color = dt_variable
+	
+	if is_struct(value) 
+	{
+		text = "Struct"
+		entry_color = dt_instance
+	}
+	else if is_array(value)
+	{
+		text = "Array"
+	}
+	else if is_real(value) and ds_map_exists(o_console.ds_indexes, varstring)
+	{
+		text = "Ds "+ds_type_to_string(o_console.ds_indexes[? varstring])
+	}
+	
+	return {entry_color: entry_color, text: text}
+}
+
+
+draw_list(autofill.scope, scope_variables, scope_color)
 draw_list(autofill.instance, instance_variables, variable_color)
+draw_list(autofill.assets, asset_list, asset_color)
 draw_list(autofill.methods, method_list, method_color)
 draw_list(autofill.macros, macro_list, macro_color)
 

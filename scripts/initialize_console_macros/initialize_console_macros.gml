@@ -3,7 +3,7 @@ function initialize_console_macros(){
 
 #region Shortcuts
 
-console_macro_add("con",				dt_instance, "o_console")
+console_macro_add("con",				dt_instance, o_console)
 
 console_macro_add("var",				dt_method, create_variable)
 			
@@ -95,6 +95,15 @@ console_macro_add("fa_middle",			dt_real, fa_middle)
 console_macro_add("fa_left",			dt_real, fa_left)
 console_macro_add("fa_right",			dt_real, fa_right)
 console_macro_add("fa_center",			dt_real, fa_center)
+#endregion
+
+#region Ds types
+console_macro_add("ds_type_grid",		dt_real, ds_type_grid)
+console_macro_add("ds_type_list",		dt_real, ds_type_list)
+console_macro_add("ds_type_map",		dt_real, ds_type_map)
+console_macro_add("ds_type_priority",	dt_real, ds_type_priority)
+console_macro_add("ds_type_queue",		dt_real, ds_type_queue)
+console_macro_add("ds_type_stack",		dt_real, ds_type_stack)
 #endregion
 
 #region Virtual keys

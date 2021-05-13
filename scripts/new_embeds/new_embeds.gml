@@ -159,7 +159,7 @@ set = function(text) {
 			self.colortext += _str
 		}
 		
-		self.plaintext += ((_clickable and s.cbox != "") ? cbox_NaN : "") + _str
+		self.plaintext += ((_clickable and s.cbox != "") ? cbox_false : "") + _str
 		
 		self.height += _newlines
 	
@@ -201,7 +201,7 @@ var set_text = false
 var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : plaintext_color
 
 draw_set_color(plain_col)
-if not is_struct(text)
+if is_undefined(text) or not is_struct(text)
 {
 	draw_text(x, y, text)
 	draw_set_halign(old_halign)

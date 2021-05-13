@@ -30,7 +30,7 @@ draw_enable_swf_aa(true)
 char_width	= string_width(" ")
 char_height = string_height(" ")
 
-BAR = {}; with BAR {
+with BAR {
 	
 	char_height = 23
 	height = 17
@@ -41,7 +41,7 @@ BAR = {}; with BAR {
 	sidebar_width = 2
 }
 
-SCROLLBAR = {}; with SCROLLBAR {
+with SCROLLBAR {
 	
 	char_height = 17
 	
@@ -49,26 +49,30 @@ SCROLLBAR = {}; with SCROLLBAR {
 	min_height = 18
 	
 	scroll_step = char_height*4
+	key_scroll_step = 6
 	
 	resize_border = 6
 }
 
-AUTOFILL_LIST = {}; with AUTOFILL_LIST {
+with AUTOFILL_LIST {
 	
 	char_height = 17
 	
-	width = 300
+	width = 465
 	height = 220
-	width_min = 76
-	height_min = char_height*1.5
+	
+	dropshadow = false
 	
 	sidetext_bar = 5
-	sidetext_width = 150
+	sidetext_width = 130
 	sidetext_border = 7
 	
 	sidetext_hue = -6
 	sidetext_saturation = -7
 	sidetext_value = -159
+	
+	width_min = sidetext_bar+sidetext_width+sidetext_border+76
+	height_min = char_height*1.5
 	
 	border_w = 1
 	border_h = 1
@@ -86,18 +90,18 @@ AUTOFILL_LIST = {}; with AUTOFILL_LIST {
 	scrollbar.resize = true
 }
 
-CHECKBOX = {}; with CHECKBOX {
+with CHECKBOX {
 	
 	width = 17
 }
 
-WINDOW = {}; with WINDOW {
+with WINDOW {
 	
 	width = 400
 	height = 300
 }
 
-COLOR_PICKER = {}; with COLOR_PICKER {
+with COLOR_PICKER {
 	
 	x = 0
 	y = 0
@@ -129,7 +133,7 @@ COLOR_PICKER = {}; with COLOR_PICKER {
 	size = 100
 }
 
-VALUE_BOX = {}; with VALUE_BOX {
+with VALUE_BOX {
 	
 	radius = 23
 	border_radius = 20
@@ -147,7 +151,7 @@ VALUE_BOX = {}; with VALUE_BOX {
 	ease = ease_normal
 }
 
-CTX_MENU = {}; with CTX_MENU {
+with CTX_MENU {
 	
 	enabled = false
 	
@@ -178,7 +182,7 @@ CTX_MENU = {}; with CTX_MENU {
 	ctx = undefined
 }
 
-CTX_STRIP = {}; with CTX_STRIP {
+with CTX_STRIP {
 	
 	dist   = 7
 	border = 5
@@ -191,7 +195,7 @@ CTX_STRIP = {}; with CTX_STRIP {
 	font = o_console.font
 }
 
-SLIDER = {}; with SLIDER {
+with SLIDER {
 	
 	height			 = SCALE_ 39
 	height_condensed = SCALE_ 15
