@@ -324,7 +324,7 @@ if console_toggle and keyboard_scope == BAR
 	#endregion
 	
 	if console_color_time == console_color_interval color_string = gmcl_string_color(console_string, char_pos1)
-	console_color_time ++
+	else if console_color_time != -1 console_color_time ++
 }
 else BAR.blink_step = 0
 

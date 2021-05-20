@@ -11,7 +11,7 @@ var cyan	     = make_color_rgb(64, 220, 255)
 var orange	     = make_color_rgb(255, 184, 113)
 var pink		 = 14044390
 var purple		 = 16734082
-var grey		 = 12559270
+var grey		 = 12404296
 
 color_schemes[$ cs_greenbeans] = create_color_scheme_full(
 	dark_blue,		//body

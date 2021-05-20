@@ -19,6 +19,7 @@ if pos == 0 segment = name
 else segment = string_copy(name, marker+1, pos-marker)
 
 var scope = string_to_instance(segment, add_macro)
+var scope_ds = -1
 
 if scope == -1 scope = id
 
@@ -70,7 +71,11 @@ do
 		
 		var access_type = string_char_at(segment, 1)
 		
-		if not string_pos(access_type, accessors) access_type = "@"
+		if not string_pos(access_type, accessors)
+		{
+			if is_array(scope) access_type = "@"
+			else if is_struct(scope) access_type = "$"
+		}
 		else segment = string_delete(segment, 1, 1)
 		
 		var index

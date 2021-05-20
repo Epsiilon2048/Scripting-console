@@ -120,18 +120,27 @@ var arg_split = []
 
 var marker = 1
 var in_string = false
+var in_brackets = 0
 
 for(var i = 1; i <= string_length(line); i++)
 {
 	var char = string_char_at(line, i)
 	
-	if char == "\\" and in_string
+	if not in_string and in_brackets and char == "]"
+	{
+		in_brackets --
+	}
+	else if not in_string and char == "["
+	{
+		in_brackets ++
+	}
+	else if in_string and char == "\\"
 	{
 		line = string_delete(line, i, 1) 
 	}
 	else if char == "\""
 	{
-		if not in_string
+		if not in_string and not in_brackets
 		{
 			if marker != i array_push(arg_split, string_copy(line, marker, i-marker+in_string))
 			marker = i+in_string
@@ -139,13 +148,13 @@ for(var i = 1; i <= string_length(line); i++)
 			
 		in_string = not in_string
 	}
-	else if not in_string and string_pos(char, space_sep)
+	else if not in_string and not in_brackets and string_pos(char, space_sep)
 	{
 		if marker != i array_push(arg_split, string_copy(line, marker, i-marker))
 		marker = i+1
 	}	
 }
-
+if in_brackets line += string_repeat("]", in_brackets)
 if marker != i array_push(arg_split, string_copy(line, marker, string_length(line)-marker+1))
 
 lines[l] = arg_split
