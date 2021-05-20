@@ -25,7 +25,7 @@ function input_set(str, add){ with o_console
 
 
 
-function output_set(output){ with o_console.Output {
+function output_set(output){ with o_console.OUTPUT {
 
 var _output = output
 
@@ -37,21 +37,19 @@ if is_undefined(_output) or _output == "" or _output == [] or _output == {}
 }
 else
 {	
-	tag_set(variable_struct_exists_get(_output, "__tag__", -1))
-	
 	if variable_struct_exists_get(_output, "__embedded__", false)
 	{
-		text_embedding = true
+		has_embed = true
 		_text = _output.o
 
 		if not is_array(_text) _text = [_text]
 	}
 	else
 	{
-		text_embedding = false
+		has_embed = false
 		_text = ""
 		
-		_output = variable_struct_exists_get(_output, "o", _output)
+		if is_struct(_output) and variable_struct_exists(_output, "__embedded__") _output = _output.o
 			
 		if is_struct(_output) 
 		{
@@ -61,18 +59,15 @@ else
 			{
 				_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
 			}
-		}
+		}		
+		else if is_array(_output) _text = _text + array_to_string(_output, "\n")
 		else _text = string(_output)
-		
-		if is_array(_output) _text = _text + array_to_string(_output, "\n")
 
 		_text = [_text]
 	}
 		
 	alpha		= 1
 	fade_time	= 0
-		
-	o_console.Output_window.set(_text)
 }
 text.set(_text)
 with o_console
@@ -90,7 +85,7 @@ return _output
 
 
 
-function output_set_lines(output){ with o_console.Output {
+function output_set_lines(output){ with o_console.OUTPUT {
 
 var _output = output
 	
@@ -99,30 +94,24 @@ var _text
 if is_undefined(_output) or _output == "" or _output == [] or _output == {}
 {
 	_text = []
-	plaintext = ""
-	text_embedding = false
+	has_embed = false
 }
 else
 {	
 	if not is_array(_output) _output = [_output]
 	
-	if array_length(_output) > 0
-	{
-		tag_set(variable_struct_exists_get(_output[0], "__tag__", -1))
-	}
-	
-	text_embedding = false
+	has_embed = false
 		
 	for(var i = 0; i <= array_length(_output)-1; i++)
 	{
 		if variable_struct_exists_get(_output[i], "__embedded__", false)
 		{
-			text_embedding = true
+			has_embed = true
 			break
 		}
 	}
 	
-	if text_embedding
+	if has_embed
 	{
 		_text = []
 		
@@ -135,7 +124,8 @@ else
 			}
 			else
 			{
-				_output[i] = variable_struct_exists_get(_output[i], "o", _output[i])
+				if is_struct(output[i]) and variable_struct_exists(output[i], "__embedded__") _output[i] = _output[i].o
+
 				array_push(_text, string(_output[i])+"\n")
 			}
 		}
@@ -163,7 +153,7 @@ else
 		{
 			for(var i = 0; i <= array_length(_output)-1; i++)
 			{
-				_output[i] = variable_struct_exists_get(_output[i], "o", _output[i])
+				if is_struct(_output[i]) and variable_struct_exists(_output[i], "__embedded__") _output[i] = _output[i].o
 			}
 		}
 		
@@ -174,8 +164,6 @@ else
 		
 	alpha		= 1
 	fade_time	= 0
-		
-	o_console.Output_window.set(_text)
 }
 text.set(_text)
 

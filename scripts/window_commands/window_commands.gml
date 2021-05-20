@@ -78,14 +78,35 @@ else
 function display_all(obj, toggle){ with o_console {
 
 if is_undefined(obj) obj = object
-var list = variable_instance_get_names(obj)
+
+var list
+
+if is_string(obj)
+{
+	var inst = variable_string_get_scope(obj, true)
+	
+	if is_undefined(inst)
+	{
+		return "Variable does not exist"
+	}
+	else
+	{
+		var varstring = string_add_scope(obj)
+		if is_undefined(varstring) return "Missing variable scope"
+		
+		obj = variable_string_get(varstring)
+	}
+	
+}
+
+var list = is_string(obj) ? variable_struct_get_names(obj) : variable_instance_get_names(obj)
 array_sort(list, true)
 
 for(var i = 0; i <= array_length(list)-1; i++)
 {
 	display(string(obj)+"."+list[i], toggle)
 }
-return "Displaying all variables in "+object_get_name(obj)
+return "Displaying all variables in "+(is_real(obj) ? object_get_name(obj) : "struct")
 }}
 
 
@@ -147,7 +168,7 @@ return "Set window text"
 
 function window_set_output(){ with o_console {
 
-window(Output.text)
+window(OUTPUT.text)
 output_set("Set window to output")
 return "Set window to output"
 }}

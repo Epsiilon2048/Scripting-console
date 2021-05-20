@@ -34,8 +34,8 @@ else if instance_cursor and instance_exists(object) {
 	draw_instance_cursor(x_to_gui(object.x), y_to_gui(object.y), object_get_name(object.object_index))
 	//make it so that you can see the cursor even if its out of frame
 }
-
-if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_output) and Output.text.plaintext != ""
+/*
+if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_output) and Output.text.plain != ""
 {
 	draw_set_color(c_white)
 	draw_set_font(font)
@@ -62,12 +62,12 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	
 	var output_body = false
 	
-	Output.mouse_over = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
-	if Output.mouse_over or force_output_body or (Output.text_embedding and force_output_embed_body)
+	Output.mouse_on = gui_mouse_between(Output.x-Output.border_w, Output.y+Output.border_h, x2, y2)
+	if Output.mouse_on or force_output_body or (Output.text_embedding and force_output_embed_body)
 	{
 		draw_console_body(Output.x-Output.border_w, y2, x2, Output.y+Output.border_h)
 		
-		if not console_toggle and Output.mouse_over
+		if not console_toggle and Output.mouse_on
 		{
 			Output.alpha = 1
 			Output.fade_time  = 0
@@ -79,32 +79,32 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	var _text_x = Output.x
 	var _text_y = Output.y-Output.text.height*char_height
 	
-	if text_outline and not output_body and Output.text.plaintext != ""
+	if text_outline and not output_body and Output.text.plain != ""
 	{
 		draw_set_color(colors.selection)
 		
-		draw_text(_text_x+1, _text_y-1, Output.text.plaintext)
+		draw_text(_text_x+1, _text_y-1, Output.text.plain)
 		if text_outline > 1 
 		{
-			draw_text(_text_x-1, _text_y+1, Output.text.plaintext)
+			draw_text(_text_x-1, _text_y+1, Output.text.plain)
 			if text_outline > 2
 			{
-				draw_text(_text_x+1, _text_y+1, Output.text.plaintext)
+				draw_text(_text_x+1, _text_y+1, Output.text.plain)
 				if text_outline > 3
 				{
-					draw_text(_text_x-1, _text_y-1, Output.text.plaintext)
+					draw_text(_text_x-1, _text_y-1, Output.text.plain)
 					if text_outline > 4
 					{
-						draw_text(_text_x-1, _text_y,	Output.text.plaintext)
+						draw_text(_text_x-1, _text_y,	Output.text.plain)
 						if text_outline > 5
 						{
-							draw_text(_text_x,	 _text_y+1, Output.text.plaintext)
+							draw_text(_text_x,	 _text_y+1, Output.text.plain)
 							if text_outline > 6
 							{
-								draw_text(_text_x,	 _text_y-1, Output.text.plaintext)
+								draw_text(_text_x,	 _text_y-1, Output.text.plain)
 								if text_outline > 7
 								{
-									draw_text(_text_x+1, _text_y,	Output.text.plaintext)
+									draw_text(_text_x+1, _text_y,	Output.text.plain)
 	}}}}}}}
 	}
 	
@@ -112,16 +112,18 @@ if not output_as_window and ((Output.alpha > 0 or console_toggle) or force_outpu
 	
 	draw_set_alpha(1)
 }
-else Output.mouse_over = false
+else Output.mouse_on = false
+*/
+draw_console_output()
 
 if console_toggle
 {
 	if not is_undefined(object) and instance_exists(object) sidetext_string = object_get_name( object.object_index )
 	else sidetext_string = "noone"
 	
-	draw_console_bar(bar_x, bar_y, bar_width)
+	draw_console_bar()
 	
-	if not Output.mouse_over Output.alpha = 0
+	if not Output.mouse_on Output.alpha = 0
 }
 #region Draw display
 if Display.enabled and ds_list_size(display_list) > 0
@@ -161,12 +163,12 @@ if Display.enabled and ds_list_size(display_list) > 0
 #endregion
 
 #region Draw window
-if Window.enabled and Window.plaintext != ""
+if Window.enabled and Window.plain != ""
 {
 	draw_console_window(Window)
 }
 
-if output_as_window and Output.plaintext != ""
+if output_as_window and Output.plain != ""
 {
 	Output.alpha = 1
 	Output.fade_time  = 0

@@ -35,7 +35,7 @@ ARGUMENT INTERPRETATION
 
 static space_sep = " ,=():"
 static iden_sep	 = " ;,=()"
-static tag_sep   = " ;"
+static tag_sep   = " "
 
 if shave(" ", command) == "" return ""
 
@@ -46,7 +46,7 @@ var tag = ""
 var com_start = 1
 
 #region Compiler instructions
-for(var i = 1; i <= string_pos("#", _command); i++)
+for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); i++)
 {
 	char = string_char_at(_command, i)
 	
@@ -71,6 +71,7 @@ for(var i = 1; i <= string_pos("#", _command); i++)
 	}
 	else if not string_pos(char, tag_sep)
 	{
+		if char == "\\" com_start = i+1
 		break
 	}
 }
@@ -81,13 +82,12 @@ var command_split = []
 
 var marker = com_start
 var in_string = false
-var in_string_iden = false
 
 for(var i = com_start; i <= string_length(_command); i++)
 {
 	var char = string_char_at(_command, i)
 	
-	if (in_string or in_string_iden) and char == "\\"
+	if in_string and char == "\\"
 	{
 		if string_char_at(_command, i+1) == "n" _command = string_replace(_command, "\\n", "\n")
 		else i++
@@ -96,20 +96,10 @@ for(var i = com_start; i <= string_length(_command); i++)
 	{
 		in_string = not in_string
 	}
-	else if not in_string and char == "/" and string_char_at(_command, i-1) == "s"
-	{
-		in_string_iden = true
-	}
 	else if not in_string and char == ";"
 	{
-		in_string_iden = false
-		
 		array_push(command_split, string_copy(_command, marker, i-marker) )
 		marker = i+1
-	}
-	else if not in_string and in_string_iden and string_pos(char, iden_sep)
-	{
-		in_string_iden = false
 	}
 }
 
@@ -130,19 +120,18 @@ var arg_split = []
 
 var marker = 1
 var in_string = false
-var in_string_iden = false
 
 for(var i = 1; i <= string_length(line); i++)
 {
 	var char = string_char_at(line, i)
 	
-	if char == "\\" and (in_string or in_string_iden)
+	if char == "\\" and in_string
 	{
 		line = string_delete(line, i, 1) 
 	}
 	else if char == "\""
 	{
-		if not (in_string_iden and not in_string)
+		if not in_string
 		{
 			if marker != i array_push(arg_split, string_copy(line, marker, i-marker+in_string))
 			marker = i+in_string
@@ -150,14 +139,8 @@ for(var i = 1; i <= string_length(line); i++)
 			
 		in_string = not in_string
 	}
-	else if not in_string and char == "/" and string_char_at(line, i-1) == "s"
-	{
-		in_string_iden = true
-	}
 	else if not in_string and string_pos(char, space_sep)
 	{
-		in_string_iden = in_string_iden and not (string_pos(char, iden_sep) and string_char_at(line, i-1) != "\\")
-			
 		if marker != i array_push(arg_split, string_copy(line, marker, i-marker))
 		marker = i+1
 	}	

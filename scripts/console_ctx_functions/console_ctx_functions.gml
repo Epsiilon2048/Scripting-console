@@ -87,7 +87,9 @@ set_item = function(index, item){
 
 
 
-function ctx_menu_inputs(){ with o_console.CTX_MENU { if not is_undefined(ctx) {
+function ctx_menu_inputs(){ with o_console.CTX_MENU { 
+	
+if is_undefined(ctx) return undefined
 
 if not enabled
 {
@@ -211,7 +213,7 @@ if enabled
 }
 
 if not enabled ctx = undefined
-}}}
+}}
 
 
 

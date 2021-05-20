@@ -20,10 +20,10 @@ switch ds_type
 
 if not is_undefined(name)
 {	
-	if not string_pos(".", name) name = string(id)+name
+	if not string_pos(".", name) name = string(id)+"."+name
 	else name = string_scope_to_id(name, true)
 	
-	o_console.ds_indexes[? name] = ds_type
+	o_console.ds_types[? name] = ds_type
 	o_console.ds_names[$ ds_type][@ ind] = {name: name, description: description}
 }
 
@@ -50,7 +50,7 @@ switch ds_type
 }
 
 var name = o_console.ds_names[$ ds_type][@ ind].name
-ds_map_delete(o_console.ds_indexes, name)
+ds_map_delete(o_console.ds_types, name)
 o_console.ds_names[$ ds_type][@ ind] = undefined
 }
 

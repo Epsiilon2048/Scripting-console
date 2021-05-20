@@ -5,7 +5,24 @@ static max_length = 700
 static space_sep = " ./;,=()[]:"
 static iden_sep	 = " ;,=()"
 static subj_sep	 = " ,=():"
-static tag_sep   = " ;"
+static tag_sep   = " "
+
+				
+static push_combine = function(list, pos, col){
+	
+	if pos <= 0 return undefined
+	
+	var list_len = array_length(list)
+					
+	if list_len > 0 and list[list_len-1].col == col
+	{
+		list[list_len-1].pos = pos
+	}
+	else if not (list_len > 0 and list[list_len-1].pos == pos)
+	{
+		array_push(list, {pos: pos, col: col})
+	}
+}
 
 try
 {
@@ -30,14 +47,17 @@ var instscope = ""
 var _col = dt_unknown
 
 var tag = ""
+var tag_pos = 0
 var com_start = 1
 
-for(var i = 1; i <= string_pos("#", _command); i++)
+for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); i++)
 {
 	var char = string_char_at(_command, i)
 	
 	if char == "#"
 	{
+		tag_pos = i
+		
 		i ++
 		do
 		{
@@ -56,11 +76,18 @@ for(var i = 1; i <= string_pos("#", _command); i++)
 		else 
 		{
 			com_start = i
-			array_push(color_list, {pos: i, col: dt_tag})
+			push_combine(color_list, tag_pos, dt_unknown)
+			push_combine(color_list, i, dt_tag)
 		}
 	}
 	else if not string_pos(char, tag_sep)
 	{
+		if char == "\\"
+		{
+			push_combine(color_list, i, dt_unknown)
+			push_combine(color_list, i+1, dt_tag)
+			com_start = i+1
+		}
 		break
 	}
 }
@@ -135,6 +162,10 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 								segment = string(_macro.value)
 								if _macro.type != -1 _col = _macro.type
 								_macro_type = _col
+								
+								if _col == dt_variable _col = dt_builtinvar
+								
+								is_int = string_is_int(segment)
 							}
 						}
 						
@@ -157,7 +188,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 							_asset_type = asset_get_type(segment) 
 						}
 						
-						if (_prev_iden == dt_instance or (_prev_iden == dt_variable and _asset_type == asset_object)) and _asset != -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
+						if (_prev_iden == dt_instance or (_prev_iden == dt_variable and _asset_type == asset_object)) and _asset != -1 and instance_exists(_asset) and  (_macro_type == -1 or _macro_type == dt_instance)
 						{
 							_col = dt_instance
 							instscope = segment
@@ -176,7 +207,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						}
 						else if _prev_iden == -1 and _asset_type != -1
 						{
-							if _asset_type == asset_object
+							if _asset_type == asset_object and instance_exists(_asset)
 							{
 								_col = dt_instance
 								instscope = segment
@@ -213,9 +244,10 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 							{
 								var value = variable_string_get(_varstring)
 								
-								if is_struct(value)			_col = dt_instance
-								else if is_method(value)	_col = dt_method
-								else						_col = dt_variable
+								if _macro_type == dt_variable	_col = dt_builtinvar
+								else if is_struct(value)		_col = dt_instance
+								else if is_method(value)		_col = dt_method
+								else							_col = dt_variable
 								
 								instscope = _varstring
 							}
@@ -243,22 +275,8 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					
 					if string_pos(char, iden_sep)
 					{
-						_iden_string = string_char_at(segment, string_length(segment)) == "\\"
+						_iden_string = false
 						_prev_iden = -1
-					}
-				}
-				
-				static push_combine = function(list, pos, col){
-					
-					var list_len = array_length(list)
-					
-					if list_len > 0 and list[list_len-1].col == col
-					{
-						list[list_len-1].pos = pos
-					}
-					else if not (list_len > 0 and list[list_len-1].pos == pos)
-					{
-						array_push(list, {pos: pos, col: col})
 					}
 				}
 				
@@ -269,7 +287,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				{
 					if _char_pos <= i 
 					{
-						subject_interpret = gmcl_interpret_subject( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment) ).description
+						subject_interpret = gmcl_interpret_subject( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment), undefined ).description
 					}
 					
 					subject = false
@@ -295,7 +313,12 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 	}
 }
 
-if string_length(command) > max_length array_push(color_list, {pos: string_length(command), col: dt_unknown})
+if string_length(command) > max_length 
+{
+	push_combine(color_list, string_length(command), dt_unknown)
+	
+	_command = command
+}
 
 console_color_time = 0
 

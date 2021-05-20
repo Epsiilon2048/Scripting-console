@@ -173,7 +173,7 @@ function Console_value_box() constructor{
 		if not is_numeric(value)
 		{
 			selected = false
-			o_console.keyboard_scope = o_console
+			o_console.keyboard_scope = o_console.BAR
 		}
 		else if mouse_check_button_pressed(mb_left)
 		{
@@ -189,7 +189,7 @@ function Console_value_box() constructor{
 			else
 			{
 				selected = false
-				o_console.keyboard_scope = o_console
+				o_console.keyboard_scope = o_console.BAR
 			}
 		}
 
@@ -245,7 +245,7 @@ function Console_value_box() constructor{
 			if keyboard_check_pressed(vk_enter) 
 			{
 				selected = false
-				o_console.keyboard_scope = o_console
+				o_console.keyboard_scope = o_console.BAR
 			}
 			else if	string_digits(keyboard_lastchar) == keyboard_lastchar or (keyboard_lastchar == "." and not string_pos(".", _valstring))
 			{

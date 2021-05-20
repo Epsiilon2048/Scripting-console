@@ -4,7 +4,6 @@
 #macro cbox_NaN	  "[/]"
 
 function Embedded_text() constructor{
-
 set = function(text) {
 
 	static _colors_list			= ds_list_create()
@@ -19,12 +18,14 @@ set = function(text) {
 	
 	_text = is_array(_text) ? _text : [ is_undefined(_text) ? "" : _text ]
 
-	self.plaintext = ""
+	self.plain = ""
 	self.colortext = ""
 	self.width = 0
 	self.height = 0
 	self.mouse_index = -1
 	self.click_index = -1
+	self.mouse_on = false
+	self.mouse_on_item = false
 
 	var _width = 0
 	var _click_id = 0
@@ -159,7 +160,7 @@ set = function(text) {
 			self.colortext += _str
 		}
 		
-		self.plaintext += ((_clickable and s.cbox != "") ? cbox_false : "") + _str
+		self.plain += ((_clickable and s.cbox != "") ? cbox_false : "") + _str
 		
 		self.height += _newlines
 	
@@ -171,7 +172,7 @@ set = function(text) {
 	self.subclickable	= ds_list_to_array(_subclickable_list)
 
 	self.height += 1
-	self.width = string_width(self.plaintext)/string_width(" ")
+	self.width = string_width(self.plain)/string_width(" ")
 
 	ds_list_clear(_colors_list)
 	ds_list_clear(_clickable_list)
@@ -198,7 +199,7 @@ draw_set_valign(fa_top)
 draw_set_alpha(alpha)
 
 var set_text = false
-var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : plaintext_color
+var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : (is_string(plaintext_color) ? o_console.colors[$ plaintext_color] : plaintext_color)
 
 draw_set_color(plain_col)
 if is_undefined(text) or not is_struct(text)
@@ -206,12 +207,11 @@ if is_undefined(text) or not is_struct(text)
 	draw_text(x, y, text)
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
-	
 	return undefined
 }
 else if not o_console.embed_text
 {
-	draw_text(x, y, text.plaintext)
+	draw_text(x, y, text.plain)
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
 	return undefined
@@ -219,12 +219,12 @@ else if not o_console.embed_text
 
 draw_text(x, y, text.colortext)
 
-var mouse_on = gui_mouse_between(x, y, x+text.width*cw, y+text.height*ch)
-var mouse_on_item = false
+text.mouse_on = gui_mouse_between(x, y, x+text.width*cw, y+text.height*ch)
+text.mouse_on_item = false
 
 text.mouse_index = -1
 
-if mouse_on
+if text.mouse_on
 {
 	for(var j = 0; j <= array_length(text.subclickable)-1; j++)
 	{
@@ -279,7 +279,7 @@ if mouse_on
 		
 			if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
 		
-			mouse_on_item = true
+			text.mouse_on_item = true
 		}
 		else 
 		{
@@ -402,5 +402,4 @@ if set_text text.set(_output)
 draw_set_valign(old_halign)
 draw_set_halign(old_valign)
 draw_set_alpha(old_alpha)
-return mouse_on
 }

@@ -1,7 +1,9 @@
 
-function autofill_in_list(array_or_ds_list, criteria){ with global.scrvar {
+function autofill_in_list(array_or_ds_list, criteria, range){ with global.scrvar {
 
 criteria = string(criteria)
+
+if first_is_digit(criteria) return -1
 
 i = 1
 list = array_or_ds_list
@@ -17,8 +19,14 @@ var c_len = string_length(criteria)
 
 if list_size == 0 or c_len == 0 return -1
 
-var _min = 0
-var _max = list_size-1
+var _min = is_struct(range) ? range.min : 0
+var _max = is_struct(range) ? range.max : (list_size-1)
+if is_struct(range) 
+{
+	show_debug_message(range)
+	range.used = true
+}
+
 var index = ceil(_max/2)
 
 static get_ord = function(index){

@@ -56,31 +56,43 @@ if inst_select
 		}
 		else
 		{
-			output_set("")
+			output_set(undefined)
 		}
 	}
 }
 #endregion
 
-#region Enable console
-
-if keyboard_check_multiple_pressed(console_key, vk_shift)
-{
-	output_set(help())
-}
-else if keyboard_check_pressed(console_key)
+if keyboard_check_pressed(console_key) and keyboard_scope != BAR
 {
 	console_toggle = not console_toggle
-	keyboard_string = console_string
+	
+	if console_toggle
+	{
+		keyboard_string = console_string
+		keyboard_scope = BAR
+	}
 }
-if keyboard_check_pressed(vk_escape) console_toggle = false
-#endregion
 
-if console_toggle and keyboard_scope == o_console
+if mouse_check_button_pressed(mb_left) and not AUTOFILL_LIST.mouse_on and not OUTPUT.mouse_on
+{
+	keyboard_scope = BAR.mouse_on ? BAR : noone
+	
+	do_autofill = false
+	gmcl_autofill(undefined, undefined)
+}
+
+if keyboard_check_pressed(vk_escape) 
+{
+	console_toggle = false
+	keyboard_scope = noone
+}
+
+if console_toggle and keyboard_scope == BAR
 {
 	#region Apply inputs to console string
 	//figure out text stuff
 	var str_length = string_length(console_string)
+	var char = ""
 
 	fleft		= (keyboard_check(vk_left)+fleft)*keyboard_check(vk_left)
 	fright		= (keyboard_check(vk_right)+fright)*keyboard_check(vk_right)
@@ -101,8 +113,26 @@ if console_toggle and keyboard_scope == o_console
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
 	copy		= keyboard_check_multiple_pressed(vk_control, ord("C"))
 	paste		= keyboard_check_multiple_pressed(vk_control, ord("V"))
-	//alt_left	= keyboard_check_multiple_pressed(vk_alt, vk_left)  //skip to the end of a word
-	//alt_right	= keyboard_check_multiple_pressed(vk_alt, vk_right) //hahahahahaahahhahahhshahsahsdfkhgsljdfgjnberdfc
+	startword	= keyboard_check_multiple_pressed(vk_control, vk_left)  //skip to the start of a word
+	endword		= keyboard_check_multiple_pressed(vk_control, vk_right)
+
+	if (BAR.mouse_on and mouse_check_button_pressed(mb_left))
+	{
+		gmcl_autofill(undefined, undefined)
+		
+		if shift mouse_char_pos = signbool(char_pos_dir) ? char_pos1 : char_pos2
+		else
+		{
+			char_pos1 = char_pos2
+			mouse_char_pos = mouse_get_char_pos(floor)
+		}
+		
+		char_pos1 = mouse_char_pos
+		char_pos2 = mouse_char_pos
+	}
+	else if not (mouse_char_pos and mouse_check_button(mb_left)) mouse_char_pos = false
+
+	var text_refresh = left or right or backspace or del or enter or startln or endln or log_up or log_down or select_all or copy or paste or startword or endword
 
 	if select_all
 	{
@@ -174,7 +204,7 @@ if console_toggle and keyboard_scope == o_console
 
 	if str_length < string_length(keyboard_string) or (paste and clipboard_has_text()) //a char was added
 	{
-		var char
+		mouse_char_pos = false
 
 		if paste  // For some reason there's an invisible character behind newlines when pasting, so I cant use string_replace_all :/
 		{
@@ -200,6 +230,9 @@ if console_toggle and keyboard_scope == o_console
 		str_length = string_length(console_string)
 		keyboard_string = console_string
 		color_string = gmcl_string_color(console_string, char_pos1)
+		
+		do_autofill = true
+		text_refresh = true
 	}
 	
 	if backspace and (char_pos1 != 1 or (char_pos1 == 1 and char_pos1 != char_pos2)) {
@@ -222,31 +255,49 @@ if console_toggle and keyboard_scope == o_console
 		color_string = gmcl_string_color(console_string, char_pos1)
 	}
 	
-	char_pos_arg = gmcl_get_argument(console_string, char_pos1)
-	
-	var sc = char_pos_arg.scope != ""
-	if sc 
-	{		
-		if is_real(char_pos_arg.scope) scope_variables = variable_instance_get_names(char_pos_arg.scope)
-		else scope_variables = variable_struct_get_names(variable_string_get(char_pos_arg.scope))
+	if mouse_char_pos
+	{
+		var pos_floor = mouse_get_char_pos(floor)
 		
-		array_sort(scope_variables, true)
+		BAR.blink_step = 0
+		char_pos_dir = sign(pos_floor - mouse_char_pos)
 		
-		if char_pos_arg.variable == "" autofill.scope = {min: 0, max: array_length(scope_variables)-1}
-		else autofill.scope = autofill_in_list(scope_variables, char_pos_arg.variable)
+		if char_pos_dir == -1 or pos_floor == mouse_char_pos
+		{
+			char_pos1 = mouse_get_char_pos(floor)
+			char_pos2 = mouse_char_pos
+		}
+		else
+		{
+			char_pos2 = mouse_get_char_pos(ceil)
+			char_pos1 = mouse_char_pos
+		}
+		
+		char_pos1 = clamp(char_pos1, 1, str_length+(mouse_char_pos == str_length+1 and char_pos1 == char_pos2))
+		char_pos2 = clamp(char_pos2, 1, str_length+(mouse_char_pos == str_length+1 and char_pos1 == char_pos2))
 	}
-	else autofill.scope = -1
 	
-	autofill.macros		=  sc ? -1 : autofill_in_list(macro_list, char_pos_arg.variable)
-	autofill.methods	=  sc ? -1 : autofill_in_list(method_list, char_pos_arg.variable)
-	autofill.assets		=  sc ? -1 : autofill_in_list(asset_list, char_pos_arg.variable)
-	autofill.instance	=  sc ? -1 : autofill_in_list(instance_variables, char_pos_arg.variable)
+	if text_refresh and not enter
+	{
+		color_string = gmcl_string_color(console_string, char_pos1)
+		BAR.blink_step = 0
+	
+		do_autofill = (do_autofill or backspace or del) and char_pos1 == char_pos2 and not paste
+	
+		if not do_autofill or del or backspace or left or right or string_pos(char, refresh_sep) gmcl_autofill(undefined, undefined)
+		if do_autofill gmcl_autofill(console_string, char_pos1)
+	}
 	
 	#endregion
 	
 	#region Parse command
 	if enter
 	{	
+		gmcl_autofill(undefined, undefined)
+		do_autofill = false
+		
+		BAR.blink_step = 0
+		
 		var _compile = gmcl_compile(console_string)
 		var _output  = gmcl_run(_compile)
 		
@@ -275,6 +326,7 @@ if console_toggle and keyboard_scope == o_console
 	if console_color_time == console_color_interval color_string = gmcl_string_color(console_string, char_pos1)
 	console_color_time ++
 }
+else BAR.blink_step = 0
 
 for(var i = 0; i <= array_length(keybinds)-1; i++)
 {
@@ -298,12 +350,12 @@ gui_mouse_y = gui_my
 ctx_menu_inputs()
 value_box_inputs()
 
-if (console_toggle or Output.mouse_over) and not value_box_mouse_on and mouse_check_button_pressed(mb_right)
+if console_toggle and not value_box_mouse_on and mouse_check_button_pressed(mb_right)
 {
 	right_mb = true
 }
 
-else if (console_toggle or Output.mouse_over) and not value_box_mouse_on and right_mb and is_undefined(CTX_MENU.ctx) and not mouse_check_button(mb_right)
+else if (console_toggle or Output.mouse_on) and not value_box_mouse_on and right_mb and is_undefined(CTX_MENU.ctx) and not mouse_check_button(mb_right)
 {
 	CTX_MENU.ctx = ctx
 	CTX_MENU.x = gui_mx + 10

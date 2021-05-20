@@ -241,7 +241,7 @@ return format_output([
 	{str: "Reset console\n", scr: reset_obj, arg: o_console},
 	{str: "Destroy console\n\n", scr: destroy_console},
 	
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Settings", col: "embed_hover"}," / ",{str: "Color schemes", scr: color_scheme_settings, output: true}
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Settings", col: "embed_hover"}
 ], true, console_settings, "IDE settings")
 }}
 	

@@ -49,7 +49,9 @@ var inst = string_to_instance(string_copy(str, 1, string_pos(".", str)-1), true)
 
 if inst == -1 return undefined
 
-return string(inst.id) + string_delete(str, 1, string_pos(".", str)-1)
+var inst_id = (inst == global) ? global : inst.id
+
+return string(inst_id) + string_delete(str, 1, string_pos(".", str)-1)
 }}
 
 

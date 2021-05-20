@@ -1,8 +1,27 @@
 
+function variable_string_get_scope(str, add_macro){
+	
+if not is_string(str) or not string_pos(str, ".") return undefined
+
+var scope = string_copy(str, 1, string_last_pos(".", str)-1)
+
+if string_pos(".", scope) return variable_string_get(scope)
+else return string_to_instance(scope, add_macro)
+}
+
+
+function variable_string_get_last(str){
+
+if not is_string(str) or not string_pos(str, ".") return undefined
+
+return string_copy(str, string_pos(str, ".")+1, string_length(str))
+}
+
+
 function variable_string_exists(str){
 
 if not is_string(str) or str == "" return undefined
-if string_pos(".", str) == 1 return false
+if string_char_at(str, 1) == "." return false
 
 var list = string_split(".", str)
 var object

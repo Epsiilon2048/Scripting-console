@@ -12,8 +12,8 @@ static com_add_category = function(text, hidden){
 ds_list_add(command_order, {str: text, cat: true, hidden: is_undefined(hidden) ? false : hidden})
 }
 
-commands = ds_map_create()
-command_order = ds_list_create()
+commands = ds_create(ds_type_map, "commands")
+command_order = ds_create(ds_type_list, "command_order")
 
 com_add_category("Help & info", false)
 com_add("help", {desc: "Returns console help and info. But surely you already know this command if you're viewing it?"})

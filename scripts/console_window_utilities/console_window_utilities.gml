@@ -87,8 +87,7 @@ if win.show
 	
 	clip_rect_cutout(left, top, right, bottom)
 	
-	if (o_console.embed_text and o_console.window_embed_text) or (win.name == "Output" and o_console.embed_text) mouse_over_embed = draw_embedded_text(left+border_x, top+border_y+1, win.text, undefined, undefined)
-	else draw_text(left+border_x, top+border_y+1, win.plaintext)
+	mouse_over_embed = draw_embedded_text(left+border_x, top+border_y+1, win.text, undefined, undefined)
 
 	shader_reset()
 }

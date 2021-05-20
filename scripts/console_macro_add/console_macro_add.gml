@@ -40,12 +40,26 @@ while script_exists(i)
 {
 	var name = script_get_name(i++)
 	
-	if not string_pos("___struct___", name) == 1
+	if string_pos("___struct___", name) != 1 and string_pos("anon_", name) != 1
 	ds_list_add(method_list, name)
 }
 
 ds_list_sort(method_list, true)
 }
+
+
+function shader_exists(ind){
+	
+try {
+	shader_get_name(ind)
+	return true
+}
+catch(exception){
+	var _ = exception //get rid of that dumbass warning sign thing
+	return false
+}
+}
+
 
 
 function index_assets(){
@@ -57,10 +71,10 @@ static asset = [
 	{exists: path_exists,		get_name: path_get_name},
 	{exists: room_exists,		get_name: room_get_name},
 	{exists: sequence_exists,	get_name: function(sequence_id){ return sequence_get(sequence_id).name }},
-	//{exists: shader_get_name(shader), get_name: },
+	{exists: shader_exists,		get_name: shader_get_name},
 	{exists: audio_exists,		get_name: audio_get_name},
 	{exists: sprite_exists,		get_name: sprite_get_name},
-	//{exists: tileset, get_name: },
+	{exists: function(tileset_id){ return tileset_get_name(tileset_id) != "<undefined>" }, get_name: tileset_get_name},
 	{exists: timeline_exists,	get_name: timeline_get_name},
 ]
 
@@ -69,7 +83,9 @@ for(var i = 0; i <= array_length(asset)-1; i++)
 	var j = 0
 	while asset[i].exists(j)
 	{
-		ds_list_add(asset_list, asset[i].get_name(j++))
+		if asset[i].get_name(j) != "__YYInternalObject__3" ds_list_add(asset_list, asset[i].get_name(j))
+		
+		j++
 	}
 }
 

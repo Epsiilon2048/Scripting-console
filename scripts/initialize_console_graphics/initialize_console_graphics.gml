@@ -33,13 +33,100 @@ char_height = string_height(" ")
 with BAR {
 	
 	char_height = 23
+	
+	x = undefined		// These are for placing the bar somewhere else
+	y = undefined
+	width = undefined	
+
+	left = 0
+	top	= 0
+	right = 0
+	bottom = 0
+
 	height = 17
 	sep = 3
 	win_dist = 50
 	
 	text_dist = 18
 	sidebar_width = 2
+	
+	blink_time = 70
+	blink_step = 0
+	
+	mouse_on = false
 }
+
+with OUTPUT {
+	
+	char_height = 17
+	
+	x = undefined	// Anchored from bottom left
+	y = undefined
+	
+	width = undefined
+	height = undefined
+	
+	left = 0
+	top = 0
+	right = 0
+	bottom = 0
+	
+	bar_dist = 15
+	border_w = 11
+	border_h = 7
+	
+	outline = .6
+	
+	text = new Embedded_text()
+	text.set()
+	//scrollbar = new Console_scrollbar()
+	//ctx = new Ctx_menu()
+	//
+	//scrollbar.initialize(left, top, right, bottom, width, height, 0, 0, fa_right, fa_bottom)
+	//ctx.set([
+	//	{str: "Copy"},
+	//	ctx_separator,
+	//	{str: "Set window"},
+	//	{str: "Clear"},
+	//])
+	
+	fade_time = 6*60
+	fade_step = 0
+	alpha = 0
+	alpha_dec = .04
+	
+	mouse_on = false
+	has_embed = false
+	body = false
+}
+	
+//Output = {}; with Output {
+//	
+//	border_w = 11
+//	border_h = 7
+//	
+//	text			= new Embedded_text()
+//	plaintext		= ""
+//	text_embedding	= false
+//	
+//	time			 = 6*60
+//	fade_time		 = 0
+//	alpha			 = 0
+//	alpha_dec		 = .04
+//	mouse_on		 = false
+//	mouse_over_embed = false
+//	
+//	tag = -1
+//	tag_prev = -1
+//	tag_prev_menu = -1
+//
+//	tag_set = function(_tag){
+//		
+//		if tag != -1 tag_prev_menu = tag
+//		tag_prev = tag
+//		tag = _tag
+//	}
+//}
 
 with SCROLLBAR {
 	
@@ -58,6 +145,8 @@ with AUTOFILL_LIST {
 	
 	char_height = 17
 	
+	index = -1
+	
 	width = 465
 	height = 220
 	
@@ -67,9 +156,9 @@ with AUTOFILL_LIST {
 	sidetext_width = 130
 	sidetext_border = 7
 	
-	sidetext_hue = -6
-	sidetext_saturation = -7
-	sidetext_value = -159
+	sidetext_hue = -3
+	sidetext_saturation = 144
+	sidetext_value = 93
 	
 	width_min = sidetext_bar+sidetext_width+sidetext_border+76
 	height_min = char_height*1.5
@@ -197,9 +286,9 @@ with CTX_STRIP {
 
 with SLIDER {
 	
-	height			 = SCALE_ 39
-	height_condensed = SCALE_ 15
-	text_offset		 = SCALE_ 10
+	height			 = 39
+	height_condensed = 15
+	text_offset		 = 10
 	
 	update_every_frame	  = true
 	lock_value_to_step	  = true

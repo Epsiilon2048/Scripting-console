@@ -1,6 +1,6 @@
 
 function signbool(bool){ //formats a bool to be -1 if false
-return -(bool == 0) + bool
+return -(sign(bool) == 0) + sign(bool)
 }
 	
 	
@@ -30,6 +30,19 @@ return make_color_hsv(
 )
 }
 	
+
+function color_set_hsv(col, hue, saturation, value){ //returns a color with added hue
+
+if is_undefined(hue) hue = color_get_hue(col)
+if is_undefined(saturation) saturation = color_get_saturation(col)
+if is_undefined(value) value = color_get_value(col)
+
+return make_color_hsv(
+	hue, 
+	saturation,
+	value
+)
+}
 	
 	
 	

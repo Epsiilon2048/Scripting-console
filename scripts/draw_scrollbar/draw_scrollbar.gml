@@ -60,20 +60,21 @@ var mouse_on_window = gui_mouse_between(x1, y1, x2, y2)
 
 if mw_scroll and mouse_on_window scroll += scroll_step * (mouse_wheel_up()-mouse_wheel_down()) + sb.key_scroll_step * (keyboard_check(vk_up)-keyboard_check(vk_down))
 
-var height = clamp( (y2-y1)/page_height*(y2-y1), _min_height, (y2-y1) )
+var height
 
 if (y2-y1) >= page_height
 {
 	height = (y2-y1)
 	mouse_down = false
 }
+else height = clamp( (y2-y1)/page_height*(y2-y1), _min_height, (y2-y1) )
 
 var _x1 = ((hbar_align == fa_left) ? x1 : x2 -_width)
 var _y1 = y1+1
 var _x2 = ((hbar_align == fa_left) ? x1 + _width : x2)
 var _y2 = y2-1
 
-scroll = clamp(scroll, 0, max(0, page_height))
+scroll = clamp(scroll, 0, max(0, page_height-(y2-y1)))
 var bar_center = y2 - scroll/page_height*-((y1+height/2)-(y2-height/2)) - height/2
 
 var bar_p1 = bar_center + height/2
@@ -104,9 +105,10 @@ if (mouse_on_v or mouse_on_h) and not mouse_down
 
 if mouse_on_v 
 {
-	scroll = clamp((-gui_my-mouse_v_offset-height/2+y2)*page_height/-((y1+height/2)-(y2-height/2)), 0, max(0, page_height))
+	scroll = clamp((-gui_my-mouse_v_offset-height/2+y2)*page_height/-((y1+height/2)-(y2-height/2)), 0, max(0, page_height-(y2-y1)))
 	
 	bar_center = y2 - scroll/page_height*-((y1+height/2)-(y2-height/2)) - height/2
+	//bar_center = y2 - () - height/2
 
 	bar_p1 = bar_center + height/2
 	bar_p2 = bar_center - height/2

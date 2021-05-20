@@ -1,16 +1,26 @@
 
-char_pos_arg = ""
+char_pos_arg = {}
 
 include_builtin_functions = true
 
-builtin_excluded = ds_list_create()
-ds_list_add(builtin_excluded,
+ds_types = ds_map_create() // if this is indexed, it has to be done after, using the already existing ind
+ds_names = {}
+ds_names[$ ds_type_grid]		= []
+ds_names[$ ds_type_list]		= []
+ds_names[$ ds_type_map]			= []
+ds_names[$ ds_type_priority]	= []
+ds_names[$ ds_type_queue]		= []
+ds_names[$ ds_type_stack]		= []
 
-	"string",
-	"array",
-	"ds_list",
-	"ds_map",
-	"ds_grid_",
+refresh_sep = " ./;,=()[]:"
+
+builtin_excluded = ds_create(ds_type_list, "builtin_excluded")
+ds_list_add(builtin_excluded,
+	//"string",
+	//"array",
+	//"ds_list",
+	//"ds_map",
+	//"ds_grid_",
 	"ds_priority_",
 	"ds_queue_",
 	"ds_stack_",
@@ -60,24 +70,15 @@ ds_list_add(builtin_excluded,
 	"testFailed",
 )
 
-ds_indexes = ds_map_create()
-ds_names = {}
+mouse_char_pos = false
 
-ds_names[$ ds_type_grid]		= []
-ds_names[$ ds_type_list]		= []
-ds_names[$ ds_type_map]			= []
-ds_names[$ ds_type_priority]	= []
-ds_names[$ ds_type_queue]		= []
-ds_names[$ ds_type_stack]		= []
-
-test = ds_create(ds_type_list, "0.test")
-
-macro_list = ds_list_create()
-method_list = ds_list_create()
-asset_list = ds_list_create()
+macro_list = ds_create(ds_type_list, "macro_list")
+method_list = ds_create(ds_type_list, "method_list")
+asset_list = ds_create(ds_type_list, "asset_list")
 instance_variables = []
 scope_variables = []
-suggestions = ds_list_create()
+lite_suggestions = ds_create(ds_type_list, "lite_suggestions")
+suggestions = ds_create(ds_type_list, "suggestions")
 
 autofill = {}; with autofill {
 	macros = -1
@@ -85,14 +86,14 @@ autofill = {}; with autofill {
 	assets = -1
 	instance = -1
 	scope = -1
+	lite_suggestions = -1
 	suggestions = -1
 }
 
 console_macros = {}
 
-keyboard_scope = o_console
-
 BAR = {}
+OUTPUT = {}
 SCROLLBAR = {}
 AUTOFILL_LIST = {}
 CHECKBOX = {}
@@ -103,14 +104,14 @@ CTX_MENU = {}
 CTX_STRIP = {}
 SLIDER = {}
 
+keyboard_scope = BAR
+
+do_autofill = false
+
 index_functions()
 index_assets()
 initialize_console_macros()
-initialize_console_graphics( undefined )
-
-bar_x = undefined
-bar_y = undefined
-bar_width = undefined
+initialize_console_graphics(undefined)
 
 identifiers = {
 	r: dt_real,
@@ -146,7 +147,8 @@ enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
 #macro dt_method		"method"
 #macro dt_instance		"instance"
 #macro dt_room			"room"
-#macro dt_color			"color"	// Only used for identifiers
+#macro dt_color			"color"		// Only used for identifiers
+#macro dt_builtinvar	"builtin variable"
 #macro dt_tag			"tag"
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"
@@ -210,8 +212,6 @@ gui_mouse_y = gui_my
 color_schemes = {}
 
 console_key = vk_tilde
-
-old_obj_identifier = "o_"
 
 show_hidden_commands = false
 show_hidden_args = false
@@ -300,11 +300,11 @@ object = noone  //object in scope
 mouse_starting_x = undefined
 mouse_starting_y = undefined
 
-input_log = ds_list_create()
+input_log = ds_create(ds_type_list, "input_log")
 input_log_limit = 20
 input_log_index = -1
 
-display_list = ds_list_create()
+display_list = ds_create(ds_type_list, "display_list")
 
 x2 = 0
 y2 = 0
@@ -337,7 +337,7 @@ Output = {}; with Output {
 	fade_time		 = 0
 	alpha			 = 0
 	alpha_dec		 = .04
-	mouse_over		 = false
+	mouse_on		 = false
 	mouse_over_embed = false
 	
 	tag = -1
@@ -354,7 +354,7 @@ Output = {}; with Output {
 Output_window = new Console_window()
 Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)
 
-log = ds_list_create()
+log = ds_create(ds_type_list, "log")
 
 inst_select = false
 inst_selecting = noone
@@ -363,12 +363,12 @@ inst_selecting_name = ""
 instance_cursor = false
 
 color_string = []
-command_log = ds_list_create()
-error_log = ds_list_create()
+command_log = ds_create(ds_type_list, "command_log")
+error_log = ds_create(ds_type_list, "error_log")
 
 command_colors = true
 
-value_boxes = ds_list_create()
+value_boxes = ds_create(ds_type_list, "value_boxes")
 value_box_dragging = false
 value_box_deleted = false
 
@@ -392,6 +392,8 @@ var greetings = [
 	"Remember to take breaks from time to time!",
 	"yooooooo sup",
 ]
+
+mouse_get_char_pos = function(rounding_method){ return clamp(rounding_method((gui_mx-BAR.text_x)/char_width)+(rounding_method == floor), 1, string_length(console_string)+(char_pos1 == char_pos2)) }
 
 output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
 

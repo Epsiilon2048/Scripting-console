@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Unsorted",
-    "path": "folders/Console/Unsorted.yy",
+    "name": "Scripting-console",
+    "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "string_to_instance",
+  "name": "slice",
   "tags": [],
   "resourceType": "GMScript",
 }
