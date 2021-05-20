@@ -35,8 +35,8 @@ var _height = ceil( min(entries_height+1, at.height*asp) )
 var _border_w = round(at.border_w*asp)
 var _border_h = round(at.border_h*asp)
 
-var x1 = Output.x
-var y1 = Output.y
+var x1 = BAR.left
+var y1 = OUTPUT.bottom
 var x2 = x1 + _width + _border_w*2
 var y2 = y1 - _height - _border_h*2 - 1
 

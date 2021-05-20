@@ -4,7 +4,7 @@ function string_to_instance(str, add_macro){ with o_console {
 
 if str == "" return -1
 
-var _is_real = first_is_digit(str)
+var _is_real = string_is_int(str)
 
 if _is_real 
 {

@@ -2,7 +2,10 @@
 function Console_window() constructor{
 	// str, scr, args, col, scrcol
 
-		set = function(_text){
+	set = function(_text){
+		
+		var old_font = draw_get_font()
+		draw_set_font(o_console.font)
 		
 		if is_struct(_text) and asset_get_index( instanceof(_text) ) == Embedded_text
 		{
@@ -17,6 +20,8 @@ function Console_window() constructor{
 		
 		self.text_w = text.width*string_width(" ")
 		self.text_h = text.height*string_height(" ")
+		
+		draw_set_font(old_font)
 	}
 	
 	reset_pos = function(){
