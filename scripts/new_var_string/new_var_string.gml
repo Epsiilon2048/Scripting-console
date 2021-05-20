@@ -12,8 +12,6 @@ if is_undefined(add_macro) add_macro = true
 var pos = string_pos(".", name)
 var marker = 0
 
-seg = ""
-
 var name_len = string_length(name)
 var segment
 
@@ -30,7 +28,6 @@ var pos
 
 do
 {
-	seg = segment
 	index ++
 	
 	if string_char_at(name, pos) == "["
@@ -47,7 +44,7 @@ do
 		}
 		until (open == 0 and char == "]") or pos > name_len
 		
-		segment = string_replace_all(slice(name, marker+1, pos-1), " ", "")
+		segment = string_replace_all(slice(name, marker+1, pos-1, 1), " ", "")
 		
 		if pos > name_len pos = 0
 		
@@ -57,7 +54,51 @@ do
 		else segment = string_delete(segment, 1, 1)
 		
 		var index
-		var comma = string_pos(",", segment)
+		var comma = string_pos(",", segment) and (access_type == "@" or access_type == "#")
+		
+		static interpret = function(index){
+				
+			if string_is_int(index) 
+			{
+				return real(index)
+			}
+			else if string_char_at(index, 1) == "\"" and string_last(index) == "\""
+			{
+				return slice(index, 2, -2, 1)
+			}
+			else
+			{
+				return vse(index, true)
+			}
+		}
+		
+		if comma
+		{
+			var _pos = string_pos("[", segment)
+			
+			if _pos and comma > _pos
+			{
+				var char
+				var open = 0
+				do
+				{
+					char = string_char_at(segment, _pos++)
+					open += (char == "[") - (char == "]")
+				}
+				until (open == 0 and char == ",") or _pos > name_len
+				
+				comma = _pos
+			}
+			
+			index = {x: slice(segment, 1, comma, 1), y: slice(segment, comma+1, -1, 1)}
+			
+			index.x = interpret(index.x)
+			index.y = interpret(index.y)
+		}
+		else
+		{
+			index = interpret(segment)
+		}
 		
 		switch access_type
 		{
@@ -66,12 +107,7 @@ do
 			
 			if comma
 			{
-				index = {x: slice(segment, 1, comma, 1), y: slice(segment, comma+1, -1, 1)}
-			
-				if not string_is_int(index.x) or not string_is_int(index.y) return "invalid array access ("+stitch(index.x,", ",index.y)+")"
-			
-				index.x = real(index.x)
-				index.y = real(index.y)
+				if not is_real(index.x) or not is_real(index.y) return "invalid array access ("+stitch(index.x,", ",index.y)+")"
 			
 				if array_length(scope) <= index.x or not is_array(scope[index.x]) or array_length(scope[index.x]) <= index.y return "array grid out of range"
 			
@@ -79,58 +115,35 @@ do
 			}
 			else
 			{
-				if not string_is_int(segment) return "invalid array access "+segment
-			
-				index = real(segment)
-			
+				if not is_real(index) return "invalid array access "+segment
+				
 				if index < 0 or index >= array_length(scope) return "index in array out of range"
 			
 				scope = scope[index]
 			}
 		break
 		case "|":
-			if comma return "invalid list access"
 			if not is_real(scope) or not ds_exists(scope, ds_type_list) return "wasnt list"
 			
-			if not string_is_int(segment) return "invalid array access "+segment
-			
-			index = real(segment)
+			if not is_real(segment) return "invalid array access "+segment
 			
 			if index < 0 or index >= ds_list_size(scope) return "index in array out of range"
 			
 			scope = scope[| index]
 		break
 		case "$":
-			if comma return "invalid struct access"
 			if not is_struct(scope) return "wasnt struct"
 			
-			if string_char_at(segment, 1) == "\"" and string_last(segment) == "\""
-			{
-				index = slice(segment, 2, -2, 1)
-			}
-			else if string_is_int(segment)
-			{
-				index = real(segment)
-			}
-			else return "invalid struct access "+segment
+			index = string(index)
 			
 			if not variable_struct_exists(scope, index) return "var didnt exist in struct "+string(index)
 			
 			scope = scope[$ index]
 		break
 		case "?":
-			if comma return "invalid map access"
 			if not is_real(scope) or not ds_exists(scope, ds_type_map) return "wasnt map"
 			
-			if string_char_at(segment, 1) == "\"" and string_last(segment) == "\""
-			{
-				index = slice(segment, 2, -2, 1)
-			}
-			else if string_is_int(segment)
-			{
-				index = real(segment)
-			}
-			else return "invalid map access "+segment
+			index = string(index)
 			
 			if not ds_map_exists(scope, index) return "var didnt exist in map "+string(index)
 			
@@ -140,12 +153,7 @@ do
 			if not comma return "invalid grid access"
 			if not is_real(scope) or not ds_exists(scope, ds_type_grid) return "wasnt grid"
 			
-			index = {x: slice(segment, 1, comma, 1), y: slice(segment, comma+1, -1, 1)}
-			
-			if not string_is_int(index.x) or not string_is_int(index.y) return "invalid grid access ("+stitch(index.x,", ",index.y)+")"
-			
-			index.x = real(index.x)
-			index.y = real(index.y)
+			if not is_real(index.x) or not is_real(index.y) return "invalid grid access ("+stitch(index.x,", ",index.y)+")"
 			
 			if ds_grid_width(scope) <= index.x or ds_grid_height(scope) <= index.y return "ds grid out of range"
 			
