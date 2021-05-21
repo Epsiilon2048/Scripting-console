@@ -13,6 +13,29 @@ if rainbow
 		embed		= color_add_hue(embed, 1)
 		embed_hover	= color_add_hue(embed_hover, 1)
 	}
+
+	colors[$ dt_real]		= color_add_hue(colors[$ dt_real], 1)
+	colors[$ dt_string]		= color_add_hue(colors[$ dt_string], 1)	
+	colors[$ dt_asset]		= color_add_hue(colors[$ dt_asset], 1)	
+	colors[$ dt_variable]	= color_add_hue(colors[$ dt_variable], 1)	
+	colors[$ dt_method]		= color_add_hue(colors[$ dt_method], 1)
+	colors[$ dt_instance]	= color_add_hue(colors[$ dt_instance], 1)
+	colors[$ dt_room]		= color_add_hue(colors[$ dt_room], 1)
+	colors[$ dt_builtinvar] = color_add_hue(colors[$ dt_builtinvar], 1)
+	colors[$ dt_tag]		= color_add_hue(colors[$ dt_tag], 1)
+	colors[$ dt_unknown]	= color_add_hue(colors[$ dt_unknown], 1)
+	colors[$ dt_deprecated] = color_add_hue(colors[$ dt_deprecated], 1)
+}
+
+if bird_mode and colors.sprite != bird_mode_
+{
+	colors.sprite = bird_mode_
+	colors.outline_layers += 8
+}
+else if not bird_mode and colors.sprite == bird_mode_
+{
+	colors.sprite = -1
+	colors.outline_layers -= 8
 }
 
 win_w = display_get_gui_width()
@@ -73,7 +96,7 @@ if keyboard_check_pressed(console_key) and keyboard_scope != BAR
 	}
 }
 
-if mouse_check_button_pressed(mb_left) and not AUTOFILL_LIST.mouse_on and not OUTPUT.mouse_on
+if mouse_check_button_pressed(mb_left) and not AUTOFILL.mouse_on and not OUTPUT.mouse_on
 {
 	keyboard_scope = BAR.mouse_on ? BAR : noone
 	
@@ -108,8 +131,8 @@ if console_toggle and keyboard_scope == BAR
 	enter		= keyboard_check_pressed(vk_enter)
 	startln		= keyboard_check_pressed(vk_home)
 	endln		= keyboard_check_pressed(vk_end) and str_length > 0 and char_pos2 != str_length+1
-	log_up		= keyboard_check_pressed(vk_up) and not AUTOFILL_LIST.mouse_on
-	log_down	= keyboard_check_pressed(vk_down) and not AUTOFILL_LIST.mouse_on and (input_log_index != -1 or ds_list_size(input_log) == 0)
+	log_up		= keyboard_check_pressed(vk_up) and not AUTOFILL.mouse_on
+	log_down	= keyboard_check_pressed(vk_down) and not AUTOFILL.mouse_on and (input_log_index != -1 or ds_list_size(input_log) == 0)
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
 	copy		= keyboard_check_multiple_pressed(vk_control, ord("C"))
 	paste		= keyboard_check_multiple_pressed(vk_control, ord("V"))

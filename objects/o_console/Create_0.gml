@@ -1,13 +1,5 @@
 
-g = 
-[
-[1, 2, 3, 4],
-[1, 2, 3, 4],
-3,
-[1, 2, 3, 4],
-[1, 2, 3, 4],
-]
-
+run_in_embed = false
 char_pos_arg = {}
 
 include_builtin_functions = true
@@ -23,8 +15,9 @@ ds_names[$ ds_type_stack]		= []
 
 refresh_sep = " ./;,=()[]:"
 
-builtin_excluded = ds_create(ds_type_list, "builtin_excluded")
-ds_list_add(builtin_excluded,
+bird_mode = false
+
+builtin_excluded = [
 	//"string",
 	//"array",
 	//"ds_list",
@@ -77,7 +70,7 @@ ds_list_add(builtin_excluded,
 	"$",				//$PRINT, $FAIL, $ERROR
 	"sleep",
 	"testFailed",
-)
+]
 
 mouse_char_pos = false
 
@@ -104,7 +97,7 @@ console_macros = {}
 BAR = {}
 OUTPUT = {}
 SCROLLBAR = {}
-AUTOFILL_LIST = {}
+AUTOFILL = {}
 CHECKBOX = {}
 WINDOW = {}
 COLOR_PICKER = {}
@@ -132,7 +125,7 @@ identifiers = {
 	c: dt_color,
 }
 
-enum SIDES { TOP = 0, RIGHT = 90, BOTTOM = 180, LEFT = 270, }
+draw_order = ds_create(ds_type_list, "draw_order")
 
 #macro script_exists better_script_exists
 
@@ -200,21 +193,8 @@ event_commands = {
 
 ctx = new Ctx_menu()
 ctx.scope = o_console
-ctx.set([
-	{str: "Clear output",			output: true},
-	{str: "Copy output",			scr: function(){ clipboard_set_text(o_console.O1) }},
-	{str: "Set window to output",	scr: window_set_output				},
-	{str: "Always Show output",		checkbox: "o_console.force_output"	},
-	ctx_separator,
-	{str: "Room instances",		scr: roomobj,			output: true},
-	{str: "Instance variables",	scr: objvar,			output: true},
-	ctx_separator,
-	{str: "Help",			scr: help,					output: true},
-	{str: "Commands",		scr: command_help,			output: true},
-	{str: "Settings",		scr: console_settings,		output: true},
-	{str: "Color schemes",	scr: color_scheme_settings,	output: true},
-	{str: "Nice thing",		scr: nice_thing,			output: true},
-])
+ctx.set([])
+
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
@@ -321,10 +301,10 @@ mouse_click_range = 1
 rainbow = false
 
 Display = new Console_window()
-Display.initialize("Display", 23, 23, SIDES.LEFT)
+Display.initialize(23, 23, fa_left)
 
 Window = new Console_window()
-Window.initialize("Window", 23, 23, SIDES.RIGHT)
+Window.initialize(23, 23, fa_right)
 
 Output = {}; with Output {
 	console_x	= o_console.console_text_x
@@ -361,7 +341,7 @@ Output = {}; with Output {
 	}
 }
 Output_window = new Console_window()
-Output_window.initialize("Output", SCALE_ 23, SCALE_ 300, SIDES.LEFT)
+Output_window.initialize(SCALE_ 23, SCALE_ 300, fa_left)
 
 log = ds_create(ds_type_list, "log")
 
@@ -387,7 +367,6 @@ O3 = ""
 O4 = ""
 O5 = ""
 
-run_in_embed   = false
 run_in_console = false
 
 cs_template = cs_greenbeans

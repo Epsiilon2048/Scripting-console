@@ -136,25 +136,7 @@ return "Display position reset"
 
 
 function window(text){ with o_console {
-
-if is_undefined(text)
-{
-	Window.enabled = not Window.enabled
-	return "Window toggled"
-}
-
-var _text
-if is_struct(text) and variable_struct_exists_get(text, "__embedded__", false) and variable_struct_exists(text, "o")
-{
-	_text = text.o
-}
-else if is_array(text)
-{
-	if array_length(text) == 1 _text = text[0]
-	if is_array(text) _text = array_to_string(text, "\n")
-}
-else _text = string(text)
-
+	
 Window.set(text)
 Window.enabled = true
 Window.show = true

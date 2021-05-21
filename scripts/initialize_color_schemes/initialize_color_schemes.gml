@@ -31,6 +31,7 @@ color_schemes[$ cs_greenbeans] = create_color_scheme_full(
 	purple,			//tag
 	grey,			//deprecated
 )
+color_schemes[$ cs_greenbeans].body_real = 2497549
 color_schemes[$ cs_greenbeans][$ dt_instance] = pink
 color_schemes[$ cs_greenbeans].__builtin__ = true
 
@@ -123,7 +124,8 @@ color_schemes[$ cs_humanrights] = create_color_scheme_full(
 color_schemes[$ cs_humanrights].__builtin__ = true
 
 
-o_console.rainbow = false
+rainbow = false
+bird_mode = false
 color_scheme(cs_index)
 return stitch("Regenerated color schemes")
 }

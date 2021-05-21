@@ -15,6 +15,8 @@ var char_height = string_height(" ")
 
 var lastpos = 1
 
+draw_outline_text(x, y, console_text.text)
+
 for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 {
 	var _text = string_copy( console_text.text, lastpos, console_text.colors[i].pos - lastpos )
@@ -129,7 +131,7 @@ draw_set_valign(old_valign)
 
 function draw_console_output(){
 	
-static ot = o_console.OUTPUT
+var ot = o_console.OUTPUT
 	
 with o_console {
 

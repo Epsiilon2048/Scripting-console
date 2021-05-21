@@ -38,11 +38,9 @@ initialize = function(x1, y1, x2, y2, window_width, window_height, page_width, p
 
 
 
-function draw_scrollbar(scrollbar){
+function draw_scrollbar(scrollbar){ with scrollbar {
 
-static sb = o_console.SCROLLBAR
-
-with scrollbar {
+var sb = o_console.SCROLLBAR
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()

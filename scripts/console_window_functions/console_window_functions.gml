@@ -1,81 +1,89 @@
 
 function Console_window() constructor{
-	// str, scr, args, col, scrcol
 
-	set = function(_text){
+set = function(_text){
 		
-		var old_font = draw_get_font()
-		draw_set_font(o_console.font)
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
 		
-		if is_struct(_text) and asset_get_index( instanceof(_text) ) == Embedded_text
-		{
-			self.text = struct_copy(_text)
-		}
-		else
-		{
-			self.text.set(_text)
-		}
+	if is_struct(_text) and asset_get_index( instanceof(_text) ) == Embedded_text
+	{
+		self.has_embed = true
 		
-		self.plain = text.plain
-		
-		self.text_w = text.width*string_width(" ")
-		self.text_h = text.height*string_height(" ")
-		
-		draw_set_font(old_font)
+		struct_replace(self.text, _text)
 	}
-	
-	reset_pos = function(){
-		if self.side == SIDES.LEFT
-		{
-			self.x = self.starting_x
-			self.y = self.starting_y
-		}
-		else if self.side == SIDES.RIGHT
-		{
-			self.x = display_get_gui_width() - self.starting_x
-			self.y = self.starting_y
-		}
+	else
+	{
+		self.has_embed = false
+		self.text.set(_text)
 	}
-	destroy = function(){
-
-	}
-
-
-	initialize = function(_name, _x, _y, _side){
-		self.name		= _name
-		self.x			= _x
-		self.y			= _y
-		self.starting_x = _x
-		self.starting_y = _y
-		self.side		= _side
 		
-		self.width	= o_console.WINDOW.width
-		self.height	= o_console.WINDOW.height
+	self.plain = text.plain
 		
-		self.text = new Embedded_text()
-		self.plain  = ""
-		self.text_w = 0
-		self.text_h = 0
+	self.text_w = text.width*string_width(" ")
+	self.text_h = text.height*string_height(" ")
 		
-		self.enabled			= true
-		self.show				= true
-		self.mouse_over_sidebar = false
-		self.sidebar			= 0
-		
-		self.set()
-	}
+	draw_set_font(old_font)
 }
 	
+reset_pos = function(){
+		
+	x = init_x
+	y = init_y
+}
+
+initialize = function(x, y, sidebar_side){
+		
+	self.name = ""
+		
+	self.x = x
+	self.y = y
+	self.init_x = x
+	self.init_y = y
+		
+	self.width = o_console.WINDOW.width
+	self.height = o_console.WINDOW.height
+		
+	self.left = x
+	self.top = y
+	self.right = x
+	self.bottom = y
+		
+	self.sidebar_x = x
+		
+	self.sidebar_side = sidebar_side
+	self.valign = fa_top
+		
+	self.mouse_on = false
+	self.mouse_on_sidebar = false
 	
+	self.dragging = false
+	self.mouse_offsetx = 0
+	self.mouse_offsety = 0
+		
+	self.right_mb = false
+		
+	self.text = new Embedded_text()
+	self.text.set()
 	
-
-function window_embed(text){ with o_console {
-
-Window.set(text)
-Window.enabled = true
-Window.show = true
-
-window_reset_pos()
-
-return "Set window text"
-}}
+	self.ctx = new Ctx_menu()
+	self.ctx.scope = noone
+	self.ctx.set([
+		{str: "Copy",			scr: function(scope){ clipboard_set_text(scope.text.plain) }, arg: self},
+		{str: "Clear",			output: true},
+		{str: "Set window",		scr: window_set_output},
+	])
+		
+	self.scrollbar = new Console_scrollbar()
+	self.scrollbar.initialize(x, y, x+self.width, y+self.width, 0, 0, 0, 0, 0, 0, 0)
+		
+	self.has_embed = false
+		
+	self.enabled = true
+	self.show = true
+		
+	self.sidebar = 0
+		
+	self.set()
+}
+}

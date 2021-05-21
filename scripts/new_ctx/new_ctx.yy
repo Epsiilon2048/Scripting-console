@@ -6,7 +6,7 @@
     "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Variable_ref",
+  "name": "new_ctx",
   "tags": [],
   "resourceType": "GMScript",
 }

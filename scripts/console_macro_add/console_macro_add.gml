@@ -111,9 +111,9 @@ for(var i = 0; i <= 10000; i++)
 		{
 			if string_pos(criteria, name) != 1 excluded = true
 		}
-		else for(var j = 0; j <= ds_list_size(builtin_excluded)-1; j++)
+		else for(var j = 0; j <= array_length(builtin_excluded)-1; j++)
 		{
-			if string_pos(builtin_excluded[| j], name) == 1 
+			if string_pos(builtin_excluded[j], name) == 1 
 			{
 				excluded = true
 				break

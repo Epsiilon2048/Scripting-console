@@ -17,7 +17,7 @@ var access
 var concat
 
 //bleck
-if _is_string		
+if _is_string
 {
 	output = ""
 	len = string_length(value)

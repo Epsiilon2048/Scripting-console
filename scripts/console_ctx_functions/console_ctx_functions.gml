@@ -12,12 +12,10 @@ variable
 
 function Ctx_menu() constructor{
 
-scope = noone
-
 set = function(_items){
 	
 	items = _items
-	if not is_array(items) items = [items]
+	if not is_array(items) and not is_undefined(items) items = [items]
 	
 	item_count = 0
 	sep_count = 0
@@ -25,7 +23,7 @@ set = function(_items){
 	longest_item = 0
 	longest_item_count = 0
 	
-	for(var i = 0; i <= array_length(items)-1; i++)
+	if not is_undefined(items) for(var i = 0; i <= array_length(items)-1; i++)
 	{
 		if is_struct(items[i])
 		{
@@ -144,12 +142,13 @@ if enabled
 					var item = ctx.items[i]
 					
 					var _scr		= variable_struct_exists_get(item, "scr",		noscript)
+					var _func		= variable_struct_exists_get(item, "func",		noscript)
 					var _variable	= variable_struct_exists_get(item, "variable",	"")
 					var _arg		= variable_struct_exists_get(item, "arg",		undefined)
 					var _args		= variable_struct_exists_get(item, "args",		[])
-					var _func		= variable_struct_exists_get(item, "func",		noscript)
 					var _checkbox	= variable_struct_exists_get(item, "checkbox",	"")
 					var _output		= variable_struct_exists_get(item, "output", false)
+					var _copy		= variable_struct_exists_get(item, "copy", false)
 					
 					var _o = []
 					
@@ -174,7 +173,7 @@ if enabled
 						if array_length(_args) > 0
 						{
 							if _use_scope	with _scope array_push(_o, script_execute_ext(_scr, _args))
-							else			array_push(_o, script_execute_ext(_scr, _args))
+							else			array_push(_o, script_execute_ext_builtin(_scr, _args))
 						}
 						else
 						{
@@ -195,6 +194,7 @@ if enabled
 					}
 					
 					if _output output_set_lines(_o)
+					if _copy clipboard_set_text(array_to_string(_o, "\n"))
 					
 					enabled = variable_struct_exists_get(item, "stay", variable_struct_exists(item, "checkbox"))
 				}

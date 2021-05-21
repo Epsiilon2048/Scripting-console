@@ -30,6 +30,8 @@ draw_enable_swf_aa(true)
 char_width	= string_width(" ")
 char_height = string_height(" ")
 
+if run_in_embed return undefined
+
 with BAR {
 	
 	char_height = 23
@@ -100,33 +102,6 @@ with OUTPUT {
 	body = false
 }
 	
-//Output = {}; with Output {
-//	
-//	border_w = 11
-//	border_h = 7
-//	
-//	text			= new Embedded_text()
-//	plaintext		= ""
-//	text_embedding	= false
-//	
-//	time			 = 6*60
-//	fade_time		 = 0
-//	alpha			 = 0
-//	alpha_dec		 = .04
-//	mouse_on		 = false
-//	mouse_over_embed = false
-//	
-//	tag = -1
-//	tag_prev = -1
-//	tag_prev_menu = -1
-//
-//	tag_set = function(_tag){
-//		
-//		if tag != -1 tag_prev_menu = tag
-//		tag_prev = tag
-//		tag = _tag
-//	}
-//}
 
 with SCROLLBAR {
 	
@@ -141,7 +116,7 @@ with SCROLLBAR {
 	resize_border = 6
 }
 
-with AUTOFILL_LIST {
+with AUTOFILL {
 	
 	char_height = 17
 	
@@ -186,8 +161,19 @@ with CHECKBOX {
 
 with WINDOW {
 	
-	width = 400
-	height = 300
+	char_height = 17
+	
+	width = 600
+	height = 500
+	
+	sidebar_min = 2
+	sidebar_max = 3
+	sidebar_lerp = .35
+
+	mouse_border = 14
+	
+	border_w = 20
+	border_h = 10
 }
 
 with COLOR_PICKER {

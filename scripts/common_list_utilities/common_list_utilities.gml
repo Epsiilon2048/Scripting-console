@@ -23,8 +23,6 @@ var add = ""
 
 for(var i = 0; i <= array_length(array)-1; i++)
 {
-	//if is_real(array[i]) array[i] = string_format_float(array[i])
-
 	add = string(array[i])
 	
 	str += separator + add

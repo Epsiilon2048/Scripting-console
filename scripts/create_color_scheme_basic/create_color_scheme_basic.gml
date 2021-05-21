@@ -124,6 +124,16 @@ colors.embed_hover		= embed_hover
 colors.plain			= plaintext
 colors.selection		= body
 
+colors.outline_layers	= 0
+
+colors.sprite			= -1
+colors.sprite_anchor	= false
+colors.sprite_alpha		= 1
+
+colors.bevel			= undefined
+
+colors.body_real_alpha	= .1
+
 colors[$ dt_real]		= real
 colors[$ dt_string]		= string
 colors[$ dt_asset]		= asset

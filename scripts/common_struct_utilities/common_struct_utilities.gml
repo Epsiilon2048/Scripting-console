@@ -17,6 +17,48 @@ return new_struct
 
 
 
+function struct_clear(struct){
+
+var names = variable_struct_get_names(struct)
+var name_count = array_length(names)
+
+for(var i = 0; i <= name_count-1; i++)
+{
+	struct[$ names[@ i]] = undefined
+}
+}
+
+
+
+
+function struct_add(dest, src){
+	
+var names = variable_struct_get_names(src)
+var name_count = array_length(names)
+
+for(var i = 0; i <= name_count-1; i++)
+{
+	dest[$ names[@ i]] = src[$ names[@ i]]
+}
+}
+
+
+function struct_replace(dest, src){
+	
+var names = variable_struct_get_names(src)
+var name_count = array_length(names)
+
+for(var i = 0; i <= name_count-1; i++)
+{
+	var value = dest[$ names[@ i]]
+	
+	if is_method(value) continue
+	if is_struct(value) dest[$ names[@ i]] = struct_copy( src[$ names[@ i]] )
+	else dest[$ names[@ i]] = src[$ names[@ i]]
+}
+}
+
+
 function ds_map_to_struct(ds_map){
 
 var struct = {}

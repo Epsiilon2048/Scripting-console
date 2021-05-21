@@ -1,8 +1,6 @@
-function draw_autofill_list(){ 
-	
-static at = o_console.AUTOFILL_LIST
+function draw_autofill_list(){ with o_console {
 
-with o_console {
+var at = o_console.AUTOFILL
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -24,7 +22,11 @@ var entries = (
 	((autofill.scope == -1) ? 0 : (autofill.scope.max - autofill.scope.min+1))  
 )-1
 
-if entries <= -1 return -1
+if entries <= -1 
+{
+	at.mouse_on = false
+	return -1
+}
 
 var asp = ch/at.char_height
 var _text_sep = ceil(at.text_sep*asp)
@@ -265,7 +267,7 @@ static variable_color = function(item){
 	
 	if is_struct(value) 
 	{
-		text = "Struct"
+		text = (instanceof(value) == "") ? "Struct" : instanceof(value)
 		entry_color = dt_instance
 	}
 	else if is_array(value)
@@ -294,7 +296,7 @@ static scope_color = function(item){
 	
 	if is_struct(value) 
 	{
-		text = "Struct"
+		text = (instanceof(value) == "") ? "Struct" : instanceof(value)
 		entry_color = dt_instance
 	}
 	else if is_array(value)
@@ -313,7 +315,6 @@ static scope_color = function(item){
 	
 	return {entry_color: entry_color, text: text}
 }
-
 
 draw_list(autofill.scope, scope_variables, scope_color)
 draw_list(autofill.instance, instance_variables, variable_color)

@@ -13,101 +13,118 @@ return -1
 
 
 
+function draw_console_window(win){ with win {
 
-function draw_console_window(win){
-
-var sidebar_width	   = SCALE_ 2
-var sidebar_width_max  = SCALE_ 4
-var sidebar_width_lerp = .4
-
-var sidebar_range = SCALE_ 17 //mouse activation dist
-
-var border_x = SCALE_ 19 //spacing between text and edges of window
-var border_y = SCALE_ 9
-
-var mouse_over_embed = false
-
-var left
-var right
-var top
-var bottom
+if not enabled 
+{
+	left = x
+	top = y
+	right = x
+	bottom = y
 	
-if win.side != SIDES.RIGHT
-{
-	left   = win.x
-	top    = win.y
-	right  = win.x + win.text_w + border_x*2
-	bottom = win.y + win.text_h + border_y*2
-}
-else if win.side == SIDES.RIGHT
-{
-	left   = win.x - win.text_w - border_x*2
-	top    = win.y
-	right  = win.x
-	bottom = win.y + win.text_h + border_y*2
+	sidebar_x = x
+	
+	mouse_on = false
+	mouse_on_sidebar = false
+	dragging = false
+	right_mb = false
+	
+	sidebar = 0
+	
+	return undefined
 }
 
-//sidebar_width+win.sidebar
-var r = (win.side == SIDES.RIGHT)
+var wn = o_console.WINDOW
 
-var sidebar_x1 = win.x + r
-var sidebar_y1 = top
-var sidebar_x2 = sidebar_x1 + (sidebar_width*(r+1) + win.sidebar)*signbool(not r)
-var sidebar_y2 = bottom
+var old_color = draw_get_color()
+var old_alpha = draw_get_alpha()
+var old_font = draw_get_font()
 
-if win.mouse_over_sidebar and mouse_check_button(mb_left)
-{		
-	if mouse_check_button_pressed(mb_left)
-	{
-		mouse_x_previous = gui_mx
-		mouse_y_previous = gui_my
-	}
-		
-	win.x += gui_mx-mouse_x_previous
-	win.y += gui_my-mouse_y_previous
-	mouse_x_previous = gui_mx
-	mouse_y_previous = gui_my
-}
-else
+draw_set_font(o_console.font)
+
+var cw = string_width(" ")
+var ch = string_height(" ")
+
+var asp = ch/wn.char_height
+
+var is_left = sidebar_side != fa_right
+var is_top = valign != fa_bottom
+
+var _border_w = ceil(wn.border_w*asp)
+var _border_h = ceil(wn.border_h*asp)
+
+if not dragging
 {
-	win.x = clamp(win.x, sidebar_width, gui_width-sidebar_width)
-	win.y = clamp(win.y, -win.text_h, gui_height-string_height(" "))
+	if is_left x = clamp(x, -_border_w, gui_width-_border_w*2)
+	else x = clamp(x, 0, gui_width-_border_w)
+	
+	//hmu
+	if is_top y = clamp(y, -text.height*ch+_border_h, gui_height-_border_h*3)
+	else y = clamp(y, _border_h, gui_height+text.height*ch-_border_h*3)
 }
 
-if not o_console.collapse_windows win.show = true
+left	= (is_left	? (x - text.width*cw) : x)
+top		= (is_top	? y : (y - text.height*ch))
+right	= _border_w*2 + (is_left ? x : (x + text.width*cw))
+bottom	= _border_h*2 + (is_top ? (y + text.height*ch) : y)
 
-if win.show
+sidebar_x = is_left ? (right) : (left)
+
+mouse_on = dragging or gui_mouse_between(left, top, right, bottom)
+mouse_on_sidebar = dragging or (mouse_on and not text.mouse_on_item and gui_mouse_between(sidebar_x, top, sidebar_x - wn.mouse_border*asp*signbool(is_left), bottom))
+
+if mouse_on and mouse_check_button_pressed(mb_right) right_mb = true
+if (right_mb and not mouse_check_button(mb_right))
 {
-	draw_set_font(o_console.font)
-	draw_set_halign(fa_left)
-	draw_set_valign(fa_top)
+	right_mb = false
+	
+	if mouse_on o_console.CTX_MENU.ctx = ctx
+}
+
+if mouse_on_sidebar and not dragging and mouse_check_button_pressed(mb_left)
+{
+	dragging = true
+	mouse_offsetx = gui_mx - x
+	mouse_offsety = gui_my - y
+}
+else if dragging and not mouse_check_button(mb_left)
+{
+	dragging = false
+}
+else if dragging
+{
+	x = gui_mx - mouse_offsetx
+	y = gui_my - mouse_offsety
+	
+	left	= (is_left	? (x - text.width*cw) : x)
+	top		= (is_top	? y : (y - text.height*ch))
+	right	= _border_w*2 + (is_left ? x : (x + text.width*cw))
+	bottom	= _border_h*2 + (is_top ? (y + text.height*ch) : y)
+
+	sidebar_x = is_left ? (right) : (left)
+}
+
+if show
+{
+	var text_x = left + wn.border_w*asp
+	var text_y = top + wn.border_h*asp
 	
 	draw_console_body(left, top, right, bottom)
-	draw_set_color(colors.output)
-	
-	clip_rect_cutout(left, top, right, bottom)
-	
-	mouse_over_embed = draw_embedded_text(left+border_x, top+border_y+1, win.text, undefined, undefined)
-
-	shader_reset()
+	draw_embedded_text(text_x, text_y, text, o_console.colors.output, 1)
 }
-	
-draw_set_color(colors.output)
+
+sidebar = lerp(sidebar, mouse_on_sidebar ? 1 : 0, wn.sidebar_lerp)
+
+var _sidebar = -ceil((wn.sidebar_min + wn.sidebar_max*sidebar)*asp*signbool(is_left))
+
+var _sidebar_x1 = min(sidebar_x, sidebar_x+_sidebar)
+var _sidebar_x2 = max(sidebar_x, sidebar_x+_sidebar)
+
+draw_set_color(o_console.colors.output)
 draw_set_alpha(1)
-draw_rectangle(sidebar_x1, sidebar_y1, sidebar_x2, sidebar_y2, false)
-draw_set_color(c_white)
+draw_rectangle(_sidebar_x1, top, _sidebar_x2, bottom, false)
 
-if not mouse_over_embed
-{
-	win.mouse_over_sidebar =
-	(
-		(win.mouse_over_sidebar and mouse_check_button(mb_left)) or
-		(not mouse_check_button(mb_left) and 
-		 gui_mouse_between(win.x - sidebar_range, win.y, win.x + sidebar_range, win.y + win.text_h + border_y*2))
-	)
-}
-win.sidebar = max(
-	lerp(win.sidebar, sidebar_width_max*win.mouse_over_sidebar, sidebar_width_lerp), 
-	sidebar_width_max*(not win.show)
-)
-}
+draw_set_color(old_color)
+draw_set_alpha(old_alpha)
+draw_set_font(old_font)
+}}

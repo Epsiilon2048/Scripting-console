@@ -284,7 +284,8 @@ if array_length(notbuiltin) > 0
 
 array_push(text, 
 	"\n\n",
-	{str: "", checkbox: "o_console.rainbow"}, " gamer mode\n\n",
+	{str: "", checkbox: "o_console.bird_mode"}," bird mode\n",
+	{str: "", checkbox: "o_console.rainbow"}," gamer mode\n\n",
 
 	{str: "New color scheme\n", scr: new_color_scheme, outp: true},
 	{str: "Regenerate default color schemes\n\n", scr: initialize_color_schemes},
@@ -382,15 +383,9 @@ static _nice_things = [
 	"Remember to take breaks from time to time!",
 	"yooooo you're sick as hell",
 ]
+static index = irandom(array_length(_nice_things)-1)
 
-static prev_nice_thing = ""
-
-var _nice_thing = ""
-
-do _nice_thing = _nice_things[irandom(array_length(_nice_things)-1)]
-until _nice_thing != prev_nice_thing
-
-prev_nice_thing = _nice_thing
+var _nice_thing = _nice_things[index++ mod array_length(_nice_things)]
 
 return format_output([{str: "Help menu", scr: help, output: true}," / ",{str: _nice_thing, scr: nice_thing, outp: true}], true, nice_thing, _nice_thing)
 }

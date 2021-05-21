@@ -14,7 +14,7 @@ set = function(text) {
 	delete self.clickable	
 	delete self.subclickable
 	
-	var _text = variable_struct_exists_get(text, "o", text)
+	var _text = (is_struct(text) and variable_struct_exists(text, "__embedded__")) ? text.o : text
 	
 	_text = is_array(_text) ? _text : [ is_undefined(_text) ? "" : _text ]
 
@@ -181,9 +181,44 @@ set = function(text) {
 }
 
 
+function draw_outline_text(x, y, text){ with o_console.colors {
+
+if outline_layers > 0
+{
+	var old_color = draw_get_color()
+	draw_set_color(selection)
+		
+	draw_text(x+1, y-1, text)
+	if outline_layers > 1 
+	{
+		draw_text(x-1, y+1, text)
+		if outline_layers > 2
+		{
+			draw_text(x+1, y+1, text)
+			if outline_layers > 3
+			{
+				draw_text(x-1, y-1, text)
+				if outline_layers > 4
+				{
+					draw_text(x-1, y, text)
+					if outline_layers > 5
+					{
+						draw_text(x, y+1, text)
+						if outline_layers > 6
+						{
+							draw_text(x, y-1, text)
+							if outline_layers > 7
+							{
+								draw_text(x+1, y, text)
+}}}}}}}
+draw_set_color(old_color)
+}
+}}
+
 
 
 function draw_embedded_text(x, y, text, plaintext_color, alpha){
+
 
 var cw = string_width(" ")
 var ch = string_height(" ")
@@ -198,12 +233,12 @@ draw_set_halign(fa_left)
 draw_set_valign(fa_top)
 draw_set_alpha(alpha)
 
-var set_text = false
 var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : (is_string(plaintext_color) ? o_console.colors[$ plaintext_color] : plaintext_color)
 
 draw_set_color(plain_col)
 if is_undefined(text) or not is_struct(text)
 {
+	draw_outline_text(x, y, text)
 	draw_text(x, y, text)
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
@@ -211,18 +246,22 @@ if is_undefined(text) or not is_struct(text)
 }
 else if not o_console.embed_text
 {
+	draw_outline_text(x, y, text.plain)
 	draw_text(x, y, text.plain)
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
 	return undefined
 }
 
+draw_outline_text(x, y, text.plain)
 draw_text(x, y, text.colortext)
 
 text.mouse_on = gui_mouse_between(x, y, x+text.width*cw, y+text.height*ch)
 text.mouse_on_item = false
 
 text.mouse_index = -1
+
+var executing = undefined
 
 if text.mouse_on
 {
@@ -257,24 +296,10 @@ if text.mouse_on
 			{
 				text.click_index = c.id
 			}
-			else if text.click_index == c.id and not mouse_check_button(mb_left)
+			else if is_undefined(executing) and text.click_index == c.id and not mouse_check_button(mb_left)
 			{
 				text.click_index = -1
-			
-				//Set variable
-				variable_string_set(c.vari, c.arg)
-			
-				//Set checkbox
-				var _check = variable_string_get(c.cbox)
-				if is_numeric(_check) variable_string_set(c.cbox, not _check)
-				
-				//Run method
-				o_console.run_in_embed = true
-				var _output = script_execute_ext_builtin(c.func, c.args)
-				o_console.run_in_embed = false
-			
-				//Set output
-				set_text = c.outp
+				executing = c
 			}
 		
 			if not mouse_check_button(mb_left) and text.click_index == c.id text.click_index = -1
@@ -397,7 +422,23 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 	)
 }
 
-if set_text text.set(_output)
+if not is_undefined(executing)
+{
+	//Set variable
+	variable_string_set(executing.vari, executing.arg)
+			
+	//Set checkbox
+	var _check = variable_string_get(executing.cbox)
+	if is_numeric(_check) variable_string_set(executing.cbox, not _check)
+				
+	//Run method
+	o_console.run_in_embed = true
+	var _output = script_execute_ext_builtin(executing.func, executing.args)
+	o_console.run_in_embed = false
+			
+	//Set output
+	if executing.outp text.set(_output)
+}
 
 draw_set_valign(old_halign)
 draw_set_halign(old_valign)
