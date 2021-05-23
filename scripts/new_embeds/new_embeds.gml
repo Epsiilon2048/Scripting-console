@@ -181,38 +181,35 @@ set = function(text) {
 }
 
 
-function draw_outline_text(x, y, text){ with o_console.colors {
+function draw_outline_text(x, y, text, layers){ with o_console.colors {
 
-if outline_layers > 0
+if is_undefined(layers) layers = outline_layers
+
+if layers > 0
 {
-	var old_color = draw_get_color()
-	draw_set_color(selection)
-		
-	draw_text(x+1, y-1, text)
-	if outline_layers > 1 
+	draw_text(x-1, y+1, text)
+	if layers > 1 
 	{
-		draw_text(x-1, y+1, text)
-		if outline_layers > 2
+		draw_text(x+1, y-1, text)
+		if layers > 2
 		{
 			draw_text(x+1, y+1, text)
-			if outline_layers > 3
+			if layers > 3
 			{
 				draw_text(x-1, y-1, text)
-				if outline_layers > 4
+				if layers > 4
 				{
 					draw_text(x-1, y, text)
-					if outline_layers > 5
+					if layers > 5
 					{
 						draw_text(x, y+1, text)
-						if outline_layers > 6
+						if layers > 6
 						{
 							draw_text(x, y-1, text)
-							if outline_layers > 7
+							if layers > 7
 							{
 								draw_text(x+1, y, text)
-}}}}}}}
-draw_set_color(old_color)
-}
+}}}}}}}}
 }}
 
 
@@ -253,7 +250,12 @@ else if not o_console.embed_text
 	return undefined
 }
 
-draw_outline_text(x, y, text.plain)
+if o_console.colors.outline_layers
+{
+	draw_set_color(selection)
+	draw_outline_text(x, y, text.plain)
+}
+
 draw_text(x, y, text.colortext)
 
 text.mouse_on = gui_mouse_between(x, y, x+text.width*cw, y+text.height*ch)

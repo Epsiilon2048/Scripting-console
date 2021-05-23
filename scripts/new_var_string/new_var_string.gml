@@ -5,11 +5,22 @@ function vse(name, add_macro){
 ///@description variable_string_exists(name, [add_macro])
 
 static accessors = "@|$?#"
+static next_pos = function(str, startpos, has_accessor){
+	
+	var pos1 = string_pos_ext(".", str, startpos)
+	var pos2 = has_accessor ? string_pos_ext("[", str, startpos) : 0
+	
+	if		not pos2 return pos1
+	else if	not pos1 return pos2
+	
+	return min(pos1, pos2)
+}
 
 if not is_string(name) or name == "" return undefined
 if is_undefined(add_macro) add_macro = true
 
-var pos = string_pos(".", name)
+var has_accessor = string_pos("[", name) > 0
+var pos = next_pos(name, 1, has_accessor)
 var marker = 0
 
 var name_len = string_length(name)
@@ -25,7 +36,6 @@ if scope == -1 scope = id
 
 var pos
 
-var has_accessor = string_pos("[", name) > 0
 do
 {
 	if not (has_accessor and string_char_at(name, pos) == "[")
@@ -33,7 +43,7 @@ do
 		if marker != 0 and not is_struct(scope) return undefined
 		marker = pos
 		
-		pos = string_pos_ext(".", name, pos)
+		pos = next_pos(name, pos, has_accessor)
 	
 		if pos == 0 segment = string_delete(name, 1, marker)
 		else segment = string_copy(name, marker+1, pos-marker-1)

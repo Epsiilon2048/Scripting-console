@@ -13,6 +13,24 @@ draw_set_halign(fa_left)
 var char_width = string_width(" ")
 var char_height = string_height(" ")
 
+var y1
+var y2
+
+switch draw_get_valign()
+{
+case fa_top:
+	y1 = y
+	y2 = y+char_height
+break
+case fa_center:
+	y1 = y-char_height/2
+	y2 = y+char_height/2
+break
+case fa_bottom:
+	y1 = y-char_height
+	y2 = y
+}
+
 var lastpos = 1
 
 draw_outline_text(x, y, console_text.text)
@@ -21,12 +39,27 @@ for(var i = 0; i <= array_length(console_text.colors)-1; i++)
 {
 	var _text = string_copy( console_text.text, lastpos, console_text.colors[i].pos - lastpos )
 	
+	var len = char_width*string_length(_text)
+	
 	var c = console_text.colors[i].col
+	var hl = console_text.colors[i].hl
+	var ol = console_text.colors[i].ol
+	if not is_undefined(hl)
+	{
+		draw_set_color( is_string(hl) ? o_console.colors[$ hl] : hl )
+		draw_rectangle(x, y1, x+len-1, y2-2, false)
+	}
+
+	if ol
+	{
+		draw_set_color(o_console.colors.plain)
+		draw_outline_text(x, y, _text, ol)
+	}
 	
 	draw_set_color( is_string(c) ? o_console.colors[$ c] : c )
 	draw_text(x, y, _text)
 	
-	x += char_width*string_length(_text)
+	x += len
 	lastpos = console_text.colors[i].pos
 }
 

@@ -370,25 +370,7 @@ run_in_embed   = false
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
-ctx_menu_inputs()
 value_box_inputs()
-
-if console_toggle and not value_box_mouse_on and mouse_check_button_pressed(mb_right)
-{
-	right_mb = true
-}
-
-else if (console_toggle or Output.mouse_on) and not value_box_mouse_on and right_mb and is_undefined(CTX_MENU.ctx) and not mouse_check_button(mb_right)
-{
-	CTX_MENU.ctx = ctx
-	CTX_MENU.x = gui_mx + 10
-	CTX_MENU.y = gui_my + 10
-}
-else if right_mb and not mouse_check_button(mb_right)
-{
-	right_mb = false
-}
-
 value_box_mouse_on = false
 
 event_commands_exec(event_commands.step_end)

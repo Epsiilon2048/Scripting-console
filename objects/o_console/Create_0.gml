@@ -1,4 +1,17 @@
 
+fonts = [
+	fnt_debug1x,
+	fnt_debug2x,
+	fnt_debug3x,
+	fnt_debug4x,
+	fnt_debug5x,
+]
+
+scale = function(size){ with o_console {
+	
+	font = fonts[ clamp(size-1, 0, array_length(fonts)-1) ]
+}}
+
 run_in_embed = false
 char_pos_arg = {}
 
@@ -131,7 +144,7 @@ draw_order = ds_create(ds_type_list, "draw_order")
 
 #macro vk_tilde 192
 
-#macro SCALE_ o_console.draw_scale.mult *
+#macro SCALE_ (13/15) *
 
 #macro gui_mx device_mouse_x_to_gui(0)
 #macro gui_my device_mouse_y_to_gui(0)
@@ -148,9 +161,9 @@ draw_order = ds_create(ds_type_list, "draw_order")
 #macro dt_variable		"variable"
 #macro dt_method		"method"
 #macro dt_instance		"instance"
-#macro dt_room			"room"
+#macro dt_room			dt_asset //ill get rid of this one later
 #macro dt_color			"color"		// Only used for identifiers
-#macro dt_builtinvar	"builtin variable"
+#macro dt_builtinvar	"builtinvar"
 #macro dt_tag			"tag"
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"
@@ -167,6 +180,7 @@ draw_order = ds_create(ds_type_list, "draw_order")
 #macro cs_drowned		"drowned"
 #macro cs_helios		"helios"
 #macro cs_humanrights	"humanrights"
+#macro cs_rainbowsoup	"rainbowsoup"
 
 #macro vb_static		"static"
 #macro vb_scrubber		"scrubber"

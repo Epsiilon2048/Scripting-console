@@ -93,13 +93,6 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			
 			break
 			#endregion
-
-			#region Room
-			case dt_room:
-				room_goto(asset_get_index(subject.plain))
-				output_string[i] = "Changed room to "+subject.plain
-			break
-			#endregion
 		
 			#region Variable	
 			case dt_variable:
@@ -154,6 +147,12 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			case dt_string:
 				if string_pos("\n", subject.value)	output_string[i] = subject.value
 				else								output_string[i] = "\""+subject.value+"\""
+			break
+			#endregion
+	
+			#region Color
+			case dt_color:
+				output_string[i] = color_get(subject.value)
 			break
 			#endregion
 	

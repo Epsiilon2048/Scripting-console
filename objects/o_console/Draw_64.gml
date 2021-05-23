@@ -70,7 +70,6 @@ if output_as_window and Output.plain != ""
 draw_autofill_list()
 draw_value_boxes()
 draw_color_picker()
-draw_ctx_menu()
 
 value_box_dragging = false
 

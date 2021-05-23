@@ -473,7 +473,7 @@ return _output
 function color_get(_col){
 
 return format_output([
-	{str: "[COLOR]\n", col: _col},
+	{str: "[color]\n", col: _col},
 	{str: "GML       ", col: "embed_hover"},string(_col)+"\n",
 	{str: "RBG       ", col: "embed_hover"},stitch(color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"),
 	{str: "HSV (255) ", col: "embed_hover"},stitch(color_get_hue(_col),", ",color_get_saturation(_col),", ",color_get_value(_col),"\n"),
@@ -481,3 +481,14 @@ return format_output([
 	{str: "HEX       ", col: "embed_hover"},color_to_hex(_col)
 ], true, -1, "Color properties of "+string(_col))
 }
+
+function color_get_condensed(name, col)
+{
+var hex = string(color_to_hex(col))
+	
+return format_output([
+	{str:"[color]", col: col}," | ",{str: hex, scr: input_set, args: ["c/"+hex, true]}," | \""+name+"\""
+], true)
+}
+
+//color_get_condensed s/local c/0xd0cbf8; color_get_condensed s/sublocal c/0xFF99F8; color_get_condensed s/field c/0xb0c8ff; color_get_condensed s/localfield c/0xB2B1FF; color_get_condensed s/globalfield c/0xf7c8e6; color_get_condensed s/keyword c/0xffffcc; color_get_condensed s/macro c/0xadfce9; color_get_condensed s/macroname c/0xadfce9; color_get_condensed s/preproc c/0x8c7195; color_get_condensed s/curly.ace_paren c/0xac647d; color_get_condensed s/constant c/0xb8dcc1; color_get_condensed s/numeric c/0xf2e2a2; color_get_condensed s/string c/0xadfcad; color_get_condensed s/momenttime c/0xf2e2a2; color_get_condensed s/comment c/0x3a435f; color_get_condensed s/eventtext c/0x3a435f; color_get_condensed s/extmacro c/0xff6251; color_get_condensed s/enum c/0xf1a3d3; color_get_condensed s/enumfield c/0xb8dcc1; color_get_condensed s/variable c/0xa48cae; color_get_condensed s/globalvar c/0xf1a3d3; color_get_condensed s/function c/0xf7c6a8; color_get_condensed s/extfunction c/0xff6251; color_get_condensed s/asset.ace_script c/0xff6251; color_get_condensed s/asset c/0xff9f9f; color_get_condensed s/namespace c/0xadfce9; color_get_condensed s/type c/0xff6251; color_get_condensed s/background c/0x232334; color_get_condensed s/active-line c/0x313142; color_get_condensed s/selection c/0x37528f; color_get_condensed s/gutter c/0x424864; color_get_condensed s/gutter c/0x28283c; color_get_condensed s/gutter-active-line c/0x33334d; color_get_condensed s/error c/0xff0000

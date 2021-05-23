@@ -33,7 +33,8 @@ color_schemes[$ cs_greenbeans] = create_color_scheme_full(
 )
 color_schemes[$ cs_greenbeans].body_real = 2497549
 color_schemes[$ cs_greenbeans][$ dt_instance] = pink
-color_schemes[$ cs_greenbeans].__builtin__ = true
+color_schemes[$ cs_greenbeans].builtin = true
+color_schemes[$ cs_greenbeans].author = "Epsiilon"
 
 
 
@@ -53,7 +54,8 @@ color_schemes[$ cs_royal] = create_color_scheme7(
 	purple,
 	yellow
 )
-color_schemes[$ cs_royal].__builtin__ = true
+color_schemes[$ cs_royal].builtin = true
+color_schemes[$ cs_royal].author = "Epsiilon"
 
 
 
@@ -73,7 +75,8 @@ color_schemes[$ cs_drowned] = create_color_scheme7(
 	pink,
 	yellow
 )
-color_schemes[$ cs_drowned].__builtin__ = true
+color_schemes[$ cs_drowned].builtin = true
+color_schemes[$ cs_drowned].author = "Epsiilon"
 
 
 
@@ -92,8 +95,8 @@ color_schemes[$ cs_helios] = create_color_scheme7(
 	green,
 	yellow
 )
-color_schemes[$ cs_helios].__builtin__ = true
-
+color_schemes[$ cs_helios].builtin = true
+color_schemes[$ cs_helios].author = "Epsiilon"
 
 
 var dark_pink	= make_color_rgb(44, 34, 54)
@@ -121,8 +124,10 @@ color_schemes[$ cs_humanrights] = create_color_scheme_full(
 	slight_pink,
 	white
 )
-color_schemes[$ cs_humanrights].__builtin__ = true
+color_schemes[$ cs_humanrights].builtin = true
+color_schemes[$ cs_humanrights].author = "Epsiilon"
 
+color_schemes[$ cs_rainbowsoup] = { author: "rainlizard", builtinvar : 12704952, selection : 3416867, string : 11402413, sprite_alpha : 1, body_bm : 0, asset : 10461183, embed_hover : 15334573, deprecated : 9392695, sprite_anchor : 0, tag : 13434879, method : 5333759, builtin : 1, body_real : 3416867, embed : 16757170, instance : 16292351, sprite : -1, variable : 16757170, body_real_alpha : 0.10, body : 3416867, output : 10461183, ex_output : 16777215, real : 10674930, plain : 8217772, outline_layers : 0, color : 13434879, bevel : undefined, body_accent : 9392695, body_alpha : 1 }
 
 rainbow = false
 bird_mode = false

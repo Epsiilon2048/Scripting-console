@@ -197,7 +197,6 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 	}
 	else
 	{
-	
 		var _macro = console_macros[$ _arg]
 	
 		if type == -1 and not is_undefined(_macro)
@@ -219,10 +218,21 @@ if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 		{
 			type = dt_asset
 		}
-		if (type == -1 or type == dt_real or type == dt_instance or type == dt_method or type == dt_room or type == dt_asset) and string_is_float(arg) 
+		if (type == -1 or type == dt_real or type == dt_instance or type == dt_method or type == dt_room or type == dt_asset or type == dt_color) and string_is_float(arg) 
 		{
+			if type == dt_color and not (not is_undefined(_macro) and _macro.type == dt_color)
+			{
+				arg = hex_to_color(arg)
+			}
+			
 			type = dt_real
 		}
+		else if type == dt_color and string_is_float("0x"+arg)
+		{
+			if not (not is_undefined(_macro) and _macro.type == dt_color) arg = hex_to_color(arg)
+			type = dt_real
+		}
+		
 		if type == -1 or type == dt_variable
 		{
 			var varstring = string_add_scope(arg, not iden)

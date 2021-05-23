@@ -44,6 +44,16 @@ else
 		type = dt_string
 	}
 
+	if type == dt_color
+	{
+		if string_is_float(arg) or string_is_float("0x"+arg)
+		{
+			if not (not is_undefined(_macro) and _macro.type == dt_color) value = hex_to_color(arg)
+			else value = real(arg)
+		}
+		else type = undefined
+	}
+
 	if (type == -1 or type == dt_instance or type == dt_method) and asset_get_index(arg) != -1
 	{
 		var asset_type = asset_get_type(arg)
@@ -161,8 +171,6 @@ case dt_method:		if is_undefined(commands[? _arg]) description = "Execute"+((val
 					else description = command_doc(_arg)+((commands[? _arg].desc == "") ? "" : " - "+commands[? _arg].desc)
 break
 case dt_real:		description = "Return real value of "+arg
-break
-case dt_room:		description = "Set room to "+room_get_name(value)
 break
 case dt_string:		description = "Echo string"
 break

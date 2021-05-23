@@ -11,8 +11,7 @@ return format_output([
 	
 	"Options\n",
 	{str: "General settings\n", scr: console_settings, output: true},
-	{str: "Color schemes\n", scr: color_scheme_settings, output: true},
-	{str: "Color scheme editor\n\n", scr: color_scheme_editor, output: true},
+	{str: "Color schemes\n\n", scr: color_scheme_settings, output: true},
 	
 	"Other stuff\n",
 	{str: "Say a nice thing!\n", scr: nice_thing, output: true},
@@ -113,8 +112,6 @@ return format_output([
 	"Notes\n"+
 	"- Multiple commands can be run in a single line when separated by semi-colons (;)\n"+
 	"- The scope of the console only changes after every line has been run\n"+
-	"- While custom methods are automatically detected, builtin gml functions have to be\n"+
-	"  manually added to the console_macros list\n"+
 	"- Characters such as parenthesis and commas are treated the same as spaces. This means\n"+
 	"  GML code is often compatible with GMCL.\n"+
 	"- If a method asks for a variable as an argument, it's likely intended to be a string\n\n",
@@ -225,10 +222,10 @@ return format_output([
 
 function console_settings(){ with o_console {
 	
-static icg = initialize_console_graphics
+static sc = scale
 	
 return format_output([
-	"UI scale: ",{str: "1x", scr: icg, arg: 1}," ",{str: "2x", scr: icg, arg: 2}," ",{str: "3x", scr: icg, arg: 3}," ",{str: "4x", scr: icg, arg: 4}," ",{str: "5x", scr: icg, arg: 5},
+	"UI scale: ",{str: "1x", scr: sc, arg: 1}," ",{str: "2x", scr: sc, arg: 2}," ",{str: "3x", scr: sc, arg: 3}," ",{str: "4x", scr: sc, arg: 4}," ",{str: "5x", scr: sc, arg: 5},
 	"\n\n",
 	
 	{cbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
@@ -257,7 +254,7 @@ var notbuiltin	= []
 
 for(var i = 0; i <= array_length(cs_list)-1; i++)
 {
-	if variable_struct_exists_get(color_schemes[$ cs_list[i]], "__builtin__", false)
+	if variable_struct_exists_get(color_schemes[$ cs_list[i]], "builtin", false)
 	{
 		if cs_list[i] == cs_index	array_push(builtin, {str: "\n> ", col: dt_unknown})
 		else						array_push(builtin, "\n  ")

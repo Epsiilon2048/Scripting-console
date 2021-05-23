@@ -142,6 +142,7 @@ colors[$ dt_method]		= method
 colors[$ dt_instance]	= asset
 colors[$ dt_room]		= asset
 colors[$ dt_builtinvar] = output
+colors[$ dt_color]		= real
 colors[$ dt_tag]		= tag
 colors[$ dt_unknown]	= plaintext
 colors[$ dt_deprecated] = deprecated

@@ -9,19 +9,19 @@ static tag_sep   = " "
 static accessors = "@|?#$"
 
 				
-static push_combine = function(list, pos, col){
+static push_combine = function(list, pos, col, hl, ol){
 	
 	if pos <= 0 return undefined
 	
 	var list_len = array_length(list)
 					
-	if list_len > 0 and list[list_len-1].col == col
+	if list_len > 0 and list[list_len-1].col == col and list[list_len-1].hl == hl and list[list_len-1].ol == ol
 	{
 		list[list_len-1].pos = pos
 	}
 	else if not (list_len > 0 and list[list_len-1].pos == pos)
 	{
-		array_push(list, {pos: pos, col: col})
+		array_push(list, {pos: pos, col: col, hl: hl, ol: ol})
 	}
 }
 
@@ -62,6 +62,8 @@ var _iden_string = false
 var _iden_name = ""
 var instscope = ""
 var _col = dt_unknown
+var _ul = undefined
+var _ol = 0
 var in_brackets = 0
 var accessor = ""
 var can_have_accessor = false
@@ -170,6 +172,8 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			}
 				
 			var _col = dt_unknown
+			var _hl = undefined
+			var _ol = 0
 				
 			if char == "/" and not is_undefined(identifiers[$ segment])
 			{
@@ -227,7 +231,16 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						_asset_type = asset_get_type(segment) 
 					}
 						
-					if (_prev_iden == dt_instance or (_prev_iden == dt_variable and _asset_type == asset_object)) and _asset != -1 and instance_exists(_asset) and  (_macro_type == -1 or _macro_type == dt_instance)
+					if _prev_iden == dt_color
+					{
+						if	string_is_float(segment) or 
+							string_is_float("0x"+segment) or
+							_macro_type == dt_color
+						{
+							_col = dt_color
+						}
+					}
+					else if (_prev_iden == dt_instance or (_prev_iden == dt_variable and _asset_type == asset_object)) and _asset != -1 and instance_exists(_asset) and  (_macro_type == -1 or _macro_type == dt_instance)
 					{
 						_col = dt_instance
 						instscope = segment
@@ -319,16 +332,16 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						possible_accessors = get_possible_accessors(value)
 					}
 				}
-					
-				if string_pos(char, iden_sep)
-				{
-					_iden_string = false
-					_prev_iden = -1
-				}
 			}
 				
 			if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
-			if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col)
+			if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col, _hl, _ol)
+				
+			if string_pos(char, iden_sep)
+			{
+				_iden_string = false
+				_prev_iden = -1
+			}
 				
 			if subject and segment != "" and (string_pos(char, subj_sep) or i == string_length(_command)+1)
 			{

@@ -166,8 +166,7 @@ else
 	fade_time	= 0
 }
 text.set(_text)
-
-with o_console
+with o_console 
 {
 	prev_output = output
 	var arlen = array_length(prev_output)

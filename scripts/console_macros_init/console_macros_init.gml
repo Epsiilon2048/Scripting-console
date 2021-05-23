@@ -42,7 +42,16 @@ console_macro_add("dt_tag",				dt_string, dt_tag)
 console_macro_add("dt_deprecated",		dt_string, dt_deprecated)
 console_macro_add("dt_color",			dt_string, dt_color)
 #endregion								
-										
+
+#region Builtin color schemes
+console_macro_add("cs_drowned",			dt_string, cs_drowned)
+console_macro_add("cs_greenbeans",		dt_string, cs_greenbeans)
+console_macro_add("cs_helios",			dt_string, cs_helios)
+console_macro_add("cs_humanrights",		dt_string, cs_humanrights)
+console_macro_add("cs_rainbowsoup",		dt_string, cs_rainbowsoup)
+console_macro_add("cs_royal",			dt_string, cs_royal)
+#endregion
+
 #region Value box types					
 console_macro_add("vb_bool",			dt_string, vb_bool)
 console_macro_add("vb_color",			dt_string, vb_color)
@@ -62,12 +71,12 @@ console_macro_add("all",				dt_instance, all)
 #endregion
 
 #region Colors
-console_macro_add("c_white",			dt_real, c_white)
-console_macro_add("c_black",			dt_real, c_black)
-console_macro_add("c_red",				dt_real, c_red)
-console_macro_add("c_blue",				dt_real, c_blue)
-console_macro_add("c_yellow",			dt_real, c_yellow)
-console_macro_add("c_green",			dt_real, c_green)
+console_macro_add("c_white",			dt_color, c_white)
+console_macro_add("c_black",			dt_color, c_black)
+console_macro_add("c_red",				dt_color, c_red)
+console_macro_add("c_blue",				dt_color, c_blue)
+console_macro_add("c_yellow",			dt_color, c_yellow)
+console_macro_add("c_green",			dt_color, c_green)
 #endregion
 
 #region Blendmodes

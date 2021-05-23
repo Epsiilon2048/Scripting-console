@@ -13,16 +13,7 @@ if is_undefined(scale)
 	// 4k and above	4x
 }
 
-SCALE[0] = undefined
-	
-SCALE[1] = {mult: 11/15, font: fnt_debug1x}
-SCALE[2] = {mult: 13/15, font: fnt_debug2x}
-SCALE[3] = {mult: 1,	 font: fnt_debug3x}
-SCALE[4] = {mult: 18/15, font: fnt_debug4x}
-SCALE[5] = {mult: 21/15, font: fnt_debug5x}
-
-draw_scale = SCALE[scale]
-font = draw_scale.font
+self.scale(scale)
 
 draw_set_font(font)
 draw_enable_swf_aa(true)
@@ -228,6 +219,31 @@ with VALUE_BOX {
 
 with CTX_MENU {
 	
+	char_height = 17
+	
+	x = 0
+	y = 0
+	
+	left = 0
+	top = 0
+	right = 0
+	bottom = 0
+	
+	border_l = 10
+	border_r = 10
+	border_h = 10
+	
+	text_dist = 10
+	
+	sep_width = 1
+	sep_dist = 10
+	
+	items = undefined
+	longest_item = undefined
+}
+
+/*with CTX_MENU {
+	
 	enabled = false
 	
 	x = 50
@@ -255,7 +271,7 @@ with CTX_MENU {
 	font = o_console.font
 	
 	ctx = undefined
-}
+}*/
 
 with CTX_STRIP {
 	

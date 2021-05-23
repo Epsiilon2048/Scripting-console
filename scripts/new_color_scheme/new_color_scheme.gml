@@ -6,7 +6,7 @@ var i = 1
 while variable_struct_exists(color_schemes, name+string(i)) i++
 
 color_schemes[$ name+string(i)] = struct_copy( color_schemes[$ cs_template] )
-color_schemes[$ name+string(i)].__builtin__ = false
+color_schemes[$ name+string(i)].builtin = false
 
 return color_scheme_settings()
 }} 
