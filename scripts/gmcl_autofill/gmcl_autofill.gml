@@ -18,7 +18,7 @@ var ch = is_undefined(idn) or idn == dt_string
 
 if sc and (ch or idn == dt_variable)
 {		
-	if is_real(char_pos_arg.scope) scope_variables = variable_instance_get_names(char_pos_arg.scope)
+	if is_numeric(char_pos_arg.scope) scope_variables = variable_instance_get_names(char_pos_arg.scope)
 	else scope_variables = variable_struct_get_names(variable_string_get(char_pos_arg.scope))
 		
 	array_sort(scope_variables, true)

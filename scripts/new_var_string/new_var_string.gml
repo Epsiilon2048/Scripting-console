@@ -1,8 +1,29 @@
 
 global.id = global
+global.object_index = global
 
-function vse(name, add_macro){
-///@description variable_string_exists(name, [add_macro])
+function variable_string_set(name, value){
+
+if o_console.object == global return variable_string(string_add_scope(name), value, true)
+else if instance_exists(o_console.object) with o_console.object variable_string(name, value, true)
+else variable_string(name, value, true)
+}
+
+function variable_string_get(name){
+
+if o_console.object == global return variable_string(string_add_scope(name), undefined, true)
+else if instance_exists(o_console.object) with o_console.object return variable_string(name, undefined, true)
+else return variable_string(name, undefined, true)
+}
+
+function variable_string_exists(name){
+
+if o_console.object == global return variable_string(string_add_scope(name), undefined, false)
+else if instance_exists(o_console.object) with o_console.object return variable_string(name, undefined, false)
+else return variable_string(name, undefined, false)
+}
+
+function variable_string(name, value, return_undefined){
 
 static accessors = "@|$?#"
 static next_pos = function(str, startpos, has_accessor){
@@ -16,8 +37,14 @@ static next_pos = function(str, startpos, has_accessor){
 	return min(pos1, pos2)
 }
 
-if not is_string(name) or name == "" return undefined
-if is_undefined(add_macro) add_macro = true
+if is_undefined(return_undefined) return_undefined = true
+
+var fail_return = return_undefined ? undefined : false
+var set_var = not is_undefined(value)
+
+if not is_string(name) or name == "" return fail_return
+
+if string_char_at(name, 1) == "." name = string(id)+name
 
 var has_accessor = string_pos("[", name) > 0
 var pos = next_pos(name, 1, has_accessor)
@@ -27,12 +54,23 @@ var name_len = string_length(name)
 var segment
 
 if pos == 0 segment = name
-else segment = string_copy(name, marker+1, pos-marker)
+else segment = string_copy(name, 1, pos-1)
 
-var scope = string_to_instance(segment, add_macro)
-var scope_ds = -1
+var returning = false
+var scope = string_to_instance(segment, true)
 
-if scope == -1 scope = id
+if scope == -1
+{
+	if string_is_float(segment)
+	{
+		scope = real(segment)
+	}
+	else
+	{
+		pos = 0
+		scope = id
+	}
+}
 
 var pos
 
@@ -40,7 +78,7 @@ do
 {
 	if not (has_accessor and string_char_at(name, pos) == "[")
 	{
-		if marker != 0 and not is_struct(scope) return undefined
+		if marker != 0 and not is_struct(scope) and not (is_numeric(scope) and instance_exists(scope)) return fail_return
 		marker = pos
 		
 		pos = next_pos(name, pos, has_accessor)
@@ -48,17 +86,15 @@ do
 		if pos == 0 segment = string_delete(name, 1, marker)
 		else segment = string_copy(name, marker+1, pos-marker-1)
 	
-		if has_accessor and ((pos == 0 and string_last(name) == "]") or string_char_at(name, pos-1) == "]")
+		if not variable_instance_exists(scope, segment) and not (scope == global and variable_global_exists(segment)) return fail_return
+		
+		returning = not pos and set_var
+		if returning
 		{
-			var _pos = string_pos("[", segment)-1
-			if _pos == 0 return undefined
-		
-			pos = ((pos == 0) ? (name_len+1) : pos) - (string_length(segment)-_pos)
-		
-			segment = slice(segment, 1, _pos+1, undefined)
+			variable_instance_set(scope, segment, value)
+			return undefined
 		}
-	
-		if not variable_instance_exists(scope, segment) return undefined
+		
 		scope = variable_instance_get(scope, segment)
 	}
 	else
@@ -78,6 +114,7 @@ do
 		segment = string_replace_all(slice(name, marker+1, pos-1, 1), " ", "")
 		
 		if pos > name_len pos = 0
+		returning = not pos and set_var
 		
 		var access_type = string_char_at(segment, 1)
 		
@@ -102,7 +139,7 @@ do
 			}
 			else
 			{
-				return vse(index, true)
+				return variable_string(index, undefined, true)
 			}
 		}
 		
@@ -134,27 +171,33 @@ do
 			index.x = interpret(index.x)
 			index.y = interpret(index.y)
 			
-			if is_undefined(index.x) or is_undefined(index.y) return undefined
+			if is_undefined(index.x) or is_undefined(index.y) return fail_return
 		}
 		else
 		{
 			index = interpret(segment)
 			
-			if is_undefined(index) return undefined
+			if is_undefined(index) return fail_return
 		}
 		
 		switch access_type
 		{
 		case "@":
-			if not is_array(scope) return undefined
+			if not is_array(scope) return fail_return
 			
 			if comma
 			{
 				if	not is_numeric(index.x) or 
-					not is_numeric(index.y) or array_length(scope) <= index.x or 
+					not is_numeric(index.y) or (not returning and array_length(scope) <= index.x) or 
 					not is_array(scope[index.x]) or 
-					array_length(scope[index.x]) <= index.y
+					(not returning and array_length(scope[index.x]) <= index.y)
 				{
+					return fail_return
+				}
+			
+				if not pos and set_var
+				{
+					scope[@ index.x, index.y] = value
 					return undefined
 				}
 			
@@ -164,11 +207,17 @@ do
 			{
 				if	not is_numeric(index) or 
 					index < 0 or 
-					index >= array_length(scope) 
+					(not returning and index >= array_length(scope))
 				{
+					return fail_return
+				}
+				
+				if not pos and set_var
+				{
+					scope[@ index] = value
 					return undefined
 				}
-			
+				
 				scope = scope[index]
 			}
 		break
@@ -176,8 +225,14 @@ do
 			if	not is_numeric(scope) or 
 				not ds_exists(scope, ds_type_list) or 
 				not is_numeric(index) or index < 0 or 
-				index >= ds_list_size(scope) 
+				(not returning and index >= ds_list_size(scope))
 			{
+				return fail_return
+			}
+			
+			if not pos and set_var
+			{
+				scope[| index] = value
 				return undefined
 			}
 			
@@ -187,8 +242,14 @@ do
 			index = string(index)
 			
 			if	not is_struct(scope) or 
-				not variable_struct_exists(scope, index) 
+				(not returning and not variable_struct_exists(scope, index))
 			{
+				return fail_return
+			}
+			
+			if not pos and set_var
+			{
+				scope[$ index] = value
 				return undefined
 			}
 			
@@ -199,8 +260,14 @@ do
 		
 			if	not is_numeric(scope) 
 				or not ds_exists(scope, ds_type_map) or 
-				not ds_map_exists(scope, index) 
+				(not returning and not ds_map_exists(scope, index))
 			{
+				return fail_return
+			}
+			
+			if not pos and set_var
+			{
+				scope[? index] = value
 				return undefined
 			}
 			
@@ -214,9 +281,14 @@ do
 				not is_numeric(index.y) or
 				index.x < 0 or
 				index.y < 0 or
-				ds_grid_width(scope) <= index.x or 
-				ds_grid_height(scope) <= index.y 
+				(not returning and (ds_grid_width(scope) <= index.x or ds_grid_height(scope) <= index.y))
 			{
+				return fail_return
+			}
+			
+			if not pos and set_var
+			{
+				scope[# index.x, index.y] = value
 				return undefined
 			}
 			
@@ -225,5 +297,7 @@ do
 	}
 }
 until pos == 0
+
+if not return_undefined return true
 return scope
 }

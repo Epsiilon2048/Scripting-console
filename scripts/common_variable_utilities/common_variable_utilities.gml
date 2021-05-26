@@ -18,7 +18,7 @@ return string_copy(str, string_pos(str, ".")+1, string_length(str))
 }
 
 
-function variable_string_exists(str){
+function variable_string_exists_old(str){
 
 if not is_string(str) or str == "" return undefined
 if string_char_at(str, 1) == "." return false
@@ -64,7 +64,7 @@ return true
 
 
 
-function variable_string_get(str){
+function variable_string_get_old(str){
 
 if not is_string(str) or str == "" return undefined
 
@@ -103,7 +103,7 @@ return value
 
 
 
-function variable_string_set(str, val){
+function variable_string_set_old(str, val){
 
 if not is_string(str) or str == "" return undefined
 

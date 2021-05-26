@@ -55,8 +55,62 @@ return string(inst_id) + string_delete(str, 1, string_pos(".", str)-1)
 }}
 
 
+
+
 function string_add_scope(str, add_macro){ with o_console {
 
+if is_undefined(add_macro) add_macro = true
+
+if string_char_at(str, 1) == "."
+{
+	if not instance_exists(object) return undefined
+	else return string(object)+str
+}
+
+var dot_pos = string_pos(".", str)
+var bracket_pos = string_pos("[", str)
+
+var segment
+
+if not dot_pos and not bracket_pos
+{
+	if not instance_exists(object) return undefined
+	else return string(object)+"."+str
+}
+if bracket_pos and (not dot_pos or bracket_pos < dot_pos)
+{
+	segment = slice(str, 1, bracket_pos, 1)
+	
+	if string_is_int(segment) return str
+	else if not instance_exists(object) return undefined
+	else return string(object)+"."+str
+}
+else
+{
+	segment = slice(str, 1, dot_pos, 1)
+	
+	if string_is_int(segment) return str
+	else var macro = add_macro ? console_macros[$ segment] : undefined
+	
+	if not is_undefined(macro) and (macro.type == dt_instance or macro.type == dt_variable)
+	{
+		return string(macro.value)+"."+slice(str, dot_pos+1, -1, 1)
+	}
+	
+	var asset = asset_get_index(segment)
+	var type = asset_get_type(segment)
+	
+	if (asset == -1 or type != asset_object or not instance_exists(asset))
+	{
+		if not instance_exists(object) return undefined
+		else return string(object)+"."+str
+	}
+	else
+	{
+		return str
+	}
+}
+/*
 if is_undefined(add_macro) add_macro = true
 
 var _str = is_undefined(str) ? "" : string(str)
@@ -87,5 +141,5 @@ if not is_undefined(_macro) and (_macro.type == dt_instance or _macro.type == dt
 	return array_to_string(split, ".")
 }
 
-return _str
+return _str*/
 }}

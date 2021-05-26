@@ -9,7 +9,7 @@ static list = ds_list_create()
 
 var _is_string = is_string(value)
 var _is_array = is_array(value)
-var _is_ds_list = is_real(value)
+var _is_ds_list = is_numeric(value)
 
 var output
 var len

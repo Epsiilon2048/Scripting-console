@@ -99,7 +99,7 @@ var sidetext_x = x1
 var text_x = sidetext_x + _sidetext_bar + _sidetext_width + _sidetext_border
 var text_y = y1 - _border_h + _scroll
 
-draw_console_body(x1, y1, x2, y2)
+draw_console_body(x1, y1-1, x2, y2+1)
 draw_scrollbar(at.scrollbar)
 clip_rect_cutout(x1+1, y2+_border_h+1, x2-_border_w*2-o_console.SCROLLBAR.width, y1-_border_h)
 
@@ -278,7 +278,7 @@ static variable_color = function(item){
 	{
 		text = "Method"
 	}
-	else if is_real(value) and ds_map_exists(o_console.ds_types, varstring)
+	else if is_numeric(value) and ds_map_exists(o_console.ds_types, varstring)
 	{
 		text = "Ds "+ds_type_to_string(o_console.ds_types[? varstring])
 	}
@@ -308,7 +308,7 @@ static scope_color = function(item){
 		text = "Method"
 		entry_color = dt_method
 	}
-	else if is_real(value) and ds_map_exists(o_console.ds_types, varstring)
+	else if is_numeric(value) and ds_map_exists(o_console.ds_types, varstring)
 	{
 		text = "Ds "+ds_type_to_string(o_console.ds_types[? varstring])
 	}

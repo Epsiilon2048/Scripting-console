@@ -77,6 +77,7 @@ for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); 
 }
 #endregion
 
+
 #region Separate commands
 var command_split = []
 
@@ -164,119 +165,32 @@ lines[l] = arg_split
 
 for(var l = 0; l <= array_length(lines)-1; l++)
 {
-if array_length(lines[l]) > 0
-{
-
-var line = lines[l]
-
-var comp_line = array_create(array_length(line)-1)
-
-var subject = gmcl_interpret_subject(line[0], array_length(line))
-var error = subject.error
-
-#region Interpret arguments
-if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
-{
-	var _arg = line[i]
-	var arg
-	var type = -1
-	var value
-	var iden = false
-
-	if string_char_at(_arg, 2) == "/" and variable_struct_exists(identifiers, string_char_at(_arg, 1))
+	if array_length(lines[l]) > 0
 	{
-		type = identifiers[$ string_char_at(_arg, 1)]
-		_arg = string_copy(_arg, 3, string_length(_arg))
-		iden = true
-	}
-	
-	if _arg == "" 
-	{
-		type = undefined
-		arg = line[i]
-	}
-	else
-	{
-		var _macro = console_macros[$ _arg]
-	
-		if type == -1 and not is_undefined(_macro)
-		{
-			if is_real(_macro) arg = string_format_float(_macro.value)
-			else			   arg = string(_macro.value)
-			
-			type = _macro.type
-		}
-		else arg = _arg
-	
-		//reeeeeally weird logic here, i swear its necessary
-		if type == dt_string or (type == -1 and string_char_at(arg, 1) == "\"" and string_last(arg) == "\"")
-		{
-			if type != dt_string arg = string_copy(arg, 2, string_length(arg)-2)
-			type = dt_string
-		}
-		if (type == -1 or type == dt_asset or type == dt_room or type == dt_method or type == dt_instance) and asset_get_index(arg) != -1
-		{
-			type = dt_asset
-		}
-		if (type == -1 or type == dt_real or type == dt_instance or type == dt_method or type == dt_room or type == dt_asset or type == dt_color) and string_is_float(arg) 
-		{
-			if type == dt_color and not (not is_undefined(_macro) and _macro.type == dt_color)
-			{
-				arg = hex_to_color(arg)
-			}
-			
-			type = dt_real
-		}
-		else if type == dt_color and string_is_float("0x"+arg)
-		{
-			if not (not is_undefined(_macro) and _macro.type == dt_color) arg = hex_to_color(arg)
-			type = dt_real
-		}
+		var variable_args
 		
-		if type == -1 or type == dt_variable
+		var line = lines[l]
+
+		var comp_line = array_create(array_length(line)-1)
+
+		var subject = gmcl_interpret_subject(line[0], array_length(line))
+		var error = subject.error
+
+		if subject.type == dt_variable	variable_args = [0]
+		else							variable_args = []
+
+		if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 		{
-			var varstring = string_add_scope(arg, not iden)
-
-			if not is_undefined(varstring) and variable_string_exists(varstring)
-			{
-				type = dt_variable
-			}
-			else
-			{
-				type = undefined
-			}
+			comp_line[i-1] = gmcl_interpret_argument(line[i])
+			error = comp_line[i-1].error
+	
+			if not is_undefined(error) break
+			
+			if comp_line[i-1].type == dt_variable array_push(variable_args, i-1)
 		}
+		comp_lines[l] = {subject: subject, args: comp_line, error: error}
 	}
-	
-	switch type
-	{
-	case dt_real:		value = real(arg)
-	break
-	case dt_string:		value = arg
-	break
-	case dt_asset:		value = asset_get_index(arg)
-	break
-	case dt_variable:	value = variable_string_get( string_add_scope(arg, true) )
-	break
-	case dt_instance:	value = asset_get_index(arg)
-	break
-	case undefined:		value = "[SYNTAX ERROR] from \""+line[i]+"\""
-						error = value
-	}
-
-	comp_line[i-1] = {
-		value: value, 
-		type: type,
-		plain: line[i],
-	}
-	
-	if not is_undefined(error) break
 }
-comp_lines[l] = {subject: subject, args: comp_line, error: error}
-}
-}
-#endregion
-
 
 return {tag: tag, commands: comp_lines, raw: string_copy(command, com_start, string_length(command)-com_start+1)}
 }}

@@ -359,15 +359,15 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 		var prev_nl = nl
 		var _nl
 			
-		for(var i = 2; i <= nl_count+1; i++)
+		for(var j = 2; j <= nl_count+1; j++)
 		{
-			if i == nl_count+1
+			if j == nl_count+1
 			{
 				len = string_length(c.str) - string_last_pos("\n", c.str)
 			}
 			else
 			{
-				_nl = string_pos_index("\n", c.str, i)
+				_nl = string_pos_index("\n", c.str, j)
 				len = _nl - prev_nl - 1
 				prev_nl = _nl
 			}
@@ -378,8 +378,8 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 				{
 					draw_set_color(hl)
 					draw_rectangle(
-						x,			y + (c.y+i-1)*ch, 
-						x + len*cw,	y + (c.y+i)*ch - 1,
+						x,			y + (c.y+j-1)*ch, 
+						x + len*cw,	y + (c.y+j)*ch - 1,
 						false
 					)
 				}
@@ -387,8 +387,8 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 				{
 					draw_set_color(ul)
 					draw_line(
-						x - 1,			y + (c.y+i)*ch - 3, 
-						x + len*cw - 1,	y + (c.y+i)*ch - 3
+						x - 1,			y + (c.y+j)*ch - 3, 
+						x + len*cw - 1,	y + (c.y+j)*ch - 3
 					)
 				}
 			}

@@ -127,7 +127,9 @@ color_schemes[$ cs_humanrights] = create_color_scheme_full(
 color_schemes[$ cs_humanrights].builtin = true
 color_schemes[$ cs_humanrights].author = "Epsiilon"
 
-color_schemes[$ cs_rainbowsoup] = { author: "rainlizard", builtinvar : 12704952, selection : 3416867, string : 11402413, sprite_alpha : 1, body_bm : 0, asset : 10461183, embed_hover : 15334573, deprecated : 9392695, sprite_anchor : 0, tag : 13434879, method : 5333759, builtin : 1, body_real : 3416867, embed : 16757170, instance : 16292351, sprite : -1, variable : 16757170, body_real_alpha : 0.10, body : 3416867, output : 10461183, ex_output : 16777215, real : 10674930, plain : 8217772, outline_layers : 0, color : 13434879, bevel : undefined, body_accent : 9392695, body_alpha : 1 }
+color_schemes[$ cs_rainbowsoup] = { author: "rainlizard", builtinvar : 12704952, selection : 3416867, string : 11402413, sprite_alpha : 1, body_bm : bm_subtract, asset : 10461183, embed_hover : 15334573, deprecated : 9392695, sprite_anchor : 0, tag : 13434879, method : 5333759, builtin : true, body_real : 3416867, embed : 16757170, instance : 16292351, sprite : -1, variable : 16757170, body_real_alpha : 0.10, body : -3416867, output : 10461183, ex_output : 16777215, real : 10674930, plain : 8217772, outline_layers : 0, color : 13434879, bevel : undefined, body_accent : 9392695, body_alpha : 1 }
+
+color_schemes[$ cs_sublimate] = { author : "iivii", selection : 3416867, color : 13434879, sprite_alpha : 1, deprecated : 9392695, body_bm : bm_subtract, asset : 7361535, embed_hover : 13299962, builtinvar : 6940601, sprite_anchor : 0, builtin : true, real : 7893488, body_real : 4074793, embed : 16617983, instance : 15372999, sprite : -1, variable : 16755783, tag : 16617983, body_real_alpha : 0.10, method : 14904319, body : -4074793, string : 9300163, output : 16755783, ex_output : 16777215, plain : 11828337, outline_layers : 0, bevel : undefined, body_accent : 5783354, body_alpha : 1 }
 
 rainbow = false
 bird_mode = false

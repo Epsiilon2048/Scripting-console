@@ -454,26 +454,11 @@ return "Object reset!"
 
 
 
-function previous_menu(){
-
-var _output = "No previous menu"
-
-if script_exists(o_console.Output.tag_prev_menu) 
-{
-	_output = o_console.Output.tag_prev_menu()
-	output_set(_output)
-}
-
-return _output
-}
-
-
-
-
 function color_get(_col){
 
 return format_output([
-	{str: "[color]\n", col: _col},
+	//{str: "[color]\n", col: _col},
+	"Color ",{str: "  \n", hl: _col},
 	{str: "GML       ", col: "embed_hover"},string(_col)+"\n",
 	{str: "RBG       ", col: "embed_hover"},stitch(color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"),
 	{str: "HSV (255) ", col: "embed_hover"},stitch(color_get_hue(_col),", ",color_get_saturation(_col),", ",color_get_value(_col),"\n"),

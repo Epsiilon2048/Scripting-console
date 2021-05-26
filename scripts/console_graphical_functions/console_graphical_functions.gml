@@ -95,7 +95,7 @@ if is_undefined(BAR.x)		var _x = _win_dist
 if is_undefined(BAR.y)		var _y = gui_height - _win_dist - _char_height - _height
 if is_undefined(BAR.width)	var _width = gui_width - _x - _win_dist
 
-BAR.left	= _x
+BAR.left	= _x+_sidebar_width
 BAR.top		= _y
 BAR.right	= _x+_width
 BAR.bottom	= _y+_char_height+_height
@@ -112,20 +112,42 @@ else if mouse_on_prev and not BAR.mouse_on	window_set_cursor(cr_default)
 draw_console_body(BAR.left, BAR.top, BAR.right-sidetext_width-_text_dist*2-_sep-1, BAR.bottom)	// Draw bar
 draw_console_body(BAR.right-sidetext_width-_text_dist*2-1, BAR.top, BAR.right, BAR.bottom)		// Draw sidetext bar
 
+draw_set_color(colors.output)
+draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
+
 clip_rect_cutout(BAR.left, BAR.top, BAR.right-sidetext_width-_text_dist*3-_sep+1, BAR.bottom+1)
 draw_set_valign(fa_bottom)
-if command_colors draw_console_text(BAR.text_x, BAR.text_y, color_string)				// Draw console colors
+if command_colors draw_console_text(BAR.text_x, BAR.text_y, color_string)						// Draw console colors
 
 draw_set_color(colors.plain)
-if not command_colors draw_text(BAR.text_x, BAR.text_y, console_string)					// Draw console string
-																				
-draw_rectangle(BAR.left, BAR.top, BAR.left+_sidebar_width, BAR.bottom, false)					// Draw sidebar
+if not command_colors draw_text(BAR.text_x, BAR.text_y, console_string)							// Draw console string
 
 if keyboard_scope == BAR or char_pos1 != char_pos2
 {
+	if subchar_pos1
+	{
+		draw_set_alpha(.3)
+		draw_rectangle(																			// Draw subselection
+			BAR.text_x + _char_width*(subchar_pos1-(subchar_pos1-subchar_pos2)),
+			BAR.text_y - _char_height,
+			BAR.text_x + _char_width*(subchar_pos1-1)-1,
+			BAR.text_y - 2,
+			false
+		)
+		
+		draw_rectangle(													
+			BAR.text_x + _char_width*(char_pos1-(char_pos1-char_pos2)),
+			BAR.text_y - _char_height,
+			BAR.text_x + _char_width*(char_pos1-1)-1,
+			BAR.text_y - 2,
+			false
+		)
+		draw_set_alpha(1)
+	}
+	
 	if char_pos1 != char_pos2 or signbool(BAR.blink_time - (BAR.blink_step mod BAR.blink_time*2))
 	{
-		draw_rectangle(															// Draw selection
+		draw_rectangle(																			// Draw selection
 			BAR.text_x + _char_width*(char_pos1-(char_pos1-char_pos2)),
 			BAR.text_y - _char_height,
 			BAR.text_x + _char_width*(char_pos1-1)-1,
@@ -136,7 +158,7 @@ if keyboard_scope == BAR or char_pos1 != char_pos2
 		if string_length(console_string) > char_pos1-1
 		{
 			draw_set_color(colors.selection)											
-			draw_text(															// Draw selection text
+			draw_text(																			// Draw selection text
 				BAR.text_x + _char_width*(char_pos1-1),
 				BAR.text_y, 
 				string_copy(console_string, char_pos1, char_pos2-char_pos1+1)
@@ -152,7 +174,7 @@ shader_reset()
 
 draw_set_color(colors.output)
 draw_set_halign(fa_right)
-draw_text(right-_text_dist, BAR.text_y, sidetext_string)							// Draw sidetext
+draw_text(BAR.right-_text_dist, BAR.text_y, sidetext_string)										// Draw sidetext
 
 draw_set_color(old_color)
 draw_set_font(old_font)
@@ -162,11 +184,15 @@ draw_set_valign(old_valign)
 
 
 
-function draw_console_output(){
-	
+function draw_console_output(){ with o_console {
+
 var ot = o_console.OUTPUT
-	
-with o_console {
+
+if output_as_window
+{
+	draw_console_window(ot.win)
+	return undefined
+}
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -192,8 +218,8 @@ var _outline = ceil(ot.outline*asp)
 
 ot.left = BAR.left
 ot.bottom = console_toggle ? (BAR.top - _bar_dist) : BAR.bottom
-ot.right = ot.left + text_width + _border_w*2
-ot.top = ot.bottom - text_height - _border_h*2
+ot.right = min( ot.left + text_width + _border_w*2, win_width )
+ot.top = max( ot.bottom - text_height - _border_h*2, 0 )
 
 ot.mouse_on = ot.text.mouse_on or gui_mouse_between(ot.left, ot.top, ot.right, ot.bottom)
 

@@ -15,6 +15,6 @@ function Variable_ref() constructor{
 	exists = function(){
 		
 		return	(is_struct(scope) and variable_struct_exists(scope, variable)) or
-				(is_real(scope) and instance_exists(scope) and variable_instance_exists(scope, variable))
+				(is_numeric(scope) and instance_exists(scope) and variable_instance_exists(scope, variable))
 	}
 }

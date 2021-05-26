@@ -41,24 +41,6 @@ else if not bird_mode and colors.sprite == bird_mode_
 win_w = display_get_gui_width()
 win_h = display_get_gui_height()
 
-#region Redefine scaled variables
-//lazy, please make better
-console_right	= win_w - SCALE_ 50
-console_top		= win_h - SCALE_ 90
-console_bottom	= win_h - SCALE_ 50
-
-console_text_x	= console_left + SCALE_ 18
-console_text_y	= console_bottom + (console_top-console_bottom)/2
-
-Output.noconsole_x = console_text_x
-Output.noconsole_y = console_text_y
-
-Output.console_x = console_text_x
-Output.console_y = console_top - SCALE_ 15
-
-console_object_x = console_right - SCALE_ 18
-#endregion
-
 #region Select instance if enabled
 if inst_select
 {
@@ -139,6 +121,8 @@ if console_toggle and keyboard_scope == BAR
 	startword	= keyboard_check_multiple_pressed(vk_control, vk_left)  //skip to the start of a word
 	endword		= keyboard_check_multiple_pressed(vk_control, vk_right)
 
+	var moved_char_pos = false
+
 	if (BAR.mouse_on and mouse_check_button_pressed(mb_left))
 	{
 		gmcl_autofill(undefined, undefined)
@@ -152,6 +136,8 @@ if console_toggle and keyboard_scope == BAR
 		
 		char_pos1 = mouse_char_pos
 		char_pos2 = mouse_char_pos
+		
+		moved_char_pos = true
 	}
 	else if not (mouse_char_pos and mouse_check_button(mb_left)) mouse_char_pos = false
 
@@ -161,6 +147,8 @@ if console_toggle and keyboard_scope == BAR
 	{
 		char_pos1 = 1
 		char_pos2 = max(str_length, 1)
+		
+		moved_char_pos = true
 	}
 	if copy and char_pos1 != char_pos2
 	{
@@ -178,6 +166,8 @@ if console_toggle and keyboard_scope == BAR
 	
 		if not shift char_pos2 = char_pos1
 		else char_pos2 = min( max(1, str_length), char_pos2 )
+	
+		moved_char_pos = true
 	}
 	if right
 	{
@@ -190,17 +180,23 @@ if console_toggle and keyboard_scope == BAR
 		}
 	
 		if not shift char_pos1 = char_pos2
+		
+		moved_char_pos = true
 	}
 	if endln
 	{
 		char_pos2 = str_length + not shift
 		if not shift char_pos1 = char_pos2
+		
+		moved_char_pos = true
 	}
 	if startln
 	{
 		char_pos1 = 1
 		if shift char_pos2 -= (char_pos2 > str_length)
 		else char_pos2 = 1
+		
+		moved_char_pos = true
 	}
 	if (log_up or log_down) and ds_list_size(input_log) > 0
 	{
@@ -214,6 +210,8 @@ if console_toggle and keyboard_scope == BAR
 		char_pos1 = str_length+1
 		char_pos2 = char_pos1
 		color_string = gmcl_string_color(console_string, char_pos1)
+		
+		moved_char_pos = true
 	}
 	else if log_down
 	{
@@ -223,6 +221,8 @@ if console_toggle and keyboard_scope == BAR
 		char_pos1 = 1
 		char_pos2 = 1
 		color_string = []
+		
+		moved_char_pos = true
 	}
 
 	if str_length < string_length(keyboard_string) or (paste and clipboard_has_text()) //a char was added
@@ -256,6 +256,7 @@ if console_toggle and keyboard_scope == BAR
 		
 		do_autofill = true
 		text_refresh = true
+		moved_char_pos = true
 	}
 	
 	if backspace and (char_pos1 != 1 or (char_pos1 == 1 and char_pos1 != char_pos2)) {
@@ -266,6 +267,8 @@ if console_toggle and keyboard_scope == BAR
 		keyboard_string = console_string
 		str_length = string_length(console_string)
 		color_string = gmcl_string_color(console_string, char_pos1)
+		
+		moved_char_pos = true
 	}
 	
 	if del and char_pos2 != str_length+1 {
@@ -276,6 +279,8 @@ if console_toggle and keyboard_scope == BAR
 		keyboard_string = console_string
 		str_length = string_length(console_string)
 		color_string = gmcl_string_color(console_string, char_pos1)
+		
+		moved_char_pos = true
 	}
 	
 	if mouse_char_pos
@@ -298,6 +303,8 @@ if console_toggle and keyboard_scope == BAR
 		
 		char_pos1 = clamp(char_pos1, 1, str_length+(mouse_char_pos == str_length+1 and char_pos1 == char_pos2))
 		char_pos2 = clamp(char_pos2, 1, str_length+(mouse_char_pos == str_length+1 and char_pos1 == char_pos2))
+		
+		moved_char_pos = true
 	}
 	
 	if text_refresh and not enter
@@ -309,8 +316,46 @@ if console_toggle and keyboard_scope == BAR
 	
 		if not do_autofill or del or backspace or left or right or string_pos(char, refresh_sep) gmcl_autofill(undefined, undefined)
 		if do_autofill gmcl_autofill(console_string, char_pos1)
+		
+		moved_char_pos = true
 	}
 	
+	if moved_char_pos
+	{
+		var segment = slice(console_string, char_pos1, char_pos2+1, 1)
+		var marker
+		var pos
+		
+		if segment == "\"" and string_char_at(console_string, char_pos1-1) != "\\"
+		{
+			var in_string = false
+			pos = 1
+			marker = 0
+			
+			while pos <= char_pos1 or pos <= str_length
+			{
+				var char = string_char_at(console_string, pos)
+				
+				if char == "\"" 
+				{
+					in_string = not in_string
+					
+					marker = in_string ? pos : 0
+				}
+				else if in_string and char == "\\" pos ++
+				
+				pos ++
+			}
+			
+			subchar_pos1 = marker
+			subchar_pos2 = marker
+		}
+		else
+		{
+			subchar_pos1 = 0
+			subchar_pos2 = 0
+		}
+	}
 	#endregion
 	
 	#region Parse command
@@ -318,6 +363,9 @@ if console_toggle and keyboard_scope == BAR
 	{	
 		gmcl_autofill(undefined, undefined)
 		do_autofill = false
+		
+		subchar_pos1 = 0
+		subchar_pos2 = 0
 		
 		BAR.blink_step = 0
 		

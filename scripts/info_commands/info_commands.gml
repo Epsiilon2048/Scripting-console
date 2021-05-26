@@ -3,9 +3,8 @@ function help(){
 
 return format_output([
 	"Help & info\n",
-	{str: "GMCL syntax\n", scr: syntax_help, output: true},
 	{str: "Command list\n", scr: command_help, output: true},
-	{str: "Shortcuts\n", scr: shortcut_help, output: true},
+	{str: "GMCL syntax\n", scr: syntax_help, output: true},
 	{str: "Console windows\n", scr: console_window_help, output: true},
 	{str: "Videos\n\n", scr: console_videos, output: true},
 	
@@ -53,7 +52,7 @@ if is_undefined(_command)
 		"\n",
 		{cbox: "o_console.show_hidden_commands", scr: command_help, output: true}," Show hidden commands\n\n",
 		
-		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}," / ",{str: "Shortcuts", scr: shortcut_help, outp: true}
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
 	)
 }
 else
@@ -89,7 +88,7 @@ else
 	)
 	
 	array_push(text, 
-		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: "Shortcuts", scr: shortcut_help, outp: true}," / ",{str: _command, col: "embed_hover"}
+		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: _command, col: "embed_hover"}
 	)
 }
 
@@ -172,28 +171,6 @@ return format_output([
 
 
 
-function shortcut_help(){
-
-return format_output([
-	"GMCL shortcuts\n\n"+
-	
-	"Data structure accessors\n"+
-	"Many types of data structures have accessors which make them easier to read from or write to.\n\n"+
-	"The symbols used are parallel to GML's ds identifiers, and they're functionally just methods with shortcuts.\n\n",
-	
-	{str: "  @", arg: "@", scr: command_help, outp: true},": arrays\n",
-	{str: "  |", arg: "|", scr: command_help, outp: true},": ds lists\n",
-	{str: "  $", arg: "$", scr: command_help, outp: true},": structs\n",
-	{str: "  ?", arg: "?", scr: command_help, outp: true},": ds maps\n",
-	{str: "  #", arg: "#", scr: command_help, outp: true},": ds grids\n\n",
-
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", scr: command_help, output: true}," / ",{str: "Shortcuts", col: "embed_hover"}
-], true, shortcut_help, "Shortcut list")
-}
-
-
-
-
 function console_window_help(){
 
 return format_output([
@@ -229,8 +206,9 @@ return format_output([
 	"\n\n",
 	
 	{cbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
-	{cbox: "o_console.output_as_window", scr: o_console.Output_window.reset_pos}, " Output as window\n\n",
+	{cbox: "o_console.output_as_window"}, " Output as window\n\n",
 	
+	{cbox: "o_console.force_body_solid"}," Force solid background\n",
 	{cbox: "o_console.force_output"}, " Always show output\n",
 	{cbox: "o_console.force_output_body"}, " Always show output background\n",
 	{cbox: "o_console.force_output_embed_body"}, " Show output background when it displays embedded text\n\n",
@@ -281,6 +259,8 @@ if array_length(notbuiltin) > 0
 
 array_push(text, 
 	"\n\n",
+	{cbox: "o_console.force_body_solid"}," Force solid background\n\n",
+
 	{str: "", checkbox: "o_console.bird_mode"}," bird mode\n",
 	{str: "", checkbox: "o_console.rainbow"}," gamer mode\n\n",
 

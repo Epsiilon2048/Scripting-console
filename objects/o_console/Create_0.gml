@@ -107,6 +107,9 @@ autofill = {}; with autofill {
 
 console_macros = {}
 
+subchar_pos1 = 0
+subchar_pos2 = 0
+
 BAR = {}
 OUTPUT = {}
 SCROLLBAR = {}
@@ -141,6 +144,47 @@ identifiers = {
 draw_order = ds_create(ds_type_list, "draw_order")
 
 #macro script_exists better_script_exists
+
+#macro failedColor ""
+#macro failedComplier ""
+#macro failedRunner ""
+#macro failedBind ""
+#macro failedEmbed ""
+
+#macro exceptionUnknown "Whoops! We're not sure what went wrong."
+#macro exceptionNoValue "No value for arg"
+
+#macro exceptionMissingScope "Missing scope"
+#macro exceptionVariableNotExists "Variable does not exist"
+#macro exceptionInstanceNotExists "Instance does not exist"
+#macro exceptionAssetNotExists "Asset does not exist"
+#macro exceptionObjectNotExists "Object does not exist"
+#macro exceptionScriptNotExists "Script does not exist"
+#macro exceptionDsNotExists "ds at index does not exist"
+
+#macro exceptionExpectingNumeric "Expecting numeric"
+#macro exceptionExpectingString "Expecting string"
+#macro exceptionExpectingStruct "Expecting struct"
+#macro exceptionExpectingArray "Expecting array"
+
+#macro exceptionBadIdentifier "Identifier does not accept this datatype"
+
+#macro exceptionIndexBelowZero "Expecting non-negative index"
+#macro exceptionIndexExceedsBounds "Index out of range"
+#macro exceptionUnrecognized "Unrecognized term"
+#macro exceptionHurtFeelings "User has hurt feelings of console"
+
+#macro exceptionFailedAccess "Value cannot be accessed with brackets"
+#macro exceptionMissingAccessor "Missing ds accessor"
+#macro exceptionBadAccessor "Variable cannot be accessed in this way"
+
+#macro exceptionBotchedString "Botched string"
+#macro exceptionBotchedInstance "Botched instance"
+#macro exceptionBotchedAsset "Botched asset"
+#macro exceptionBotchedMethod "Botched method"
+#macro exceptionBotchedReal "Botched real"
+#macro exceptionBotchedVariable "Botched variable"
+#macro exceptionBotchedColor "Botched color"
 
 #macro vk_tilde 192
 
@@ -181,6 +225,7 @@ draw_order = ds_create(ds_type_list, "draw_order")
 #macro cs_helios		"helios"
 #macro cs_humanrights	"humanrights"
 #macro cs_rainbowsoup	"rainbowsoup"
+#macro cs_sublimate		"sublimate"
 
 #macro vb_static		"static"
 #macro vb_scrubber		"scrubber"
@@ -262,17 +307,7 @@ win_h = display_get_gui_height()
 
 console_toggle = false	//where the user inputs commands
 
-console_left	= 50
-console_right	= win_w-50
-console_top		= win_h-90
-console_bottom	= win_h-50
-console_text_x	= console_left + 18
-console_text_y	= console_bottom + (console_top-console_bottom)/2
-console_object_x = console_right - 18
-
 console_string = ""
-char_width	= string_width(" ") //the width of a single character -- MUST HAVE CONSISTENT KERNING
-char_height = string_height(" ")
 char_pos1 = 1
 char_pos2 = 1
 char_pos_dir = 0 //the direction the selection is moving in based on arrow keys
@@ -320,43 +355,6 @@ Display.initialize(23, 23, fa_left)
 Window = new Console_window()
 Window.initialize(23, 23, fa_right)
 
-Output = {}; with Output {
-	console_x	= o_console.console_text_x
-	console_y	= o_console.console_top - SCALE_ 15
-	noconsole_x	= o_console.console_text_x
-	noconsole_y	= o_console.console_text_y
-	
-	x = console_x
-	y = noconsole_y
-	
-	border_w = 11
-	border_h = 7
-	
-	text			= new Embedded_text()
-	plaintext		= ""
-	text_embedding	= false
-	
-	time			 = 6*60
-	fade_time		 = 0
-	alpha			 = 0
-	alpha_dec		 = .04
-	mouse_on		 = false
-	mouse_over_embed = false
-	
-	tag = -1
-	tag_prev = -1
-	tag_prev_menu = -1
-
-	tag_set = function(_tag){
-		
-		if tag != -1 tag_prev_menu = tag
-		tag_prev = tag
-		tag = _tag
-	}
-}
-Output_window = new Console_window()
-Output_window.initialize(SCALE_ 23, SCALE_ 300, fa_left)
-
 log = ds_create(ds_type_list, "log")
 
 inst_select = false
@@ -394,8 +392,16 @@ var greetings = [
 	"Remember to take breaks from time to time!",
 	"yooooooo sup",
 ]
-
-mouse_get_char_pos = function(rounding_method){ return clamp(rounding_method((gui_mx-BAR.text_x)/char_width)+(rounding_method == floor), 1, string_length(console_string)+(char_pos1 == char_pos2)) }
+ 
+mouse_get_char_pos = function(rounding_method){
+	
+	var old_font = draw_get_font()
+	draw_set_font(font)
+	var cw = string_width(" ")
+	draw_set_font(old_font)
+	
+	return clamp( rounding_method((gui_mx-BAR.text_x) / cw)+(rounding_method == floor), 1, string_length(console_string)+1 )
+}
 
 output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
 

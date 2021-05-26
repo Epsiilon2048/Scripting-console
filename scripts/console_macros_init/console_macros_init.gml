@@ -50,6 +50,7 @@ console_macro_add("cs_helios",			dt_string, cs_helios)
 console_macro_add("cs_humanrights",		dt_string, cs_humanrights)
 console_macro_add("cs_rainbowsoup",		dt_string, cs_rainbowsoup)
 console_macro_add("cs_royal",			dt_string, cs_royal)
+console_macro_add("cs_sublimate",		dt_string, cs_sublimate)
 #endregion
 
 #region Value box types					

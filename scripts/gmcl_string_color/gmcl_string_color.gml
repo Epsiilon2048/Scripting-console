@@ -132,6 +132,8 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 	}
 	else
 	{
+		var is_sep = string_pos(char, space_sep) > 0
+		
 		if char == "\""
 		{
 			in_string = not in_string
@@ -139,12 +141,12 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			string_offset = in_string
 			string_onset  = not in_string
 		}
-		else if not in_string and (can_have_accessor or char != "[")
+		else if not in_string and (can_have_accessor or char != "[") or is_sep
 		{
 			if can_have_accessor and string_pos(char, accessors)
 			{
 				marker = i
-				push_combine(color_list, i, dt_unknown)
+				push_combine(color_list, i, _iden_string ? dt_string : dt_unknown)
 				push_combine(color_list, i+1, string_pos(char, possible_accessors) ? dt_instance : dt_deprecated)
 				
 				accessor = char
@@ -158,18 +160,20 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			}
 		}
 		
-		if string_sep or (not in_string and (string_pos(char, space_sep))) or i == string_length(_command)+1
+		if string_sep or (not in_string and (is_sep)) or i == string_length(_command)+1
 		{	
 			if marker == i continue
 			
 			var segment = string_copy(_command, marker+1, i-marker-1+string_onset)
+			var char_next = string_char_at(_command, i+1)
 			var plain_segment = segment
 			var is_int = string_is_int(segment)
-				
-			if char == "." and _prev_iden != dt_variable and (is_int or segment == "") and (string_is_int( string_char_at(_command, i+1) ) or string_pos( string_char_at(_command, i+1), space_sep ) or string_char_at(_command, i+1) == "")
+			
+			if char == "." and _prev_iden != dt_variable and (is_int or segment == "" or segment == "-") and (string_is_int( char_next ) or string_pos( char_next, space_sep ) or char_next == "")
 			{
 				continue
 			}
+			
 				
 			var _col = dt_unknown
 			var _hl = undefined
@@ -178,7 +182,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			if char == "/" and not is_undefined(identifiers[$ segment])
 			{
 				_col  = identifiers[$ segment]
-				_iden = identifiers[$ segment]
+				_iden = _col
 				_iden_name = segment+"/"
 			}
 			else 
@@ -192,7 +196,12 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				else if instscope == ""
 				{	
 					//yandere dev pls hire me
-						
+					
+					if char == "." and segment == "" and not string_is_int(char_next)
+					{
+						instscope = string(object)
+					}
+					
 					var _macro_type = -1
 					
 					if _prev_iden == -1
@@ -207,6 +216,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 							_macro_type = _col
 								
 							if _col == dt_variable _col = dt_builtinvar
+							else if _col == dt_string _col = dt_real
 								
 							is_int = string_is_int(segment)
 						}
@@ -230,12 +240,12 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						_asset = asset_get_index(segment)
 						_asset_type = asset_get_type(segment) 
 					}
-						
+					
 					if _prev_iden == dt_color
 					{
-						if	string_is_float(segment) or 
-							string_is_float("0x"+segment) or
-							_macro_type == dt_color
+						if	_macro_type == dt_color or
+							string_is_float(segment) or 
+							string_is_float("0x"+segment)
 						{
 							_col = dt_color
 						}
@@ -337,7 +347,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
 			if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col, _hl, _ol)
 				
-			if string_pos(char, iden_sep)
+			if not in_brackets and string_pos(char, iden_sep)
 			{
 				_iden_string = false
 				_prev_iden = -1

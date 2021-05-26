@@ -68,7 +68,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					}
 				
 					if is_undefined(output_string[i]) output_string[i] = ""
-					else if is_real(output_string[i]) output_string[i] = string_format_float(output_string[i])
+					else if is_numeric(output_string[i]) output_string[i] = string_format_float(output_string[i])
 				}
 				catch(_exception)
 				{
@@ -105,7 +105,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					var _value = variable_string_get(subject.value)
 				
 					var string_value
-					if is_real(_value) string_value = string_format_float(_value)
+					if is_numeric(_value) string_value = string_format_float(_value)
 					else			   string_value = _value
 				
 					output_string[i] = string_value
@@ -117,7 +117,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					variable_string_set(subject.value, _value)
 			
 					var string_value
-					if is_real(_value) string_value = string_format_float(_value)
+					if is_numeric(_value) string_value = string_format_float(_value)
 					else			   string_value = string(_value)
 			
 					output_string[i] = "Set "+subject.plain+" to "+string_value

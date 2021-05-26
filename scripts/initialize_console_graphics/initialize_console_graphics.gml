@@ -18,9 +18,6 @@ self.scale(scale)
 draw_set_font(font)
 draw_enable_swf_aa(true)
 
-char_width	= string_width(" ")
-char_height = string_height(" ")
-
 if run_in_embed return undefined
 
 with BAR {
@@ -37,16 +34,46 @@ with BAR {
 	bottom = 0
 
 	height = 17
-	sep = 3
+	sep = 2.7
 	win_dist = 50
 	
 	text_dist = 18
-	sidebar_width = 2
+	sidebar_width = 3
 	
 	blink_time = 70
 	blink_step = 0
 	
 	mouse_on = false
+}
+
+with SCROLLBAR {
+	
+	char_height = 17
+	
+	width = 20
+	min_height = 18
+	
+	scroll_step = char_height*4
+	key_scroll_step = 6
+	
+	resize_border = 6
+}
+
+with WINDOW {
+	
+	char_height = 17
+	
+	width = 600
+	height = 500
+	
+	sidebar_min = 2
+	sidebar_max = 3
+	sidebar_lerp = .35
+
+	mouse_border = 14
+	
+	border_w = 20
+	border_h = 10
 }
 
 with OUTPUT {
@@ -68,20 +95,14 @@ with OUTPUT {
 	border_w = 11
 	border_h = 7
 	
-	outline = .6
+	outline = .7
 	
 	text = new Embedded_text()
 	text.set()
-	//scrollbar = new Console_scrollbar()
-	//ctx = new Ctx_menu()
-	//
-	//scrollbar.initialize(left, top, right, bottom, width, height, 0, 0, fa_right, fa_bottom)
-	//ctx.set([
-	//	{str: "Copy"},
-	//	ctx_separator,
-	//	{str: "Set window"},
-	//	{str: "Clear"},
-	//])
+	
+	self.win = new Console_window()
+	self.win.initialize(0, 0, fa_left)
+	self.win.text = text
 	
 	fade_time = 6*60
 	fade_step = 0
@@ -93,19 +114,6 @@ with OUTPUT {
 	body = false
 }
 	
-
-with SCROLLBAR {
-	
-	char_height = 17
-	
-	width = 20
-	min_height = 18
-	
-	scroll_step = char_height*4
-	key_scroll_step = 6
-	
-	resize_border = 6
-}
 
 with AUTOFILL {
 	
@@ -148,23 +156,6 @@ with AUTOFILL {
 with CHECKBOX {
 	
 	width = 17
-}
-
-with WINDOW {
-	
-	char_height = 17
-	
-	width = 600
-	height = 500
-	
-	sidebar_min = 2
-	sidebar_max = 3
-	sidebar_lerp = .35
-
-	mouse_border = 14
-	
-	border_w = 20
-	border_h = 10
 }
 
 with COLOR_PICKER {

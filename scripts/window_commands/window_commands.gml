@@ -106,7 +106,7 @@ for(var i = 0; i <= array_length(list)-1; i++)
 {
 	display(string(obj)+"."+list[i], toggle)
 }
-return "Displaying all variables in "+(is_real(obj) ? object_get_name(obj) : "struct")
+return "Displaying all variables in "+(is_numeric(obj) ? object_get_name(obj) : "struct")
 }}
 
 
