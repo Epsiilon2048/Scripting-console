@@ -66,7 +66,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	}
 	else
 	{
-		if not is_undefined(com[i].error) output_string[i] = "[SYNTAX ERROR] "+com[i].error
+		if not is_undefined(com[i].error) output_string[i] = com[i].error
 
 		else
 		{

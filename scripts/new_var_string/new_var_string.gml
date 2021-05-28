@@ -58,17 +58,20 @@ static get_fail_return = function(scr, exception, segment){
 var set_var			= not is_undefined(value)
 var set_return		= (scr == variable_string_exists) ? true : undefined
 
-if not is_string(name)	return get_fail_return(scr, exceptionBotchedVariable)
+if not is_string(name)	return get_fail_return(scr, exceptionExpectingString)
 if name == ""			return get_fail_return(scr, exceptionNoValue)
 
 if string_char_at(name, 1) == "." name = string(id)+name
 
-var has_accessor = string_pos("[", name) > 0
+var has_accessor = string_pos("[", name)
 var pos = next_pos(name, 1, has_accessor)
 var marker = 0
 
+if has_accessor == 1 return get_fail_return(scr, exceptionNoValue, name)
+
 var name_len = string_length(name)
 var segment
+var plain_segment
 var scope_segment
 
 if pos == 0 segment = name
@@ -76,7 +79,6 @@ else segment = string_copy(name, 1, pos-1)
 
 var returning = false
 var scope = string_to_instance(segment, true)
-scope_segment = scope
 
 if scope == -1
 {
@@ -92,9 +94,13 @@ if scope == -1
 		scope_segment = better_object_get_name(id)
 	}
 }
+else scope_segment = better_object_get_name(scope)
 var ds_scope = string(scope.id)
 
 var pos
+
+plain_segment = segment
+global.scrvar.name = string(name)
 
 do
 {
@@ -108,6 +114,7 @@ do
 	
 		if pos == 0 segment = string_delete(name, 1, marker)
 		else segment = string_copy(name, marker+1, pos-marker-1)
+		plain_segment = segment
 	
 		if not variable_instance_exists(scope, segment) and not (scope == global and variable_global_exists(segment)) return get_fail_return(scr, exceptionVariableNotExists, segment)
 		
@@ -155,13 +162,14 @@ do
 		}
 		until (open == 0 and char == "]") or pos > name_len
 		
-		segment = string_replace_all(slice(name, marker+1, pos-1, 1), " ", "")
+		plain_segment = slice(name, marker, pos, 1)
+		segment = string_replace_all(slice(plain_segment, 2, -2, 1), " ", "")
 		
 		if pos > name_len pos = 0
 		returning = not pos and set_var
 		
 		var access_type = string_char_at(segment, 1)
-		
+
 		if not string_pos(access_type, accessors)
 		{
 			if is_array(scope) access_type = "@"
@@ -179,7 +187,7 @@ do
 						case ds_type_grid: access_type = "#"
 					}
 				}
-				else return get_fail_return(scr, exceptionMissingAccessor, scope_segment+segment)
+				else return get_fail_return(scr, exceptionMissingAccessor, scope_segment+plain_segment)
 			}
 			else return get_fail_return(scr, exceptionFailedAccess, scope_segment)
 		}
@@ -194,7 +202,7 @@ do
 			if index == ""
 			{
 				global.scrvar.error = true
-				return exceptionNoIndex
+				return {error: exceptionNoIndex, plain: global.scrvar.name}
 			}
 			else if string_is_int(index) 
 			{
@@ -210,7 +218,7 @@ do
 				if not is_undefined(arg.error) 
 				{
 					global.scrvar.error = true
-					return arg.error
+					return is_struct(arg.error) ? arg.error : arg
 				}
 				else if arg.type == dt_variable return variable_string_get(arg.value)
 				else return arg.value
@@ -243,34 +251,35 @@ do
 			}
 			
 			if comma
-			{
+			{			
 				index = {x: slice(segment, 1, comma, 1), y: slice(segment, comma+1, -1, 1)}
 			
 				index.x = interpret(index.x)
-				if global.scrvar.error return get_fail_return(scr, index.x)
+				if global.scrvar.error return get_fail_return(scr, index.x.error, index.x.plain)
 				
 				index.y = interpret(index.y)
-				if global.scrvar.error return get_fail_return(scr, index.y)
+				if global.scrvar.error return get_fail_return(scr, index.y.error, index.y.plain)
 			}
 		}
 		if not comma
 		{
 			index = interpret(segment)
-			if global.scrvar.error return get_fail_return(scr, index)
+			if global.scrvar.error return get_fail_return(scr, index.error, index.plain)
 		}
 		
 		switch access_type
 		{
 		case "@":
-			if not is_array(scope) return get_fail_return(scr, exceptionExpectingArray, scope_segment)
+			if not is_array(scope) return get_fail_return(scr, exceptionBadAccessor, scope_segment)
 			
 			if comma
 			{
-				if not is_numeric(index.x) or not is_numeric(index.y)			return get_fail_return(scr, exceptionBadIndex)
-				if index.x < 0 or index.y < 0									return get_fail_return(scr, exceptionIndexBelowZero)
-				if not returning and array_length(scope) <= index.x				return get_fail_return(scr, exceptionIndexExceedsBounds)
-				if not is_array(scope[index.x])									return get_fail_return(scr, exceptionExpectingArray)
-				if not returning and array_length(scope[index.x]) <= index.y	return get_fail_return(scr, exceptionIndexExceedsBounds)
+				if not is_numeric(index.x) or not is_numeric(index.y)			return get_fail_return(scr, exceptionBadIndex, scope_segment+plain_segment)
+				if index.x < 0													return get_fail_return(scr, exceptionIndexBelowZero, index.x)
+				if index.y < 0													return get_fail_return(scr, exceptionIndexBelowZero, index.y)
+				if not returning and array_length(scope) <= index.x				return get_fail_return(scr, exceptionIndexExceedsBounds, index.x)
+				if not is_array(scope[index.x])									return get_fail_return(scr, exceptionExpectingArray, scope_segment+plain_segment)
+				if not returning and array_length(scope[index.x]) <= index.y	return get_fail_return(scr, exceptionIndexExceedsBounds, index.y)
 			
 				if not pos and set_var
 				{
@@ -283,9 +292,9 @@ do
 			}
 			else
 			{
-				if not is_numeric(index)							return get_fail_return(scr, exceptionBadIndex)
-				if index < 0										return get_fail_return(scr, exceptionIndexBelowZero)
-				if not returning and index >= array_length(scope)	return get_fail_return(scr, exceptionIndexExceedsBounds)
+				if not is_numeric(index)							return get_fail_return(scr, exceptionBadIndex, scope_segment)
+				if index < 0										return get_fail_return(scr, exceptionIndexBelowZero, index)
+				if not returning and index >= array_length(scope)	return get_fail_return(scr, exceptionIndexExceedsBounds, index)
 				
 				if not pos and set_var
 				{
@@ -298,11 +307,11 @@ do
 			}
 		break
 		case "|":
-			if not is_numeric(scope)							return get_fail_return(scr, exceptionExpectingDsIndex, scope_segment)
+			if not is_numeric(scope)							return get_fail_return(scr, exceptionBadAccessor, scope_segment)
 			if not ds_exists(scope, ds_type_list)				return get_fail_return(scr, exceptionDsNotExists, scope_segment)
-			if not is_numeric(index)							return get_fail_return(scr, exceptionBadIndex)
-			if index < 0										return get_fail_return(scr, exceptionIndexBelowZero)
-			if not returning and index >= ds_list_size(scope)	return get_fail_return(scr, exceptionIndexExceedsBounds)
+			if not is_numeric(index)							return get_fail_return(scr, exceptionBadIndex, scope_segment+plain_segment)
+			if index < 0										return get_fail_return(scr, exceptionIndexBelowZero, index)
+			if not returning and index >= ds_list_size(scope)	return get_fail_return(scr, exceptionIndexExceedsBounds, index)
 			
 			if not pos and set_var
 			{
@@ -316,8 +325,8 @@ do
 		case "$":
 			index = string(index)
 			
-			if not is_struct(scope)											return get_fail_return(scr, exceptionExpectingStruct, scope_segment)
-			if not returning and not variable_struct_exists(scope, index)	return get_fail_return(scr, exceptionVariableNotExists)
+			if not is_struct(scope)											return get_fail_return(scr, exceptionBadAccessor, scope_segment)
+			if not returning and not variable_struct_exists(scope, index)	return get_fail_return(scr, exceptionVariableNotExists, scope_segment+plain_segment)
 			
 			if not pos and set_var
 			{
@@ -331,9 +340,9 @@ do
 		case "?":
 			index = string(index)
 		
-			if not is_numeric(scope) 								return get_fail_return(scr, exceptionExpectingDsIndex, scope_segment)
+			if not is_numeric(scope) 								return get_fail_return(scr, exceptionBadAccessor, scope_segment)
 			if not ds_exists(scope, ds_type_map)					return get_fail_return(scr, exceptionDsNotExists, scope_segment)
-			if not returning and not ds_map_exists(scope, index)	return get_fail_return(scr, exceptionVariableNotExists, scope_segment+segment)
+			if not returning and not ds_map_exists(scope, index)	return get_fail_return(scr, exceptionVariableNotExists, scope_segment+plain_segment)
 			
 			if not pos and set_var
 			{
@@ -345,10 +354,10 @@ do
 			scope_segment += segment
 		break
 		case "#":
-			if not is_numeric(scope)																	return get_fail_return(scr, exceptionExpectingDsIndex, scope_segment)
+			if not is_numeric(scope)																	return get_fail_return(scr, exceptionBadAccessor, scope_segment)
 			if not comma																				return get_fail_return(scr, exceptionGridExpectingComma, scope_segment)
 			if not ds_exists(scope, ds_type_grid)														return get_fail_return(scr, exceptionDsNotExists, scope_segment)
-			if not (is_numeric(index.x) or is_numeric(index.y))											return get_fail_return(scr, exceptionBadIndex, scope_segment+segment)
+			if not (is_numeric(index.x) or is_numeric(index.y))											return get_fail_return(scr, exceptionBadIndex, scope_segment+plain_segment)
 			if index.x < 0																				return get_fail_return(scr, exceptionIndexBelowZero, index.x)
 			if index.y < 0																				return get_fail_return(scr, exceptionIndexBelowZero, index.y)
 			if not returning and ds_grid_width(scope) <= index.x										return get_fail_return(scr, exceptionIndexExceedsBounds, index.x)

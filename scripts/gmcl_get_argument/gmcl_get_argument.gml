@@ -1,6 +1,6 @@
 function gmcl_get_argument(command, pos){ with o_console {
 
-static sep = " ;,=()[]:"
+static sep = " ;,=()[]:@#$?|"
 
 var marker = 1
 var in_string = false

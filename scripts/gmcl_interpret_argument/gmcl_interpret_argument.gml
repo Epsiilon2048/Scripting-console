@@ -127,20 +127,17 @@ else
 				}
 			break
 			case dt_variable:
-				if variable_string_exists(_arg_plain)
-				{
-					value = _arg_plain
-					type = dt_variable
-				}
-				else if not is_undefined(macro) and macro.type == dt_variable and variable_string_exists(_arg)
+				if not is_undefined(macro) and macro.type == dt_variable
 				{
 					value = _arg
 					type = dt_variable
 				}
 				else
 				{
-					error = exceptionVariableNotExists
+					value = _arg_plain
+					type = dt_variable
 				}
+			break
 			break
 			case dt_method:
 				var asset = asset_get_index(_arg_plain)
@@ -200,15 +197,14 @@ else
 			type = dt_real
 			value = asset
 		}
-		else if variable_string_exists(_arg)
+		else
 		{
-			type = dt_variable
-			value = string_add_scope(_arg, true)
-		}
-		else 
-		{
-			if string_pos(".", _arg)	error = exceptionVariableNotExists
-			else						error = exceptionUnrecognized
+			error = variable_string_exists_error(_arg)
+			if is_undefined(error)
+			{
+				type = dt_variable
+				value = string_add_scope(_arg, true)
+			}
 		}
 	}
 }

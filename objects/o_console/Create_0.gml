@@ -26,7 +26,7 @@ ds_names[$ ds_type_priority]	= []
 ds_names[$ ds_type_queue]		= []
 ds_names[$ ds_type_stack]		= []
 
-refresh_sep = " ./;,=()[]:"
+refresh_sep = " ./;,=()[]:@?#$|"
 
 bird_mode = false
 

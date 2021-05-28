@@ -130,7 +130,7 @@ return format_output([
 	"Datatype identifiers can be used for avoiding naming conflicts, instructing the compiler\n"+
 	"on what to return, or for checking to see if a value works for a datatype.\n\n"+
 	
-	"Supported identifiers: (",{s:"r",col: dt_real},")eal - (",{s:"s",col: dt_string},")tring - (",{s:"a",col: dt_asset},")sset - (",{s:"v",col: dt_variable},")ariable - (",{s:"m",col: dt_method},")ethod - (",{s:"i",col: dt_instance},")nstance\n\n"+
+	"Supported identifiers: (",{s:"r",col: dt_real},")eal - (",{s:"s",col: dt_string},")tring - (",{s:"a",col: dt_asset},")sset - (",{s:"v",col: dt_variable},")ariable - (",{s:"m",col: dt_method},")ethod - (",{s:"i",col: dt_instance},")nstance - (",{s:"c",col: dt_color},")olor\n\n"+
 	
 	"(just a couple) use cases:\n"+
 	"- Writing a variable as a string, but retaining the text colors to make sure it's correct\n"+
