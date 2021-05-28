@@ -147,7 +147,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			{
 				marker = i
 				push_combine(color_list, i, _iden_string ? dt_string : dt_unknown)
-				push_combine(color_list, i+1, string_pos(char, possible_accessors) ? dt_instance : dt_deprecated)
+				push_combine(color_list, i+1, string_pos(char, possible_accessors) ? dt_variable : dt_deprecated)
 				
 				accessor = char
 				possible_accessors = ""
@@ -204,22 +204,19 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					
 					var _macro_type = -1
 					
-					if _prev_iden == -1
-					{
-						var _macro = console_macros[$ segment]
+					var _macro = console_macros[$ segment]
 				
-						if not is_undefined(_macro)
-						{
-							plain_segment = segment
-							segment = string(_macro.value)
-							if _macro.type != -1 _col = _macro.type
-							_macro_type = _col
+					if not is_undefined(_macro)
+					{
+						plain_segment = segment
+						segment = string(_macro.value)
+						if _macro.type != -1 _col = _macro.type
+						_macro_type = _col
 								
-							if _col == dt_variable _col = dt_builtinvar
-							else if _col == dt_string _col = dt_real
+						if _macro_type == dt_variable _col = dt_builtinvar
+						else if _macro_type == dt_string _col = dt_real
 								
-							is_int = string_is_int(segment)
-						}
+						is_int = string_is_int(segment)
 					}
 						
 					var _asset 
@@ -243,14 +240,12 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					
 					if _prev_iden == dt_color
 					{
-						if	_macro_type == dt_color or
-							string_is_float(segment) or 
-							string_is_float("0x"+segment)
+						if _macro_type == dt_color or string_is_float(segment)
 						{
 							_col = dt_color
 						}
 					}
-					else if (_prev_iden == dt_instance or (_prev_iden == dt_variable and _asset_type == asset_object)) and _asset != -1 and instance_exists(_asset) and  (_macro_type == -1 or _macro_type == dt_instance)
+					else if (_prev_iden == dt_instance or (_prev_iden == dt_variable and (_asset_type == asset_object or _macro_type = dt_instance))) and _asset != -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
 					{
 						_col = dt_instance
 						instscope = segment
@@ -293,10 +288,10 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 								if instance_exists(real(segment)) _col = dt_instance
 								else _col = _iden_string ? dt_string : dt_unknown
 							}
-							else 
+							else
 							{
 								possible_accessors = get_possible_accessors(real(segment))
-								_col = dt_real
+								_col = (char == "[" and is_int) ? dt_variable : dt_real
 							}
 								
 							instscope = segment

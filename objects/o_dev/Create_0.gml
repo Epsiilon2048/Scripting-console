@@ -1,18 +1,16 @@
 
 init = true
 
-ar = [0, 1, 2, [0, "you did it!"]]
-
-a = {}
-a.b = ["c"]
-
-d = {}
-d.c = 3
 
 
-t = function(){
-	display("o_dev.arg.plain")
-	display("o_dev.arg.value")
-	display("o_dev.arg.error")
-	display("o_dev.arg.type")
-}
+array = [123, 456, 789, "You did it!!!"]
+
+array_2d = [
+[0, 1, 2, 3, 4, 5],
+[6, 7, 8, 9, 10, 11],
+[12, 13, 14, 15, 16],
+[17, 18, 19, 20, 21],
+[22, 23, 24, 25, 26]
+]
+
+struct = {test1: 3, test2: 4, test3: 12}

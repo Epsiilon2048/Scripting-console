@@ -54,13 +54,17 @@ else
 		if is_struct(_output) 
 		{
 			var structnames = variable_struct_get_names(_output)
-				
+			
+			_text += "{"
+			
 			for(var i = 0; i <= array_length(structnames)-1; i++)
 			{
 				_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
 			}
+			
+			_text += "\n}"
 		}		
-		else if is_array(_output) _text = _text + array_to_string(_output, "\n")
+		else if is_array(_output) _text = _text + "[\n"+array_to_string(_output, "\n")+"\n]"
 		else _text = string(_output)
 
 		_text = [_text]
@@ -142,10 +146,14 @@ else
 			{
 				var structnames = variable_struct_get_names(_output)
 				
+				_text += "{"
+				
 				for(var i = 0; i <= array_length(structnames)-1; i++)
 				{
 					_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
 				}
+				
+				_text += "\n}"
 			}
 			else if not is_array(_output) _text = string(_output)
 		}
@@ -157,7 +165,7 @@ else
 			}
 		}
 		
-		if is_array(_output) _text = _text + array_to_string(_output, "\n")
+		if is_array(_output) _text = _text + "[\n"+array_to_string(_output, "\n")+"\n]"
 		
 		_text = [_text]
 	}

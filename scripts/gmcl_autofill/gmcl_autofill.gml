@@ -1,4 +1,6 @@
-function gmcl_autofill(gmcl_string, char_pos){
+function gmcl_autofill(gmcl_string, char_pos){ with o_console {
+
+AUTOFILL.index = -1
 
 if not is_string(gmcl_string)
 {
@@ -24,7 +26,7 @@ if sc and (ch or idn == dt_variable)
 	array_sort(scope_variables, true)
 		
 	if char_pos_arg.variable == "" autofill.scope = {min: 0, max: array_length(scope_variables)-1}
-	else autofill.scope = autofill_in_list(scope_variables, char_pos_arg.variable, autofill.scope)
+	else autofill.scope = autofill_in_list(scope_variables, char_pos_arg.variable, undefined)
 }
 else autofill.scope = -1
 	
@@ -41,13 +43,13 @@ if not is_undefined(char_pos_arg.iden) and char_pos_arg.variable == ""
 {
 	switch idn
 	{
-		case dt_asset:		autofill.assets = {min: 0, max: ds_list_size(asset_list)-1}
-							autofill.methods = {min: 0, max: ds_list_size(method_list)-1}
+		case dt_asset:		autofill.assets		= {min: 0, max: ds_list_size(asset_list)-1}
+							autofill.methods	= {min: 0, max: ds_list_size(method_list)-1}
 		break
-		case dt_variable:	autofill.instance = {min: 0, max: array_length(instance_variables)-1}
+		case dt_variable:	autofill.instance	= {min: 0, max: array_length(instance_variables)-1}
 		break
-		case dt_method:		autofill.methods = {min: 0, max: ds_list_size(method_list)-1}
-							autofill.macros = {min: 0, max: ds_list_size(macro_list)-1}
+		case dt_method:		autofill.methods	= {min: 0, max: ds_list_size(method_list)-1}
+							autofill.macros		= {min: 0, max: ds_list_size(macro_list)-1}
 	}
 }
-}
+}}

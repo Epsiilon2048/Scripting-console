@@ -45,6 +45,8 @@ var char
 var tag = ""
 var com_start = 1
 
+var old_object = object
+
 #region Compiler instructions
 for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); i++)
 {
@@ -104,7 +106,7 @@ for(var i = com_start; i <= string_length(_command); i++)
 	}
 }
 
-if in_string and string_last(_command) != "\"" _command += "\""
+if in_string _command += "\""
 array_push(command_split, string_copy(_command, marker, string_length(_command)-marker+1) )
 #endregion
 
@@ -167,30 +169,35 @@ for(var l = 0; l <= array_length(lines)-1; l++)
 {
 	if array_length(lines[l]) > 0
 	{
-		var variable_args
+		var variables = []
 		
 		var line = lines[l]
 
 		var comp_line = array_create(array_length(line)-1)
 
 		var subject = gmcl_interpret_subject(line[0], array_length(line))
-		var error = subject.error
+		var error = is_undefined(subject.error) ? undefined : "from \""+subject.plain+"\": "+subject.error
 
-		if subject.type == dt_variable	variable_args = [0]
-		else							variable_args = []
+		if subject.type == dt_instance object = subject.value
 
 		if is_undefined(error) for(var i = 1; i <= array_length(line)-1; i++)
 		{
 			comp_line[i-1] = gmcl_interpret_argument(line[i])
 			error = comp_line[i-1].error
 	
-			if not is_undefined(error) break
+			if not is_undefined(error) 
+			{
+				error = "from \""+comp_line[i-1].plain+"\": "+error
+				break
+			}
 			
-			if comp_line[i-1].type == dt_variable array_push(variable_args, i-1)
+			if comp_line[i-1].type == dt_variable array_push(variables, i-1)
 		}
-		comp_lines[l] = {subject: subject, args: comp_line, error: error}
+		comp_lines[l] = {subject: subject, args: comp_line, error: error, variables: variables}
 	}
 }
+
+object = old_object
 
 return {tag: tag, commands: comp_lines, raw: string_copy(command, com_start, string_length(command)-com_start+1)}
 }}

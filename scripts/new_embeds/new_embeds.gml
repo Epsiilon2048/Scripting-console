@@ -252,7 +252,7 @@ else if not o_console.embed_text
 
 if o_console.colors.outline_layers
 {
-	draw_set_color(selection)
+	draw_set_color(colors.selection)
 	draw_outline_text(x, y, text.plain)
 }
 

@@ -6,7 +6,7 @@
     "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
-  "name": "gmcl_autofill",
+  "name": "gmcl_interpret_argument",
   "tags": [],
   "resourceType": "GMScript",
 }

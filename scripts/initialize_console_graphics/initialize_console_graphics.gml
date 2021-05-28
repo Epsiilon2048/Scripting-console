@@ -100,9 +100,14 @@ with OUTPUT {
 	text = new Embedded_text()
 	text.set()
 	
-	self.win = new Console_window()
-	self.win.initialize(0, 0, fa_left)
-	self.win.text = text
+	win = new Console_window()
+	win.initialize(0, 0, fa_left)
+	win.valign = fa_bottom
+	win.text = text
+	win.reset_pos = function(){
+		x = o_console.OUTPUT.left
+		y = o_console.OUTPUT.bottom
+	}
 	
 	fade_time = 6*60
 	fade_step = 0

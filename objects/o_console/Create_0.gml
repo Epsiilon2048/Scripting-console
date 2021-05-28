@@ -153,6 +153,7 @@ draw_order = ds_create(ds_type_list, "draw_order")
 
 #macro exceptionUnknown "Whoops! We're not sure what went wrong."
 #macro exceptionNoValue "No value for arg"
+#macro exceptionNoIndex "No value for index"
 
 #macro exceptionMissingScope "Missing scope"
 #macro exceptionVariableNotExists "Variable does not exist"
@@ -160,9 +161,10 @@ draw_order = ds_create(ds_type_list, "draw_order")
 #macro exceptionAssetNotExists "Asset does not exist"
 #macro exceptionObjectNotExists "Object does not exist"
 #macro exceptionScriptNotExists "Script does not exist"
-#macro exceptionDsNotExists "ds at index does not exist"
+#macro exceptionDsNotExists "Intended ds at index does not exist"
 
 #macro exceptionExpectingNumeric "Expecting numeric"
+#macro exceptionExpectingDsIndex "Expecting ds index (numeric)"
 #macro exceptionExpectingString "Expecting string"
 #macro exceptionExpectingStruct "Expecting struct"
 #macro exceptionExpectingArray "Expecting array"
@@ -174,9 +176,12 @@ draw_order = ds_create(ds_type_list, "draw_order")
 #macro exceptionUnrecognized "Unrecognized term"
 #macro exceptionHurtFeelings "User has hurt feelings of console"
 
+#macro exceptionBadScope "Unsupported datatype for scope"
+#macro exceptionBadIndex "Unsupported datatype for index"
 #macro exceptionFailedAccess "Value cannot be accessed with brackets"
 #macro exceptionMissingAccessor "Missing ds accessor"
 #macro exceptionBadAccessor "Variable cannot be accessed in this way"
+#macro exceptionGridExpectingComma "ds grids require x and y indexes for access"
 
 #macro exceptionBotchedString "Botched string"
 #macro exceptionBotchedInstance "Botched instance"
@@ -187,8 +192,6 @@ draw_order = ds_create(ds_type_list, "draw_order")
 #macro exceptionBotchedColor "Botched color"
 
 #macro vk_tilde 192
-
-#macro SCALE_ (13/15) *
 
 #macro gui_mx device_mouse_x_to_gui(0)
 #macro gui_my device_mouse_y_to_gui(0)
@@ -279,6 +282,8 @@ output_as_window = false
 force_output = false
 force_output_body = false //this sounds pretty yikesy thinking of it now
 force_output_embed_body = true
+
+autofill_from_float = false
 
 force_body_solid = false
 

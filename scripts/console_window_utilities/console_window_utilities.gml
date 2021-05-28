@@ -55,23 +55,23 @@ var _border_h = ceil(wn.border_h*asp)
 
 if not dragging
 {
-	if is_left x = clamp(x, -_border_w, gui_width-_border_w*2)
-	else x = clamp(x, 0, gui_width-_border_w)
+	if not is_left	x = clamp(x, -_border_w, gui_width-_border_w*2)
+	else			x = clamp(x, 0, gui_width-_border_w)
 	
 	//hmu
-	if is_top y = clamp(y, -text.height*ch+_border_h, gui_height-_border_h*3)
-	else y = clamp(y, _border_h, gui_height+text.height*ch-_border_h*3)
+	if is_top	y = clamp(y, -text.height*ch+_border_h, gui_height-_border_h*3)
+	else		y = clamp(y, _border_h, gui_height+text.height*ch-_border_h*3)
 }
 
-left	= (is_left	? (x - text.width*cw) : x)
+left	= ((!is_left)	? (x - text.width*cw) : x)
 top		= (is_top	? y : (y - text.height*ch))
-right	= _border_w*2 + (is_left ? x : (x + text.width*cw))
+right	= _border_w*2 + ((!is_left) ? x : (x + text.width*cw))
 bottom	= _border_h*2 + (is_top ? (y + text.height*ch) : y)
 
-sidebar_x = is_left ? (right) : (left)
+sidebar_x = is_left ? left : right
 
 mouse_on = dragging or gui_mouse_between(left, top, right, bottom)
-mouse_on_sidebar = dragging or (mouse_on and not text.mouse_on_item and gui_mouse_between(sidebar_x, top, sidebar_x - wn.mouse_border*asp*signbool(is_left), bottom))
+mouse_on_sidebar = dragging or (mouse_on and not text.mouse_on_item and gui_mouse_between(sidebar_x, top, sidebar_x + wn.mouse_border*asp*signbool(is_left), bottom))
 
 if mouse_on and mouse_check_button_pressed(mb_right) right_mb = true
 if (right_mb and not mouse_check_button(mb_right))
@@ -96,12 +96,12 @@ else if dragging
 	x = gui_mx - mouse_offsetx
 	y = gui_my - mouse_offsety
 	
-	left	= (is_left	? (x - text.width*cw) : x)
+	left	= ((!is_left)	? (x - text.width*cw) : x)
 	top		= (is_top	? y : (y - text.height*ch))
-	right	= _border_w*2 + (is_left ? x : (x + text.width*cw))
+	right	= _border_w*2 + ((!is_left) ? x : (x + text.width*cw))
 	bottom	= _border_h*2 + (is_top ? (y + text.height*ch) : y)
 
-	sidebar_x = is_left ? (right) : (left)
+	sidebar_x = is_left ? left : right
 }
 
 if show
@@ -110,12 +110,12 @@ if show
 	var text_y = top + wn.border_h*asp
 	
 	draw_console_body(left, top, right, bottom)
-	draw_embedded_text(text_x, text_y, text, o_console.colors.output, 1)
+	draw_embedded_text(text_x, text_y+1, text, o_console.colors.output, 1)
 }
 
 sidebar = lerp(sidebar, mouse_on_sidebar ? 1 : 0, wn.sidebar_lerp)
 
-var _sidebar = -ceil((wn.sidebar_min + wn.sidebar_max*sidebar)*asp*signbool(is_left))
+var _sidebar = ceil((wn.sidebar_min + wn.sidebar_max*sidebar)*asp*signbool(is_left))
 
 var _sidebar_x1 = min(sidebar_x, sidebar_x+_sidebar)
 var _sidebar_x2 = max(sidebar_x, sidebar_x+_sidebar)

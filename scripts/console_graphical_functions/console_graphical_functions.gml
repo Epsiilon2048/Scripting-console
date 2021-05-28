@@ -225,10 +225,8 @@ ot.mouse_on = ot.text.mouse_on or gui_mouse_between(ot.left, ot.top, ot.right, o
 
 if ot.mouse_on and not ot.text.mouse_on_item and mouse_check_button_pressed(mb_left)
 {
-	var toggle = not force_output
-	
-	force_output = toggle
-	force_output_body = toggle
+	force_output = not (force_output and force_output_body)
+	force_output_body = force_output
 }
 
 ot.body = ot.mouse_on or force_output_body or (ot.has_embed and force_output_embed_body)

@@ -206,7 +206,7 @@ return format_output([
 	"\n\n",
 	
 	{cbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
-	{cbox: "o_console.output_as_window"}, " Output as window\n\n",
+	{cbox: "o_console.output_as_window", scr: o_console.OUTPUT.win.reset_pos}, " Output as window\n\n",
 	
 	{cbox: "o_console.force_body_solid"}," Force solid background\n",
 	{cbox: "o_console.force_output"}, " Always show output\n",

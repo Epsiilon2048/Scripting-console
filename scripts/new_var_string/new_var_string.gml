@@ -4,26 +4,33 @@ global.object_index = global
 
 function variable_string_set(name, value){
 
-if o_console.object == global return variable_string(string_add_scope(name), value, true)
-else if instance_exists(o_console.object) with o_console.object variable_string(name, value, true)
-else variable_string(name, value, true)
+if o_console.object == global return variable_string(string_add_scope(name), variable_string_set, value)
+else if instance_exists(o_console.object) with o_console.object variable_string(name, variable_string_set, value)
+else variable_string(name, variable_string_set, value)
 }
 
 function variable_string_get(name){
 
-if o_console.object == global return variable_string(string_add_scope(name), undefined, true)
-else if instance_exists(o_console.object) with o_console.object return variable_string(name, undefined, true)
-else return variable_string(name, undefined, true)
+if o_console.object == global return variable_string(string_add_scope(name), variable_string_get, undefined)
+else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_get, undefined)
+else return variable_string(name, variable_string_get, undefined)
 }
 
 function variable_string_exists(name){
 
-if o_console.object == global return variable_string(string_add_scope(name), undefined, false)
-else if instance_exists(o_console.object) with o_console.object return variable_string(name, undefined, false)
-else return variable_string(name, undefined, false)
+if o_console.object == global return variable_string(string_add_scope(name), variable_string_exists, undefined)
+else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_exists, undefined)
+else return variable_string(name, variable_string_exists, undefined)
 }
 
-function variable_string(name, value, return_undefined){
+function variable_string_exists_error(name){
+
+if o_console.object == global return variable_string(name, variable_string_exists_error, undefined)
+else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_exists_error, undefined)
+else return variable_string(name, variable_string_exists_error, undefined)
+}
+
+function variable_string(name, scr, value){
 
 static accessors = "@|$?#"
 static next_pos = function(str, startpos, has_accessor){
@@ -36,13 +43,23 @@ static next_pos = function(str, startpos, has_accessor){
 	
 	return min(pos1, pos2)
 }
+static get_fail_return = function(scr, exception, segment){
+	
+	switch scr
+	{
+		case variable_string_exists:		return false
+		case variable_string_get:			return undefined
+		case variable_string_set:			return undefined
+		case variable_string_exists_error:	return {error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
+	}
+	return undefined
+}
 
-if is_undefined(return_undefined) return_undefined = true
+var set_var			= not is_undefined(value)
+var set_return		= (scr == variable_string_exists) ? true : undefined
 
-var fail_return = return_undefined ? undefined : false
-var set_var = not is_undefined(value)
-
-if not is_string(name) or name == "" return fail_return
+if not is_string(name)	return get_fail_return(scr, exceptionBotchedVariable)
+if name == ""			return get_fail_return(scr, exceptionNoValue)
 
 if string_char_at(name, 1) == "." name = string(id)+name
 
@@ -52,25 +69,30 @@ var marker = 0
 
 var name_len = string_length(name)
 var segment
+var scope_segment
 
 if pos == 0 segment = name
 else segment = string_copy(name, 1, pos-1)
 
 var returning = false
 var scope = string_to_instance(segment, true)
+scope_segment = scope
 
 if scope == -1
 {
 	if string_is_float(segment)
 	{
 		scope = real(segment)
+		scope_segment = segment
 	}
 	else
 	{
 		pos = 0
 		scope = id
+		scope_segment = better_object_get_name(id)
 	}
 }
+var ds_scope = string(scope.id)
 
 var pos
 
@@ -78,7 +100,8 @@ do
 {
 	if not (has_accessor and string_char_at(name, pos) == "[")
 	{
-		if marker != 0 and not is_struct(scope) and not (is_numeric(scope) and instance_exists(scope)) return fail_return
+		if marker != 0 and not is_struct(scope) and not (is_numeric(scope) and instance_exists(scope)) return get_fail_return(scr, exceptionBadScope, scope_segment)
+		
 		marker = pos
 		
 		pos = next_pos(name, pos, has_accessor)
@@ -86,16 +109,37 @@ do
 		if pos == 0 segment = string_delete(name, 1, marker)
 		else segment = string_copy(name, marker+1, pos-marker-1)
 	
-		if not variable_instance_exists(scope, segment) and not (scope == global and variable_global_exists(segment)) return fail_return
+		if not variable_instance_exists(scope, segment) and not (scope == global and variable_global_exists(segment)) return get_fail_return(scr, exceptionVariableNotExists, segment)
 		
 		returning = not pos and set_var
 		if returning
 		{
 			variable_instance_set(scope, segment, value)
-			return undefined
+			return set_return
 		}
 		
 		scope = variable_instance_get(scope, segment)
+		scope_segment = segment
+		
+		if has_accessor
+		{
+			if is_real(scope)
+			{
+				if ds_map_exists(ds_types, ds_scope+"."+segment)
+				{
+					ds_scope += "."+segment
+				}
+				else if instance_exists(scope)
+				{
+					ds_scope = string(scope.id)
+				}
+				else
+				{
+					ds_scope = ""
+				}
+			}
+			else ds_scope += "."+segment
+		}
 	}
 	else
 	{
@@ -122,6 +166,22 @@ do
 		{
 			if is_array(scope) access_type = "@"
 			else if is_struct(scope) access_type = "$"
+			else if is_numeric(scope)
+			{
+				if ds_map_exists(ds_types, ds_scope)
+				{
+					switch ds_types[? ds_scope]
+					{
+						case ds_type_list: access_type = "|"
+						break
+						case ds_type_map: access_type = "?"
+						break
+						case ds_type_grid: access_type = "#"
+					}
+				}
+				else return get_fail_return(scr, exceptionMissingAccessor, scope_segment+segment)
+			}
+			else return get_fail_return(scr, exceptionFailedAccess, scope_segment)
 		}
 		else segment = string_delete(segment, 1, 1)
 		
@@ -129,7 +189,14 @@ do
 		
 		static interpret = function(index){
 				
-			if string_is_int(index) 
+			global.scrvar.error = false
+			
+			if index == ""
+			{
+				global.scrvar.error = true
+				return exceptionNoIndex
+			}
+			else if string_is_int(index) 
 			{
 				return real(index)
 			}
@@ -139,7 +206,14 @@ do
 			}
 			else
 			{
-				return variable_string(index, undefined, true)
+				var arg = gmcl_interpret_argument(index)
+				if not is_undefined(arg.error) 
+				{
+					global.scrvar.error = true
+					return arg.error
+				}
+				else if arg.type == dt_variable return variable_string_get(arg.value)
+				else return arg.value
 			}
 		}
 		
@@ -149,142 +223,136 @@ do
 		else comma = 0
 		
 		if comma
-		{
-			var _pos = string_pos("[", segment)
-			
+		{	
+			_pos = string_pos("[", segment)
 			if _pos and comma > _pos
 			{
+				var _pos = 0
 				var char
 				var open = 0
 				do
 				{
-					char = string_char_at(segment, _pos++)
+					_pos++
+					char = string_char_at(segment, _pos)
 					open += (char == "[") - (char == "]")
 				}
-				until (open == 0 and char == ",") or _pos > name_len
+				until (not open and char == ",") or _pos > name_len
 				
-				comma = _pos
+				if _pos > name_len comma = 0
+				else comma = _pos
 			}
 			
-			index = {x: slice(segment, 1, comma, 1), y: slice(segment, comma+1, -1, 1)}
+			if comma
+			{
+				index = {x: slice(segment, 1, comma, 1), y: slice(segment, comma+1, -1, 1)}
 			
-			index.x = interpret(index.x)
-			index.y = interpret(index.y)
-			
-			if is_undefined(index.x) or is_undefined(index.y) return fail_return
+				index.x = interpret(index.x)
+				if global.scrvar.error return get_fail_return(scr, index.x)
+				
+				index.y = interpret(index.y)
+				if global.scrvar.error return get_fail_return(scr, index.y)
+			}
 		}
-		else
+		if not comma
 		{
 			index = interpret(segment)
-			
-			if is_undefined(index) return fail_return
+			if global.scrvar.error return get_fail_return(scr, index)
 		}
 		
 		switch access_type
 		{
 		case "@":
-			if not is_array(scope) return fail_return
+			if not is_array(scope) return get_fail_return(scr, exceptionExpectingArray, scope_segment)
 			
 			if comma
 			{
-				if	not is_numeric(index.x) or 
-					not is_numeric(index.y) or (not returning and array_length(scope) <= index.x) or 
-					not is_array(scope[index.x]) or 
-					(not returning and array_length(scope[index.x]) <= index.y)
-				{
-					return fail_return
-				}
+				if not is_numeric(index.x) or not is_numeric(index.y)			return get_fail_return(scr, exceptionBadIndex)
+				if index.x < 0 or index.y < 0									return get_fail_return(scr, exceptionIndexBelowZero)
+				if not returning and array_length(scope) <= index.x				return get_fail_return(scr, exceptionIndexExceedsBounds)
+				if not is_array(scope[index.x])									return get_fail_return(scr, exceptionExpectingArray)
+				if not returning and array_length(scope[index.x]) <= index.y	return get_fail_return(scr, exceptionIndexExceedsBounds)
 			
 				if not pos and set_var
 				{
 					scope[@ index.x, index.y] = value
-					return undefined
+					return set_return
 				}
 			
 				scope = scope[@ index.x, index.y]
+				scope_segment += segment
 			}
 			else
 			{
-				if	not is_numeric(index) or 
-					index < 0 or 
-					(not returning and index >= array_length(scope))
-				{
-					return fail_return
-				}
+				if not is_numeric(index)							return get_fail_return(scr, exceptionBadIndex)
+				if index < 0										return get_fail_return(scr, exceptionIndexBelowZero)
+				if not returning and index >= array_length(scope)	return get_fail_return(scr, exceptionIndexExceedsBounds)
 				
 				if not pos and set_var
 				{
 					scope[@ index] = value
-					return undefined
+					return set_return
 				}
 				
 				scope = scope[index]
+				scope_segment += segment
 			}
 		break
 		case "|":
-			if	not is_numeric(scope) or 
-				not ds_exists(scope, ds_type_list) or 
-				not is_numeric(index) or index < 0 or 
-				(not returning and index >= ds_list_size(scope))
-			{
-				return fail_return
-			}
+			if not is_numeric(scope)							return get_fail_return(scr, exceptionExpectingDsIndex, scope_segment)
+			if not ds_exists(scope, ds_type_list)				return get_fail_return(scr, exceptionDsNotExists, scope_segment)
+			if not is_numeric(index)							return get_fail_return(scr, exceptionBadIndex)
+			if index < 0										return get_fail_return(scr, exceptionIndexBelowZero)
+			if not returning and index >= ds_list_size(scope)	return get_fail_return(scr, exceptionIndexExceedsBounds)
 			
 			if not pos and set_var
 			{
 				scope[| index] = value
-				return undefined
+				return set_return
 			}
 			
 			scope = scope[| index]
+			scope_segment += segment
 		break
 		case "$":
 			index = string(index)
 			
-			if	not is_struct(scope) or 
-				(not returning and not variable_struct_exists(scope, index))
-			{
-				return fail_return
-			}
+			if not is_struct(scope)											return get_fail_return(scr, exceptionExpectingStruct, scope_segment)
+			if not returning and not variable_struct_exists(scope, index)	return get_fail_return(scr, exceptionVariableNotExists)
 			
 			if not pos and set_var
 			{
 				scope[$ index] = value
-				return undefined
+				return set_return
 			}
 			
 			scope = scope[$ index]
+			scope_segment += segment
 		break
 		case "?":
 			index = string(index)
 		
-			if	not is_numeric(scope) 
-				or not ds_exists(scope, ds_type_map) or 
-				(not returning and not ds_map_exists(scope, index))
-			{
-				return fail_return
-			}
+			if not is_numeric(scope) 								return get_fail_return(scr, exceptionExpectingDsIndex, scope_segment)
+			if not ds_exists(scope, ds_type_map)					return get_fail_return(scr, exceptionDsNotExists, scope_segment)
+			if not returning and not ds_map_exists(scope, index)	return get_fail_return(scr, exceptionVariableNotExists, scope_segment+segment)
 			
 			if not pos and set_var
 			{
 				scope[? index] = value
-				return undefined
+				return set_return
 			}
 			
 			scope = scope[? index]
+			scope_segment += segment
 		break
 		case "#":
-			if	not comma or 
-				not is_numeric(scope) or 
-				not ds_exists(scope, ds_type_grid) or 
-				not is_numeric(index.x) or 
-				not is_numeric(index.y) or
-				index.x < 0 or
-				index.y < 0 or
-				(not returning and (ds_grid_width(scope) <= index.x or ds_grid_height(scope) <= index.y))
-			{
-				return fail_return
-			}
+			if not is_numeric(scope)																	return get_fail_return(scr, exceptionExpectingDsIndex, scope_segment)
+			if not comma																				return get_fail_return(scr, exceptionGridExpectingComma, scope_segment)
+			if not ds_exists(scope, ds_type_grid)														return get_fail_return(scr, exceptionDsNotExists, scope_segment)
+			if not (is_numeric(index.x) or is_numeric(index.y))											return get_fail_return(scr, exceptionBadIndex, scope_segment+segment)
+			if index.x < 0																				return get_fail_return(scr, exceptionIndexBelowZero, index.x)
+			if index.y < 0																				return get_fail_return(scr, exceptionIndexBelowZero, index.y)
+			if not returning and ds_grid_width(scope) <= index.x										return get_fail_return(scr, exceptionIndexExceedsBounds, index.x)
+			if not returning and ds_grid_height(scope) <= index.y										return get_fail_return(scr, exceptionIndexExceedsBounds, index.y)
 			
 			if not pos and set_var
 			{
@@ -293,11 +361,13 @@ do
 			}
 			
 			scope = scope[# index.x, index.y]
+			scope_segment += segment
 		}
 	}
 }
 until pos == 0
 
-if not return_undefined return true
+if scr == variable_string_exists		return true
+if scr == variable_string_exists_error	return undefined
 return scope
 }

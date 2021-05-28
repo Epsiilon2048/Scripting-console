@@ -81,6 +81,7 @@ if keyboard_check_pressed(console_key) and keyboard_scope != BAR
 if mouse_check_button_pressed(mb_left) and not AUTOFILL.mouse_on and not OUTPUT.mouse_on
 {
 	keyboard_scope = BAR.mouse_on ? BAR : noone
+	if keyboard_scope == BAR keyboard_string = console_string
 	
 	do_autofill = false
 	gmcl_autofill(undefined, undefined)
@@ -113,8 +114,8 @@ if console_toggle and keyboard_scope == BAR
 	enter		= keyboard_check_pressed(vk_enter)
 	startln		= keyboard_check_pressed(vk_home)
 	endln		= keyboard_check_pressed(vk_end) and str_length > 0 and char_pos2 != str_length+1
-	log_up		= keyboard_check_pressed(vk_up) and not AUTOFILL.mouse_on
-	log_down	= keyboard_check_pressed(vk_down) and not AUTOFILL.mouse_on and (input_log_index != -1 or ds_list_size(input_log) == 0)
+	log_up		= keyboard_check_pressed(vk_up)
+	log_down	= keyboard_check_pressed(vk_down) and (input_log_index != -1 or ds_list_size(input_log) == 0)
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
 	copy		= keyboard_check_multiple_pressed(vk_control, ord("C"))
 	paste		= keyboard_check_multiple_pressed(vk_control, ord("V"))

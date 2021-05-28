@@ -24,6 +24,11 @@ for(var i = 1; i <= string_length(command); i++)
 	
 segment = string_copy(command, marker, i-marker)
 
+if autofill_from_float and string_char_at(segment, 1) == "." and instance_exists(object)
+{
+	segment = string(object)+segment
+}
+
 if string_pos(".", segment) 
 {
 	instscope = string_copy(segment, 1+string_pos("/", segment), string_last_pos(".", segment)-1-string_pos("/", segment))
@@ -37,7 +42,7 @@ else						variable = string_copy(segment, 1+string_pos("/", segment), string_len
 var inst = string_to_instance(instscope, true)
 var varscope = string_add_scope(instscope, true)
 
-if string_pos(".", instscope) == 0 and inst != -1 and not ((variable == "" or string_is_float(variable)) and string_is_float(instscope))
+if string_pos(".", instscope) == 0 and inst != -1 and (autofill_from_float or not ((variable == "" or string_is_float(variable)) and string_is_float(instscope)))
 {
 	instscope = inst
 }

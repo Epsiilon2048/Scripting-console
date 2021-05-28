@@ -1,5 +1,5 @@
 
-function gmcl_interpret_argument(arg){ with o_console {
+function gmcl_interpret_subject(arg){ with o_console {
 
 var _arg = string(arg)
 var _arg_plain = _arg
@@ -10,6 +10,7 @@ var macro = undefined
 var iden_type = ""
 var macro_type = ""
 var error = undefined
+var description = undefined
 
 var arg_first = string_char_at(_arg, 1)
 var arg_last = (string_length(_arg) <= 1) ? "" : string_last(_arg)
@@ -59,7 +60,7 @@ else
 				if is_int and arg_real >= 0 and arg_real <= 0xfffffffffffffb and object_exists(arg_real)
 				{
 					value = arg_real
-					type = dt_real
+					type = dt_asset
 				}
 				else
 				{
@@ -73,7 +74,7 @@ else
 				if is_int and better_script_exists(arg_real)
 				{
 					value = arg_real
-					type = dt_real
+					type = dt_method
 				}
 				else
 				{
@@ -84,7 +85,7 @@ else
 				if is_int and better_instance_exists(arg_real)
 				{
 					value = arg_real
-					type = dt_real
+					type = dt_instance
 				}
 				else
 				{
@@ -95,12 +96,21 @@ else
 				if slice(_arg, 1, 3, 1) == "0x" value = hex_to_color(_arg)
 				else value = real(_arg)
 			
-				type = dt_real
+				type = dt_color
+		}
+		else if macro_type != ""
+		{
+			type = macro_type
+			value = arg_real
+		}
+		else if instance_exists(arg_real)
+		{
+			type = dt_instance
+			value = arg_real
 		}
 		else
 		{
-			type = dt_real
-			value = arg_real
+			error = exceptionInstanceNotExists
 		}
 	}
 	else if iden_type != ""
@@ -123,7 +133,7 @@ else
 				else
 				{
 					value = asset
-					type = dt_real
+					type = dt_asset
 				}
 			break
 			case dt_variable:
@@ -147,12 +157,12 @@ else
 				if better_script_exists(asset)
 				{
 					value = asset
-					type = dt_real
+					type = dt_method
 				}
 				else if not is_undefined(macro) and macro.type == dt_method and better_script_exists(macro.value)
 				{
 					value = macro.value
-					type = dt_real
+					type = dt_method
 				}
 				else
 				{
@@ -164,12 +174,12 @@ else
 				if better_instance_exists(asset)
 				{
 					value = asset
-					type = dt_real
+					type = dt_instance
 				}
 				else if not is_undefined(macro) and macro.type == dt_instance and better_instance_exists(macro.value)
 				{
 					value = macro.value
-					type = dt_real
+					type = dt_instance
 				}
 				else
 				{
@@ -197,8 +207,15 @@ else
 		var asset = asset_get_index(_arg)
 		if asset != -1
 		{
-			type = dt_real
+			type = dt_asset
 			value = asset
+			
+			switch asset_get_type(_arg)
+			{
+				case asset_object: type = dt_instance
+				break
+				case asset_script: type = dt_method
+			}
 		}
 		else if variable_string_exists(_arg)
 		{
@@ -217,6 +234,7 @@ return {
 	value: value, 
 	type: type,
 	plain: string(arg),
-	error: error
+	error: error,
+	description: description,
 }
 }}

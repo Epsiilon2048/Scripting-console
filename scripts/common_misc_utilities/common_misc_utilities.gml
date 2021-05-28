@@ -70,3 +70,8 @@ function better_instance_exists(obj){
 
 return obj < 0xfffffffb and instance_exists(obj)
 }
+	
+	
+function better_object_get_name(obj){
+return (obj == global) ? "global" : object_get_name(obj)
+}

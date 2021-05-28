@@ -103,8 +103,12 @@ draw_console_body(x1, y1-1, x2, y2+1)
 draw_scrollbar(at.scrollbar)
 clip_rect_cutout(x1+1, y2+_border_h+1, x2-_border_w*2-o_console.SCROLLBAR.width, y1-_border_h)
 
+var tab = keyboard_check_pressed(vk_tab)
+at.index += tab
+
 with global.scrvar
 {
+	self.tab = tab
 	self.asp = asp
 	self.at = at
 	self._text_sep = _text_sep
@@ -121,8 +125,6 @@ with global.scrvar
 	self.ch = ch
 	self.item_index = 0
 }
-
-at.index += keyboard_check_pressed(vk_up) - keyboard_check_pressed(vk_down)
 
 static draw_list = function(range, list, color_method){ with global.scrvar {
 
@@ -163,6 +165,8 @@ for(var i = range.min; i <= range.max; i++)
 		
 		draw_text(sidetext_x+_sidetext_bar+_sidetext_border, text_y+1, this.text)
 		draw_text(text_x, text_y+1, access(list, i))
+		
+		if tab and selected input_set_pos(access(list, i))
 	}
 	
 	item_index ++
@@ -267,7 +271,7 @@ static variable_color = function(item){
 	
 	if is_struct(value) 
 	{
-		text = (instanceof(value) == "") ? "Struct" : instanceof(value)
+		text = "Struct"
 		entry_color = dt_instance
 	}
 	else if is_array(value)
@@ -296,7 +300,7 @@ static scope_color = function(item){
 	
 	if is_struct(value) 
 	{
-		text = (instanceof(value) == "") ? "Struct" : instanceof(value)
+		text = "Struct"
 		entry_color = dt_instance
 	}
 	else if is_array(value)

@@ -7,11 +7,11 @@ console_macro_add("con",				dt_instance, o_console)
 
 console_macro_add("var",				dt_method, create_variable)
 			
-//console_macro_add("@",					dt_method, dealwith_array)
-//console_macro_add("$",					dt_method, dealwith_struct)
-//console_macro_add("|",					dt_method, dealwith_ds_list)
-//console_macro_add("?",					dt_method, dealwith_ds_map)
-//console_macro_add("#",					dt_method, dealwith_ds_grid)
+console_macro_add("@",					dt_method, dealwith_array)
+console_macro_add("$",					dt_method, dealwith_struct)
+console_macro_add("|",					dt_method, dealwith_ds_list)
+console_macro_add("?",					dt_method, dealwith_ds_map)
+console_macro_add("#",					dt_method, dealwith_ds_grid)
 
 console_macro_add("O1",					dt_variable, "o_console.O1")
 console_macro_add("O2",					dt_variable, "o_console.O2")

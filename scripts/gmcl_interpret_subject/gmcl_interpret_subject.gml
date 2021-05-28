@@ -1,5 +1,5 @@
 
-function gmcl_interpret_subject(subject, argument_total){
+function gmcl_interpret_subject_old(subject, argument_total){
 ///@description gmcl_interpret_subject(subject, [argument_total])
 
 var _arg = subject

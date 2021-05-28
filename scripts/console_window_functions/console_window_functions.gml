@@ -9,7 +9,6 @@ set = function(_text){
 	if is_struct(_text) and asset_get_index( instanceof(_text) ) == Embedded_text
 	{
 		self.has_embed = true
-		
 		struct_replace(self.text, _text)
 	}
 	else

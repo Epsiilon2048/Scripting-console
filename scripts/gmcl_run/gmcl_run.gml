@@ -1,5 +1,5 @@
 
-function gmcl_run(compiled_command){ with o_console {
+function gmcl_run(compiled_command){
 
 /*
 ACTION BASED ON SUBJECT DATATYPE
@@ -13,7 +13,34 @@ ASSET			Return asset index
 UNDEFINED		Throw error
 */
 
-try{
+static method_exec = function(ind, args){
+	run_in_console = true
+	try 
+	{
+		var output
+
+		if instance_exists(object) with object
+		{ 
+			output = script_execute_ext_builtin(ind, args)
+		}
+		else 
+		{
+			output = script_execute_ext_builtin(ind, args)
+		}
+				
+		if is_undefined(output)		return ""
+		else if is_numeric(output)	return string_format_float(output)
+		else						return output
+	}
+	catch(_exception)
+	{
+		return {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
+		prev_exception = _exception
+	}
+	run_in_console = false
+}
+
+with o_console { try {
 	
 if compiled_command == "" return ""	
 
@@ -22,7 +49,10 @@ var tag = compiled_command.tag
 
 if not is_undefined(event_commands[$ tag])
 {
-	array_push(event_commands[$ tag], compiled_command.raw)
+	var tag_com = struct_copy(compiled_command)
+	tag_com.tag = ""
+	
+	array_push(event_commands[$ tag], tag_com)
 	return ["Added command to "+tag+" event"]
 }
 
@@ -36,11 +66,27 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	}
 	else
 	{
-		if not is_undefined(com[i].error) output_string[i] = com[i].error
+		if not is_undefined(com[i].error) output_string[i] = "[SYNTAX ERROR] "+com[i].error
 
 		else
 		{
+			var args = array_struct_get(com[i].args, "value")
 			var subject = com[i].subject
+			
+			for(var j = 0; j <= array_length(com[i].variables)-1; j++)
+			{
+				var varstring = args[com[i].variables[j]]
+				
+				if variable_string_exists(varstring)
+				{
+					args[com[i].variables[j]] = variable_string_get(varstring)
+				}
+				else
+				{
+					output_string[i] = exceptionVariableNotExists
+					continue
+				}
+			}
 	
 			switch subject.type 
 			{
@@ -52,31 +98,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 
 			#region Method
 			case dt_method:
-	
-				var a = array_struct_get(com[i].args, "value")
-			
-				run_in_console = true
-				try 
-				{
-					if instance_exists(object) with object
-					{ 
-						output_string[i] = script_execute_ext_builtin(subject.value, a)
-					}
-					else 
-					{
-						output_string[i] = script_execute_ext_builtin(subject.value, a)
-					}
-				
-					if is_undefined(output_string[i]) output_string[i] = ""
-					else if is_numeric(output_string[i]) output_string[i] = string_format_float(output_string[i])
-				}
-				catch(_exception)
-				{
-					output_string[i] = {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
-					prev_exception = _exception
-				}
-				run_in_console = false
-		
+				output_string[i] = method_exec(subject.value, args)
 			break
 			#endregion
 			
@@ -96,23 +118,40 @@ for(var i = 0; i <= array_length(com)-1; i++)
 		
 			#region Variable	
 			case dt_variable:
-	
-				//if there are multiple lines and one of them changes the scope of the console,
-				//the variable will not be updated to the new scope
-	
-				if array_length(com[i].args) < 1
+
+				var _value = variable_string_get(subject.value)
+
+				if is_method(_value)
 				{
-					var _value = variable_string_get(subject.value)
-				
+					output_string[i] = method_exec(_value, args)
+				}
+				else if array_length(com[i].args) < 1
+				{					
 					var string_value
-					if is_numeric(_value) string_value = string_format_float(_value)
-					else			   string_value = _value
+					if is_numeric(_value)
+					{
+						string_value = string_format_float(_value)
+						
+						var ds_scope = string_scope_to_id(subject.value, true)
+						if ds_map_exists(ds_types, ds_scope)
+						{
+							switch ds_types[? ds_scope]
+							{
+								case ds_type_list: string_value = ds_list_to_array(_value)
+								break
+								case ds_type_map: string_value = ds_map_to_struct(_value)
+								break
+								case ds_type_grid: string_value = "ds grid"
+							}
+						}
+					}
+					else string_value = _value
 				
 					output_string[i] = string_value
 				}
 				else
 				{
-					var _value = com[i].args[0].value
+					var _value = args[i]
 				
 					variable_string_set(subject.value, _value)
 			
@@ -159,7 +198,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#region Undefined
 			case undefined:
 				output_string[i] = format_output(
-					[{str: "[SYNTAX ERROR]", scr: compile_report, output: true}," from \""+subject.plain+"\""], 
+					[{str: "[COMPILE ERROR]", scr: compile_report, output: true}," "+subject.error], 
 				true, -1)
 			#endregion
 			}
