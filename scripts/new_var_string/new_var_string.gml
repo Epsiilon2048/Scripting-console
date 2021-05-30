@@ -61,6 +61,8 @@ var set_return		= (scr == variable_string_exists) ? true : undefined
 if not is_string(name)	return get_fail_return(scr, exceptionExpectingString)
 if name == ""			return get_fail_return(scr, exceptionNoValue)
 
+if string_last(name) == "." name = string_delete(name, string_length(name), 1)
+
 if string_char_at(name, 1) == "." name = string(id)+name
 
 var has_accessor = string_pos("[", name)
@@ -95,7 +97,7 @@ if scope == -1
 	}
 }
 else scope_segment = better_object_get_name(scope)
-var ds_scope = string(scope.id)
+var ds_scope = instance_exists(scope) ? string(scope.id) : ""
 
 var pos
 
@@ -132,7 +134,7 @@ do
 		{
 			if is_real(scope)
 			{
-				if ds_map_exists(ds_types, ds_scope+"."+segment)
+				if ds_map_exists(o_console.ds_types, ds_scope+"."+segment)
 				{
 					ds_scope += "."+segment
 				}
@@ -176,9 +178,9 @@ do
 			else if is_struct(scope) access_type = "$"
 			else if is_numeric(scope)
 			{
-				if ds_map_exists(ds_types, ds_scope)
+				if ds_map_exists(o_console.ds_types, ds_scope)
 				{
-					switch ds_types[? ds_scope]
+					switch o_console.ds_types[? ds_scope]
 					{
 						case ds_type_list: access_type = "|"
 						break

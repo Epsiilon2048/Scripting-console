@@ -1,4 +1,6 @@
 
+colors = {}
+
 fonts = [
 	fnt_debug1x,
 	fnt_debug2x,

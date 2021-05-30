@@ -6,7 +6,7 @@ var _segment
 if is_struct(error)
 {
 	_error = string(error.error)
-	_segment = "from \""+string(error.plain)+"\": "
+	_segment = is_undefined(error.plain) ? "" : "from \""+string(error.plain)+"\": "
 }
 else
 {

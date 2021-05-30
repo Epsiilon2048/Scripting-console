@@ -119,7 +119,7 @@ if console_toggle and keyboard_scope == BAR
 	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
 	copy		= keyboard_check_multiple_pressed(vk_control, ord("C"))
 	paste		= keyboard_check_multiple_pressed(vk_control, ord("V"))
-	startword	= keyboard_check_multiple_pressed(vk_control, vk_left)  //skip to the start of a word
+	startword	= keyboard_check_multiple_pressed(vk_control, vk_left)
 	endword		= keyboard_check_multiple_pressed(vk_control, vk_right)
 
 	var moved_char_pos = false
@@ -320,7 +320,45 @@ if console_toggle and keyboard_scope == BAR
 		
 		moved_char_pos = true
 	}
+	#endregion
 	
+	#region Parse command
+	if enter
+	{	
+		gmcl_autofill(undefined, undefined)
+		do_autofill = false
+		moved_char_pos = true
+		
+		subchar_pos1 = 0
+		subchar_pos2 = 0
+		
+		BAR.blink_step = 0
+		
+		var _compile = gmcl_compile(console_string)
+		var _output  = gmcl_run(_compile)
+		
+		if is_struct(_compile)
+		{
+			prev_command = console_string
+			prev_compile = _compile
+			
+			output_set_lines(_output)
+			
+			ds_list_insert(input_log, 0, console_string)
+			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
+			
+			console_log_input(console_string, _output, false)
+		}
+		else output_set_lines(_output)
+		
+		console_string = ""
+		keyboard_string = ""
+		color_string = []
+		char_pos1 = 1
+		char_pos2 = 1
+	}
+	#endregion
+
 	if moved_char_pos
 	{
 		var segment = slice(console_string, char_pos1, char_pos2+1, 1)
@@ -357,43 +395,6 @@ if console_toggle and keyboard_scope == BAR
 			subchar_pos2 = 0
 		}
 	}
-	#endregion
-	
-	#region Parse command
-	if enter
-	{	
-		gmcl_autofill(undefined, undefined)
-		do_autofill = false
-		
-		subchar_pos1 = 0
-		subchar_pos2 = 0
-		
-		BAR.blink_step = 0
-		
-		var _compile = gmcl_compile(console_string)
-		var _output  = gmcl_run(_compile)
-		
-		if is_struct(_compile)
-		{
-			prev_command = console_string
-			prev_compile = _compile
-			
-			output_set_lines(_output)
-			
-			ds_list_insert(input_log, 0, console_string)
-			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
-			
-			console_log_input(console_string, _output, false)
-		}
-		else output_set_lines(_output)
-		
-		console_string = ""
-		keyboard_string = ""
-		color_string = []
-		char_pos1 = 1
-		char_pos2 = 1
-	}
-	#endregion
 	
 	if console_color_time == console_color_interval color_string = gmcl_string_color(console_string, char_pos1)
 	else if console_color_time != -1 console_color_time ++

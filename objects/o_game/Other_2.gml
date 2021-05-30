@@ -6,5 +6,3 @@ var win_posx = 100
 var win_posy = 100
 
 window_set_position(win_posx, win_posy)
-
-instance_create_depth(50, 50, 0, o_console)

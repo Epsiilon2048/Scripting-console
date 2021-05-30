@@ -83,13 +83,11 @@ if at.mouse_dragging_top or at.mouse_dragging_right
 		window_set_cursor(cr_default)
 	}
 }
-
-//at.scrollbar.set_pos(x1, y1, x2+o_console.SCROLLBAR.width*asp, y2)
 at.scrollbar.set_pos(x1+1, y2+_border_h, x2-_border_w, y1-_border_h)
-at.scrollbar.page_height = (entries_height + ceil(_text_sep/2))/asp
+at.scrollbar.page_height = entries_height+_text_sep+1
 at.scrollbar.page_width = _width
 
-var _scroll = floor(at.scrollbar.scroll*asp)
+var _scroll = floor(at.scrollbar.scroll)
 
 var _sidetext_bar = floor(at.sidetext_bar*asp)
 var _sidetext_width = ceil(at.sidetext_width*asp)

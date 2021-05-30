@@ -1,16 +1,9 @@
 
 init = true
 
+f=[0]
 
-
-array = [123, 456, 789, "You did it!!!"]
-
-array_2d = [
-[0, 1, 2, 3, 4, 5],
-[6, 7, 8, 9, 10, 11],
-[12, 13, 14, 15, 16],
-[17, 18, 19, 20, 21],
-[22, 23, 24, 25, 26]
-]
-
-struct = {test1: 3, test2: 4, test3: 12}
+w=150
+h=150
+scr=new Console_scrollbar()
+scr.initialize(x, y, x+w, y+h, w, h, sprite_get_width(s_scrollbar_tester), sprite_get_height(s_scrollbar_tester), fa_left, fa_bottom)
