@@ -26,10 +26,18 @@ with TEXT_BOX {
 	text_wdist = 9
 	text_hdist = 4
 	
-	blink_time = 70
+	blink_time = 45
 	char_selection_alpha = .2
 	
-	dclick_time = 20
+	dclick_time = 14
+	
+	repeat_time = 30
+	repeat_step = 0
+	
+	rleft = 0
+	rright = 0
+	rbackspace = 0
+	rdel = 0
 }
 
 with BAR {

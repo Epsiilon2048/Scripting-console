@@ -67,7 +67,7 @@ if inst_select
 }
 #endregion
 
-if keyboard_check_pressed(console_key) and keyboard_scope != BAR
+if keyboard_check_pressed(console_key) and keyboard_scope == noone
 {
 	console_toggle = not console_toggle
 	

@@ -10,6 +10,9 @@ tb.initialize() with tb{
 	y = other.y
 	length_min = 4
 	text = "0123"
+	scrubber = true
+	select_all_on_click = true
+	allow_alpha = false
 }
 
 w=150

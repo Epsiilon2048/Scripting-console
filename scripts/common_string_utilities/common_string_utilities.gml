@@ -102,13 +102,15 @@ return string_is_int(_str)
 
 
 
-function string_format_float(float){ //formats a float into a string, rounding to the 10^6 place (rather than 100s place)
+function string_format_float(float, places){ //formats a float into a string, rounding to the 10^6 place (rather than 100s place)
+
+if is_undefined(places) places = 6
 
 var decimal = float - floor(float)
 var whole = floor(float)
 
 if decimal == 0 return string(float)
-else return stitch(whole, shave("0", string_format(decimal, 0, 6)))
+else return stitch(whole, shave("0", string_format(decimal, 0, places)))
 }
 
 
