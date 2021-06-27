@@ -20,6 +20,16 @@ draw_enable_swf_aa(true)
 
 if run_in_embed return undefined
 
+with TEXT_BOX {
+	
+	char_height = 23
+	text_wdist = 9
+	text_hdist = 4
+	
+	blink_time = 70
+	char_selection_alpha = .2
+}
+
 with BAR {
 	
 	char_height = 23

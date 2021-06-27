@@ -112,6 +112,7 @@ console_macros = {}
 subchar_pos1 = 0
 subchar_pos2 = 0
 
+TEXT_BOX = {}
 BAR = {}
 OUTPUT = {}
 SCROLLBAR = {}
@@ -131,7 +132,7 @@ do_autofill = false
 index_functions()
 index_assets()
 initialize_console_macros()
-initialize_console_graphics(undefined)
+initialize_console_graphics(5)
 
 identifiers = {
 	r: dt_real,
