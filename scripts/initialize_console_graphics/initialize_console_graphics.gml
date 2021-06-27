@@ -28,6 +28,8 @@ with TEXT_BOX {
 	
 	blink_time = 70
 	char_selection_alpha = .2
+	
+	dclick_time = 20
 }
 
 with BAR {

@@ -132,7 +132,7 @@ do_autofill = false
 index_functions()
 index_assets()
 initialize_console_macros()
-initialize_console_graphics(5)
+initialize_console_graphics(4)
 
 identifiers = {
 	r: dt_real,
