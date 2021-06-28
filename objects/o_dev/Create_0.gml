@@ -13,6 +13,7 @@ tb.initialize() with tb{
 	scrubber = true
 	select_all_on_click = true
 	allow_alpha = false
+	value_conversion = real
 }
 
 w=150
