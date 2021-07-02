@@ -5,12 +5,12 @@ if is_undefined(scale)
 {
 	var display_w = display_get_width()
 	
-	scale = (display_w < 1920) + (display_w < 2560) + (display_w < 3840)
-	
-	// Below 1080p	1x
-	// 1080p		2x
-	// 2k			3x
-	// 4k and above	4x
+	scale = 2 + (display_w >= 1920) + (display_w >= 2560) + (display_w >= 3840)
+	show_debug_message("Console IDE automatically scaled to "+string(scale)+" based on display size")
+	// Below 1080p	2x
+	// 1080p		3x
+	// 2k			4x
+	// 4k and above	5x
 }
 
 self.scale(scale)
@@ -23,8 +23,8 @@ if run_in_embed return undefined
 with TEXT_BOX {
 	
 	char_height = 23
-	text_wdist = 9
-	text_hdist = 4
+	text_wdist = 10
+	text_hdist = 5
 	
 	blink_time = 45
 	char_selection_alpha = .2
@@ -33,6 +33,8 @@ with TEXT_BOX {
 	
 	repeat_time = 30
 	repeat_step = 0
+	
+	outline_width = 1
 	
 	rleft = 0
 	rright = 0

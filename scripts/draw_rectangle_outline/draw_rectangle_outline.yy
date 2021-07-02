@@ -6,7 +6,7 @@
     "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Text_box",
+  "name": "draw_rectangle_outline",
   "tags": [],
   "resourceType": "GMScript",
 }

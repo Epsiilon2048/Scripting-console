@@ -7,6 +7,7 @@ fonts = [
 	fnt_debug3x,
 	fnt_debug4x,
 	fnt_debug5x,
+	fnt_debug6x,
 ]
 
 scale = function(size){ with o_console {
@@ -132,7 +133,7 @@ do_autofill = false
 index_functions()
 index_assets()
 initialize_console_macros()
-initialize_console_graphics(4)
+initialize_console_graphics()
 
 identifiers = {
 	r: dt_real,

@@ -1,12 +1,30 @@
 
 function Text_box() constructor{
 
+
+
+set_value = function(text){
+
+self.text = text
+if not att.allow_alpha and not string_is_float(text) text = "0"
+
+value = att.value_conversion(text)
+
+if att.allow_alpha
+{
+	if not att.allow_negative value = abs(value)
+	if not att.allow_float value = round(value)
+}
+}
+
+
+
 initialize = function(){
 		
 	x = 0
 	y = 0
 	
-	text = ""
+	text = "0"
 	variable = undefined
 	value = 0
 	scoped = false
@@ -44,44 +62,62 @@ initialize = function(){
 	colors = undefined
 	
 	
-	draw_box = true // Whether or not the box is drawn around the text
+	att = {} with att {
+		draw_box = true // Whether or not the box is drawn around the text
 	
-	// The length of the box itself
-	length_min = 1
-	length_max = infinity
-	lock_text_length = false // Whether or not the text can be longer than the max length
+		// The length of the box itself
+		length_min = 1
+		length_max = infinity
+		lock_text_length = false // Whether or not the text can be longer than the max length
 	
-	exit_with_enter = true // If pressing enter descopes
+		exit_with_enter = true // If pressing enter descopes
 	
-	color_method = noscript // The script used to color the string
+		text_color = undefined
+		color_method = noscript // The script used to color the string
 		
-	allow_input = true // If the text can be edited
-	allow_external_input = true // If the text can be changed when the associated variable is
-	allow_alpha = true // Alphabetical
+		allow_input = true // If the text can be edited
+		allow_external_input = true // If the text can be changed when the associated variable is
+		allow_alpha = true // Alphabetical
 	
-	select_all_on_click = false
+		select_all_on_click = false
 	
-	set_variable_on_input = false // Set variable every time theres input, rather than just once it's descoped
+		set_variable_on_input = false // Set variable every time theres input, rather than just once it's descoped
 	
-	value_conversion = string // How the value is converted from the text
+		value_conversion = string // How the value is converted from the text
 	
-	// If not allowing alphabet
-	allow_float = true
-	allow_negative = true
+		// If not allowing alphabet
+		allow_float = true
+		allow_negative = true
 		
-	float_places = 2
+		float_places = 2
 	
-	value_min = -infinity
-	value_max = infinity
+		value_min = -infinity
+		value_max = infinity
 	
-	incrementor = true // Up/down buttons on the side
-	incrementor_step = 1
-	incrementor_curve = animcurvetype_linear
+		incrementor = true // Up/down buttons on the side
+		incrementor_step = 1
+		incrementor_curve = animcurvetype_linear
 	
-	scrubber = false // The mouse scrubbing the value
-	scrubber_step = 1
-	scrubber_pixels_per_step = 10
-	scrubber_curve = animcurvetype_linear
+		scrubber = false // The mouse scrubbing the value
+		scrubber_step = 1
+		scrubber_pixels_per_step = 10
+		scrubber_curve = animcurvetype_linear
+	}
+}
+
+
+
+format_scrubber = function(step){
+
+	if is_undefined(step) att.scrubber_step = 1
+	else att.scrubber_step = step
+
+	att.length_min = 4
+	att.length_max = infinity
+	att.scrubber = true
+	att.select_all_on_click = true
+	att.allow_alpha = false
+	att.value_conversion = real
 }
 
 
@@ -110,15 +146,15 @@ get_input = function(){
 	var _text_wdist = floor(tb.text_wdist*asp)
 	var _text_hdist = floor(tb.text_hdist*asp)
 	
-	text_width = cw*clamp(string_length(text), length_min, length_max)
+	text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
 	
 	left = x
 	top = y
-	right = x + text_width + (draw_box ? _text_wdist*2 : 0)
-	bottom = y + ch + (draw_box ? _text_hdist*2 : 0)
+	right = x + text_width + (att.draw_box ? _text_wdist*2 : 0)
+	bottom = y + ch + (att.draw_box ? _text_hdist*2 : 0)
 	
-	text_x = draw_box ? x+_text_wdist : x
-	text_y = draw_box ? y+_text_hdist : y
+	text_x = att.draw_box ? x+_text_wdist : x
+	text_y = att.draw_box ? y+_text_hdist : y
 	
 	var shift = keyboard_check(vk_shift)
 	
@@ -127,7 +163,7 @@ get_input = function(){
 		if not mouse_on
 		{
 			mouse_on = true
-			window_set_cursor(scrubber ? cr_size_we : cr_beam)
+			window_set_cursor(att.scrubber ? cr_size_we : cr_beam)
 		}
 	}
 	else if mouse_on and not clicking
@@ -144,9 +180,9 @@ get_input = function(){
 		scrubbing = false
 	}
 
-	if mouse_check_button_pressed(mb_left) or keyboard_check_pressed(vk_escape)
+	if mouse_check_button_pressed(mb_left) or keyboard_check_pressed(vk_escape) or (att.exit_with_enter and keyboard_check_pressed(vk_enter))
 	{	
-		if mouse_on and scoped and scrubber and not typing and mouse_check_button_pressed(mb_left)
+		if mouse_on and scoped and att.scrubber and not typing and mouse_check_button_pressed(mb_left)
 		{
 			scrubbing = true
 			mouse_previous = gui_mx
@@ -161,7 +197,7 @@ get_input = function(){
 			tb.rbackspace	= 0
 			tb.rdel			= 0
 		
-			if not scoped and scrubber 
+			if not scoped and att.scrubber 
 			{
 				scrubbing = true
 				mouse_previous = gui_mx
@@ -170,7 +206,7 @@ get_input = function(){
 				char_pos1 = 0
 				char_pos2 = 0
 			}
-			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*(room_speed/60)) or (not scoped and select_all_on_click)
+			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*(room_speed/60)) or (not scoped and att.select_all_on_click)
 			{
 				char_selection = true
 				typing = true
@@ -213,41 +249,60 @@ get_input = function(){
 	
 	if clicking blink_step = 0
 	
-	if not scoped and allow_external_input and not is_undefined(variable)
+	if not scoped and att.allow_external_input and not is_undefined(variable)
 	{
-		value = value_conversion(variable_string_get(variable))
+		value = att.value_conversion(variable_string_get(variable))
 		text = string(value)
 	}
 	
 	if scoped
 	{
-		if scrubbing and keyboard_key != vk_nokey
-		{
-			typing = true
-			scrubbing = false
-			char_pos1 = string_length(text)
-			char_pos2 = 0
-			char_selection = true
+		var text_changed = false
+		var rt = tb.repeat_time*(room_speed/60)
+		
+		tb.rleft		= (keyboard_check(vk_left)+tb.rleft)*keyboard_check(vk_left)
+		tb.rright		= (keyboard_check(vk_right)+tb.rright)*keyboard_check(vk_right)
+		tb.rbackspace	= (keyboard_check(vk_backspace)+tb.rbackspace)*keyboard_check(vk_backspace)
+		tb.rdel			= (keyboard_check(vk_delete)+tb.rdel)*keyboard_check(vk_delete)
+		
+		var r = tb.repeat_step mod (2*(room_speed/60)) == 0
+		tb.repeat_step ++
+		
+		var key_left		= (r and rt < tb.rleft) or keyboard_check_pressed(vk_left)
+		var key_right		= (r and rt < tb.rright) or keyboard_check_pressed(vk_right)
+		var key_backspace	= (r and rt < tb.rbackspace) or keyboard_check_pressed(vk_backspace)
+		var key_delete		= (r and rt < tb.rdel) or keyboard_check_pressed(vk_delete)
+		
+		
+		if att.scrubber and not typing and keyboard_key != vk_nokey
+		{	
+			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
+			var digits = string_digits(char) != ""
+			if digits or key_backspace or key_delete or (att.allow_negative and string_pos("-", char)) or (att.allow_float and string_pos(".", char))
+			{
+				typing = true
+				scrubbing = false
+				char_pos1 = string_length(text)
+				if digits or key_backspace or key_delete
+				{
+					char_pos2 = 0
+					char_selection = true
+				}
+				else char_pos2 = char_pos1
+			}
 		}
+		
+		
+		if not typing and not att.allow_alpha and (key_left or key_right)
+		{
+			value += att.incrementor_step*(key_right-key_left)
+			text = string_format_float(value, att.float_places)
+		}
+		
 		
 		if typing
 		{
 			blink_step ++
-			var text_changed = false
-			var rt = tb.repeat_time*(room_speed/60)
-		
-			tb.rleft		= (keyboard_check(vk_left)+tb.rleft)*keyboard_check(vk_left)
-			tb.rright		= (keyboard_check(vk_right)+tb.rright)*keyboard_check(vk_right)
-			tb.rbackspace	= (keyboard_check(vk_backspace)+tb.rbackspace)*keyboard_check(vk_backspace)
-			tb.rdel			= (keyboard_check(vk_delete)+tb.rdel)*keyboard_check(vk_delete)
-		
-			var r = tb.repeat_step mod (2*(room_speed/60)) == 0
-			tb.repeat_step ++
-		
-			var key_left		= (r and rt < tb.rleft) or keyboard_check_pressed(vk_left)
-			var key_right		= (r and rt < tb.rright) or keyboard_check_pressed(vk_right)
-			var key_backspace	= (r and rt < tb.rbackspace) or keyboard_check_pressed(vk_backspace)
-			var key_delete		= (r and rt < tb.rdel) or keyboard_check_pressed(vk_delete)
 		
 			if key_left
 			{	
@@ -293,8 +348,77 @@ get_input = function(){
 				blink_step = 0
 			}
 		
-			if allow_input
+			if att.allow_input
 			{
+				var paste = keyboard_check_multiple_pressed(vk_control, ord("V")) and clipboard_has_text()
+		
+				if paste or string_length(text) < string_length(keyboard_string)
+				{
+					var newtext = text
+					var char 
+					if paste char = clipboard_get_text()
+					else char = slice(keyboard_string, string_length(text)+1, -1, 1)
+			
+					if char_selection newtext = string_delete(newtext, char_pos_min+1, char_pos_max-char_pos_min)
+			
+					if not att.allow_alpha 
+					{
+						if att.allow_negative and string_pos("-", char)
+						{
+							char_pos1 = char_pos_min
+							
+							if string_char_at(newtext, 1) == "-" 
+							{
+								newtext = string_delete(newtext, 1, 1)
+								char_pos1 --
+							}
+							else 
+							{
+								newtext = "-"+newtext
+								char_pos1 ++
+							}
+							char_pos_min = char_pos1
+							text_changed = true
+						}
+						if att.allow_float and string_pos(".", char)
+						{
+							char_pos1 = char_pos_min
+							newtext = string_delete(newtext, string_pos(".", newtext), 1)
+							newtext = string_insert(".", newtext, char_pos1+1)
+							char_pos1 ++
+							char_pos_min = char_pos1
+							text_changed = true
+						}
+						char = string_digits(char)
+					}
+				
+					if att.lock_text_length and (string_length(char)+string_length(newtext)) > att.length_max
+					{
+						var overlap = -(att.length_max-(string_length(char)+string_length(newtext)))
+					
+						if sign(overlap) != -1 char = ""
+						else char = slice(char, 1, overlap, 1)
+					}
+					
+					if text_changed or char != ""
+					{
+						char_pos1 = char_pos_min
+						char_selection = false
+						
+						if not att.allow_alpha and char != "" and (newtext == "0" or newtext == "-0")
+						{
+							newtext = (newtext == "-0") ? "-" : ""
+							char_pos1 --
+						}
+						
+						text = string_insert(char, newtext, char_pos1+1)
+						char_pos1 += string_length(char)
+						char_pos2 = char_pos1
+						text_changed = true
+					}
+					keyboard_string = text
+				}
+		
 				if (key_backspace or (char_selection and key_delete)) and (char_selection or char_pos1 != 0)
 				{
 					if char_selection
@@ -317,85 +441,33 @@ get_input = function(){
 					text_changed = true
 				}
 		
-				var paste = keyboard_check_multiple_pressed(vk_control, ord("V")) and clipboard_has_text()
-		
-				if paste or string_length(text) < string_length(keyboard_string)
-				{
-					var char 
-					if paste char = clipboard_get_text()
-					else char = slice(keyboard_string, string_length(text)+1, -1, 1)
-			
-					if char_selection
-					{
-						text = string_delete(text, char_pos_min+1, char_pos_max-char_pos_min)
-						char_pos1 = char_pos_min
-						char_selection = false
-					}
-			
-					if not allow_alpha 
-					{
-						if allow_negative and string_pos("-", char)
-						{
-							if string_char_at(text, 1) == "-" 
-							{
-								text = string_delete(text, 1, 1)
-								char_pos1 --
-							}
-							else 
-							{
-								text = "-"+text
-								char_pos1 ++
-							}
-							text_changed = true
-						}
-						if allow_float and string_pos(".", char)
-						{
-							text = string_delete(text, string_pos(".", text), 1)
-							text = string_insert(".", text, char_pos1+1)
-							char_pos1 ++
-							text_changed = true
-						}
-						char = string_digits(char)
-					}
-				
-					if lock_text_length and (string_length(char)+string_length(text)) > length_max
-					{
-						var overlap = -(length_max-(string_length(char)+string_length(text)))
-					
-						if sign(overlap) != -1 char = ""
-						else char = slice(char, 1, overlap, 1)
-					}
-				
-					show_debug_message(char == "")
-					if char != ""
-					{			
-						text = string_insert(char, text, char_pos1+1)
-						char_pos1 += string_length(char)
-						char_pos2 = char_pos1
-						text_changed = true
-					}
-					keyboard_string = text
-				}
-		
 				if text_changed
 				{
+					if not att.allow_alpha and not string_is_float(text)
+					{
+						text = "0"
+						char_pos1 = 1
+						char_pos2 = char_pos1
+						char_selection = false
+					}
+					
 					keyboard_string = text
 				
-					value = value_conversion(text)
-					if set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
+					value = att.value_conversion(text)
+					if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
 			
-					text_width = cw*clamp(string_length(text), length_min, length_max)
+					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
 	
 					left = x
 					top = y
-					right = x + text_width + (draw_box ? _text_wdist*2 : 0)
-					bottom = y + ch + (draw_box ? _text_hdist*2 : 0)
+					right = x + text_width + (att.draw_box ? _text_wdist*2 : 0)
+					bottom = y + ch + (att.draw_box ? _text_hdist*2 : 0)
 				
 					char_mouse = false
 				
-					if color_method != noscript
+					if att.color_method != noscript
 					{
-						colors = color_method(text)
+						colors = att.color_method(text)
 					}
 					blink_step = 0
 				}
@@ -403,13 +475,13 @@ get_input = function(){
 		}
 		else if scrubbing
 		{
-			if abs(gui_mx-mouse_previous) >= scrubber_pixels_per_step
+			if abs(gui_mx-mouse_previous) >= att.scrubber_pixels_per_step
 			{
-				value += floor((gui_mx-mouse_previous)/scrubber_pixels_per_step)*scrubber_step
+				value += floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step
 				mouse_previous = gui_mx
 			
-				if not allow_float value = floor(value)
-				text = string_format_float(value, float_places)
+				if not att.allow_float value = floor(value)
+				text = string_format_float(value, att.float_places)
 			}
 		}
 	}
@@ -434,7 +506,7 @@ draw = function(){
 	draw_set_font(o_console.font)
 	var tb = o_console.TEXT_BOX
 
-	if draw_box
+	if att.draw_box
 	{
 		var cw = string_width(" ")
 		var ch = string_height(" ")
@@ -442,12 +514,13 @@ draw = function(){
 	
 		var _text_wdist = floor(tb.text_wdist*asp)
 		var _text_hdist = floor(tb.text_hdist*asp)
+		var _outline_width = tb.outline_width*asp
 	
 		draw_set_color(o_console.colors.body_real)
 		draw_rectangle(left, top, right, bottom, false)
 	
-		draw_set_color((scoped and allow_input) ? o_console.colors.output : o_console.colors.body_accent)
-		draw_rectangle(left+1, top+1, right-1, bottom-1, true)
+		draw_set_color((scoped and att.allow_input) ? o_console.colors.output : o_console.colors.body_accent)
+		draw_hollowrect(left, top, right, bottom, _outline_width)
 	}
 	else
 	{
@@ -459,9 +532,13 @@ draw = function(){
 	draw_set_color(o_console.colors.plain)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
-	if draw_box and string_length(text) > length_max clip_rect_cutout(left, top, right, bottom)
-	if color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
-	else draw_text(text_x, text_y, text)
+	if att.draw_box and string_length(text) > att.length_max clip_rect_cutout(left, top, right, bottom)
+	if att.color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
+	else 
+	{
+		if not is_undefined(att.text_color) draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
+		draw_text(text_x, text_y, text)
+	}
 	
 	if scoped and typing
 	{
@@ -475,9 +552,9 @@ draw = function(){
 			draw_rectangle(text_x+cw*char_pos_min, y1, text_x+cw*char_pos_max, y2, false)
 			draw_set_alpha(1)
 		}
-		if allow_input and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
+		if att.allow_input and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
 	}
-	if draw_box and string_length(text) > length_max shader_reset()
+	if att.draw_box and string_length(text) > att.length_max shader_reset()
 
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)
