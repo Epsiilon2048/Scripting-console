@@ -113,6 +113,7 @@ console_macros = {}
 subchar_pos1 = 0
 subchar_pos2 = 0
 
+DOCK = {}
 TEXT_BOX = {}
 BAR = {}
 OUTPUT = {}

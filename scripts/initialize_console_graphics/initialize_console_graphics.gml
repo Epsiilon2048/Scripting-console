@@ -20,6 +20,20 @@ draw_enable_swf_aa(true)
 
 if run_in_embed return undefined
 
+with DOCK {
+	
+	char_height = 23
+	
+	name_wdist = 7
+	name_hdist = 5
+	
+	element_wdist = 7
+	element_hdist = 5
+	
+	element_wsep = 7
+	element_hsep = 5
+}
+
 with TEXT_BOX {
 	
 	char_height = 23

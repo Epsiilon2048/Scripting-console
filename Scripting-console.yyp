@@ -58,6 +58,7 @@
     {"id":{"name":"console_misc_utilities","path":"scripts/console_misc_utilities/console_misc_utilities.yy",},"order":3,},
     {"id":{"name":"console_macros_init","path":"scripts/console_macros_init/console_macros_init.yy",},"order":3,},
     {"id":{"name":"initialize_console_docs","path":"scripts/initialize_console_docs/initialize_console_docs.yy",},"order":1,},
+    {"id":{"name":"Console_dock","path":"scripts/Console_dock/Console_dock.yy",},"order":33,},
     {"id":{"name":"fnt_debug1x","path":"fonts/fnt_debug1x/fnt_debug1x.yy",},"order":0,},
     {"id":{"name":"s_collision9","path":"sprites/s_collision9/s_collision9.yy",},"order":5,},
     {"id":{"name":"draw_scrollbar","path":"scripts/draw_scrollbar/draw_scrollbar.yy",},"order":12,},

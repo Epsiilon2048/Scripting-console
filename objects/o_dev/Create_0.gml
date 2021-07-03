@@ -5,10 +5,7 @@ f=[0]
 
 
 tb = new Text_box()
-tb.initialize() with tb{
-	x = other.x
-	y = other.y
-	//format_scrubber()
+tb.initialize(x, y) with tb{
 	set_value(1234)
 }
 

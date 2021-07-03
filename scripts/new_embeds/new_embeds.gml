@@ -26,6 +26,11 @@ set = function(text) {
 	self.click_index = -1
 	self.mouse_on = false
 	self.mouse_on_item = false
+	
+	self.left = 0
+	self.top = 0
+	self.right = 0
+	self.bottom = 0
 
 	var _width = 0
 	var _click_id = 0
@@ -232,6 +237,11 @@ draw_set_alpha(alpha)
 
 var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : (is_string(plaintext_color) ? o_console.colors[$ plaintext_color] : plaintext_color)
 
+text.left = x
+text.top = y
+text.right = x+text.width*cw
+text.bottom = y+text.height*ch
+
 draw_set_color(plain_col)
 if is_undefined(text) or not is_struct(text)
 {
@@ -258,7 +268,7 @@ if o_console.colors.outline_layers
 
 draw_text(x, y, text.colortext)
 
-text.mouse_on = gui_mouse_between(x, y, x+text.width*cw, y+text.height*ch)
+text.mouse_on = gui_mouse_between(text.left, text.top, text.right, text.bottom)
 text.mouse_on_item = false
 
 text.mouse_index = -1

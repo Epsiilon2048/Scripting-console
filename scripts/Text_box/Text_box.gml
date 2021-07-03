@@ -19,10 +19,10 @@ if att.allow_alpha
 
 
 
-initialize = function(){
+initialize = function(x, y){
 		
-	x = 0
-	y = 0
+	self.x = is_undefined(x) ? self.x : x
+	self.y = is_undefined(y) ? self.y : y
 	
 	text = "0"
 	variable = undefined
@@ -107,7 +107,9 @@ initialize = function(){
 
 
 
-format_scrubber = function(step){
+initialize_scrubber = function(step){
+
+	initialize()
 
 	if is_undefined(step) att.scrubber_step = 1
 	else att.scrubber_step = step
