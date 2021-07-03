@@ -1,2 +1,2 @@
 
-tb.get_input()
+cd.get_input()

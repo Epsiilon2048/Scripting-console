@@ -4,7 +4,7 @@
 #macro cbox_NaN	  "[/]"
 
 function Embedded_text() constructor{
-set = function(text) {
+set = function(text){
 
 	static _colors_list			= ds_list_create()
 	static _clickable_list		= ds_list_create()
@@ -26,6 +26,9 @@ set = function(text) {
 	self.click_index = -1
 	self.mouse_on = false
 	self.mouse_on_item = false
+	
+	self.x = 0
+	self.y = 0
 	
 	self.left = 0
 	self.top = 0
@@ -182,7 +185,20 @@ set = function(text) {
 	ds_list_clear(_colors_list)
 	ds_list_clear(_clickable_list)
 	ds_list_clear(_subclickable_list)
-	}
+}
+
+
+
+draw = function(){
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
+	draw_embedded_text(x, y, self, o_console.colors.output, 1)
+	draw_set_font(old_font)
+}
+
+
+
+get_input = draw
 }
 
 
@@ -225,9 +241,10 @@ function draw_embedded_text(x, y, text, plaintext_color, alpha){
 var cw = string_width(" ")
 var ch = string_height(" ")
 
+var old_color = draw_get_color()
+var old_alpha = draw_get_alpha()
 var old_halign = draw_get_halign()
 var old_valign = draw_get_valign()
-var old_alpha = draw_get_alpha()
 
 if is_undefined(alpha) alpha = 1
 
@@ -452,7 +469,8 @@ if not is_undefined(executing)
 	if executing.outp text.set(_output)
 }
 
+draw_set_color(old_color)
+draw_set_alpha(old_alpha)
 draw_set_valign(old_halign)
 draw_set_halign(old_valign)
-draw_set_alpha(old_alpha)
 }

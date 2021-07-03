@@ -107,9 +107,9 @@ initialize = function(x, y){
 
 
 
-initialize_scrubber = function(step){
+initialize_scrubber = function(x, y, step){
 
-	initialize()
+	initialize(x, y)
 
 	if is_undefined(step) att.scrubber_step = 1
 	else att.scrubber_step = step
@@ -120,6 +120,7 @@ initialize_scrubber = function(step){
 	att.select_all_on_click = true
 	att.allow_alpha = false
 	att.value_conversion = real
+	att.set_variable_on_input = true
 }
 
 
@@ -299,6 +300,8 @@ get_input = function(){
 		{
 			value += att.incrementor_step*(key_right-key_left)
 			text = string_format_float(value, att.float_places)
+			
+			if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
 		}
 		
 		
@@ -481,9 +484,11 @@ get_input = function(){
 			{
 				value += floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step
 				mouse_previous = gui_mx
-			
+				
 				if not att.allow_float value = floor(value)
 				text = string_format_float(value, att.float_places)
+				
+				if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
 			}
 		}
 	}

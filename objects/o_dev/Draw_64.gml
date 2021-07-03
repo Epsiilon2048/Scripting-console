@@ -4,4 +4,5 @@
 //shader_reset()
 //draw_scrollbar(scr)
 
-tb.draw()
+cd.draw()
+draw_circle(x, y, 4, false)

@@ -24,14 +24,14 @@ with DOCK {
 	
 	char_height = 23
 	
-	name_wdist = 7
-	name_hdist = 5
+	name_wdist = 15
+	name_hdist = 7
 	
-	element_wdist = 7
-	element_hdist = 5
+	element_wdist = 21
+	element_hdist = 21
 	
-	element_wsep = 7
-	element_hsep = 5
+	element_wsep = 14
+	element_hsep = 17
 }
 
 with TEXT_BOX {
