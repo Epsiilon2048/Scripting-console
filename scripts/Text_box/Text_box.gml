@@ -144,7 +144,7 @@ get_input = function(){
 		scrubbing = false
 	}
 
-	if mouse_check_button_pressed(mb_left) or keyboard_check_pressed(vk_escape)
+	if mouse_check_button_pressed(mb_left) or keyboard_check_pressed(vk_escape) or (exit_with_enter and keyboard_check_pressed(vk_enter))
 	{	
 		if mouse_on and scoped and scrubber and not typing and mouse_check_button_pressed(mb_left)
 		{
@@ -221,8 +221,9 @@ get_input = function(){
 	
 	if scoped
 	{
-		if scrubbing and keyboard_key != vk_nokey
+		if scrubber and not typing and keyboard_key != vk_nokey
 		{
+			show_debug_message(1)
 			typing = true
 			scrubbing = false
 			char_pos1 = string_length(text)
@@ -379,6 +380,11 @@ get_input = function(){
 		
 				if text_changed
 				{
+					if not allow_alpha and text == "" 
+					{
+						text = "0"
+					}
+					
 					keyboard_string = text
 				
 					value = value_conversion(text)
