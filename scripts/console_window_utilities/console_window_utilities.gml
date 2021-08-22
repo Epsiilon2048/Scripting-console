@@ -70,8 +70,11 @@ bottom	= _border_h*2 + (is_top ? (y + text.height*ch) : y)
 
 sidebar_x = is_left ? left : right
 
-mouse_on = dragging or gui_mouse_between(left, top, right, bottom)
+mouse_on = dragging or (not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom))
 mouse_on_sidebar = dragging or (mouse_on and not text.mouse_on_item and gui_mouse_between(sidebar_x, top, sidebar_x + wn.mouse_border*asp*signbool(is_left), bottom))
+
+if mouse_on mouse_on_console = true
+if dragging clicking_on_console = true
 
 if mouse_on and mouse_check_button_pressed(mb_right) right_mb = true
 if (right_mb and not mouse_check_button(mb_right))

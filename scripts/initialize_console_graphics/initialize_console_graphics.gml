@@ -32,6 +32,10 @@ with DOCK {
 	
 	element_wsep = 14
 	element_hsep = 17
+	
+	dropdown_hypotenuse = 10
+	dropdown_base = 17
+	dropdown_wdist = 8
 }
 
 with TEXT_BOX {
@@ -48,7 +52,7 @@ with TEXT_BOX {
 	repeat_time = 30
 	repeat_step = 0
 	
-	outline_width = 1
+	outline_width = .63
 	
 	rleft = 0
 	rright = 0

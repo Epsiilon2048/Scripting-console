@@ -221,7 +221,8 @@ ot.bottom = console_toggle ? (BAR.top - _bar_dist) : BAR.bottom
 ot.right = min( ot.left + text_width + _border_w*2, win_width )
 ot.top = max( ot.bottom - text_height - _border_h*2, 0 )
 
-ot.mouse_on = ot.text.mouse_on or gui_mouse_between(ot.left, ot.top, ot.right, ot.bottom)
+ot.mouse_on = not mouse_on_console and gui_mouse_between(ot.left, ot.top, ot.right, ot.bottom)
+if ot.mouse_on mouse_on_console = true
 
 if ot.mouse_on and not ot.text.mouse_on_item and mouse_check_button_pressed(mb_left)
 {

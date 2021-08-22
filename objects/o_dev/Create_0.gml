@@ -8,6 +8,8 @@ text = ""
 var tb_text = new_text_box("o_dev.text") with tb_text {
 	att.set_variable_on_input = true
 	att.length_min = 16
+	att.length_max = 16
+	att.color_method = gmcl_string_color
 }
 
 var emb = new Embedded_text()
@@ -16,10 +18,10 @@ emb.set(["Click ",{str: "here",scr: show_message, arg: 1}," to show the message 
 var dc = new Console_dock() with dc
 {
 	initialize()
-	name = "embedded lol"
+	name = "embedded lolfffffffffffffffffffff"
 	set([
 		"this is pretty cool right???",
-		["its like",new_text_box(),"a new thing and stuff!!"],
+		["its like",new_text_box()],
 		"woo embedded lol"
 	])
 }
@@ -52,6 +54,16 @@ var dc = new Console_dock() with dc
 	name = "embedded lol"
 	set([
 		"this is pretty cool right???",
+		["its like",new_text_box()],
+		"woo embedded lol"
+	])
+}
+var dc2 = new Console_dock() with dc2
+{
+	initialize()
+	name = "embedded lol"
+	set([
+		"this is pretty cool right???",
 		["its like",new_text_box(),"a new thing and stuff!!"],
 		"woo embedded lol"
 	])
@@ -65,7 +77,7 @@ cd2 = new Console_dock() with cd2
 		["text",tb_text],
 		["x",new_scrubber("o_dev.x"),"y",new_scrubber("o_dev.y")],
 		["image_angle ",new_scrubber("o_dev.image_angle")],
-		dc,
+		[dc,dc2],
 		["image_xscale",new_scrubber("o_dev.image_xscale"),"image_yscale",new_scrubber("o_dev.image_yscale")],
 		emb,
 	])

@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Worrking on",
+    "path": "folders/Console/Worrking on.yy",
   },
   "resourceVersion": "1.0",
   "name": "Text_box",

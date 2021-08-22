@@ -19,6 +19,8 @@ set_value = function(text){
 
 initialize = function(variable){
 	
+	format_for_dock(undefined)
+	
 	x = 0
 	y = 0
 	
@@ -165,7 +167,7 @@ get_input = function(){
 	bottom = y + ch + (att.draw_box ? _text_hdist*2 : 0)
 	
 	text_x = att.draw_box ? x+_text_wdist : x
-	text_y = att.draw_box ? y+_text_hdist : y
+	text_y = att.draw_box ? y+_text_hdist+1 : y+1
 	
 	var shift = keyboard_check(vk_shift)
 	
@@ -568,7 +570,7 @@ draw = function(){
 	{
 		var x1 = text_x+cw*char_pos1
 		var y1 = text_y
-		var y2 = text_y+ch
+		var y2 = text_y+ch-1
 		
 		if char_selection and char_pos1 != char_pos2
 		{

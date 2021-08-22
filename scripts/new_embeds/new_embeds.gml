@@ -292,7 +292,7 @@ text.mouse_index = -1
 
 var executing = undefined
 
-if text.mouse_on
+if text.mouse_on and not mouse_on_console and not clicking_on_console
 {
 	for(var j = 0; j <= array_length(text.subclickable)-1; j++)
 	{
@@ -313,13 +313,14 @@ if text.mouse_on
 	{
 		var c = text.clickable[i]
 
-		if text.mouse_index == c.id or (c.length and gui_mouse_between(
+		if text.mouse_index == c.id or (not mouse_on_console and not clicking_on_console and c.length and gui_mouse_between(
 			x + c.x*cw, 
 			y + c.y*ch,
 			x + (c.x + c.length)*cw,
 			y + c.y*ch + ch
 		)){
 			text.mouse_index = c.id
+			mouse_on_console = true
 			
 			if mouse_check_button_pressed(mb_left)
 			{
@@ -468,6 +469,8 @@ if not is_undefined(executing)
 	//Set output
 	if executing.outp text.set(_output)
 }
+
+if text.click_index != -1 clicking_on_console = true
 
 draw_set_color(old_color)
 draw_set_alpha(old_alpha)
