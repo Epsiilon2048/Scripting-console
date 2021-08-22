@@ -3,27 +3,27 @@ function Text_box() constructor{
 
 set_value = function(text){
 
-self.text = text
-if not att.allow_alpha and not string_is_float(text) text = "0"
+	self.text = text
+	if not att.allow_alpha and not string_is_float(text) text = "0"
 
-convert(text)
+	convert(text)
 
-if att.allow_alpha
-{
-	if not att.allow_negative value = abs(value)
-	if not att.allow_float value = round(value)
+	if att.allow_alpha
+	{
+		if not att.allow_negative value = abs(value)
+		if not att.allow_float value = round(value)
+	}
 }
-}
 
 
 
-initialize = function(x, y){
-		
-	self.x = is_undefined(x) ? self.x : x
-	self.y = is_undefined(y) ? self.y : y
+initialize = function(variable){
+	
+	x = 0
+	y = 0
 	
 	text = "0"
-	variable = undefined
+	self.variable = variable
 	value = 0
 	scoped = false
 	
@@ -113,12 +113,14 @@ initialize = function(x, y){
 
 
 
-initialize_scrubber = function(x, y, step){
+initialize_scrubber = function(variable, step){
 
-	initialize(x, y)
+	initialize(variable)
 
 	if is_undefined(step) att.scrubber_step = 1
 	else att.scrubber_step = step
+
+	typing = false
 
 	att.length_min = 4
 	att.length_max = infinity
@@ -167,12 +169,14 @@ get_input = function(){
 	
 	var shift = keyboard_check(vk_shift)
 	
-	if gui_mouse_between(left, top, right, bottom)
+	if not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
 	{
+		mouse_on_console = true
+		
 		if not mouse_on
 		{
 			mouse_on = true
-			window_set_cursor(att.scrubber ? cr_size_we : cr_beam)
+			window_set_cursor((att.scrubber and not typing) ? cr_size_we : cr_beam)
 		}
 	}
 	else if mouse_on and not clicking
@@ -221,6 +225,8 @@ get_input = function(){
 				typing = true
 				char_pos1 = string_length(text)
 				char_pos2 = 0
+				
+				window_set_cursor(cr_beam)
 			}
 			else
 			{
@@ -240,6 +246,7 @@ get_input = function(){
 		{
 			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
 			scoped = false
+			if att.scrubber typing = false
 			if not is_undefined(variable) variable_string_set(variable, value)
 		}
 	}
@@ -256,7 +263,11 @@ get_input = function(){
 	
 	if scoped and o_console.keyboard_scope != self scoped = false
 	
-	if clicking blink_step = 0
+	if clicking 
+	{
+		clicking_on_console = true
+		blink_step = 0
+	}
 	
 	if not scoped and att.allow_external_input and not is_undefined(variable)
 	{
@@ -581,14 +592,12 @@ draw = function(){
 
 function new_text_box(variable){
 var text_box = new Text_box()
-text_box.initialize(0, 0)
-text_box.variable = variable
+text_box.initialize(variable)
 return text_box
 }
 
 function new_scrubber(variable, step){
 var text_box = new Text_box()
-text_box.initialize_scrubber(0, 0, step)
-text_box.variable = variable
+text_box.initialize_scrubber(variable, step)
 return text_box
 }

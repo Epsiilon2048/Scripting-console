@@ -71,6 +71,7 @@
     {"id":{"name":"info_commands","path":"scripts/info_commands/info_commands.yy",},"order":17,},
     {"id":{"name":"fnt_debug2x","path":"fonts/fnt_debug2x/fnt_debug2x.yy",},"order":1,},
     {"id":{"name":"Text_box","path":"scripts/Text_box/Text_box.yy",},"order":20,},
+    {"id":{"name":"Console elements","path":"notes/Console elements/Console elements.yy",},"order":9,},
     {"id":{"name":"ds_type_to_string","path":"scripts/ds_type_to_string/ds_type_to_string.yy",},"order":11,},
     {"id":{"name":"s_checkbox_empty","path":"sprites/s_checkbox_empty/s_checkbox_empty.yy",},"order":1,},
     {"id":{"name":"new_ctx","path":"scripts/new_ctx/new_ctx.yy",},"order":17,},

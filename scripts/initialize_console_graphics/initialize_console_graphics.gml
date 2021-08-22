@@ -25,7 +25,7 @@ with DOCK {
 	char_height = 23
 	
 	name_wdist = 15
-	name_hdist = 7
+	name_hdist = 5
 	
 	element_wdist = 21
 	element_hdist = 21

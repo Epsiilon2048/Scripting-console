@@ -1,0 +1,12 @@
+
+Console bar
+Text boxes
+Autofill list
+Embedded text
+Color text
+Docks
+Windows
+
+Quick embedded text
+Context menus
+Context strips

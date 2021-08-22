@@ -10,4 +10,5 @@ draw_set_valign(fa_center)
 draw_set_color(c_black)
 draw_text_transformed(x, y, text, image_xscale, image_yscale, image_angle)
 
+cd2.draw()
 cd.draw()

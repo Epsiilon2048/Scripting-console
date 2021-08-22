@@ -1,4 +1,34 @@
 
+function format_for_dock(scope){
+
+var vesg = variable_struct_exists_get
+var _dock
+
+if is_undefined(scope) 
+{
+	scope = self
+	_dock = undefined
+	
+}
+else _dock = self
+with scope
+{
+	dock		= vesg(self, "dock", _dock)
+
+	dock_halign = vesg(self, "dock_halign", fa_left)
+	dock_valign	= vesg(self, "dock_valign", fa_middle)
+
+	x			= vesg(self, "x", 0)
+	y			= vesg(self, "y", 0)
+	left		= vesg(self, "left", 0)
+	top			= vesg(self, "top", 0)
+	right		= vesg(self, "right", 0)
+	bottom		= vesg(self, "bottom", 0)
+
+	dragging	= vesg(self, "dragging", false)
+}
+}
+
 function Cd_text() constructor{
 
 set = function(text){
@@ -98,30 +128,16 @@ function Cd_checkbox() constructor{
 }
 
 
+function Cd_color_picker() constructor{
+	
+}
+
 
 function Console_dock() constructor{
 
-set = function(elements){
-	
-	static create_text = function(text){
-		var element = new Cd_text()
-		element.set(is_real(text) ? string_format_float(text, undefined) : string(text))
-		return element
-	}
-	
-	for(var i = 0; i <= array_length(elements)-1; i++)
-	{
-		if is_array(elements[i]) for(var j = 0; j <= array_length(elements[i])-1; j++)
-		{
-			if not is_struct(elements[@ i, j]) elements[@ i, j] = create_text(elements[@ i, j])
-		}
-		else if not is_struct(elements[i]) elements[i] = create_text(elements[i])
-	}
-	
-	self.elements = elements
-}
-
 initialize = function(){
+	
+	format_for_dock(undefined)
 	
 	name = ""
 	association = noone
@@ -137,6 +153,8 @@ initialize = function(){
 	mouse_on = false
 	mouse_on_bar = false
 	
+	active_element = undefined
+	
 	dragging = false
 	mouse_xoffset = 0
 	mouse_yoffset = 0
@@ -144,6 +162,31 @@ initialize = function(){
 	elements = []
 }
 
+
+set = function(elements){
+	
+	static create_text = function(text){
+		var element = new Cd_text()
+		element.set(is_real(text) ? string_format_float(text, undefined) : string(text))
+		return element
+	}
+	
+	for(var i = 0; i <= array_length(elements)-1; i++)
+	{
+		if is_array(elements[i]) for(var j = 0; j <= array_length(elements[i])-1; j++)
+		{
+			if not is_struct(elements[@ i, j]) elements[@ i, j] = create_text(elements[@ i, j])
+			format_for_dock(elements[@ i, j])
+		}
+		else 
+		{	
+			if not is_struct(elements[i]) elements[i] = create_text(elements[i])
+			format_for_dock(elements[i])
+		}
+	}
+	
+	self.elements = elements
+}
 
 
 get_input = function(){
@@ -185,6 +228,13 @@ get_input = function(){
 	var xx = x + _element_wdist
 	var yy = bottom
 	
+	var was_clicking_on_console = clicking_on_console
+	
+	if not is_undefined(active_element) 
+	{
+		active_element.get_input()
+	}
+	
 	for(var i = 0; i <= array_length(elements)-1; i++)
 	{		
 		if not is_array(elements[i])
@@ -193,10 +243,15 @@ get_input = function(){
 				
 			el.x = xx
 			el.y = yy
-			el.get_input()
+			if active_element != el el.get_input()
 			el.dragging = false
 			el.x = xx
 			el.y = yy
+			
+			if not was_clicking_on_console and clicking_on_console
+			{
+				active_element = el
+			}
 				
 			right = max(right, el.right+_element_wdist)
 			bottom = max(bottom, el.bottom)
@@ -209,30 +264,41 @@ get_input = function(){
 				
 				el.x = xx
 				el.y = yy
-				el.get_input()
+				if active_element != el el.get_input()
+				el.dragging = false
 				el.x = xx
 				el.y = yy
+				
+				if not was_clicking_on_console and clicking_on_console
+				{
+					active_element = el
+				}
 				
 				xx = max(xx, el.right+_element_wsep)
 				right = max(right, el.right+_element_wdist)
 				bottom = max(bottom, el.bottom)
 			}
 		}
+		
+		if not clicking_on_console active_element = undefined
 
 		xx = x + _element_wdist
 		yy = bottom+_element_hsep
 	}
 	bottom += _element_hdist
 	
-	mouse_on = gui_mouse_between(left, top, right, bottom)
+	mouse_on = not mouse_on_console and gui_mouse_between(left, top, right, bottom)
 	mouse_on_bar = mouse_on and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
 	
-	if mouse_check_button_pressed(mb_left) and mouse_on_bar
+	if not clicking_on_console and mouse_check_button_pressed(mb_left) and mouse_on_bar
 	{
 		dragging = true
 		mouse_xoffset = gui_mx-x
 		mouse_yoffset = gui_my-y
 	}
+	
+	if dragging clicking_on_console = true
+	if mouse_on mouse_on_console = true
 	
 	draw_set_font(old_font)
 }
@@ -263,7 +329,7 @@ draw = function(){
 	draw_rectangle(left, top, right, top + ch + _name_hdist*2, false)
 	
 	draw_set_color(o_console.colors.output)
-	draw_text(left+_name_wdist, top+_name_hdist, name)
+	draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 	draw_set_font(old_font)
 	draw_set_halign(old_halign)

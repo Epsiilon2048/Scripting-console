@@ -1,4 +1,7 @@
 
+mouse_on_console = false
+clicking_on_console = false
+
 step ++
 
 if rainbow
