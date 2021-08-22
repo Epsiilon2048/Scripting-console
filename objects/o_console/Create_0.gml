@@ -1,4 +1,8 @@
 
+#macro console_enabled o_console.enabled
+#macro mouse_on_console o_console.mouse_on
+#macro clicking_on_console o_console.clicking_on
+
 colors = {}
 
 fonts = [
