@@ -2,7 +2,7 @@
 init = true
 
 f=[0]
-
+c = 0
 text = ""
 
 var tb_text = new_text_box("o_dev.text") with tb_text {
@@ -61,6 +61,7 @@ cd2 = new Console_dock() with cd2
 	initialize()
 	name = "Test console dock"
 	set([
+		new_slider("o_dev.c"),
 		["text",tb_text],
 		["x",new_scrubber("o_dev.x"),"y",new_scrubber("o_dev.y")],
 		["image_angle ",new_scrubber("o_dev.image_angle")],

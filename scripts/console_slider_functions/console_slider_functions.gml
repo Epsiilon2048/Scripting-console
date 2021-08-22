@@ -1,48 +1,62 @@
 
+function new_slider(variable){
+
+var slider = new Console_slider()
+slider.initialize(variable, 0, 0, 0, 100, 1)
+return slider
+}
+
 function Console_slider() constructor{
 	
-	initialize = function(variable, x, y, var_min, var_max, var_step){
-		
-		self.variable = variable
-		
-		self.meter = false
-		self.value_show = true
-		self.condensed = false
-		self.mouse_is_pivot = false
-		
-		self.value = 0
-		self.var_min = var_min
-		self.var_max = var_max
-		self.var_step = var_step
-		//self.var_places = float_places(var_step)
-		
-		self.markers = 10 //incriment for each value step
-		self.submarkers = 3 //amount of submarkers in between markers
-		
-		self.dividers = false
-		
-		self.x = x
-		self.y = y
-		
-		self.mx_init = 0
-		self.my_init = 0
-		self.value_init = 0
-		
-		self.before_text = ""
-		self.after_text  = ""
+initialize = function(variable, x, y, var_min, var_max, var_step){
 	
-		self.width = 200
-		
-		self.ease = ease_normal
-		
-		self.mouse_on = false
-	}
+	format_for_dock(undefined)
 	
-	set_var_step = function(step){
+	self.variable = variable
 		
-		self.var_step = step
-		//self.var_places = float_places(step)
-	}
+	self.meter = false
+	self.value_show = true
+	self.condensed = false
+	self.mouse_is_pivot = false
+		
+	self.value = 0
+	self.var_min = var_min
+	self.var_max = var_max
+	self.var_step = var_step
+	//self.var_places = float_places(var_step)
+		
+	self.markers = 10 //incriment for each value step
+	self.submarkers = 3 //amount of submarkers in between markers
+		
+	self.dividers = false
+		
+	self.x = x
+	self.y = y
+		
+	self.mx_init = 0
+	self.my_init = 0
+	self.value_init = 0
+		
+	self.before_text = ""
+	self.after_text  = ""
+	
+	self.width = 200
+		
+	self.ease = ease_normal
+		
+	self.mouse_on = false
+}
+	
+set_var_step = function(step){
+		
+	self.var_step = step
+	//self.var_places = float_places(step)
+}
+
+get_input = noscript
+draw = function(){
+	draw_slider(self)	
+}
 }
 
 
@@ -52,14 +66,14 @@ function draw_slider(slider){ with slider {
 var mx = device_mouse_x_to_gui(0)
 var my = device_mouse_y_to_gui(0)
 
-var x2 = x + width
-var y2 = y + (condensed ? o_console.SLIDER.height_condensed : o_console.SLIDER.height)
+right = x + width
+bottom = y + (condensed ? o_console.SLIDER.height_condensed : o_console.SLIDER.height)
 
 var curvalue = variable_string_get(variable)
 
 if not meter and (o_console.SLIDER.correct_not_real or is_numeric(curvalue))
 {
-	if gui_mouse_between(x, y, x2, y2) and mouse_check_button_pressed(mb_left)
+	if gui_mouse_between(x, y, right, bottom) and mouse_check_button_pressed(mb_left)
 	{
 		mouse_on = true
 		value_init = value
@@ -116,13 +130,13 @@ if is_numeric(curvalue)
 {
 	//if o_console.SLIDER.text_fill_places text = float_fill_places(curvalue, var_places)
 	//else
-	text = string_format_float(curvalue)
+	text = string_format_float(curvalue, 2)
 	
 	text = before_text + text + after_text
 }
 
 draw_set_color(o_console.colors.body_real)
-draw_rectangle(x, y, x2, y2, false)
+draw_rectangle(x, y, right, bottom, false)
 
 if value_show and not condensed
 {
@@ -131,21 +145,21 @@ if value_show and not condensed
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_middle)
 
-	clip_rect_cutout(x, y, x2+1, y2)
+	clip_rect_cutout(x, y, right+1, bottom)
 	draw_text(x+o_console.SLIDER.text_offset, y+o_console.SLIDER.height/2+1, text)
 	shader_reset()
 }
 
 if value > 0
 {
-	var value_x = x + (ceil( (x2-x)*value ))
+	var value_x = x + (ceil( (right-x)*value ))
 	
 	draw_set_color(o_console.colors.output)
-	draw_rectangle(x, y, value_x, y2, false)
+	draw_rectangle(x, y, value_x, bottom, false)
 	
 	if value_show and not condensed
 	{
-		clip_rect_cutout(x, y, value_x+1, y2);
+		clip_rect_cutout(x, y, value_x+1, bottom);
 		
 		draw_set_color(o_console.colors.body_real)
 		draw_text(x+o_console.SLIDER.text_offset, y+o_console.SLIDER.height/2+1, text)
@@ -155,4 +169,7 @@ if value > 0
 }
 
 draw_set_color(c_white)
+
+left = x
+top = y
 }}
