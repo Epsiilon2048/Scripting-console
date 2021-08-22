@@ -53,7 +53,7 @@ get_input = function(){
 	left = x
 	top = y
 	right = x+width*cw
-	top = y+height*ch
+	bottom = y+height*ch
 	
 	draw_set_font(old_font)
 }
@@ -80,18 +80,46 @@ draw = function(){
 
 
 
+function Cd_button() constructor{
+
+initialize = function(name, func){
+	
+	self.name = name
+	self.func = func
+	
+	length = undefined
+}
+}
+
+
+
 function Cd_checkbox() constructor{
 	
 }
 
 
 
-function Cd_sprite() constructor{
-	
-}
-
-
 function Console_dock() constructor{
+
+set = function(elements){
+	
+	static create_text = function(text){
+		var element = new Cd_text()
+		element.set(is_real(text) ? string_format_float(text, undefined) : string(text))
+		return element
+	}
+	
+	for(var i = 0; i <= array_length(elements)-1; i++)
+	{
+		if is_array(elements[i]) for(var j = 0; j <= array_length(elements[i])-1; j++)
+		{
+			if not is_struct(elements[@ i, j]) elements[@ i, j] = create_text(elements[@ i, j])
+		}
+		else if not is_struct(elements[i]) elements[i] = create_text(elements[i])
+	}
+	
+	self.elements = elements
+}
 
 initialize = function(){
 	
@@ -166,6 +194,7 @@ get_input = function(){
 			el.x = xx
 			el.y = yy
 			el.get_input()
+			el.dragging = false
 			el.x = xx
 			el.y = yy
 				
