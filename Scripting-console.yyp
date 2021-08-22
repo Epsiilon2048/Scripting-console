@@ -28,6 +28,7 @@
     {"id":{"name":"gmcl_interpret_subject2","path":"scripts/gmcl_interpret_subject2/gmcl_interpret_subject2.yy",},"order":4,},
     {"id":{"name":"o_bg","path":"objects/o_bg/o_bg.yy",},"order":16,},
     {"id":{"name":"easing_functions","path":"scripts/easing_functions/easing_functions.yy",},"order":31,},
+    {"id":{"name":"Sprite7","path":"sprites/Sprite7/Sprite7.yy",},"order":34,},
     {"id":{"name":"fnt_debug6x","path":"fonts/fnt_debug6x/fnt_debug6x.yy",},"order":5,},
     {"id":{"name":"autofill_in_list","path":"scripts/autofill_in_list/autofill_in_list.yy",},"order":27,},
     {"id":{"name":"console_value_box_functions","path":"scripts/console_value_box_functions/console_value_box_functions.yy",},"order":0,},
