@@ -24,7 +24,7 @@ initialize = function(variable){
 	x = 0
 	y = 0
 	
-	text = "0"
+	text = ""
 	self.variable = variable
 	value = 0
 	scoped = false
@@ -81,10 +81,12 @@ initialize = function(variable){
 		exit_with_enter = true // If pressing enter descopes
 	
 		text_color = undefined
+		scoped_color = "output"
 		color_method = noscript // The script used to color the string
 		
 		allow_input = true // If the text can be edited
-		allow_external_input = true // If the text can be changed when the associated variable is
+		allow_exinput = true // If the text can be changed when the associated variable is
+		allow_scoped_exinput = false // If the text can be changed when the associated variable is when scoped
 		allow_alpha = true // Alphabetical
 	
 		select_all_on_click = false
@@ -131,6 +133,8 @@ initialize_scrubber = function(variable, step){
 	att.allow_alpha = false
 	att.value_conversion = real
 	att.set_variable_on_input = true
+	att.text_color = dt_real
+	att.scoped_color = dt_real
 }
 
 
@@ -170,6 +174,8 @@ get_input = function(){
 	text_y = att.draw_box ? y+_text_hdist+1 : y+1
 	
 	var shift = keyboard_check(vk_shift)
+	
+	//if o_console.keyboard_scope == self scoped = true
 	
 	if not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
 	{
@@ -271,10 +277,11 @@ get_input = function(){
 		blink_step = 0
 	}
 	
-	if not scoped and att.allow_external_input and not is_undefined(variable)
+	if (not scoped and att.allow_exinput) or (scoped and att.allow_scoped_exinput) and not is_undefined(variable)
 	{
 		convert(variable_string_get(variable))
 		text = string(value)
+		colors = att.color_method(text)
 	}
 	
 	if scoped
@@ -489,10 +496,7 @@ get_input = function(){
 				
 					char_mouse = false
 				
-					if att.color_method != noscript
-					{
-						colors = att.color_method(text)
-					}
+					colors = att.color_method(text)
 					blink_step = 0
 				}
 			}
@@ -546,7 +550,8 @@ draw = function(){
 		draw_set_color(o_console.colors.body_real)
 		draw_rectangle(left, top, right, bottom, false)
 	
-		draw_set_color((scoped and att.allow_input) ? o_console.colors.output : o_console.colors.body_accent)
+		if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
+		else draw_set_color(o_console.colors.body_accent)
 		draw_hollowrect(left, top, right, bottom, _outline_width)
 	}
 	else
@@ -558,7 +563,7 @@ draw = function(){
 	draw_set_color(o_console.colors.plain)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
-	if att.draw_box and string_length(text) > att.length_max clip_rect_cutout(left, top, right, bottom)
+	if string_length(text) > att.length_max clip_rect_cutout(left, top, right, bottom)
 	if att.color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
 	else 
 	{
@@ -578,9 +583,9 @@ draw = function(){
 			draw_rectangle(text_x+cw*char_pos_min, y1, text_x+cw*char_pos_max, y2, false)
 			draw_set_alpha(1)
 		}
-		if att.allow_input and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
 	}
-	if att.draw_box and string_length(text) > att.length_max shader_reset()
+	if string_length(text) > att.length_max shader_reset()
+	if scoped and typing and att.allow_input and x1 < right and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
 
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)

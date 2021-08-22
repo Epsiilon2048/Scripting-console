@@ -115,66 +115,16 @@ draw_console_body(BAR.right-sidetext_width-_text_dist*2-1, BAR.top, BAR.right, B
 draw_set_color(colors.output)
 draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
 
-clip_rect_cutout(BAR.left, BAR.top, BAR.right-sidetext_width-_text_dist*3-_sep+1, BAR.bottom+1)
-draw_set_valign(fa_bottom)
-if command_colors draw_console_text(BAR.text_x, BAR.text_y, color_string)						// Draw console colors
-
-draw_set_color(colors.plain)
-if not command_colors draw_text(BAR.text_x, BAR.text_y, console_string)							// Draw console string
-
-if keyboard_scope == BAR or char_pos1 != char_pos2
-{
-	if subchar_pos1
-	{
-		draw_set_alpha(.3)
-		draw_rectangle(																			// Draw subselection
-			BAR.text_x + _char_width*(subchar_pos1-(subchar_pos1-subchar_pos2)),
-			BAR.text_y - _char_height,
-			BAR.text_x + _char_width*(subchar_pos1-1)-1,
-			BAR.text_y - 2,
-			false
-		)
-		
-		draw_rectangle(													
-			BAR.text_x + _char_width*(char_pos1-(char_pos1-char_pos2)),
-			BAR.text_y - _char_height,
-			BAR.text_x + _char_width*(char_pos1-1)-1,
-			BAR.text_y - 2,
-			false
-		)
-		draw_set_alpha(1)
-	}
-	
-	if char_pos1 != char_pos2 or signbool(BAR.blink_time - (BAR.blink_step mod BAR.blink_time*2))
-	{
-		draw_rectangle(																			// Draw selection
-			BAR.text_x + _char_width*(char_pos1-(char_pos1-char_pos2)),
-			BAR.text_y - _char_height,
-			BAR.text_x + _char_width*(char_pos1-1)-1,
-			BAR.text_y - 2,
-			false
-		)
-		
-		if string_length(console_string) > char_pos1-1
-		{
-			draw_set_color(colors.selection)											
-			draw_text(																			// Draw selection text
-				BAR.text_x + _char_width*(char_pos1-1),
-				BAR.text_y, 
-				string_copy(console_string, char_pos1, char_pos2-char_pos1+1)
-			)
-		}
-	}
-	
-	BAR.blink_step ++
-}
-else BAR.blink_step = 0
-
-shader_reset()
+BAR.text_box.att.length_min = (BAR.right-sidetext_width-_text_dist*2-_sep-1 - BAR.text_x)/_char_width
+BAR.text_box.att.length_max = BAR.text_box.att.length_min
+BAR.text_box.x = BAR.text_x
+BAR.text_box.y = ceil(BAR.top+_text_dist-_char_height/2)+1
+BAR.text_box.draw()
 
 draw_set_color(colors.output)
 draw_set_halign(fa_right)
-draw_text(BAR.right-_text_dist, BAR.text_y, sidetext_string)										// Draw sidetext
+draw_set_valign(fa_top)
+draw_text(BAR.right-_text_dist, BAR.text_box.y+1, sidetext_string)								// Draw sidetext
 
 draw_set_color(old_color)
 draw_set_font(old_font)
@@ -222,14 +172,6 @@ ot.right = min( ot.left + text_width + _border_w*2, win_width )
 ot.top = max( ot.bottom - text_height - _border_h*2, 0 )
 
 ot.mouse_on = not mouse_on_console and gui_mouse_between(ot.left, ot.top, ot.right, ot.bottom)
-if ot.mouse_on mouse_on_console = true
-
-if ot.mouse_on and not ot.text.mouse_on_item and mouse_check_button_pressed(mb_left)
-{
-	force_output = not (force_output and force_output_body)
-	force_output_body = force_output
-}
-
 ot.body = ot.mouse_on or force_output_body or (ot.has_embed and force_output_embed_body)
 
 var offset = _outline*2*(force_output and force_output_body)
@@ -251,6 +193,14 @@ if force_output and force_output_body
 }
 
 draw_embedded_text(ot.left+_border_w, ot.bottom-text_height-_border_h, ot.text, ot.body ? "output" : "ex_output", ot.alpha)
+
+if ot.mouse_on mouse_on_console = true
+
+if ot.mouse_on and not ot.text.mouse_on_item and mouse_check_button_pressed(mb_left)
+{
+	force_output = not (force_output and force_output_body)
+	force_output_body = force_output
+}
 
 draw_set_color(old_color)
 draw_set_font(old_font)

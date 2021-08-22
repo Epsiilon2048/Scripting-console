@@ -134,7 +134,7 @@ CTX_MENU = {}
 CTX_STRIP = {}
 SLIDER = {}
 
-keyboard_scope = BAR
+keyboard_scope = noone
 
 do_autofill = false
 

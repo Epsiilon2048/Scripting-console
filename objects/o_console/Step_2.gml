@@ -76,18 +76,8 @@ if keyboard_check_pressed(console_key) and keyboard_scope == noone
 	
 	if console_toggle
 	{
-		keyboard_string = console_string
-		keyboard_scope = BAR
+		BAR.text_box.scoped = true
 	}
-}
-
-if mouse_check_button_pressed(mb_left) and not AUTOFILL.mouse_on and not OUTPUT.mouse_on
-{
-	keyboard_scope = BAR.mouse_on ? BAR : noone
-	if keyboard_scope == BAR keyboard_string = console_string
-	
-	do_autofill = false
-	gmcl_autofill(undefined, undefined)
 }
 
 if keyboard_check_pressed(vk_escape) 
@@ -96,234 +86,11 @@ if keyboard_check_pressed(vk_escape)
 	keyboard_scope = noone
 }
 
-if console_toggle and keyboard_scope == BAR
+if console_toggle and keyboard_scope == BAR.text_box
 {
-	#region Apply inputs to console string
-	//figure out text stuff
-	var str_length = string_length(console_string)
-	var char = ""
-
-	fleft		= (keyboard_check(vk_left)+fleft)*keyboard_check(vk_left)
-	fright		= (keyboard_check(vk_right)+fright)*keyboard_check(vk_right)
-	fbackspace	= (keyboard_check(vk_backspace)+fbackspace)*keyboard_check(vk_backspace)
-	fdel		= (keyboard_check(vk_delete)+fdel)*keyboard_check(vk_delete)
-	
-	var f = step mod 2 == 0
-	left		= (f and key_repeat < fleft) or keyboard_check_pressed(vk_left)
-	right		= (f and key_repeat < fright) or keyboard_check_pressed(vk_right)
-	shift		= keyboard_check(vk_shift)
-	backspace	= (f and key_repeat < fbackspace) or keyboard_check_pressed(vk_backspace)
-	del			= (f and key_repeat < fdel) or keyboard_check_pressed(vk_delete)
 	enter		= keyboard_check_pressed(vk_enter)
-	startln		= keyboard_check_pressed(vk_home)
-	endln		= keyboard_check_pressed(vk_end) and str_length > 0 and char_pos2 != str_length+1
 	log_up		= keyboard_check_pressed(vk_up)
 	log_down	= keyboard_check_pressed(vk_down) and (input_log_index != -1 or ds_list_size(input_log) == 0)
-	select_all	= keyboard_check_multiple_pressed(vk_control, ord("A"))
-	copy		= keyboard_check_multiple_pressed(vk_control, ord("C"))
-	paste		= keyboard_check_multiple_pressed(vk_control, ord("V"))
-	startword	= keyboard_check_multiple_pressed(vk_control, vk_left)
-	endword		= keyboard_check_multiple_pressed(vk_control, vk_right)
-
-	var moved_char_pos = false
-
-	if (BAR.mouse_on and mouse_check_button_pressed(mb_left))
-	{
-		gmcl_autofill(undefined, undefined)
-		
-		if shift mouse_char_pos = signbool(char_pos_dir) ? char_pos1 : char_pos2
-		else
-		{
-			char_pos1 = char_pos2
-			mouse_char_pos = mouse_get_char_pos(floor)
-		}
-		
-		char_pos1 = mouse_char_pos
-		char_pos2 = mouse_char_pos
-		
-		moved_char_pos = true
-	}
-	else if not (mouse_char_pos and mouse_check_button(mb_left)) mouse_char_pos = false
-
-	var text_refresh = left or right or backspace or del or enter or startln or endln or log_up or log_down or select_all or copy or paste or startword or endword
-
-	if select_all
-	{
-		char_pos1 = 1
-		char_pos2 = max(str_length, 1)
-		
-		moved_char_pos = true
-	}
-	if copy and char_pos1 != char_pos2
-	{
-		clipboard_set_text((string_copy(console_string, max(char_pos1, (char_pos1 == 1)), char_pos2-char_pos1+1)))
-	}
-	if left
-	{
-		if shift and char_pos1 == char_pos2 char_pos_dir = -1
-	
-		if char_pos_dir == -1 or not shift {
-			char_pos1 = max(1, char_pos1-1)
-		} else {
-			char_pos2 --
-		}
-	
-		if not shift char_pos2 = char_pos1
-		else char_pos2 = min( max(1, str_length), char_pos2 )
-	
-		moved_char_pos = true
-	}
-	if right
-	{
-		if shift and char_pos1 == char_pos2 char_pos_dir = 1
-	
-		if (char_pos_dir == 1 and char_pos1 != str_length+1) or not shift {
-			char_pos2 = min(str_length+(not shift), char_pos2+1)
-		} else if char_pos1 != str_length+1 {
-			char_pos1 ++
-		}
-	
-		if not shift char_pos1 = char_pos2
-		
-		moved_char_pos = true
-	}
-	if endln
-	{
-		char_pos2 = str_length + not shift
-		if not shift char_pos1 = char_pos2
-		
-		moved_char_pos = true
-	}
-	if startln
-	{
-		char_pos1 = 1
-		if shift char_pos2 -= (char_pos2 > str_length)
-		else char_pos2 = 1
-		
-		moved_char_pos = true
-	}
-	if (log_up or log_down) and ds_list_size(input_log) > 0
-	{
-		input_log_index = min(input_log_index + log_up-log_down, ds_list_size(input_log)-1)
-		
-		if input_log_index == -1 console_string = ""
-		else console_string = ds_list_find_value(input_log, input_log_index)
-		
-		keyboard_string = console_string
-		str_length = string_length(console_string)
-		char_pos1 = str_length+1
-		char_pos2 = char_pos1
-		color_string = gmcl_string_color(console_string, char_pos1)
-		
-		moved_char_pos = true
-	}
-	else if log_down
-	{
-		console_string = ""
-		keyboard_string = ""
-		str_length = 0
-		char_pos1 = 1
-		char_pos2 = 1
-		color_string = []
-		
-		moved_char_pos = true
-	}
-
-	if str_length < string_length(keyboard_string) or (paste and clipboard_has_text()) //a char was added
-	{
-		mouse_char_pos = false
-
-		if paste  // For some reason there's an invisible character behind newlines when pasting, so I cant use string_replace_all :/
-		{
-			char = string_replace_all( clipboard_get_text(), "	", "")
-			while string_pos("\n", char)
-			{
-				char = string_delete(string_replace(char, "\n", "; "), string_pos("\n", char)-1, 1)
-			}
-		}
-		else char = keyboard_lastchar
-		
-		input_log_index = -1
-		
-		if char_pos1 != char_pos2
-		{
-			console_string = string_delete(console_string, char_pos1, char_pos2-char_pos1+1)
-			char_pos2 = char_pos1
-		}
-	
-		console_string = string_insert(char, console_string, char_pos1)
-		char_pos1 += string_length(char)
-		char_pos2 += string_length(char)
-		str_length = string_length(console_string)
-		keyboard_string = console_string
-		color_string = gmcl_string_color(console_string, char_pos1)
-		
-		do_autofill = true
-		text_refresh = true
-		moved_char_pos = true
-	}
-	
-	if backspace and (char_pos1 != 1 or (char_pos1 == 1 and char_pos1 != char_pos2)) {
-		input_log_index = -1
-		console_string = string_delete(console_string, max(char_pos1-(char_pos1 == char_pos2), (char_pos1 == 1)), char_pos2-char_pos1+1)
-		char_pos1 = max(1, char_pos1-(char_pos1 == char_pos2))
-		char_pos2 = char_pos1
-		keyboard_string = console_string
-		str_length = string_length(console_string)
-		color_string = gmcl_string_color(console_string, char_pos1)
-		
-		moved_char_pos = true
-	}
-	
-	if del and char_pos2 != str_length+1 {
-		input_log_index = -1
-		console_string = string_delete(console_string, char_pos2, 1)
-		char_pos2 = clamp(char_pos2, 1, str_length)
-		char_pos1 = char_pos2
-		keyboard_string = console_string
-		str_length = string_length(console_string)
-		color_string = gmcl_string_color(console_string, char_pos1)
-		
-		moved_char_pos = true
-	}
-	
-	if mouse_char_pos
-	{
-		var pos_floor = mouse_get_char_pos(floor)
-		
-		BAR.blink_step = 0
-		char_pos_dir = sign(pos_floor - mouse_char_pos)
-		
-		if char_pos_dir == -1 or pos_floor == mouse_char_pos
-		{
-			char_pos1 = mouse_get_char_pos(floor)
-			char_pos2 = mouse_char_pos
-		}
-		else
-		{
-			char_pos2 = mouse_get_char_pos(ceil)
-			char_pos1 = mouse_char_pos
-		}
-		
-		char_pos1 = clamp(char_pos1, 1, str_length+(mouse_char_pos == str_length+1 and char_pos1 == char_pos2))
-		char_pos2 = clamp(char_pos2, 1, str_length+(mouse_char_pos == str_length+1 and char_pos1 == char_pos2))
-		
-		moved_char_pos = true
-	}
-	
-	if text_refresh and not enter
-	{
-		color_string = gmcl_string_color(console_string, char_pos1)
-		BAR.blink_step = 0
-	
-		do_autofill = (do_autofill or backspace or del) and char_pos1 == char_pos2 and not paste
-	
-		if not do_autofill or del or backspace or left or right or string_pos(char, refresh_sep) gmcl_autofill(undefined, undefined)
-		if do_autofill gmcl_autofill(console_string, char_pos1)
-		
-		moved_char_pos = true
-	}
-	#endregion
 	
 	#region Parse command
 	if enter
@@ -362,43 +129,6 @@ if console_toggle and keyboard_scope == BAR
 	}
 	#endregion
 
-	if moved_char_pos
-	{
-		var segment = slice(console_string, char_pos1, char_pos2+1, 1)
-		var marker
-		var pos
-		
-		if segment == "\"" and string_char_at(console_string, char_pos1-1) != "\\"
-		{
-			var in_string = false
-			pos = 1
-			marker = 0
-			
-			while pos <= char_pos1 or pos <= str_length
-			{
-				var char = string_char_at(console_string, pos)
-				
-				if char == "\"" 
-				{
-					in_string = not in_string
-					
-					marker = in_string ? pos : 0
-				}
-				else if in_string and char == "\\" pos ++
-				
-				pos ++
-			}
-			
-			subchar_pos1 = marker
-			subchar_pos2 = marker
-		}
-		else
-		{
-			subchar_pos1 = 0
-			subchar_pos2 = 0
-		}
-	}
-	
 	if console_color_time == console_color_interval color_string = gmcl_string_color(console_string, char_pos1)
 	else if console_color_time != -1 console_color_time ++
 }
@@ -425,5 +155,7 @@ gui_mouse_y = gui_my
 
 value_box_inputs()
 value_box_mouse_on = false
+
+if console_toggle BAR.text_box.get_input()
 
 event_commands_exec(event_commands.step_end)

@@ -80,10 +80,19 @@ with BAR {
 	text_dist = 18
 	sidebar_width = 3
 	
-	blink_time = 70
-	blink_step = 0
+	//blink_time = 70
+	//blink_step = 0
 	
 	mouse_on = false
+	
+	text_box = new Text_box()
+	text_box.initialize()
+	text_box.variable = "o_console.console_string"
+	text_box.att.draw_box = false
+	text_box.att.color_method = gmcl_string_color
+	text_box.att.exit_with_enter = false
+	text_box.att.set_variable_on_input = true
+	text_box.att.allow_scoped_exinput = true
 }
 
 with SCROLLBAR {
