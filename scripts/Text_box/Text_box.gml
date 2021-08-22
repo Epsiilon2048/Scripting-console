@@ -1,14 +1,12 @@
 
 function Text_box() constructor{
 
-
-
 set_value = function(text){
 
 self.text = text
 if not att.allow_alpha and not string_is_float(text) text = "0"
 
-value = att.value_conversion(text)
+convert(text)
 
 if att.allow_alpha
 {
@@ -31,7 +29,7 @@ initialize = function(x, y){
 	
 	mouse_on = false
 	clicking = false
-	typing = false
+	typing = true
 	scrubbing = false
 	
 	mouse_previous = 0
@@ -61,6 +59,14 @@ initialize = function(x, y){
 	
 	colors = undefined
 	
+	convert = function(value){
+		try{
+			self.value = att.value_conversion(value)
+		}
+		catch(_){
+			self.value = undefined
+		}
+	}
 	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
@@ -254,7 +260,7 @@ get_input = function(){
 	
 	if not scoped and att.allow_external_input and not is_undefined(variable)
 	{
-		value = att.value_conversion(variable_string_get(variable))
+		convert(variable_string_get(variable))
 		text = string(value)
 	}
 	
@@ -458,7 +464,7 @@ get_input = function(){
 					
 					keyboard_string = text
 				
-					value = att.value_conversion(text)
+					convert(text)
 					if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
 			
 					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
@@ -513,10 +519,11 @@ draw = function(){
 	draw_set_font(o_console.font)
 	var tb = o_console.TEXT_BOX
 
+	var cw = string_width(" ")
+	var ch = string_height(" ")
+	
 	if att.draw_box
 	{
-		var cw = string_width(" ")
-		var ch = string_height(" ")
 		var asp = ch/tb.char_height
 	
 		var _text_wdist = floor(tb.text_wdist*asp)
@@ -531,7 +538,6 @@ draw = function(){
 	}
 	else
 	{
-		var cw = string_width(" ")
 		var _text_wdist = 0
 		var _text_hdist = 0
 	}
@@ -569,4 +575,20 @@ draw = function(){
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
 }
+}
+
+
+
+function new_text_box(variable){
+var text_box = new Text_box()
+text_box.initialize(0, 0)
+text_box.variable = variable
+return text_box
+}
+
+function new_scrubber(variable, step){
+var text_box = new Text_box()
+text_box.initialize_scrubber(0, 0, step)
+text_box.variable = variable
+return text_box
 }
