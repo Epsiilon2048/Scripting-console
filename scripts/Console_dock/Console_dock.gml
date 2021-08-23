@@ -339,14 +339,18 @@ get_input = function(){
 		width = right-left
 	}
 	
-	var dropdown_x1 = right-_dropdown_wdist*2-_dropdown_base
-	var dropdown_y1 = top
-	var dropdown_x2 = right
-	var dropdown_y2 = top+bar_height
-	
 	mouse_on = not mouse_on_console and gui_mouse_between(left, top, right, bottom)
 	mouse_on_bar = mouse_on and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
-	mouse_on_dropdown = mouse_on_bar and gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
+	
+	if mouse_on_bar
+	{
+		var dropdown_x1 = right-_dropdown_wdist*2-_dropdown_base
+		var dropdown_y1 = top
+		var dropdown_x2 = right
+		var dropdown_y2 = top+bar_height
+		
+		mouse_on_dropdown = gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
+	}
 	
 	if mouse_on_dropdown
 	{

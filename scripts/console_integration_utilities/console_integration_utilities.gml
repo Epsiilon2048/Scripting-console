@@ -2,7 +2,7 @@
 function input_set(str, add){ with o_console
 {
 	input_log_index = -1
-	console_toggle = true
+	BAR.enabled = true
 	
 	if is_undefined(add) or not add 
 	{

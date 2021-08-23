@@ -45,7 +45,7 @@ builtin_excluded = [
 	//"array",
 	//"ds_list",
 	//"ds_map",
-	//"ds_grid_",
+	"ds_grid_",
 	"ds_priority_",
 	"ds_queue_",
 	"ds_stack_",
@@ -96,6 +96,8 @@ builtin_excluded = [
 ]
 
 mouse_char_pos = false
+
+elements = ds_create(ds_type_list, "elements")
 
 macro_list = ds_create(ds_type_list, "macro_list")
 method_list = ds_create(ds_type_list, "method_list")
@@ -322,8 +324,6 @@ step = 0
 win_w = display_get_gui_width()
 win_h = display_get_gui_height()
 
-console_toggle = false	//where the user inputs commands
-
 console_string = ""
 char_pos1 = 1
 char_pos2 = 1
@@ -426,3 +426,17 @@ initialize_color_schemes()
 initialize_console_docs()
 
 startup = true
+
+
+cd = new Console_dock() with cd
+{
+	initialize()
+	name = "Test console dock"
+	set([
+		["text"],
+		["x",new_scrubber("o_dev.x"),"y",new_scrubber("o_dev.y")],
+		["image_angle",new_scrubber("o_dev.image_angle", .1)],
+		["image_xscale",new_scrubber("o_dev.image_xscale", .1),"image_yscale",new_scrubber("o_dev.image_yscale", .1)]
+	])
+}
+ds_list_add(elements, cd)

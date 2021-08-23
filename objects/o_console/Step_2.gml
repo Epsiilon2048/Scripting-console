@@ -44,37 +44,11 @@ else if not bird_mode and colors.sprite == bird_mode_
 win_w = display_get_gui_width()
 win_h = display_get_gui_height()
 
-#region Select instance if enabled
-if inst_select
-{
-	inst_selecting = instance_position(mouse_x, mouse_y, all)
-	if instance_exists(inst_selecting) inst_selecting_name = object_get_name(inst_selecting.object_index)
-	else inst_selecting_name = "noone"
-	
-	if mouse_check_button_released(mb_left)
-	{
-		inst_select = false
-		display(object_get_name(id.object_index)+".inst_selecting_name", false)
-		
-		if inst_selecting != noone
-		{
-			output_set(stitch("Seeking variables in ",object_get_name(inst_selecting.object_index)," ",inst_selecting))
-			object = inst_selecting
-			color_string = gmcl_string_color(console_string, char_pos1)
-		}
-		else
-		{
-			output_set(undefined)
-		}
-	}
-}
-#endregion
-
 if keyboard_check_pressed(console_key) and keyboard_scope == noone
 {
-	console_toggle = not console_toggle
+	BAR.enabled = not BAR.enabled
 	
-	if console_toggle
+	if BAR.enabled
 	{
 		BAR.text_box.scoped = true
 	}
@@ -82,11 +56,10 @@ if keyboard_check_pressed(console_key) and keyboard_scope == noone
 
 if keyboard_check_pressed(vk_escape) 
 {
-	console_toggle = false
-	keyboard_scope = noone
+	BAR.enabled = false
 }
 
-if console_toggle and keyboard_scope == BAR.text_box
+if BAR.enabled and keyboard_scope == BAR.text_box
 {
 	enter		= keyboard_check_pressed(vk_enter)
 	log_up		= keyboard_check_pressed(vk_up)
@@ -121,11 +94,8 @@ if console_toggle and keyboard_scope == BAR.text_box
 		}
 		else output_set_lines(_output)
 		
-		console_string = ""
 		keyboard_string = ""
-		color_string = []
-		char_pos1 = 1
-		char_pos2 = 1
+		console_string = ""
 	}
 	#endregion
 
@@ -136,7 +106,7 @@ else BAR.blink_step = 0
 
 for(var i = 0; i <= array_length(keybinds)-1; i++)
 {
-	if (keyboard_check_pressed(keybinds[i].key) and not console_toggle) or keyboard_check_multiple_pressed(keybinds[i].key, vk_alt)
+	if (keyboard_check_pressed(keybinds[i].key) and not BAR.enabled) or keyboard_check_multiple_pressed(keybinds[i].key, vk_alt)
 	{
 		try keybinds[i].action()
 		catch(_exception)
@@ -156,6 +126,24 @@ gui_mouse_y = gui_my
 value_box_inputs()
 value_box_mouse_on = false
 
-if console_toggle BAR.text_box.get_input()
+if BAR.enabled BAR.text_box.get_input()
+
+var was_clicking = clicking_on_console
+var front = -1
+for(var i = 0; i <= ds_list_size(elements)-1; i++)
+{
+	elements[| i].get_input()
+	if not was_clicking and clicking_on_console 
+	{
+		front = i
+		was_clicking = true
+	}
+}
+if front != -1
+{
+	var el = elements[| front]
+	ds_list_delete(elements, front)
+	ds_list_insert(elements, 0, el)
+}
 
 event_commands_exec(event_commands.step_end)

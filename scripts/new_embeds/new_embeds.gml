@@ -198,7 +198,12 @@ draw = function(){
 
 
 
-get_input = draw
+get_input = function(){
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
+	draw_embedded_text(x, y, self, o_console.colors.output, 1)
+	draw_set_font(old_font)
+}
 }
 
 
@@ -235,55 +240,17 @@ if layers > 0
 
 
 
-function draw_embedded_text(x, y, text, plaintext_color, alpha){
-
+function embedded_text_inputs(x, y, text, plaintext_color, alpha){
 
 var cw = string_width(" ")
 var ch = string_height(" ")
 
-var old_color = draw_get_color()
-var old_alpha = draw_get_alpha()
-var old_halign = draw_get_halign()
-var old_valign = draw_get_valign()
-
-if is_undefined(alpha) alpha = 1
-
-draw_set_halign(fa_left)
-draw_set_valign(fa_top)
-draw_set_alpha(alpha)
-
-var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : (is_string(plaintext_color) ? o_console.colors[$ plaintext_color] : plaintext_color)
+if is_undefined(text) or not is_struct(text) or not o_console.embed_text return undefined
 
 text.left = x
 text.top = y
 text.right = x+text.width*cw
 text.bottom = y+text.height*ch
-
-draw_set_color(plain_col)
-if is_undefined(text) or not is_struct(text)
-{
-	draw_outline_text(x, y, text)
-	draw_text(x, y, text)
-	draw_set_halign(old_halign)
-	draw_set_valign(old_valign)
-	return undefined
-}
-else if not o_console.embed_text
-{
-	draw_outline_text(x, y, text.plain)
-	draw_text(x, y, text.plain)
-	draw_set_halign(old_halign)
-	draw_set_valign(old_valign)
-	return undefined
-}
-
-if o_console.colors.outline_layers
-{
-	draw_set_color(colors.selection)
-	draw_outline_text(x, y, text.plain)
-}
-
-draw_text(x, y, text.colortext)
 
 text.mouse_on = gui_mouse_between(text.left, text.top, text.right, text.bottom)
 text.mouse_on_item = false
@@ -349,6 +316,73 @@ else
 	
 	if not mouse_check_button(mb_left) text.click_index = -1
 }
+
+if not is_undefined(executing)
+{
+	//Set variable
+	variable_string_set(executing.vari, executing.arg)
+			
+	//Set checkbox
+	var _check = variable_string_get(executing.cbox)
+	if is_numeric(_check) variable_string_set(executing.cbox, not _check)
+				
+	//Run method
+	o_console.run_in_embed = true
+	var _output = script_execute_ext_builtin(executing.func, executing.args)
+	o_console.run_in_embed = false
+			
+	//Set output
+	if executing.outp text.set(_output)
+}
+
+if text.click_index != -1 clicking_on_console = true
+}
+
+
+
+function draw_embedded_text(x, y, text, plaintext_color, alpha){
+
+var cw = string_width(" ")
+var ch = string_height(" ")
+
+var old_color = draw_get_color()
+var old_alpha = draw_get_alpha()
+var old_halign = draw_get_halign()
+var old_valign = draw_get_valign()
+
+if is_undefined(alpha) alpha = 1
+
+draw_set_halign(fa_left)
+draw_set_valign(fa_top)
+draw_set_alpha(alpha)
+
+var plain_col = is_undefined(plaintext_color) ? o_console.colors.output : (is_string(plaintext_color) ? o_console.colors[$ plaintext_color] : plaintext_color)
+
+draw_set_color(plain_col)
+if is_undefined(text) or not is_struct(text)
+{
+	draw_outline_text(x, y, text)
+	draw_text(x, y, text)
+	draw_set_halign(old_halign)
+	draw_set_valign(old_valign)
+	return undefined
+}
+else if not o_console.embed_text
+{
+	draw_outline_text(x, y, text.plain)
+	draw_text(x, y, text.plain)
+	draw_set_halign(old_halign)
+	draw_set_valign(old_valign)
+	return undefined
+}
+
+if o_console.colors.outline_layers
+{
+	draw_set_color(colors.selection)
+	draw_outline_text(x, y, text.plain)
+}
+
+draw_text(x, y, text.colortext)
 
 for(var i = 0; i <= array_length(text.colors)-1; i++)
 {
@@ -451,26 +485,6 @@ for(var i = 0; i <= array_length(text.colors)-1; i++)
 		string_copy(c.str, nl+1, string_length(c.str)),
 	)
 }
-
-if not is_undefined(executing)
-{
-	//Set variable
-	variable_string_set(executing.vari, executing.arg)
-			
-	//Set checkbox
-	var _check = variable_string_get(executing.cbox)
-	if is_numeric(_check) variable_string_set(executing.cbox, not _check)
-				
-	//Run method
-	o_console.run_in_embed = true
-	var _output = script_execute_ext_builtin(executing.func, executing.args)
-	o_console.run_in_embed = false
-			
-	//Set output
-	if executing.outp text.set(_output)
-}
-
-if text.click_index != -1 clicking_on_console = true
 
 draw_set_color(old_color)
 draw_set_alpha(old_alpha)

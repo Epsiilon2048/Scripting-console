@@ -167,7 +167,7 @@ var _border_h = floor(ot.border_h*asp)
 var _outline = ceil(ot.outline*asp)
 
 ot.left = BAR.left
-ot.bottom = console_toggle ? (BAR.top - _bar_dist) : BAR.bottom
+ot.bottom = BAR.enabled ? (BAR.top - _bar_dist) : BAR.bottom
 ot.right = min( ot.left + text_width + _border_w*2, win_width )
 ot.top = max( ot.bottom - text_height - _border_h*2, 0 )
 

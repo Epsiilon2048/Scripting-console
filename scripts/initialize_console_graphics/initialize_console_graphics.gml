@@ -62,6 +62,8 @@ with TEXT_BOX {
 
 with BAR {
 	
+	enabled = false
+	
 	char_height = 23
 	
 	x = undefined		// These are for placing the bar somewhere else
@@ -80,9 +82,6 @@ with BAR {
 	text_dist = 18
 	sidebar_width = 3
 	
-	//blink_time = 70
-	//blink_step = 0
-	
 	mouse_on = false
 	
 	text_box = new Text_box()
@@ -93,6 +92,9 @@ with BAR {
 	text_box.att.exit_with_enter = false
 	text_box.att.set_variable_on_input = true
 	text_box.att.allow_scoped_exinput = true
+	
+	get_input = text_box.get_input
+	draw = draw_console_bar
 }
 
 with SCROLLBAR {

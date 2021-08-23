@@ -85,4 +85,14 @@ initialize = function(x, y, sidebar_side){
 		
 	self.set()
 }
+
+
+get_input = function(){
+	console_window_inputs(self)
+}
+
+
+draw = function(){
+	draw_console_window(self)
+}
 }

@@ -5,7 +5,7 @@ var old_font   = draw_get_font()
 var old_halign = draw_get_halign()
 var old_valign = draw_get_valign()
 
-if console_toggle
+if BAR.enabled
 {
 	if not is_undefined(object) and instance_exists(object) 
 	{
@@ -67,6 +67,11 @@ draw_value_boxes()
 draw_color_picker()
 
 value_box_dragging = false
+
+for(var i = ds_list_size(elements)-1; i >= 0; i--)
+{
+	elements[| i].draw()
+}
 
 event_commands_exec(event_commands.gui)
 
