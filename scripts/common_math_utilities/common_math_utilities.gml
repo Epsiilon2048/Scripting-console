@@ -108,7 +108,28 @@ return dec_to_hex(_r << 16 | _g << 8 | _b, 1)
 }
 	
 	
+
+function float_count_places(float, max_places){
+
+if (float mod 1) == 0 return 0
+
+if is_undefined(max_places) max_places = 10
+
+var float_string = string_format(float, 0, max_places)
+
+var i = 1
+var len = string_length(float_string)
+var char = string_char_at(float_string, len)
+while char == "0"
+{
+	i++
+	char = string_char_at(float_string, len-i)
+}
 	
+return len-string_pos(".", float_string)-i
+}
+
+
 
 function hex_to_color(hex){
 
@@ -123,9 +144,9 @@ else if is_numeric(hex) _hex = dec_to_hex(hex, 6)
 
 return hex_to_dec( string_copy(_hex, 5, 2)+string_copy(_hex, 3, 2)+string_copy(_hex, 1, 2), 6 )
 }
-	
-	
-	
+
+
+
 	
 function color_to_hex(color){
 

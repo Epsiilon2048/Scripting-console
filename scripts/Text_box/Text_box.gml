@@ -45,6 +45,8 @@ initialize = function(variable){
 	char_selection = false
 	char_mouse = false
 	
+	text_changed = false
+	
 	char_pos_max = 0
 	char_pos_min = 0
 	
@@ -55,6 +57,11 @@ initialize = function(variable){
 	top = 0
 	right = 0
 	bottom = 0
+	
+	cbox_left = undefined
+	cbox_top = undefined
+	cbox_right = undefined
+	cbox_bottom = undefined
 	
 	text_x = 0
 	text_y = 0
@@ -99,7 +106,8 @@ initialize = function(variable){
 		allow_float = true
 		allow_negative = true
 		
-		float_places = 2
+		float_places = undefined
+		whole_places = 0
 	
 		value_min = -infinity
 		value_max = infinity
@@ -125,7 +133,8 @@ initialize_scrubber = function(variable, step){
 	else att.scrubber_step = step
 
 	typing = false
-
+	
+	att.float_places = ((att.scrubber_step mod 1) == 0) ? undefined : float_count_places(att.scrubber_step, 10)
 	att.length_min = 4
 	att.length_max = infinity
 	att.scrubber = true
@@ -167,17 +176,39 @@ get_input = function(){
 	
 	left = x
 	top = y
-	right = x + text_width + (att.draw_box ? _text_wdist*2 : 0)
-	bottom = y + ch + (att.draw_box ? _text_hdist*2 : 0)
 	
-	text_x = att.draw_box ? x+_text_wdist : x
-	text_y = att.draw_box ? y+_text_hdist+1 : y+1
+	if docked and not is_undefined(dock_element_x) and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Text_box"
+	{
+		var left_el = dock.elements[@ dock_element_y, dock_element_x-1]
+		left = left_el.right+1
+	}
+	
+	right = left + text_width + (att.draw_box ? _text_wdist*2 : 0)
+	bottom = top + ch + (att.draw_box ? _text_hdist*2 : 0)
+	
+	text_x = att.draw_box ? left+_text_wdist : left
+	text_y = att.draw_box ? top+_text_hdist+1 : top+1
+	
+	text_changed = false
 	
 	var shift = keyboard_check(vk_shift)
 	
-	//if o_console.keyboard_scope == self scoped = true
+	if is_undefined(cbox_left)
+	{
+		var _left = left
+		var _top = top
+		var _right = right
+		var _bottom = bottom
+	}
+	else
+	{
+		var _left = cbox_left
+		var _top = cbox_top
+		var _right = cbox_right
+		var _bottom = cbox_bottom
+	}
 	
-	if not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
+	if not mouse_on_console and not clicking_on_console and gui_mouse_between(_left, _top, _right, _bottom)
 	{
 		mouse_on_console = true
 		
@@ -190,12 +221,12 @@ get_input = function(){
 	else if mouse_on and not clicking
 	{
 		mouse_on = false
-		window_set_cursor(cr_default)
+		if not clicking_on_console and not mouse_on_console window_set_cursor(cr_default)
 	}
 
 	dclick_step ++
 
-	if scrubbing and not mouse_check_button(mb_left) 
+	if scrubbing and not mouse_check_button(mb_left)
 	{
 		if not is_undefined(variable) variable_string_set(variable, value)
 		scrubbing = false
@@ -255,6 +286,16 @@ get_input = function(){
 			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
 			scoped = false
 			if att.scrubber typing = false
+			
+			if not att.allow_alpha and att.allow_float
+			{
+				var pos = string_pos(".", text)
+				var step_places = float_count_places(att.scrubber_step, 10)
+				
+				if pos == 0 and not step_places att.float_places = undefined
+				else att.float_places = max(float_count_places(att.scrubber_step, 10), string_length(text)-string_pos(".", text))
+			}
+			
 			if not is_undefined(variable) variable_string_set(variable, value)
 		}
 	}
@@ -280,13 +321,12 @@ get_input = function(){
 	if (not scoped and att.allow_exinput) or (scoped and att.allow_scoped_exinput) and not is_undefined(variable)
 	{
 		convert(variable_string_get(variable))
-		text = string(value)
+		text = string_format_float(value, att.float_places, att.whole_places)
 		colors = att.color_method(text)
 	}
 	
 	if scoped
 	{
-		var text_changed = false
 		var rt = tb.repeat_time*(room_speed/60)
 		
 		tb.rleft		= (keyboard_check(vk_left)+tb.rleft)*keyboard_check(vk_left)
@@ -325,7 +365,7 @@ get_input = function(){
 		if not typing and not att.allow_alpha and (key_left or key_right)
 		{
 			value += att.incrementor_step*(key_right-key_left)
-			text = string_format_float(value, att.float_places)
+			text = string_format_float(value, att.float_places, att.whole_places)
 			
 			if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
 		}
@@ -414,9 +454,11 @@ get_input = function(){
 						if att.allow_float and string_pos(".", char)
 						{
 							char_pos1 = char_pos_min
-							newtext = string_delete(newtext, string_pos(".", newtext), 1)
-							newtext = string_insert(".", newtext, char_pos1+1)
-							char_pos1 ++
+							var pos = string_pos(".", newtext)
+							if pos == 0 pos = infinity
+							newtext = string_delete(newtext, pos, 1)
+							newtext = string_insert(".", newtext, char_pos1+(char_pos1 < pos))
+							char_pos1 += (char_pos1 < pos)
 							char_pos_min = char_pos1
 							text_changed = true
 						}
@@ -560,14 +602,16 @@ draw = function(){
 		var _text_hdist = 0
 	}
 	
-	draw_set_color(o_console.colors.plain)
+	var is_front = true //not docked or (docked and dock.is_front)
+	
+	draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	if string_length(text) > att.length_max clip_rect_cutout(left, top, right, bottom)
-	if att.color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
-	else 
+	if is_front and att.color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
+	else
 	{
-		if not is_undefined(att.text_color) draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
+		if is_front and not is_undefined(att.text_color) draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
 		draw_text(text_x, text_y, text)
 	}
 	

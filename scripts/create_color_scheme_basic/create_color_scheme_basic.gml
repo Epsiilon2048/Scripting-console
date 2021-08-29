@@ -130,7 +130,7 @@ colors.sprite			= -1
 colors.sprite_anchor	= false
 colors.sprite_alpha		= 1
 
-colors.bevel			= undefined
+colors.bevel			= true
 
 colors.body_real_alpha	= .1
 

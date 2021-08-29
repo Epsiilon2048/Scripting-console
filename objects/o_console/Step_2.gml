@@ -50,33 +50,57 @@ if keyboard_check_pressed(console_key) and keyboard_scope == noone
 	
 	if BAR.enabled
 	{
+		keyboard_string = ""
 		BAR.text_box.scoped = true
+		o_console.keyboard_scope = BAR.text_box
 	}
 }
 
 if keyboard_check_pressed(vk_escape) 
 {
 	BAR.enabled = false
+	BAR.text_box.scoped = false
+	o_console.keyboard_scope = noone
 }
 
 if BAR.enabled and keyboard_scope == BAR.text_box
 {
 	enter		= keyboard_check_pressed(vk_enter)
 	log_up		= keyboard_check_pressed(vk_up)
-	log_down	= keyboard_check_pressed(vk_down) and (input_log_index != -1 or ds_list_size(input_log) == 0)
+	log_down	= keyboard_check_pressed(vk_down)
+	
+	if log_up and ds_list_size(input_log)
+	{
+		if input_log_index == -1 and input_log_save = console_string
+		input_log_index = min(input_log_index+1, ds_list_size(input_log)-1)
+		console_string = input_log[| input_log_index]
+	}
+	else if log_down
+	{
+		if input_log_index == 0
+		{
+			input_log_index = -1
+			console_string = input_log_save
+			input_log_save = ""
+		}
+		else if input_log_index != -1
+		{
+			input_log_index --
+			console_string = input_log[| input_log_index]
+		}
+	}
+	
+	if log_up or log_down
+	{
+		BAR.text_box.blink_step = 0
+		BAR.text_box.char_pos1 = string_length(console_string)
+		BAR.text_box.char_pos2 = BAR.text_box.char_pos1
+		BAR.text_box.char_pos_selection = false
+	}
 	
 	#region Parse command
 	if enter
 	{	
-		gmcl_autofill(undefined, undefined)
-		do_autofill = false
-		moved_char_pos = true
-		
-		subchar_pos1 = 0
-		subchar_pos2 = 0
-		
-		BAR.blink_step = 0
-		
 		var _compile = gmcl_compile(console_string)
 		var _output  = gmcl_run(_compile)
 		
@@ -87,6 +111,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 			
 			output_set_lines(_output)
 			
+			input_log_index = -1
 			ds_list_insert(input_log, 0, console_string)
 			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
 			
@@ -94,13 +119,26 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 		}
 		else output_set_lines(_output)
 		
+		BAR.text_box.blink_step = 0
 		keyboard_string = ""
 		console_string = ""
 	}
 	#endregion
-
-	if console_color_time == console_color_interval color_string = gmcl_string_color(console_string, char_pos1)
-	else if console_color_time != -1 console_color_time ++
+	
+	with BAR
+	{
+		text_box.cbox_left = left
+		text_box.cbox_top = top
+		text_box.cbox_right = right
+		text_box.cbox_bottom = bottom
+		text_box.get_input()
+	}
+	
+	if BAR.text_box.text_changed and input_log_index != -1
+	{
+		input_log_index = -1
+		input_log_save = ""
+	}
 }
 else BAR.blink_step = 0
 
@@ -125,8 +163,6 @@ gui_mouse_y = gui_my
 
 value_box_inputs()
 value_box_mouse_on = false
-
-if BAR.enabled BAR.text_box.get_input()
 
 var was_clicking = clicking_on_console
 var front = -1

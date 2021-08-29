@@ -24,6 +24,7 @@ with DOCK {
 	
 	char_height = 23
 	
+	name_outline_width = 1.7
 	name_wdist = 15
 	name_hdist = 5
 	
@@ -52,7 +53,7 @@ with TEXT_BOX {
 	repeat_time = 30
 	repeat_step = 0
 	
-	outline_width = .63
+	outline_width = 1.7
 	
 	rleft = 0
 	rright = 0
@@ -216,6 +217,8 @@ with CHECKBOX {
 
 with COLOR_PICKER {
 	
+	size = 100
+	
 	x = 0
 	y = 0
 	
@@ -242,8 +245,21 @@ with COLOR_PICKER {
 	sat = 255
 	val = 255
 	
+	r = 255
+	g = 255
+	b = 255
+	
+	hsv_255 = false
+	
+	hex_text_box = new_text_box("o_console.COLOR_PICKER.hex")
+	hue_text_box = new_scrubber("o_console.COLOR_PICKER.hue", 1)
+	sat_text_box = new_scrubber("o_console.COLOR_PICKER.sat", 1)
+	val_text_box = new_scrubber("o_console.COLOR_PICKER.val", 1)
+	r_text_box = new_scrubber("o_console.COLOR_PICKER.r", 1)
+	g_text_box = new_scrubber("o_console.COLOR_PICKER.g", 1)
+	b_text_box = new_scrubber("o_console.COLOR_PICKER.b", 1)
+
 	color = make_color_hsv(hue, sat, val)
-	size = 100
 }
 
 with VALUE_BOX {

@@ -1,18 +1,37 @@
 
 function shave(substr, str){ //removes substr from the ends of str
 
-var output = str
+var in = 1
+var out = string_length(str)
 
-while string_char_at(output, 1) == substr
-{
-	output = string_delete(output, 1, 1)
-}
+var substr_len = string_length(substr)
 
-while string_char_at(output, string_length(output)) == substr
+if substr_len == 0 return str
+if substr_len == 1
 {
-	output = string_delete(output, string_length(output), 1)
+	while string_char_at(str, in) == substr
+	{
+		in++
+	}
+
+	while string_char_at(str, out) == substr
+	{
+		out--
+	}
 }
-return output
+else
+{
+	while slice(str, in, in+substr_len, 1) == substr
+	{
+		in += substr_len
+	}
+
+	while slice(str, out-substr_len+1, out+1, 1) == substr
+	{
+		out -= substr_len
+	}
+}
+return slice(str, in, out+1, 1)
 }
 
 
@@ -102,15 +121,29 @@ return string_is_int(_str)
 
 
 
-function string_format_float(float, places){ //formats a float into a string, rounding to the 10^6 place (rather than 100s place)
+function string_format_float(float, decimal_places){ //formats a float into a string, rounding to the 10^6 place (rather than 100s place)
 
-if is_undefined(places) places = 6
+if not is_numeric(float) or (is_undefined(decimal_places) and (float mod 1) == 0) return string(float)
 
-var decimal = float - floor(float)
-var whole = floor(float)
+var _decimal_places = is_undefined(decimal_places) ? 3 : decimal_places
 
-if decimal == 0 return string(float)
-else return stitch(whole, shave("0", string_format(decimal, 0, places)))
+var float_string = string_format(float, 0, _decimal_places)
+
+if is_undefined(decimal_places) and (float mod 1) != 0
+{
+	var len = string_length(float_string)
+	var i = len
+	var char = string_char_at(float_string, len)
+	while char == "0"
+	{
+		i--
+		char = string_char_at(float_string, i)
+	}
+	
+	float_string = slice(float_string, 1, i+1, 1)
+}
+
+return float_string
 }
 
 

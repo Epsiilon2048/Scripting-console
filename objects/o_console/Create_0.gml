@@ -303,9 +303,6 @@ force_body_solid = false
 
 cs_index = cs_greenbeans
 
-console_color_interval = 300
-console_color_time = 0
-
 right_mb = false
 
 keybinds = []
@@ -358,6 +355,7 @@ mouse_starting_y = undefined
 input_log = ds_create(ds_type_list, "input_log")
 input_log_limit = 20
 input_log_index = -1
+input_log_save = ""
 
 display_list = ds_create(ds_type_list, "display_list")
 
@@ -428,15 +426,58 @@ initialize_console_docs()
 startup = true
 
 
-cd = new Console_dock() with cd
+name_dock = new Console_dock() with name_dock
 {
+	initialize()
+	name = "Name bar"
+	set([
+		["Outline", new_scrubber("con.DOCK.name_outline_width", .1)],
+		[new_cd_text("Border", "plain"), "W", new_scrubber("con.DOCK.name_wdist", 1), " H", new_scrubber("con.DOCK.name_hdist", 1)],
+	])
+}
+element_dock = new Console_dock() with element_dock
+{
+	initialize()
+	name = "Elements"
+	set([
+		[new_cd_text("Border", "plain"), "W", new_scrubber("con.DOCK.element_wdist", 1), " H", new_scrubber("con.DOCK.element_hdist", 1)],
+		[new_cd_text("Separation", "plain"), "W", new_scrubber("con.DOCK.element_wsep", 1), " H", new_scrubber("con.DOCK.element_hsep", 1)],
+	])
+}
+dropdown_dock = new Console_dock() with dropdown_dock
+{
+	initialize()
+	name = "Dropdown arrow"
+	set([
+		["Base", new_scrubber("con.DOCK.dropdown_base", 1), " Hypotenuse", new_scrubber("con.DOCK.dropdown_hypotenuse", 1)],
+		["Border", new_scrubber("con.DOCK.dropdown_wdist", 1)],
+	])
+}
+cd1 = new Console_dock() with cd1
+{
+	initialize()
+	name = "Docks"
+	set([
+		other.name_dock,
+		other.element_dock,
+		other.dropdown_dock,
+	])
+}
+
+ds_list_add(elements, cd1)
+
+q = ""
+cd2 = new Console_dock() with cd2
+{
+	var t = new_text_box("o_console.q")
+	
 	initialize()
 	name = "Test console dock"
 	set([
-		["text"],
-		["x",new_scrubber("o_dev.x"),"y",new_scrubber("o_dev.y")],
+		["text",t],
+		["xy",new_scrubber("o_dev.x"), new_scrubber("o_dev.y")],
 		["image_angle",new_scrubber("o_dev.image_angle", .1)],
 		["image_xscale",new_scrubber("o_dev.image_xscale", .1),"image_yscale",new_scrubber("o_dev.image_yscale", .1)]
 	])
 }
-ds_list_add(elements, cd)
+ds_list_add(elements, cd2)
