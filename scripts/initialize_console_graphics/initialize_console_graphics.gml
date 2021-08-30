@@ -65,9 +65,14 @@ with TEXT_BOX {
 
 with BAR {
 	
+	format_for_dock(undefined)
+	
 	enabled = false
 	
 	char_height = 23
+	
+	outline_width = 1.7
+	docked_width = 1000
 	
 	x = undefined		// These are for placing the bar somewhere else
 	y = undefined
@@ -96,7 +101,7 @@ with BAR {
 	text_box.att.set_variable_on_input = true
 	text_box.att.allow_scoped_exinput = true
 	
-	get_input = text_box.get_input
+	get_input = console_bar_inputs
 	draw = draw_console_bar
 }
 

@@ -21,6 +21,8 @@ initialize = function(variable){
 	
 	format_for_dock(undefined)
 	
+	enabled = true
+	
 	x = 0
 	y = 0
 	
@@ -147,6 +149,18 @@ initialize_scrubber = function(variable, step){
 }
 
 
+set_scoped = function(enabled){
+	
+	if enabled
+	{
+		
+	}
+	else
+	{
+		
+	}
+}
+
 
 mouse_get_char_pos = function(){
 	
@@ -161,6 +175,32 @@ mouse_get_char_pos = function(){
 
 
 get_input = function(){
+	
+	if not enabled
+	{
+		left = x
+		top = y
+		right = x
+		bottom = y
+		
+		text_x = x
+		text_y = y
+		
+		text_changed = false
+		mouse_on = false
+		clicking = false
+		
+		char_pos2 = char_pos1
+		char_pos_selection = false
+		
+		if scoped
+		{
+			scoped = false
+			if att.scrubber typing = false
+			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
+		}
+		return undefined
+	}
 	
 	var tb = o_console.TEXT_BOX
 	

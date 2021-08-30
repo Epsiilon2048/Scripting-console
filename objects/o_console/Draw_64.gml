@@ -4,18 +4,7 @@ var old_alpha  = draw_get_alpha()
 var old_font   = draw_get_font()
 var old_halign = draw_get_halign()
 var old_valign = draw_get_valign()
-
-if BAR.enabled
-{
-	if not is_undefined(object) and instance_exists(object) 
-	{
-		sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
-	}
-	else sidetext_string = "noone"
 	
-	draw_console_bar()
-}
-
 draw_console_output()
 
 #region Draw display

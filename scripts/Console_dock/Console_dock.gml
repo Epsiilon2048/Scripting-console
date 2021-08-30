@@ -14,6 +14,7 @@ with scope
 {
 	dock		= _dock
 	docked		= not is_undefined(dock)
+	run_in_dock = false
 	
 	dock_element_x = undefined
 	dock_element_y = undefined
@@ -346,7 +347,9 @@ get_input = function(){
 				
 				el.x = xx
 				el.y = yy
+				el.run_in_dock = true
 				if active_element != el el.get_input()
+				el.run_in_dock = false
 				el.dragging = false
 				el.x = xx
 				el.y = yy

@@ -445,6 +445,7 @@ cd1 = new Console_dock() with cd1
 			["Base", new_scrubber("con.DOCK.dropdown_base", 1), " Hypotenuse", new_scrubber("con.DOCK.dropdown_hypotenuse", 1)],
 			["Border", new_scrubber("con.DOCK.dropdown_wdist", 1)],
 		]),
+		other.BAR,
 	])
 }
 
@@ -465,3 +466,4 @@ cd2 = new Console_dock() with cd2
 	])
 }
 ds_list_add(elements, cd2)
+//ds_list_add(elements, BAR)
