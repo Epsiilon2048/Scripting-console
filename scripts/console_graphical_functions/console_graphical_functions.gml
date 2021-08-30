@@ -72,6 +72,29 @@ draw_set_halign(old_halign)
 
 function console_bar_inputs(){ with o_console {
 
+var old_font = draw_get_font()
+draw_set_font(o_console.font)
+
+var cw = string_width(" ")
+var ch = string_height(" ")
+var asp = ch/BAR.char_height
+
+var _win_dist		= floor(BAR.win_dist*asp)
+var _height			= ceil(BAR.height*asp)
+var _text_dist		= ceil(BAR.text_dist*asp)
+var _sep			= ceil(BAR.sep*asp)
+var _sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
+
+var sidetext_width = string_length(BAR.sidetext_string)*cw
+
+var _x = is_undefined(BAR.x) ? _win_dist : BAR.x
+var _y = is_undefined(BAR.y) ? (gui_height - _win_dist - ch - _height) : BAR.y
+var _width
+
+if BAR.docked _width = is_undefined(BAR.width) ? round(BAR.docked_width*asp) : BAR.width
+else _width = is_undefined(BAR.width) ? (gui_width - _x - _win_dist) : BAR.width
+
+
 if BAR.docked BAR.enabled = BAR.dock.show
 else
 {
@@ -159,6 +182,20 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 }
 else BAR.blink_step = 0
 
+BAR.left	= _x+_sidebar_width
+BAR.top		= _y
+BAR.right	= _x+_width
+BAR.bottom	= _y+ch+_height
+
+BAR.bar_right = BAR.right-sidetext_width-_text_dist*2-_sep-1
+BAR.sidetext_left = BAR.right-sidetext_width-_text_dist*2-1
+
+BAR.text_x = BAR.left+_text_dist
+BAR.text_y = ceil(BAR.bottom - _height/2)+1
+
+var mouse_on_prev = BAR.mouse_on
+BAR.mouse_on = gui_mouse_between(BAR.left, BAR.top, BAR.right, BAR.bottom)
+
 with BAR
 {
 	text_box.enabled = enabled
@@ -166,6 +203,10 @@ with BAR
 	text_box.cbox_top = top
 	text_box.cbox_right = right
 	text_box.cbox_bottom = bottom
+	text_box.att.length_min = (bar_right - text_x)/cw
+	text_box.att.length_max = text_box.att.length_min
+	text_box.x = text_x
+	text_box.y = text_y
 	text_box.get_input()
 }
 	
@@ -177,9 +218,11 @@ if BAR.text_box.text_changed and input_log_index != -1
 
 if not is_undefined(object) and instance_exists(object) 
 {
-	sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
+	BAR.sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
 }
-else sidetext_string = "noone"
+else BAR.sidetext_string = "noone"
+
+draw_set_font(old_font)
 }}
 
 
@@ -195,70 +238,42 @@ var old_valign = draw_get_valign()
 
 draw_set_font(font)
 
-var _char_width = string_width(" ")
-var _char_height = string_height(" ")
-var asp = _char_height/BAR.char_height
+var cw = string_width(" ")
+var ch = string_height(" ")
+var asp = ch/BAR.char_height
 
-var _win_dist		= floor(BAR.win_dist*asp)
-var _height			= ceil(BAR.height*asp)
 var _text_dist		= ceil(BAR.text_dist*asp)
-var _sep			= ceil(BAR.sep*asp)
 var _sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
 
-var sidetext_width = string_length(sidetext_string)*_char_width
+var sidetext_width = string_length(BAR.sidetext_string)*cw
 
-var _x = is_undefined(BAR.x) ? _win_dist : BAR.x
-var _y = is_undefined(BAR.y) ? (gui_height - _win_dist - _char_height - _height) : BAR.y
-var _width
-
-if BAR.docked _width = is_undefined(BAR.width) ? round(BAR.docked_width*asp) : BAR.width
-else _width = is_undefined(BAR.width) ? (gui_width - _x - _win_dist) : BAR.width
-
-BAR.left	= _x+_sidebar_width
-BAR.top		= _y
-BAR.right	= _x+_width
-BAR.bottom	= _y+_char_height+_height
-
-BAR.text_x = BAR.left+_text_dist
-BAR.text_y = ceil(BAR.bottom - _height/2)+1
-
-var mouse_on_prev = BAR.mouse_on
-BAR.mouse_on = gui_mouse_between(BAR.left, BAR.top, BAR.right-sidetext_width-_text_dist*2-_sep-1, BAR.bottom)
-
-if not mouse_on_prev and BAR.mouse_on		window_set_cursor(cr_beam)
-else if mouse_on_prev and not BAR.mouse_on	window_set_cursor(cr_default)
-
-var dock_body
+var draw_dock_body
 if BAR.docked
 {
 	if BAR.dock.is_front
 	{
-		dock_body = draw_rectangle
+		draw_dock_body = draw_rectangle
 		draw_set_color(o_console.colors.body_real)
 	}
-	else dock_body = noscript
+	else draw_dock_body = noscript
 }
-else dock_body = draw_console_body
+else draw_dock_body = draw_console_body
 
-dock_body(BAR.left, BAR.top, BAR.right-sidetext_width-_text_dist*2-_sep-1, BAR.bottom, false)	// Draw bar
-dock_body(BAR.right-sidetext_width-_text_dist*2-1, BAR.top, BAR.right, BAR.bottom, false)		// Draw sidetext bar
+draw_dock_body(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, false)	// Draw bar
+draw_dock_body(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, false)		// Draw sidetext bar
 
 if BAR.docked
 {
 	var _outline_width = round(BAR.outline_width*asp)
 	
 	draw_set_color(o_console.colors.body_accent)
-	draw_hollowrect(BAR.left, BAR.top, BAR.right-sidetext_width-_text_dist*2-_sep-1, BAR.bottom, _outline_width)
-	draw_hollowrect(BAR.right-sidetext_width-_text_dist*2-1, BAR.top, BAR.right, BAR.bottom, _outline_width)
+	draw_hollowrect(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, _outline_width)
+	draw_hollowrect(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, _outline_width)
 }
 
 draw_set_color(colors.output)
 draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
 
-BAR.text_box.att.length_min = (BAR.right-sidetext_width-_text_dist*2-_sep-1 - BAR.text_x)/_char_width
-BAR.text_box.att.length_max = BAR.text_box.att.length_min
-BAR.text_box.x = BAR.text_x
-BAR.text_box.y = ceil(BAR.top+_text_dist-_char_height/2)+1
 BAR.text_box.draw()
 
 draw_set_color(colors.output)

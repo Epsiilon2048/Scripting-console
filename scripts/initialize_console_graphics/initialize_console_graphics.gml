@@ -82,6 +82,10 @@ with BAR {
 	top	= 0
 	right = 0
 	bottom = 0
+	
+	bar_right = 0
+	sidetext_left = 0
+	sidetext_string = "noone"
 
 	height = 17
 	sep = 2.7
