@@ -6,6 +6,8 @@
 clicking_on_console = false
 mouse_on_console = false
 
+update_steps = 10
+
 colors = {}
 
 fonts = [
@@ -426,41 +428,23 @@ initialize_console_docs()
 startup = true
 
 
-name_dock = new Console_dock() with name_dock
-{
-	initialize()
-	name = "Name bar"
-	set([
-		["Outline", new_scrubber("con.DOCK.name_outline_width", .1)],
-		[new_cd_text("Border", "plain"), "W", new_scrubber("con.DOCK.name_wdist", 1), " H", new_scrubber("con.DOCK.name_hdist", 1)],
-	])
-}
-element_dock = new Console_dock() with element_dock
-{
-	initialize()
-	name = "Elements"
-	set([
-		[new_cd_text("Border", "plain"), "W", new_scrubber("con.DOCK.element_wdist", 1), " H", new_scrubber("con.DOCK.element_hdist", 1)],
-		[new_cd_text("Separation", "plain"), "W", new_scrubber("con.DOCK.element_wsep", 1), " H", new_scrubber("con.DOCK.element_hsep", 1)],
-	])
-}
-dropdown_dock = new Console_dock() with dropdown_dock
-{
-	initialize()
-	name = "Dropdown arrow"
-	set([
-		["Base", new_scrubber("con.DOCK.dropdown_base", 1), " Hypotenuse", new_scrubber("con.DOCK.dropdown_hypotenuse", 1)],
-		["Border", new_scrubber("con.DOCK.dropdown_wdist", 1)],
-	])
-}
 cd1 = new Console_dock() with cd1
 {
 	initialize()
 	name = "Docks"
 	set([
-		other.name_dock,
-		other.element_dock,
-		other.dropdown_dock,
+		new_console_dock("Name", [
+			["Outline", new_scrubber("con.DOCK.name_outline_width", .1)],
+			["Border W", new_scrubber("con.DOCK.name_wdist", 1), " H", new_scrubber("con.DOCK.name_hdist", 1)],
+		]),
+		new_console_dock("Elements", [
+			["Border W", new_scrubber("con.DOCK.element_wdist", 1), " H", new_scrubber("con.DOCK.element_hdist", 1)],
+			["Separation W", new_scrubber("con.DOCK.element_wsep", 1), " H", new_scrubber("con.DOCK.element_hsep", 1)],
+		]),
+		new_console_dock("Dropdown triangle", [
+			["Base", new_scrubber("con.DOCK.dropdown_base", 1), " Hypotenuse", new_scrubber("con.DOCK.dropdown_hypotenuse", 1)],
+			["Border", new_scrubber("con.DOCK.dropdown_wdist", 1)],
+		]),
 	])
 }
 

@@ -33,6 +33,16 @@ with scope
 }
 
 
+function new_console_dock(name, elements){
+
+var d = new Console_dock()
+d.initialize()
+d.name = name
+d.set(elements)
+return d
+}
+
+
 function Cd_text() constructor{
 
 set = function(text){
@@ -225,13 +235,13 @@ initialize = function(){
 set_element = function(x, y, element){
 	
 	if not is_struct(element) element = new_cd_text(element, "output")
-	
+
 	if is_undefined(x) elements[y] = element
 	else
 	{
 		if y > array_length(elements)-1 array_push(elements, array_create(x+1))
 		else if not is_array(elements[y]) elements[y] = [elements[y]]
-		elements[@ x, y] = element
+		elements[y][x] = element
 	}
 	
 	format_for_dock(element)
@@ -245,19 +255,19 @@ set_element = function(x, y, element){
 
 set = function(elements){
 	
-	for(var i = 0; i <= array_length(elements)-1; i++)
+	self.elements = elements
+	
+	for(var i = 0; i <= array_length(self.elements)-1; i++)
 	{
-		if not is_array(elements[@ i])
+		if not is_array(self.elements[i])
 		{
-			set_element(undefined, i, elements[@ i])
+			set_element(undefined, i, self.elements[i])
 		}
-		else for(var j = 0; j <= array_length(elements[i])-1; j++)
+		else for(var j = 0; j <= array_length(self.elements[i])-1; j++)
 		{	
-			set_element(i, j, elements[@ i, j])
+			set_element(j, i, self.elements[i][j])
 		}
 	}
-	
-	self.elements = elements
 }
 
 
@@ -438,13 +448,16 @@ get_input = function(){
 		mouse_yoffset = gui_my-y
 	}
 	
-	if dragging or not is_undefined(active_element) or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
+	if not docked
 	{
-		is_front = true
-	}
-	else if clicking_on_console or (mouse_check_button_pressed(mb_any) and not mouse_on_dropdown)
-	{
-		is_front = false
+		if dragging or not is_undefined(active_element) or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
+		{
+			is_front = true
+		}
+		else if clicking_on_console or (mouse_check_button_pressed(mb_any) and not mouse_on_dropdown)
+		{
+			is_front = false
+		}
 	}
 	
 	if dragging or show_next or (mouse_on and mouse_check_button_pressed(mb_any)) clicking_on_console = true
@@ -456,6 +469,12 @@ get_input = function(){
 	}
 	
 	draw_set_font(old_font)
+}
+
+
+
+after_dock = function(){
+	is_front = dock.is_front
 }
 
 
@@ -484,14 +503,51 @@ draw = function(){
 	
 	var bar_height = ch + _name_hdist*2
 
-	draw_set_color(o_console.colors.body_real)
-	if docked draw_rectangle(left, top, right, bottom, false)
-	else draw_console_body(left, top, right, bottom)
-	draw_rectangle(left, top, right, top + bar_height, false)
-	
-	draw_set_color((is_front) ? o_console.colors.output : o_console.colors.body_accent)
+	if docked
+	{
+		if is_front
+		{
+			draw_set_color(o_console.colors.body_real)
+			draw_rectangle(left, top, right, top + bar_height, false)
+		}
+		draw_set_color(o_console.colors.body_accent)
+		draw_hollowrect(left, top, right, bottom, _outline_width)
+		
+		if is_front draw_set_color(o_console.colors.output)
+	}
+	else
+	{
+		draw_console_body(left, top, right, bottom)
+		
+		draw_set_color(o_console.colors.body_real)
+		draw_rectangle(left, top, right, top + bar_height, false)
+		
+		draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
+	}
 	draw_text(left+_name_wdist, top+_name_hdist+1, name)
+	
+	draw_set_color(o_console.colors.body_accent)
 	draw_hollowrect(left, top, right, top + bar_height, _outline_width)
+
+
+	//draw_set_color(o_console.colors.body_real)
+	//if docked
+	//{
+	//	if is_front draw_rectangle(left, top, right, top + bar_height, false)
+	//	draw_set_color(o_console.colors.body_accent)
+	//	draw_hollowrect(left, top, right, bottom, _outline_width)
+	//	draw_set_color(o_console.colors.body_real)
+	//}
+	//else draw_console_body(left, top, right, bottom)
+	//
+	//if is_front or not docked draw_rectangle(left, top, right, top + bar_height, false)
+	//
+	//if is_front draw_set_color(o_console.colors.output) 
+	//else if docked draw_set_color(o_console.colors.body_accent) 
+	//else draw_set_color(o_console.colors.plain)
+	//draw_text(left+_name_wdist, top+_name_hdist+1, name)
+	//draw_set_color(o_console.colors.body_accent)
+	//draw_hollowrect(left, top, right, top + bar_height, _outline_width)
 	
 	if show
 	{

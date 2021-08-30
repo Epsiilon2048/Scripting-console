@@ -10,7 +10,7 @@ set_value = function(text){
 
 	if att.allow_alpha
 	{
-		if not att.allow_negative value = abs(value)
+		if sign(att.value_min) != -1 value = abs(value)
 		if not att.allow_float value = round(value)
 	}
 }
@@ -68,6 +68,8 @@ initialize = function(variable){
 	
 	colors = undefined
 	
+	update_id = o_console.TEXT_BOX.update_id++
+	
 	convert = function(value){
 		try{
 			self.value = att.value_conversion(value)
@@ -104,10 +106,8 @@ initialize = function(variable){
 	
 		// If not allowing alphabet
 		allow_float = true
-		allow_negative = true
 		
 		float_places = undefined
-		whole_places = 0
 	
 		value_min = -infinity
 		value_max = infinity
@@ -180,7 +180,7 @@ get_input = function(){
 	if docked and not is_undefined(dock_element_x) and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Text_box"
 	{
 		var left_el = dock.elements[@ dock_element_y, dock_element_x-1]
-		left = left_el.right+1
+		left = left_el.right + (att.draw_box ? 1 : cw)
 	}
 	
 	right = left + text_width + (att.draw_box ? _text_wdist*2 : 0)
@@ -310,7 +310,11 @@ get_input = function(){
 		char_selection = char_pos1 != char_pos2
 	}
 	
-	if scoped and o_console.keyboard_scope != self scoped = false
+	if scoped and o_console.keyboard_scope != self 
+	{
+		scoped = false
+		if att.scrubber typing = false
+	}
 	
 	if clicking 
 	{
@@ -318,10 +322,12 @@ get_input = function(){
 		blink_step = 0
 	}
 	
-	if (not scoped and att.allow_exinput) or (scoped and att.allow_scoped_exinput) and not is_undefined(variable)
+	if	not is_undefined(variable) and
+		((scoped and att.allow_scoped_exinput) or 
+		(not scoped and att.allow_exinput and ((o_console.step mod o_console.update_steps) == update_id mod o_console.update_steps)))
 	{
 		convert(variable_string_get(variable))
-		text = string_format_float(value, att.float_places, att.whole_places)
+		text = string_format_float(value, att.float_places)
 		colors = att.color_method(text)
 	}
 	
@@ -347,7 +353,7 @@ get_input = function(){
 		{	
 			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
 			var digits = string_digits(char) != ""
-			if digits or key_backspace or key_delete or (att.allow_negative and string_pos("-", char)) or (att.allow_float and string_pos(".", char))
+			if digits or key_backspace or key_delete or (sign(att.value_min) == -1 and string_pos("-", char)) or (att.allow_float and string_pos(".", char))
 			{
 				typing = true
 				scrubbing = false
@@ -365,7 +371,7 @@ get_input = function(){
 		if not typing and not att.allow_alpha and (key_left or key_right)
 		{
 			value += att.incrementor_step*(key_right-key_left)
-			text = string_format_float(value, att.float_places, att.whole_places)
+			text = string_format_float(value, att.float_places)
 			
 			if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
 		}
@@ -434,7 +440,7 @@ get_input = function(){
 			
 					if not att.allow_alpha 
 					{
-						if att.allow_negative and string_pos("-", char)
+						if sign(att.value_min) == -1 and string_pos("-", char)
 						{
 							char_pos1 = char_pos_min
 							
@@ -516,12 +522,19 @@ get_input = function(){
 		
 				if text_changed
 				{
-					if not att.allow_alpha and not string_is_float(text)
+					if not att.allow_alpha
 					{
-						text = "0"
-						char_pos1 = 1
-						char_pos2 = char_pos1
-						char_selection = false
+						if not string_is_float(text)
+						{
+							text = "0"
+							char_pos1 = 1
+							char_pos2 = char_pos1
+							char_selection = false
+						}
+						else
+						{
+							text = string_format_float(clamp(real(text), att.value_min, att.value_max), att.float_places)
+						}
 					}
 					
 					keyboard_string = text
@@ -589,8 +602,11 @@ draw = function(){
 		var _text_hdist = floor(tb.text_hdist*asp)
 		var _outline_width = tb.outline_width*asp
 	
-		draw_set_color(o_console.colors.body_real)
-		draw_rectangle(left, top, right, bottom, false)
+		if not (docked and not dock.is_front)
+		{
+			draw_set_color(o_console.colors.body_real)
+			draw_rectangle(left, top, right, bottom, false)
+		}
 	
 		if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
 		else draw_set_color(o_console.colors.body_accent)
@@ -602,20 +618,19 @@ draw = function(){
 		var _text_hdist = 0
 	}
 	
-	var is_front = true //not docked or (docked and dock.is_front)
-	
-	draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
+	draw_set_color(o_console.colors.body_accent)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	if string_length(text) > att.length_max clip_rect_cutout(left, top, right, bottom)
-	if is_front and att.color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
+	if att.color_method != noscript and is_struct(colors) draw_console_text(text_x, text_y, colors)
 	else
 	{
-		if is_front and not is_undefined(att.text_color) draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
+		if not is_undefined(att.text_color) draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
 		draw_text(text_x, text_y, text)
 	}
 	
-	if scoped and typing
+	if is_undefined(att.text_color) draw_set_color(o_console.colors.plain)
+	if scoped and typing and o_console.keyboard_scope == self
 	{
 		var x1 = text_x+cw*char_pos1
 		var y1 = text_y

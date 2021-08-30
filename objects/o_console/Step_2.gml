@@ -71,7 +71,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 	
 	if log_up and ds_list_size(input_log)
 	{
-		if input_log_index == -1 and input_log_save = console_string
+		if input_log_index == -1 input_log_save = console_string
 		input_log_index = min(input_log_index+1, ds_list_size(input_log)-1)
 		console_string = input_log[| input_log_index]
 	}

@@ -59,6 +59,8 @@ with TEXT_BOX {
 	rright = 0
 	rbackspace = 0
 	rdel = 0
+	
+	update_id = 0
 }
 
 with BAR {
