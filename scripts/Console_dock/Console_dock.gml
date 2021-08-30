@@ -19,6 +19,8 @@ with scope
 	dock_element_x = undefined
 	dock_element_y = undefined
 	
+	name		= vesg(self, "name", instanceof(self))
+	
 	//dock_halign = vesg(self, "dock_halign", fa_left)
 	dock_valign	= vesg(self, "dock_valign", fa_middle)
 

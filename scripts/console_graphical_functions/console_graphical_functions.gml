@@ -72,6 +72,8 @@ draw_set_halign(old_halign)
 
 function console_bar_inputs(){ with o_console {
 
+if BAR.docked and not BAR.run_in_dock return undefined
+
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
 
@@ -182,6 +184,12 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 }
 else BAR.blink_step = 0
 
+if not is_undefined(object) and instance_exists(object) 
+{
+	BAR.sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
+}
+else BAR.sidetext_string = "noone"
+
 BAR.left	= _x+_sidebar_width
 BAR.top		= _y
 BAR.right	= _x+_width
@@ -191,7 +199,7 @@ BAR.bar_right = BAR.right-sidetext_width-_text_dist*2-_sep-1
 BAR.sidetext_left = BAR.right-sidetext_width-_text_dist*2-1
 
 BAR.text_x = BAR.left+_text_dist
-BAR.text_y = ceil(BAR.bottom - _height/2)+1
+BAR.text_y = ceil(BAR.top+_text_dist/2)
 
 var mouse_on_prev = BAR.mouse_on
 BAR.mouse_on = gui_mouse_between(BAR.left, BAR.top, BAR.right, BAR.bottom)
@@ -201,7 +209,7 @@ with BAR
 	text_box.enabled = enabled
 	text_box.cbox_left = left
 	text_box.cbox_top = top
-	text_box.cbox_right = right
+	text_box.cbox_right = bar_right
 	text_box.cbox_bottom = bottom
 	text_box.att.length_min = (bar_right - text_x)/cw
 	text_box.att.length_max = text_box.att.length_min
@@ -216,12 +224,6 @@ if BAR.text_box.text_changed and input_log_index != -1
 	input_log_save = ""
 }
 
-if not is_undefined(object) and instance_exists(object) 
-{
-	BAR.sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
-}
-else BAR.sidetext_string = "noone"
-
 draw_set_font(old_font)
 }}
 
@@ -230,6 +232,7 @@ draw_set_font(old_font)
 function draw_console_bar(){ with o_console {
 
 if not BAR.enabled return undefined
+if (BAR.docked and not BAR.run_in_dock) return undefined
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -279,7 +282,7 @@ BAR.text_box.draw()
 draw_set_color(colors.output)
 draw_set_halign(fa_right)
 draw_set_valign(fa_top)
-draw_text(BAR.right-_text_dist, BAR.text_box.y+1, sidetext_string)								// Draw sidetext
+draw_text(BAR.right-_text_dist, BAR.text_box.y+1, BAR.sidetext_string)							// Draw sidetext
 
 draw_set_color(old_color)
 draw_set_font(old_font)

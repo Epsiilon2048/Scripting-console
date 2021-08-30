@@ -2,7 +2,7 @@
 function Text_box() constructor{
 
 set_value = function(text){
-
+	
 	self.text = text
 	if not att.allow_alpha and not string_is_float(text) text = "0"
 
@@ -21,6 +21,7 @@ initialize = function(variable){
 	
 	format_for_dock(undefined)
 	
+	name = "Text box"
 	enabled = true
 	
 	x = 0
@@ -366,9 +367,13 @@ get_input = function(){
 		((scoped and att.allow_scoped_exinput) or 
 		(not scoped and att.allow_exinput and ((o_console.step mod o_console.update_steps) == update_id mod o_console.update_steps)))
 	{
+		var old_text = text
+		
+		name = "Text box ("+variable+")"
 		convert(variable_string_get(variable))
 		text = string_format_float(value, att.float_places)
-		colors = att.color_method(text)
+		
+		if old_text != text colors = att.color_method(text)
 	}
 	
 	if scoped

@@ -466,4 +466,4 @@ cd2 = new Console_dock() with cd2
 	])
 }
 ds_list_add(elements, cd2)
-//ds_list_add(elements, BAR)
+ds_list_add(elements, BAR)
