@@ -445,7 +445,6 @@ cd1 = new Console_dock() with cd1
 			["Base", new_scrubber("con.DOCK.dropdown_base", 1), " Hypotenuse", new_scrubber("con.DOCK.dropdown_hypotenuse", 1)],
 			["Border", new_scrubber("con.DOCK.dropdown_wdist", 1)],
 		]),
-		other.BAR,
 	])
 }
 
@@ -459,10 +458,8 @@ cd2 = new Console_dock() with cd2
 	initialize()
 	name = "Test console dock"
 	set([
-		["text",t],
-		["xy",new_scrubber("o_dev.x"), new_scrubber("o_dev.y")],
-		["image_angle",new_scrubber("o_dev.image_angle", .1)],
-		["image_xscale",new_scrubber("o_dev.image_xscale", .1),"image_yscale",new_scrubber("o_dev.image_yscale", .1)]
+		other.OUTPUT.text,
+		other.BAR
 	])
 }
 ds_list_add(elements, cd2)

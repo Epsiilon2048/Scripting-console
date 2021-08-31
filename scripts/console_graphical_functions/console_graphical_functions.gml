@@ -296,11 +296,7 @@ function draw_console_output(){ with o_console {
 
 var ot = o_console.OUTPUT
 
-if output_as_window
-{
-	draw_console_window(ot.win)
-	return undefined
-}
+if ot.text.docked return undefined
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -324,8 +320,10 @@ var _border_w = floor(ot.border_w*asp)
 var _border_h = floor(ot.border_h*asp)
 var _outline = ceil(ot.outline*asp)
 
+var in_corner = not BAR.enabled or BAR.docked
+
 ot.left = BAR.left
-ot.bottom = BAR.enabled ? (BAR.top - _bar_dist) : BAR.bottom
+ot.bottom = in_corner ? (BAR.top - _bar_dist) : BAR.bottom
 ot.right = min( ot.left + text_width + _border_w*2, win_width )
 ot.top = max( ot.bottom - text_height - _border_h*2, 0 )
 

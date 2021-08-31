@@ -12,6 +12,8 @@ if is_undefined(scope)
 else _dock = self
 with scope
 {
+	formatted_for_dock = true
+	
 	dock		= _dock
 	docked		= not is_undefined(dock)
 	run_in_dock = false
@@ -218,8 +220,6 @@ initialize = function(){
 	mouse_on_bar = false
 	mouse_on_dropdown = false
 	
-	active_element = undefined
-	
 	show = true
 	show_next = false
 	
@@ -298,6 +298,8 @@ get_input = function(){
 	
 	var bar_height = ch + _name_hdist*2
 	
+	var element_active = false
+	
 	if dragging
 	{
 		if not mouse_check_button(mb_left)
@@ -309,6 +311,12 @@ get_input = function(){
 			x = gui_mx-mouse_xoffset
 			y = gui_my-mouse_yoffset
 		}
+	}
+	
+	if not docked
+	{
+		x = round(clamp(x, -(right-left)+cw*2+_dropdown_base+_dropdown_wdist, win_width-cw*3))
+		y = round(clamp(y, -ch/2, win_height-ch))
 	}
 	
 	if show_next
@@ -336,11 +344,6 @@ get_input = function(){
 	
 		var was_clicking_on_console = clicking_on_console
 	
-		if not is_undefined(active_element) 
-		{
-			active_element.get_input()
-		}
-	
 		for(var i = 0; i <= array_length(elements)-1; i++)
 		{		
 			if not is_array(elements[i])
@@ -350,16 +353,11 @@ get_input = function(){
 				el.x = xx
 				el.y = yy
 				el.run_in_dock = true
-				if active_element != el el.get_input()
+				el.get_input()
 				el.run_in_dock = false
 				el.dragging = false
 				el.x = xx
 				el.y = yy
-			
-				if not was_clicking_on_console and clicking_on_console
-				{
-					active_element = el
-				}
 				
 				right = max(right, el.right+_element_wdist)
 				bottom = max(bottom, el.bottom)
@@ -395,24 +393,21 @@ get_input = function(){
 				
 					el.x = _xx
 					el.y = _yy
-					if active_element != el el.get_input()
+					el.run_in_dock = true
+					el.get_input()
+					el.run_in_dock = false
 					el.dragging = false
 					el.x = _xx
 					el.y = _yy
-				
-					if not was_clicking_on_console and clicking_on_console
-					{
-						active_element = el
-					}
 				
 					xx = max(xx, el.right+_element_wsep)
 					right = max(right, el.right+_element_wdist)
 					bottom = max(bottom, el.bottom)
 				}
 			}
-		
-			if not clicking_on_console active_element = undefined
-
+	
+			if not was_clicking_on_console and clicking_on_console element_active = true
+	
 			xx = left + _element_wdist
 			yy = bottom+_element_hsep
 		}
@@ -455,7 +450,7 @@ get_input = function(){
 	
 	if not docked
 	{
-		if dragging or not is_undefined(active_element) or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
+		if dragging or element_active or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
 		{
 			is_front = true
 		}
@@ -534,26 +529,6 @@ draw = function(){
 	draw_set_color(o_console.colors.body_accent)
 	draw_hollowrect(left, top, right, top + bar_height, _outline_width)
 
-
-	//draw_set_color(o_console.colors.body_real)
-	//if docked
-	//{
-	//	if is_front draw_rectangle(left, top, right, top + bar_height, false)
-	//	draw_set_color(o_console.colors.body_accent)
-	//	draw_hollowrect(left, top, right, bottom, _outline_width)
-	//	draw_set_color(o_console.colors.body_real)
-	//}
-	//else draw_console_body(left, top, right, bottom)
-	//
-	//if is_front or not docked draw_rectangle(left, top, right, top + bar_height, false)
-	//
-	//if is_front draw_set_color(o_console.colors.output) 
-	//else if docked draw_set_color(o_console.colors.body_accent) 
-	//else draw_set_color(o_console.colors.plain)
-	//draw_text(left+_name_wdist, top+_name_hdist+1, name)
-	//draw_set_color(o_console.colors.body_accent)
-	//draw_hollowrect(left, top, right, top + bar_height, _outline_width)
-	
 	if show
 	{
 		var dropdown_x1 = right-_dropdown_wdist
@@ -587,13 +562,19 @@ draw = function(){
 		{	
 			if not is_array(elements[i])
 			{
-				elements[i].draw()
+				var el = elements[i]
+				el.run_in_dock = true
+				el.draw()
+				el.run_in_dock = false
 			}
 			else
 			{
 				for(var j = 0; j <= array_length(elements[i])-1; j++)
 				{
-					elements[@ i, j].draw()
+					var el = elements[@ i, j]
+					el.run_in_dock = true
+					el.draw()
+					el.run_in_dock = false
 				}
 			}
 		}
@@ -627,6 +608,5 @@ destroy = function(){
 	elements = []
 	ds_list_destroy(afterscript)
 	afterscript = -1
-	active_element = undefined
 }
 }

@@ -6,6 +6,8 @@
 function Embedded_text() constructor{
 set = function(text){
 
+	if not variable_struct_exists(self, "formatted_for_dock") format_for_dock(undefined)
+
 	static _colors_list			= ds_list_create()
 	static _clickable_list		= ds_list_create()
 	static _subclickable_list	= ds_list_create()
@@ -27,13 +29,8 @@ set = function(text){
 	self.mouse_on = false
 	self.mouse_on_item = false
 	
-	self.x = 0
-	self.y = 0
-	
-	self.left = 0
-	self.top = 0
-	self.right = 0
-	self.bottom = 0
+	self.x = variable_struct_exists_get(self, "x", 0)
+	self.y = variable_struct_exists_get(self, "y", 0)
 
 	var _width = 0
 	var _click_id = 0
@@ -182,9 +179,19 @@ set = function(text){
 	self.height += 1
 	self.width = string_width(self.plain)/string_width(" ")
 
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
+	
+	left = x
+	top = y
+	right = x+width*string_width(" ")
+	bottom = y+height*string_height(" ")
+
 	ds_list_clear(_colors_list)
 	ds_list_clear(_clickable_list)
 	ds_list_clear(_subclickable_list)
+	
+	draw_set_font(old_font)
 }
 
 
@@ -201,7 +208,7 @@ draw = function(){
 get_input = function(){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
-	draw_embedded_text(x, y, self, o_console.colors.output, 1)
+	embedded_text_inputs(x, y, self, o_console.colors.output, 1)
 	draw_set_font(old_font)
 }
 }
