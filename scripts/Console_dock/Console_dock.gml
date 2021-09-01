@@ -1,4 +1,9 @@
 
+function element_container(elements) constructor{
+	
+self.elements = elements
+}
+
 function format_for_dock(scope){
 
 var vesg = variable_struct_exists_get
@@ -258,15 +263,19 @@ set_element = function(x, y, element){
 
 set = function(elements){
 	
+	if instanceof(elements) == "element_container" elements = elements.elements
+	if not is_array(elements) elements = [elements]
+	
 	self.elements = elements
 	
 	for(var i = 0; i <= array_length(self.elements)-1; i++)
 	{
-		if not is_array(self.elements[i])
-		{
-			set_element(undefined, i, self.elements[i])
-		}
-		else for(var j = 0; j <= array_length(self.elements[i])-1; j++)
+		if not is_array(self.elements[i]) self.elements[i] = [self.elements[i]]
+		//{
+		//	set_element(undefined, i, self.elements[i])
+		//}
+		
+		for(var j = 0; j <= array_length(self.elements[i])-1; j++)
 		{	
 			set_element(j, i, self.elements[i][j])
 		}

@@ -217,6 +217,17 @@ with BAR
 	text_box.y = text_y
 	text_box.get_input()
 }
+
+if BAR.docked and keyboard_check_pressed(console_key) and keyboard_scope == noone
+{
+	BAR.dock.show = true
+	BAR.dock.is_front = true
+	BAR.text_box.scoped = true
+	keyboard_scope = BAR.text_box
+
+	clicking_on_console = true
+	keyboard_string = ""
+}
 	
 if BAR.text_box.text_changed and input_log_index != -1
 {
