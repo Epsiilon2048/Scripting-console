@@ -1,10 +1,4 @@
 
-var old_color  = draw_get_color()
-var old_alpha  = draw_get_alpha()
-var old_font   = draw_get_font()
-var old_halign = draw_get_halign()
-var old_valign = draw_get_valign()
-	
 draw_console_output()
 
 #region Draw display
@@ -44,18 +38,8 @@ if Display.enabled and ds_list_size(display_list) > 0
 }
 #endregion
 
-#region Draw window
-if Window.enabled and Window.plain != ""
-{
-	draw_console_window(Window)
-}
-#endregion
-
 draw_autofill_list()
-draw_value_boxes()
 draw_color_picker()
-
-value_box_dragging = false
 
 for(var i = ds_list_size(elements)-1; i >= 0; i--)
 {
@@ -63,9 +47,3 @@ for(var i = ds_list_size(elements)-1; i >= 0; i--)
 }
 
 event_commands_exec(event_commands.gui)
-
-draw_set_color(old_color)
-draw_set_alpha(old_alpha)
-draw_set_font(old_font)
-draw_set_halign(old_halign)
-draw_set_valign(old_valign)

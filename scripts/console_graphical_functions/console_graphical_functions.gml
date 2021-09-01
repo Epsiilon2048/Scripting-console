@@ -72,7 +72,19 @@ draw_set_halign(old_halign)
 
 function console_bar_inputs(){ with o_console {
 
-if BAR.docked and not BAR.run_in_dock return undefined
+if BAR.docked and not BAR.run_in_dock
+{
+	if BAR.dock.enabled return undefined
+	
+	with BAR
+	{
+		docked = false
+		x = undefined
+		y = undefined
+		width = undefined
+	}
+}
+else if BAR.run_in_dock BAR.docked = true
 
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
@@ -243,7 +255,7 @@ draw_set_font(old_font)
 function draw_console_bar(){ with o_console {
 
 if not BAR.enabled return undefined
-if (BAR.docked and not BAR.run_in_dock) return undefined
+if BAR.docked and not BAR.run_in_dock and BAR.dock.enabled return undefined
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()

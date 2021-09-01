@@ -6,7 +6,11 @@
 function Embedded_text() constructor{
 set = function(text){
 
-	if not variable_struct_exists(self, "formatted_for_dock") format_for_dock(undefined)
+	if not variable_struct_exists(self, "formatted_for_dock") 
+	{
+		format_for_dock(undefined)
+		dock_valign = fa_top
+	}
 
 	static _colors_list			= ds_list_create()
 	static _clickable_list		= ds_list_create()
@@ -385,8 +389,9 @@ else if not o_console.embed_text
 
 if o_console.colors.outline_layers
 {
-	draw_set_color(colors.selection)
+	draw_set_color(o_console.colors.selection)
 	draw_outline_text(x, y, text.plain)
+	draw_set_color(plain_col)
 }
 
 draw_text(x, y, text.colortext)

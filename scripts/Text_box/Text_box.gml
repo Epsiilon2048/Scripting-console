@@ -137,6 +137,7 @@ initialize_scrubber = function(variable, step){
 
 	typing = false
 	
+	att.incrementor_step = att.scrubber_step
 	att.float_places = ((att.scrubber_step mod 1) == 0) ? undefined : float_count_places(att.scrubber_step, 10)
 	att.length_min = 4
 	att.length_max = infinity
@@ -626,6 +627,8 @@ get_input = function(){
 
 
 draw = function(){
+	
+	if not enabled return undefined
 	
 	var old_color = draw_get_color()
 	var old_alpha = draw_get_alpha()

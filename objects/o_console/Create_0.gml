@@ -6,6 +6,12 @@
 clicking_on_console = false
 mouse_on_console = false
 
+rainbowify = function(list){
+for(var i = 0; i <= array_length(list)-1; i++){
+	colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow) 
+}
+}
+
 update_steps = 10
 
 colors = {}
@@ -133,10 +139,10 @@ AUTOFILL = {}
 CHECKBOX = {}
 WINDOW = {}
 COLOR_PICKER = {}
-VALUE_BOX = {}
 CTX_MENU = {}
 CTX_STRIP = {}
 SLIDER = {}
+CD_BUTTON = {}
 
 keyboard_scope = noone
 
@@ -307,8 +313,6 @@ cs_index = cs_greenbeans
 
 right_mb = false
 
-keybinds = []
-
 //these are just for the help command
 is_this_the_display = "it sure is!"
 checkboxes_like_this_one = false
@@ -386,10 +390,6 @@ error_log = ds_create(ds_type_list, "error_log")
 
 command_colors = true
 
-value_boxes = ds_create(ds_type_list, "value_boxes")
-value_box_dragging = false
-value_box_deleted = false
-
 O1 = ""
 O2 = ""
 O3 = ""
@@ -433,6 +433,7 @@ cd1 = new Console_dock() with cd1
 	initialize()
 	name = "Docks"
 	set([
+		new_cd_button("Hello world", show_debug_message),
 		new_console_dock("Name", [
 			["Outline", new_scrubber("con.DOCK.name_outline_width", .1)],
 			["Border W", new_scrubber("con.DOCK.name_wdist", 1), " H", new_scrubber("con.DOCK.name_hdist", 1)],

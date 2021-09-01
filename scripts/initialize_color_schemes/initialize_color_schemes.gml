@@ -1,5 +1,5 @@
 
-function initialize_color_schemes(){
+function initialize_color_schemes(){ with o_console {
 
 var dark_blue    = make_color_rgb(34, 50, 66)
 var green	     = make_color_rgb(40, 235, 134)
@@ -135,4 +135,4 @@ rainbow = false
 bird_mode = false
 color_scheme(cs_index)
 return "Regenerated color schemes"
-}
+}}

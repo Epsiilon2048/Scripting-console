@@ -181,7 +181,6 @@ with OUTPUT {
 	has_embed = false
 	body = false
 }
-	
 
 with AUTOFILL {
 	
@@ -273,24 +272,6 @@ with COLOR_PICKER {
 	color = make_color_hsv(hue, sat, val)
 }
 
-with VALUE_BOX {
-	
-	radius = 23
-	border_radius = 20
-	border = 9
-	border_w = 6
-	ext_border = 3
-	outline_dist = border-2
-	outline_radius1 = radius*(outline_dist/border)
-	outline_radius2 = radius*((outline_dist-1)/border)
-	text_w = string_width(" ")
-	text_h = string_height(" ")
-
-	ease_max = 200
-	ease_div = 1.5
-	ease = ease_normal
-}
-
 with CTX_MENU {
 	
 	char_height = 17
@@ -315,37 +296,6 @@ with CTX_MENU {
 	items = undefined
 	longest_item = undefined
 }
-
-/*with CTX_MENU {
-	
-	enabled = false
-	
-	x = 50
-	y = 50
-	
-	border_l = 36
-	border_r = 10
-	
-	mouse_item = -1
-	
-	clicking_on = false
-	
-	inputs = false
-	
-	left   = 0
-	right  = 0
-	top	   = 0
-	bottom = 0
-	
-	roundrect_radius = 5
-	
-	spacing = 8
-	sep_spacing = 10
-	
-	font = o_console.font
-	
-	ctx = undefined
-}*/
 
 with CTX_STRIP {
 	
@@ -374,5 +324,13 @@ with SLIDER {
 	marker_font = -1 //set later
 	
 	divider_width = 2
+}
+
+with CD_BUTTON {
+	
+	char_height = 20
+	
+	wdist = 15
+	hdist = 4
 }
 }}
