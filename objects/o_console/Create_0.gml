@@ -470,6 +470,7 @@ cd2 = new Console_dock() with cd2
 {
 	initialize()
 	name = "Command line"
+	allow_element_dragging = false
 	set([
 		other.BAR
 	])

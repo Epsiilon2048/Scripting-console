@@ -12,6 +12,8 @@ if output_as_window
 else
 {
 	ot.dock.show_name = false
+	ot.dock.x = 0
+	ot.dock.y = win_height-(ot.dock.bottom-ot.dock.top)
 }
 
 ot.dock.get_input()

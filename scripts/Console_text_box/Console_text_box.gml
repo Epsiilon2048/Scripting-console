@@ -750,7 +750,7 @@ draw = function(){
 		draw_text(text_x, text_y, text)
 	}
 	
-	if is_undefined(att.text_color) draw_set_color(o_console.colors.plain)
+	draw_set_color(o_console.colors[$ att.text_color])
 	if scoped and typing and o_console.keyboard_scope == self
 	{
 		var x1 = text_x+cw*char_pos1

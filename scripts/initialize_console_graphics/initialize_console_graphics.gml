@@ -98,14 +98,17 @@ with BAR {
 	
 	mouse_on = false
 	
-	text_box = new Console_text_box()
-	text_box.initialize()
-	text_box.variable = "o_console.console_string"
-	text_box.att.draw_box = false
-	text_box.att.color_method = gmcl_string_color
-	text_box.att.exit_with_enter = false
-	text_box.att.set_variable_on_input = true
-	text_box.att.allow_scoped_exinput = true
+	text_box = new Console_text_box() with text_box
+	{
+		initialize()
+		variable = "o_console.console_string"
+		show_name = false
+		att.draw_box = false
+		att.color_method = gmcl_string_color
+		att.exit_with_enter = false
+		att.set_variable_on_input = true
+		att.allow_scoped_exinput = true
+	}
 	
 	get_input = console_bar_inputs
 	draw = draw_console_bar
@@ -228,13 +231,15 @@ with COLOR_PICKER {
 	
 	hsv_255 = false
 	
-	hex_text_box = new_text_box("o_console.COLOR_PICKER.hex")
-	hue_text_box = new_scrubber("o_console.COLOR_PICKER.hue", 1)
-	sat_text_box = new_scrubber("o_console.COLOR_PICKER.sat", 1)
-	val_text_box = new_scrubber("o_console.COLOR_PICKER.val", 1)
-	r_text_box = new_scrubber("o_console.COLOR_PICKER.r", 1)
-	g_text_box = new_scrubber("o_console.COLOR_PICKER.g", 1)
-	b_text_box = new_scrubber("o_console.COLOR_PICKER.b", 1)
+	hex_text_box = new_text_box("Hex", "o_console.COLOR_PICKER.hex")
+	
+	hue_text_box = new_scrubber("Hue", "o_console.COLOR_PICKER.hue", 1)
+	sat_text_box = new_scrubber("Sat", "o_console.COLOR_PICKER.sat", 1)
+	val_text_box = new_scrubber("Val", "o_console.COLOR_PICKER.val", 1)
+	
+	r_text_box = new_scrubber("Red", "o_console.COLOR_PICKER.r", 1)
+	g_text_box = new_scrubber("Green", "o_console.COLOR_PICKER.g", 1)
+	b_text_box = new_scrubber("Blue", "o_console.COLOR_PICKER.b", 1)
 
 	color = make_color_hsv(hue, sat, val)
 }
