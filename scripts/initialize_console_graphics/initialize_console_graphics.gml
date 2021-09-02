@@ -61,6 +61,8 @@ with TEXT_BOX {
 	rdel = 0
 	
 	update_id = 0
+
+	word_sep = " .,()[]/"
 }
 
 with BAR {
@@ -141,38 +143,17 @@ with WINDOW {
 
 with OUTPUT {
 	
-	char_height = 17
-	
-	x = undefined	// Anchored from bottom left
-	y = undefined
-	
-	width = undefined
-	height = undefined
-	
-	left = 0
-	top = 0
-	right = 0
-	bottom = 0
-	
-	bar_dist = 15
-	border_w = 11
-	border_h = 7
-	
-	outline = .7
+	format_for_dock()
 	
 	text = new Embedded_text()
 	text.set()
 	
-	win = new Console_window()
-	win.initialize(0, 0, fa_left)
-	win.valign = fa_bottom
-	win.text = text
-	win.reset_pos = function(){
-		x = o_console.OUTPUT.left
-		y = o_console.OUTPUT.bottom
-	}
-	
-	fade_time = 6*60
+	dock = new Console_dock()
+	dock.initialize()
+	dock.set(text)
+	dock.name = "Console output"
+
+	fade_time = 6 //seconds
 	fade_step = 0
 	alpha = 0
 	alpha_dec = .04
@@ -180,6 +161,9 @@ with OUTPUT {
 	mouse_on = false
 	has_embed = false
 	body = false
+	
+	get_input = console_output_inputs
+	draw = draw_console_output
 }
 
 with AUTOFILL {

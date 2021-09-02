@@ -29,6 +29,7 @@ with scope
 	dock_element_y = undefined
 	
 	name		= vesg(self, "name", instanceof(self))
+	if name == "struct" name = "element"
 	
 	//dock_halign = vesg(self, "dock_halign", fa_left)
 	dock_valign	= vesg(self, "dock_valign", fa_middle)
@@ -186,12 +187,23 @@ set_name = function(name){
 	var cw = string_width(" ")
 	var ch = string_height(" ")
 	
-	self.name = name
-	name_width = string_width(name)/cw
-	name_height = string_height(name)/ch
+	self.name = string(name)
+	name_width = string_width(self.name)/cw
+	name_height = string_height(self.name)/ch
 	
 	draw_set_font(old_font)
 }
+
+
+set_sprite = function(sprite){
+
+	self.sprite = sprite
+	name_width = sprite_get_width(self.sprite)
+	name_height = sprite_get_height(self.sprite)
+	
+	subimg_speed = sprite_get_speed(sprite)
+}
+
 
 initialize = function(name, func){
 	
@@ -201,6 +213,17 @@ initialize = function(name, func){
 	
 	set_name(name)
 	self.func = func
+	
+	e = {}
+	
+	sprite = undefined
+	sprite_color = undefined
+	subimg = 0
+	subimg_speed = 0
+	subimg_timer = 0
+	
+	image_scale = 1
+	scale_from_global = true
 	
 	width = undefined
 	height = undefined
@@ -252,30 +275,59 @@ get_input = function(){
 	var _wdist = round(bt.wdist*asp)
 	var _hdist = round(bt.hdist*asp)
 	
-	var _name_width = name_width*cw
-	var _name_height = name_height*ch
+	var _image_scale = image_scale
+	if scale_from_global _image_scale *= asp
+	
+	if is_undefined(sprite)
+	{
+		var _name_width = name_width*cw
+		var _name_height = name_height*ch
+	}
+	else
+	{
+		var _name_width = name_width*_image_scale
+		var _name_height = name_height*_image_scale
+		
+		if sprite_get_speed_type(sprite) == gamespeed_microseconds
+		{
+			var time = get_timer()
+			if time-subimg_timer >= subimg_speed
+			{
+				subimg ++
+				subimg_timer = time
+			}
+		}
+		else
+		{
+			if subimg_timer >= room_speed
+			{
+				subimg ++
+				subimg_timer = 0
+			}
+			else subimg_timer += subimg_speed
+		}
+	}
 	
 	left = x
 	top = y
 	
-	if draw_box
+	right = left+_name_width
+	bottom = top+_name_height
+	
+	if not is_undefined(width) right = max(right, left+width)
+	else if draw_box right += _wdist*2
+	if not is_undefined(height) bottom = max(bottom, top+height)
+	else if draw_box bottom += _hdist*2
+	
+	if is_undefined(sprite)
 	{
-		right = left+_wdist*2+_name_width
-		bottom = top+_hdist*2+_name_height
-		
-		if not is_undefined(width) right = max(right, left+width)
-		if not is_undefined(height) bottom = max(bottom, top+height)
-		
 		text_x = left+(right-left)/2
 		text_y = top+(bottom-top)/2+1
 	}
 	else
 	{
-		right = left+_name_width
-		bottom = top+_name_height
-		
-		text_x = left+(right-left)/2
-		text_y = top+1
+		text_x = left + _wdist*draw_box + (name_width + (sprite_get_xoffset(sprite)-name_width))*_image_scale
+		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale
 	}
 	
 	mouse_on = not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
@@ -311,6 +363,8 @@ draw = function(){
 	
 	if not enabled return undefined
 	
+	var bt = o_console.CD_BUTTON
+	
 	var old_font = draw_get_font()
 	var old_halign = draw_get_halign()
 	var old_valign = draw_get_valign()
@@ -319,26 +373,46 @@ draw = function(){
 	draw_set_halign(fa_center)
 	draw_set_valign(fa_middle)
 	
+	var ch = string_height(" ")
+	
+	var asp = ch/bt.char_height
+	
+	var _image_scale = image_scale
+	if scale_from_global _image_scale *= asp
+	
 	var is_front = not (docked and not dock.is_front)
 	
-	if mouse_on or clicking
+	if draw_box
 	{
-		draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
-		draw_rectangle(left, top, right, bottom, false)
+		if mouse_on or clicking
+		{
+			draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
+			draw_rectangle(left, top, right, bottom, false)
+		}
 	}
 	
+	if clicking	and draw_box			draw_set_color(o_console.colors.body_real)
+	else if clicking and not draw_box	draw_set_color(o_console.colors.plain)
+	else if mouse_on					draw_set_color(o_console.colors.embed_hover)
+	else if is_front or not draw_box	draw_set_color(o_console.colors.embed)
+	else								draw_set_color(o_console.colors.body_accent)
 	
+	if not clicking and draw_box draw_hollowrect(left, top, right, bottom, 1)
 	
+	if not is_front and not clicking and draw_box draw_set_color(o_console.colors.embed)
 	
-	if clicking			draw_set_color(o_console.colors.body_real)
-	else if mouse_on	draw_set_color(o_console.colors.embed_hover)
-	else if is_front	draw_set_color(o_console.colors.embed)
-	else				draw_set_color(o_console.colors.body_accent)
-	
-	if not clicking draw_hollowrect(left, top, right, bottom, 1)
-	
-	if not is_front and not clicking and not mouse_on draw_set_color(o_console.colors.embed)
-	draw_text(text_x, text_y, name)
+	if not is_undefined(sprite)
+	{
+		var _sprite_color
+		if is_undefined(sprite_color)
+		{
+			_sprite_color = draw_get_color()
+		}
+		else _sprite_color = is_numeric(sprite_color) ? _sprite_color : o_console.colors[$ sprite_color]
+		
+		draw_sprite_ext(sprite, subimg, text_x, text_y, _image_scale, _image_scale, 0, _sprite_color, 1)
+	}
+	else draw_text(text_x, text_y, name)
 	
 	draw_set_font(old_font)
 	draw_set_halign(old_halign)
@@ -421,6 +495,17 @@ set_element = function(x, y, element){
 	format_for_dock(element)
 	element.dock_element_x = x
 	element.dock_element_y = y
+	
+	var _name = element.name
+	var i = 1
+	while variable_struct_exists(e, _name)
+	{
+		_name = element.name+" "+string(i++)
+	}
+	
+	element.name = _name
+	
+	e[$ element.name] = element
 	
 	if variable_struct_exists(element, "after_dock") ds_list_add(afterscript, element)
 }
@@ -788,6 +873,7 @@ destroy = function(){
 	}
 	
 	elements = []
+	e = {}
 	ds_list_destroy(afterscript)
 	afterscript = -1
 }

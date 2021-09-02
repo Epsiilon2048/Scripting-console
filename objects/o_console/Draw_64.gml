@@ -1,6 +1,4 @@
 
-draw_console_output()
-
 #region Draw display
 if Display.enabled and ds_list_size(display_list) > 0
 {

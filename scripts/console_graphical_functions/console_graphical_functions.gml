@@ -315,76 +315,40 @@ draw_set_valign(old_valign)
 
 
 
+function console_output_inputs(){ with o_console {
+	
+var ot = OUTPUT
+	
+if ot.docked and not ot.run_in_dock return undefined
+
+if output_as_window
+{
+	ot.dock.show_name = true
+}
+else
+{
+	ot.dock.show_name = false
+}
+
+ot.dock.get_input()
+
+with OUTPUT
+{
+	left = ot.dock.left
+	top = ot.dock.top
+	right = ot.dock.right
+	bottom = ot.dock.bottom
+}
+}}
+	
+	
 function draw_console_output(){ with o_console {
 
-var ot = o_console.OUTPUT
+var ot = OUTPUT
 
-if ot.text.docked return undefined
+if ot.docked and not ot.run_in_dock return undefined
 
-var old_color = draw_get_color()
-var old_font = draw_get_font()
-var old_halign = draw_get_halign()
-var old_valign = draw_get_valign()
-
-draw_set_font(font)
-draw_set_halign(fa_left)
-draw_set_valign(fa_bottom)
-
-var cw = string_width(" ")
-var ch = string_height(" ")
-
-var asp = ch/ot.char_height
-
-var text_width = ot.text.width*cw
-var text_height = ot.text.height*ch
-
-var _bar_dist = floor(ot.bar_dist*asp)
-var _border_w = floor(ot.border_w*asp)
-var _border_h = floor(ot.border_h*asp)
-var _outline = ceil(ot.outline*asp)
-
-var in_corner = not BAR.enabled or BAR.docked
-
-ot.left = BAR.left
-ot.bottom = in_corner ? (BAR.top - _bar_dist) : BAR.bottom
-ot.right = min( ot.left + text_width + _border_w*2, win_width )
-ot.top = max( ot.bottom - text_height - _border_h*2, 0 )
-
-ot.mouse_on = not mouse_on_console and gui_mouse_between(ot.left, ot.top, ot.right, ot.bottom)
-ot.body = ot.mouse_on or force_output_body or (ot.has_embed and force_output_embed_body)
-
-var offset = _outline*2*(force_output and force_output_body)
-if ot.body draw_console_body(ot.left-offset+1, ot.top-offset, ot.right+offset, ot.bottom+offset)
-
-if force_output and force_output_body
-{
-	var _x1	= ot.left - _outline + 1
-	var _y1	= ot.top - _outline
-	var _x2	= ot.right + _outline + 1
-	var _y2	= ot.bottom	 + _outline
-	
-	draw_set_color(colors.output)
-	draw_rectangle(_x1, _y1, ot.left, _y2, false)
-	draw_rectangle(_x1, _y2+1, _x2-1, ot.bottom, false)
-	draw_rectangle(_x2, _y2, ot.right, _y1, false)
-	draw_rectangle(_x1, _y1, _x2-1, ot.top-1, false)
-	//draw_rectangle(, false)
-}
-
-draw_embedded_text(ot.left+_border_w, ot.bottom-text_height-_border_h, ot.text, ot.body ? "output" : "ex_output", ot.alpha)
-
-if ot.mouse_on mouse_on_console = true
-
-if ot.mouse_on and not ot.text.mouse_on_item and mouse_check_button_pressed(mb_left)
-{
-	force_output = not (force_output and force_output_body)
-	force_output_body = force_output
-}
-
-draw_set_color(old_color)
-draw_set_font(old_font)
-draw_set_halign(old_halign)
-draw_set_valign(old_valign)
+ot.dock.draw()
 }}
 
 

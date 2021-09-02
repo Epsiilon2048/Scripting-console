@@ -1,22 +1,6 @@
 
 function Text_box() constructor{
 
-set_value = function(text){
-	
-	self.text = text
-	if not att.allow_alpha and not string_is_float(text) text = "0"
-
-	convert(text)
-
-	if att.allow_alpha
-	{
-		if sign(att.value_min) != -1 value = abs(value)
-		if not att.allow_float value = round(value)
-	}
-}
-
-
-
 initialize = function(variable){
 	
 	format_for_dock(undefined)
@@ -234,6 +218,7 @@ get_input = function(){
 	text_changed = false
 	
 	var shift = keyboard_check(vk_shift)
+	var control = keyboard_check(vk_control)
 	
 	if is_undefined(cbox_left)
 	{
@@ -304,8 +289,10 @@ get_input = function(){
 			{
 				char_selection = true
 				typing = true
-				char_pos1 = string_length(text)
-				char_pos2 = 0
+				char_pos1 = string_char_next(tb.word_sep, text, char_pos1, 1)
+				char_pos2 = string_char_next(tb.word_sep, text, char_pos1, -1)
+				
+				char_pos1 -= string_pos(string_char_at(text, char_pos1), tb.word_sep)
 				
 				window_set_cursor(cr_beam)
 			}
@@ -429,7 +416,7 @@ get_input = function(){
 		
 			if key_left
 			{	
-				char_pos1 --
+				char_pos1 = control ? string_char_next(tb.word_sep, text, char_pos1, -1) : (char_pos1-1)
 				char_selection = shift
 				char_mouse = false
 				blink_step = 0
@@ -442,7 +429,7 @@ get_input = function(){
 			}
 			if key_right
 			{	
-				char_pos1 ++
+				char_pos1 = control ? string_char_next(tb.word_sep, text, char_pos1, 1) : (char_pos1+1)
 				char_selection = shift
 				char_mouse = false
 				blink_step = 0
