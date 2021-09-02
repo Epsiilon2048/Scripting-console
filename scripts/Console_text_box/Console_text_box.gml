@@ -229,8 +229,8 @@ get_input = function(){
 	
 	text_width = clamp(string_length(text), att.length_min, att.length_max)*cw
 	
-	left = x
-	top = y
+	left = round(x)
+	top = round(y)
 	
 	if docked and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Console_text_box"
 	{
@@ -708,7 +708,12 @@ draw = function(){
 		if not (docked and not dock.is_front)
 		{
 			draw_set_color(o_console.colors.body_real)
-			draw_rectangle(left, top, right, bottom, false)
+			if docked draw_rectangle(left, top, right, bottom, false)
+			else
+			{
+				draw_console_body(left, top, box_left, bottom)
+				draw_rectangle(box_left, top, right, bottom, false)
+			}
 		}
 	
 		if show_name

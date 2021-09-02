@@ -21,7 +21,7 @@ with scope
 	dock_element_x = undefined
 	dock_element_y = undefined
 	
-	name		= vesg(self, "name", instanceof(self))
+	name = vesg(self, "name", instanceof(self))
 	if name == "struct" name = "element"
 	
 	//dock_halign = vesg(self, "dock_halign", fa_left)
@@ -109,7 +109,7 @@ initialize = function(){
 update_elements = function(y){
 	
 	for(var i = y; i <= array_length(elements)-1; i++)
-	for(var j = 0; j <= array_length(elements[i])-1; i++)
+	for(var j = 0; j <= array_length(elements[i])-1; j++)
 	{
 		var el = elements[@ i, j]
 		
@@ -148,6 +148,10 @@ remove_element = function(element){
 	
 	variable_struct_remove(e, element.id)
 	array_delete(elements[yy], xx, 1)
+	ds_list_delete(afterscript, ds_list_find_index(afterscript, element))
+	
+	if elements[yy] = [] array_delete(elements, yy, 1)
+	
 	update_elements(yy)
 }
 
@@ -273,6 +277,8 @@ get_input = function(){
 		if not el.dragging and not mouse_on
 		{
 			remove_element(el)
+			el.dock = undefined
+			el.docked = false
 			add_console_element(el)
 		}
 	}
@@ -447,7 +453,7 @@ draw = function(){
 	
 	var bar_height = ch + _name_hdist*2
 
-	if docked
+	if docked and not dragging
 	{
 		if is_front and show_name
 		{

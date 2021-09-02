@@ -26,5 +26,5 @@ e[$ element.id] = element
 function add_console_element(element){ with o_console {
 
 add_element(element)
-ds_list_add(elements, element)
+ds_list_insert(elements, 0, element)
 }}

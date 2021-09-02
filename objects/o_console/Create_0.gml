@@ -423,7 +423,7 @@ initialize_console_docs()
 startup = true
 
 
-cd1 = new Console_dock() with cd1
+var cd1 = new Console_dock() with cd1
 {
 	initialize()
 	name = "Docks"
@@ -437,6 +437,29 @@ cd1 = new Console_dock() with cd1
 		new_separator(),
 		[new_scrubber("Base", "con.DOCK.dropdown_base", 1), new_scrubber("Hypotenuse", "con.DOCK.dropdown_hypotenuse", 1)],
 		[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
+	])
+}
+
+add_console_element(cd1)
+
+var cd1 = new Console_dock() with cd1
+{
+	initialize()
+	name = "Docks"
+	set([
+		new_cd_button("Hello world", show_debug_message),
+		new_console_dock("Name", [
+			[new_scrubber("Outline", "con.DOCK.name_outline_width", .1)],
+			["Border", new_scrubber("W", "con.DOCK.name_wdist", 1), new_scrubber("H", "con.DOCK.name_hdist", 1)],
+		]),
+		new_console_dock("Elements", [
+			["Border", new_scrubber("W", "con.DOCK.element_wdist", 1),  new_scrubber("H", "con.DOCK.element_hdist", 1)],
+			["Separation", new_scrubber("W", "con.DOCK.element_wsep", 1), new_scrubber("H", "con.DOCK.element_hsep", 1)],
+		]),
+		new_console_dock("Dropdown triangle", [
+			[new_scrubber("Base", "con.DOCK.dropdown_base", 1), new_scrubber("Hypotenuse", "con.DOCK.dropdown_hypotenuse", 1)],
+			[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
+		]),
 	])
 }
 
