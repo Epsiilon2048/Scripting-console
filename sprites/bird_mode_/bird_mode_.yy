@@ -69,8 +69,8 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Unsorted",
+    "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
   "name": "bird_mode_",

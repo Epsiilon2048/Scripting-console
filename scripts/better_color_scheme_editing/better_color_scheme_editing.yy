@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Unsorted",
+    "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
   "name": "better_color_scheme_editing",

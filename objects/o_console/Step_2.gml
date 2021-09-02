@@ -26,6 +26,8 @@ if front != -1
 	ds_list_delete(elements, front)
 	ds_list_insert(elements, 0, el)
 }
+
+if not mouse_check_button(mb_left) element_dragging = noone
 #endregion
 
 #region Silly theming stuff

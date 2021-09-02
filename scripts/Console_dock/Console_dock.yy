@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Worrking on",
-    "path": "folders/Console/Worrking on.yy",
+    "name": "Graphical elements",
+    "path": "folders/Console/Graphical elements.yy",
   },
   "resourceVersion": "1.0",
   "name": "Console_dock",

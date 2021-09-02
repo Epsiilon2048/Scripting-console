@@ -12,6 +12,8 @@ for(var i = 0; i <= array_length(list)-1; i++){
 }
 }
 
+e = {}
+
 update_steps = 10
 
 colors = {}
@@ -134,7 +136,6 @@ DOCK = {}
 TEXT_BOX = {}
 BAR = {}
 OUTPUT = {}
-SCROLLBAR = {}
 AUTOFILL = {}
 CHECKBOX = {}
 WINDOW = {}
@@ -142,6 +143,7 @@ COLOR_PICKER = {}
 CTX_MENU = {}
 CTX_STRIP = {}
 SLIDER = {}
+SEPARATOR = {}
 CD_BUTTON = {}
 
 keyboard_scope = noone
@@ -294,7 +296,6 @@ window_embed_text = true
 collapse_windows = true
 
 display_show_objects = false
-display_update = 3
 
 output_set_window = true
 
@@ -370,12 +371,6 @@ y2 = 0
 mouse_click_range = 1
 rainbow = false
 
-Display = new Console_window()
-Display.initialize(23, 23, fa_left)
-
-Window = new Console_window()
-Window.initialize(23, 23, fa_right)
-
 log = ds_create(ds_type_list, "log")
 
 inst_select = false
@@ -434,35 +429,32 @@ cd1 = new Console_dock() with cd1
 	name = "Docks"
 	set([
 		new_cd_button("Hello world", show_debug_message),
-		new_console_dock("Name", [
-			["Outline", new_scrubber("con.DOCK.name_outline_width", .1)],
-			["Border W", new_scrubber("con.DOCK.name_wdist", 1), " H", new_scrubber("con.DOCK.name_hdist", 1)],
-		]),
-		new_console_dock("Elements", [
-			["Border W", new_scrubber("con.DOCK.element_wdist", 1), " H", new_scrubber("con.DOCK.element_hdist", 1)],
-			["Separation W", new_scrubber("con.DOCK.element_wsep", 1), " H", new_scrubber("con.DOCK.element_hsep", 1)],
-		]),
-		new_console_dock("Dropdown triangle", [
-			["Base", new_scrubber("con.DOCK.dropdown_base", 1), " Hypotenuse", new_scrubber("con.DOCK.dropdown_hypotenuse", 1)],
-			["Border", new_scrubber("con.DOCK.dropdown_wdist", 1)],
-		]),
+		[new_scrubber("Outline", "con.DOCK.name_outline_width", .1)],
+		["Border", new_scrubber("W", "con.DOCK.name_wdist", 1), new_scrubber("H", "con.DOCK.name_hdist", 1)],
+		new_separator(),
+		["Border", new_scrubber("W", "con.DOCK.element_wdist", 1),  new_scrubber("H", "con.DOCK.element_hdist", 1)],
+		["Separation", new_scrubber("W", "con.DOCK.element_wsep", 1), new_scrubber("H", "con.DOCK.element_hsep", 1)],
+		new_separator(),
+		[new_scrubber("Base", "con.DOCK.dropdown_base", 1), new_scrubber("Hypotenuse", "con.DOCK.dropdown_hypotenuse", 1)],
+		[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
 	])
 }
 
-ds_list_add(elements, cd1)
+add_console_element(cd1)
 
 q = ""
 cd2 = new Console_dock() with cd2
 {
-	var t = new_text_box("o_console.q")
-	
 	initialize()
-	name = "Test console dock"
+	name = "Command line"
 	set([
-		//other.OUTPUT,
 		other.BAR
 	])
 }
-ds_list_add(elements, cd2)
-ds_list_add(elements, BAR)
-ds_list_add(elements, OUTPUT)
+
+element_dragging = noone
+
+add_console_element(cd2)
+add_console_element(BAR)
+add_console_element(OUTPUT)
+add_console_element(new_text_box("Q", "o_console.e.Q.mouse_on"))

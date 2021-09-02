@@ -72,10 +72,7 @@ initialize = function(x, y, sidebar_side){
 		{str: "Clear",			output: true},
 		{str: "Set window",		scr: window_set_output},
 	])
-		
-	self.scrollbar = new Console_scrollbar()
-	self.scrollbar.initialize(x, y, x+self.width, y+self.width, 0, 0, 0, 0, 0, 0, 0)
-		
+
 	self.has_embed = false
 		
 	self.enabled = true

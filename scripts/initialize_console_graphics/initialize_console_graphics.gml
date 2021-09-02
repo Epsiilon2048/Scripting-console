@@ -62,7 +62,7 @@ with TEXT_BOX {
 	
 	update_id = 0
 
-	word_sep = " .,()[]/"
+	word_sep = " .,\"()[]/"
 }
 
 with BAR {
@@ -98,7 +98,7 @@ with BAR {
 	
 	mouse_on = false
 	
-	text_box = new Text_box()
+	text_box = new Console_text_box()
 	text_box.initialize()
 	text_box.variable = "o_console.console_string"
 	text_box.att.draw_box = false
@@ -109,19 +109,6 @@ with BAR {
 	
 	get_input = console_bar_inputs
 	draw = draw_console_bar
-}
-
-with SCROLLBAR {
-	
-	char_height = 17
-	
-	width = 20
-	min_height = 18
-	
-	scroll_step = char_height*4
-	key_scroll_step = 6
-	
-	resize_border = 6
 }
 
 with WINDOW {
@@ -143,7 +130,7 @@ with WINDOW {
 
 with OUTPUT {
 	
-	format_for_dock()
+	format_for_dock(undefined)
 	
 	text = new Embedded_text()
 	text.set()
@@ -198,10 +185,6 @@ with AUTOFILL {
 	mouse_border = 6
 	mouse_dragging_top = false
 	mouse_dragging_right = false
-	
-	scrollbar = new Console_scrollbar()
-	scrollbar.initialize(0, 0, 0, 0, width, height, fa_right, fa_bottom)
-	scrollbar.resize = true
 }
 
 with CHECKBOX {
@@ -256,44 +239,6 @@ with COLOR_PICKER {
 	color = make_color_hsv(hue, sat, val)
 }
 
-with CTX_MENU {
-	
-	char_height = 17
-	
-	x = 0
-	y = 0
-	
-	left = 0
-	top = 0
-	right = 0
-	bottom = 0
-	
-	border_l = 10
-	border_r = 10
-	border_h = 10
-	
-	text_dist = 10
-	
-	sep_width = 1
-	sep_dist = 10
-	
-	items = undefined
-	longest_item = undefined
-}
-
-with CTX_STRIP {
-	
-	dist   = 7
-	border = 5
-	
-	line_width = 1
-	
-	time = 20
-	alpha_spd = .3
-	
-	font = o_console.font
-}
-
 with SLIDER {
 	
 	height			 = 39
@@ -316,5 +261,12 @@ with CD_BUTTON {
 	
 	wdist = 15
 	hdist = 4
+}
+	
+with SEPARATOR {
+	
+	char_height = 23
+	width = 1.7
+	double_sep = 3
 }
 }}

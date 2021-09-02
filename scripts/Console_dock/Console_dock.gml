@@ -1,11 +1,4 @@
 
-function element_container(elements) constructor{
-	
-self.elements = elements
-}
-
-
-
 function format_for_dock(scope){
 
 var vesg = variable_struct_exists_get
@@ -47,6 +40,13 @@ with scope
 
 
 
+function element_container(elements) constructor{
+	
+self.elements = elements
+}
+
+
+
 function new_console_dock(name, elements){
 
 var d = new Console_dock()
@@ -54,382 +54,6 @@ d.initialize()
 d.name = name
 d.set(elements)
 return d
-}
-
-
-
-function Cd_text() constructor{
-
-set = function(text){
-	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
-	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
-	
-	self.text = text
-	width = string_width(text)/cw
-	height = string_height(text)/ch
-	
-	x = 0
-	y = 0
-	
-	left = 0
-	top = 0
-	right = 0
-	bottom = 0
-	
-	color_text = undefined
-	color = "output"
-	color_method = noscript
-	
-	variable = undefined
-	float_places = 3
-	
-	draw_set_font(old_font)
-}
-
-initialize = set
-
-get_input = function(){
-	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
-	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
-	
-	if not is_undefined(variable)
-	{
-		var value = variable_string_get(variable)
-		var newtext = is_real(value) ? string_format_float(value, float_places) : string(value)
-		
-		if newtext != text
-		{
-			text = newtext
-			color_text = color_method(newtext)
-			width = string_width(text)/cw
-			height = string_height(text)/ch
-		}
-	}
-	
-	left = x
-	top = y
-	right = x+width*cw
-	bottom = y+height*ch
-	
-	draw_set_font(old_font)
-}
-
-draw = function(){
-
-	var old_color = draw_get_color()
-	var old_font = draw_get_font()
-	var old_halign = draw_get_halign()
-	var old_valign = draw_get_valign()
-	
-	var is_front = true //not docked or (docked and dock.is_front)
-	
-	draw_set_font(o_console.font)
-	draw_set_halign(fa_left)
-	draw_set_valign(fa_top)
-	
-	if not is_front or color_method == noscript
-	{
-		draw_set_color(is_front ? (is_numeric(color) ? color : o_console.colors[$ color]) : o_console.colors.body_accent)
-		draw_text(x, y+1, text)
-	}
-	else draw_console_text(x, y+1, color_text)
-	
-	draw_set_color(old_color)
-	draw_set_font(old_font)
-	draw_set_halign(old_halign)	draw_set_valign(old_valign)
-}
-}
-
-
-
-function new_cd_text(text, color){
-
-var t = new Cd_text()
-t.initialize(text)
-t.color = color
-return t
-}
-
-
-
-function new_cd_var(variable){
-var v = new Cd_text()
-v.initialize()
-v.variable = variable
-return v
-}
-
-
-
-function new_cd_button(name, func){
-var b = new Cd_button()
-b.initialize(name, func)
-return b
-}
-
-
-
-function Cd_button() constructor{
-
-set_name = function(name){
-	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
-	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
-	
-	self.name = string(name)
-	name_width = string_width(self.name)/cw
-	name_height = string_height(self.name)/ch
-	
-	draw_set_font(old_font)
-}
-
-
-set_sprite = function(sprite){
-
-	self.sprite = sprite
-	name_width = sprite_get_width(self.sprite)
-	name_height = sprite_get_height(self.sprite)
-	
-	subimg_speed = sprite_get_speed(sprite)
-}
-
-
-initialize = function(name, func){
-	
-	format_for_dock()
-	
-	enabled = true
-	
-	set_name(name)
-	self.func = func
-	
-	e = {}
-	
-	sprite = undefined
-	sprite_color = undefined
-	subimg = 0
-	subimg_speed = 0
-	subimg_timer = 0
-	
-	image_scale = 1
-	scale_from_global = true
-	
-	width = undefined
-	height = undefined
-	
-	pressed_script = noscript
-	held_script = noscript
-	released_script = func
-	
-	x = 0
-	y = 0
-	
-	left = 0
-	top = 0
-	right = 0
-	bottom = 0
-	
-	text_x = 0
-	text_y = 0
-	
-	mouse_on = false
-	clicking = false
-	
-	draw_box = true
-}
-
-
-get_input = function(){
-	
-	if not enabled
-	{
-		left = x
-		top = y
-		right = x
-		bottom = y
-		
-		return undefined
-	}
-	
-	var bt = o_console.CD_BUTTON
-	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
-	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
-	
-	var asp = ch/bt.char_height
-	
-	var _wdist = round(bt.wdist*asp)
-	var _hdist = round(bt.hdist*asp)
-	
-	var _image_scale = image_scale
-	if scale_from_global _image_scale *= asp
-	
-	if is_undefined(sprite)
-	{
-		var _name_width = name_width*cw
-		var _name_height = name_height*ch
-	}
-	else
-	{
-		var _name_width = name_width*_image_scale
-		var _name_height = name_height*_image_scale
-		
-		if sprite_get_speed_type(sprite) == gamespeed_microseconds
-		{
-			var time = get_timer()
-			if time-subimg_timer >= subimg_speed
-			{
-				subimg ++
-				subimg_timer = time
-			}
-		}
-		else
-		{
-			if subimg_timer >= room_speed
-			{
-				subimg ++
-				subimg_timer = 0
-			}
-			else subimg_timer += subimg_speed
-		}
-	}
-	
-	left = x
-	top = y
-	
-	right = left+_name_width
-	bottom = top+_name_height
-	
-	if not is_undefined(width) right = max(right, left+width)
-	else if draw_box right += _wdist*2
-	if not is_undefined(height) bottom = max(bottom, top+height)
-	else if draw_box bottom += _hdist*2
-	
-	if is_undefined(sprite)
-	{
-		text_x = left+(right-left)/2
-		text_y = top+(bottom-top)/2+1
-	}
-	else
-	{
-		text_x = left + _wdist*draw_box + (name_width + (sprite_get_xoffset(sprite)-name_width))*_image_scale
-		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale
-	}
-	
-	mouse_on = not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
-	if mouse_on 
-	{
-		if mouse_check_button_pressed(mb_left)
-		{
-			clicking = true
-			pressed_script()
-		}
-		
-		mouse_on_console = true
-	}
-	
-	if clicking and not mouse_check_button(mb_left)
-	{
-		clicking = false
-		released_script()
-	}
-	
-	else if clicking 
-	{
-		clicking_on_console = true
-		held_script()
-	}
-
-	draw_set_font(old_font)
-}
-
-
-
-draw = function(){
-	
-	if not enabled return undefined
-	
-	var bt = o_console.CD_BUTTON
-	
-	var old_font = draw_get_font()
-	var old_halign = draw_get_halign()
-	var old_valign = draw_get_valign()
-	
-	draw_set_font(o_console.font)
-	draw_set_halign(fa_center)
-	draw_set_valign(fa_middle)
-	
-	var ch = string_height(" ")
-	
-	var asp = ch/bt.char_height
-	
-	var _image_scale = image_scale
-	if scale_from_global _image_scale *= asp
-	
-	var is_front = not (docked and not dock.is_front)
-	
-	if draw_box
-	{
-		if mouse_on or clicking
-		{
-			draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
-			draw_rectangle(left, top, right, bottom, false)
-		}
-	}
-	
-	if clicking	and draw_box			draw_set_color(o_console.colors.body_real)
-	else if clicking and not draw_box	draw_set_color(o_console.colors.plain)
-	else if mouse_on					draw_set_color(o_console.colors.embed_hover)
-	else if is_front or not draw_box	draw_set_color(o_console.colors.embed)
-	else								draw_set_color(o_console.colors.body_accent)
-	
-	if not clicking and draw_box draw_hollowrect(left, top, right, bottom, 1)
-	
-	if not is_front and not clicking and draw_box draw_set_color(o_console.colors.embed)
-	
-	if not is_undefined(sprite)
-	{
-		var _sprite_color
-		if is_undefined(sprite_color)
-		{
-			_sprite_color = draw_get_color()
-		}
-		else _sprite_color = is_numeric(sprite_color) ? _sprite_color : o_console.colors[$ sprite_color]
-		
-		draw_sprite_ext(sprite, subimg, text_x, text_y, _image_scale, _image_scale, 0, _sprite_color, 1)
-	}
-	else draw_text(text_x, text_y, name)
-	
-	draw_set_font(old_font)
-	draw_set_halign(old_halign)
-	draw_set_valign(old_valign)
-}
-}
-
-
-
-function Cd_checkbox() constructor{
-	
-}
-
-
-
-function Cd_color_picker() constructor{
-	
 }
 
 
@@ -472,12 +96,27 @@ initialize = function(){
 	mouse_xoffset = 0
 	mouse_yoffset = 0
 	
+	allow_element_dragging = true
+	
 	is_front = false
 	
 	elements = []
+	e = {}
 	afterscript = ds_list_create()
 }
 
+
+update_elements = function(y){
+	
+	for(var i = y; i <= array_length(elements)-1; i++)
+	for(var j = 0; j <= array_length(elements[i])-1; i++)
+	{
+		var el = elements[@ i, j]
+		
+		el.dock_element_x = j
+		el.dock_element_y = i
+	}
+}
 
 
 set_element = function(x, y, element){
@@ -496,20 +135,50 @@ set_element = function(x, y, element){
 	element.dock_element_x = x
 	element.dock_element_y = y
 	
-	var _name = element.name
-	var i = 1
-	while variable_struct_exists(e, _name)
-	{
-		_name = element.name+" "+string(i++)
-	}
-	
-	element.name = _name
-	
-	e[$ element.name] = element
+	add_element(element)
 	
 	if variable_struct_exists(element, "after_dock") ds_list_add(afterscript, element)
 }
 
+
+remove_element = function(element){
+	
+	var xx = element.dock_element_x
+	var yy = element.dock_element_y
+	
+	variable_struct_remove(e, element.id)
+	array_delete(elements[yy], xx, 1)
+	update_elements(yy)
+}
+
+
+destroy_element = function(element){
+	
+	remove_element(element)
+	if variable_struct_exists(element, "destroy") element.destroy()
+}
+
+
+insert_horizontal = function(x, y, element){
+	
+	y = max(y, array_length(elements))
+	if y == array_length(elements) array_push(elements, [])
+	y = max(x, array_length(elements[y]))
+
+	array_insert(elements[y], x, undefined)
+	set_element(x, y, element)
+	update_elements(y)
+}
+
+
+insert_vertical = function(y, element){
+	
+	y = max(y, array_length(elements))
+	
+	array_insert(elements, y, [])
+	set_element(0, y, element)
+	update_elements(y+1)
+}
 
 
 set = function(elements){
@@ -529,7 +198,6 @@ set = function(elements){
 		}
 	}
 }
-
 
 
 get_input = function(){
@@ -554,7 +222,6 @@ get_input = function(){
 	var cw = string_width(" ")
 	var ch = string_height(" ")
 	var asp = ch/dc.char_height
-	var asp = ch/dc.char_height
 	
 	var _outline_width = round(dc.name_outline_width*asp)
 	var _name_wdist = round(dc.name_wdist*asp)+_outline_width
@@ -569,13 +236,11 @@ get_input = function(){
 	var bar_height = ch + _name_hdist*2
 	
 	var element_active = false
+	var was_clicking_on_console = clicking_on_console
 	
 	if dragging
 	{
-		if not mouse_check_button(mb_left)
-		{
-			dragging = false
-		}
+		if not mouse_check_button(mb_left) dragging = false
 		else
 		{
 			x = gui_mx-mouse_xoffset
@@ -600,6 +265,17 @@ get_input = function(){
 	right = left
 	bottom = top
 	if show_name bottom += ch + _name_hdist*2
+
+	var el = o_console.element_dragging
+	if allow_element_dragging and el != noone and el.docked and el.dock == self
+	{
+		el.get_input()
+		if not el.dragging and not mouse_on
+		{
+			remove_element(el)
+			add_console_element(el)
+		}
+	}
 	
 	if not show
 	{
@@ -612,8 +288,6 @@ get_input = function(){
 		
 		var xx = left + _element_wdist
 		var yy = bottom
-	
-		var was_clicking_on_console = clicking_on_console
 	
 		for(var i = 0; i <= array_length(elements)-1; i++)
 		{		
@@ -645,30 +319,38 @@ get_input = function(){
 				{
 					_yy = _bottom-(el.bottom-el.top)
 				}
-				
-				el.x = _xx
-				el.y = _yy
-				el.run_in_dock = true
-				el.get_input()
-				el.run_in_dock = false
-				el.dragging = false
-				el.x = _xx
-				el.y = _yy
-				
-				if (el.right-el.left) and (el.bottom-el.top)
+
+				if not allow_element_dragging or not el.dragging
 				{
-					xx = max(xx, el.right+_element_wsep)
-					right = max(right, el.right+_element_wdist)
-					bottom = max(bottom, el.bottom)
+					el.x = _xx
+					el.y = _yy
+					el.run_in_dock = true
+					el.get_input()
+					el.run_in_dock = false
+					el.x = _xx
+					el.y = _yy
 					
-					sized_element = true
+					if not allow_element_dragging and el.dragging
+					{
+						el.dragging = false
+						if o_console.element_dragging == el o_console.element_dragging = noone
+					}
+				
+					if (el.right-el.left) or (el.bottom-el.top)
+					{
+						xx = max(xx, el.right+_element_wsep)
+						right = max(right, el.right+_element_wdist)
+						bottom = max(bottom, el.bottom)
+					
+						sized_element = true
+					}
 				}
 			}
 	
 			if not was_clicking_on_console and clicking_on_console element_active = true
 	
-			xx = left+_element_wdist
-			yy = bottom + (_element_hsep*sized_element)
+			xx = left + _element_wdist
+			yy = bottom + (_element_hsep*(sized_element or i != 0))
 		}
 		bottom += _element_hdist
 		_width = right-left
@@ -677,7 +359,7 @@ get_input = function(){
 	if not is_undefined(width) right = max(right, left+width)
 	if not is_undefined(height) bottom = max(top, top+height)
 	
-	mouse_on = not mouse_on_console and gui_mouse_between(left, top, right, bottom)
+	mouse_on = not was_clicking_on_console and gui_mouse_between(left, top, right, bottom)
 	mouse_on_bar = mouse_on and show_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
 	
 	if mouse_on_bar
@@ -705,6 +387,8 @@ get_input = function(){
 		dragging = true
 		mouse_xoffset = gui_mx-x
 		mouse_yoffset = gui_my-y
+		
+		o_console.element_dragging = self
 	}
 	
 	if not docked
@@ -731,11 +415,9 @@ get_input = function(){
 }
 
 
-
 after_dock = function(){
 	is_front = dock.is_front
 }
-
 
 
 draw = function(){
@@ -823,28 +505,21 @@ draw = function(){
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
 	
-	if show
-	{
-		for(var i = 0; i <= array_length(elements)-1; i++)
-		{	
-			if not is_array(elements[i])
-			{
-				var el = elements[i]
-				el.run_in_dock = true
-				el.draw()
-				el.run_in_dock = false
-			}
-			else
-			{
-				for(var j = 0; j <= array_length(elements[i])-1; j++)
-				{
-					var el = elements[@ i, j]
-					el.run_in_dock = true
-					el.draw()
-					el.run_in_dock = false
-				}
-			}
+	if show for(var i = 0; i <= array_length(elements)-1; i++) for(var j = 0; j <= array_length(elements[i])-1; j++)
+	{	
+		var el = elements[@ i, j]
+					
+		if not el.dragging
+		{
+			el.run_in_dock = true
+			el.draw()
+			el.run_in_dock = false
 		}
+	}
+	
+	if o_console.element_dragging != noone and o_console.element_dragging.docked and o_console.element_dragging.dock == self
+	{
+		o_console.element_dragging.draw()
 	}
 	
 	draw_set_color(old_color)
@@ -854,22 +529,11 @@ draw = function(){
 }
 
 
-
 destroy = function(){
 	
-	for(var i = 0; i <= array_length(elements)-1; i++)
+	for(var i = 0; i <= array_length(elements)-1; i++) for(var j = 0; j <= array_length(elements[i])-1; j++)
 	{	
-		if not is_array(elements[i])
-		{
-			if variable_struct_exists(elements[i], "destroy") elements[i].destroy()
-		}
-		else
-		{
-			for(var j = 0; j <= array_length(elements[i])-1; j++)
-			{
-				if variable_struct_exists(elements[@ i, j], "destroy") elements[@ i, j].destroy()
-			}
-		}
+		if variable_struct_exists(elements[@ i, j], "destroy") elements[@ i, j].destroy()
 	}
 	
 	elements = []

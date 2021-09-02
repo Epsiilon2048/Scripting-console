@@ -83,11 +83,6 @@ if at.mouse_dragging_top or at.mouse_dragging_right
 		window_set_cursor(cr_default)
 	}
 }
-at.scrollbar.set_pos(x1+1, y2+_border_h, x2-_border_w, y1-_border_h)
-at.scrollbar.page_height = entries_height+_text_sep+1
-at.scrollbar.page_width = _width
-
-var _scroll = floor(at.scrollbar.scroll)
 
 var _sidetext_bar = floor(at.sidetext_bar*asp)
 var _sidetext_width = ceil(at.sidetext_width*asp)
@@ -98,7 +93,6 @@ var text_x = sidetext_x + _sidetext_bar + _sidetext_width + _sidetext_border
 var text_y = y1 - _border_h + _scroll
 
 draw_console_body(x1, y1-1, x2, y2+1)
-draw_scrollbar(at.scrollbar)
 clip_rect_cutout(x1+1, y2+_border_h+1, x2-_border_w*2-o_console.SCROLLBAR.width, y1-_border_h)
 
 var tab = keyboard_check_pressed(vk_tab)
