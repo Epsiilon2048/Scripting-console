@@ -37,6 +37,8 @@ with DOCK {
 	dropdown_hypotenuse = 10
 	dropdown_base = 17
 	dropdown_wdist = 8
+	
+	dragging_radius = 30
 }
 
 with TEXT_BOX {

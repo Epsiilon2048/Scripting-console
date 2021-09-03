@@ -236,6 +236,7 @@ get_input = function(){
 	var _element_hsep = round(dc.element_hsep*asp)
 	var _dropdown_base = round(dc.dropdown_base*asp)
 	var _dropdown_wdist = round(dc.dropdown_wdist*asp)+_outline_width
+	var _dragging_radius = round(dc.dragging_radius*asp)
 	
 	var bar_height = ch + _name_hdist*2
 	
@@ -270,13 +271,18 @@ get_input = function(){
 	bottom = top
 	if show_name bottom += ch + _name_hdist*2
 
+	var dragging_radius_met = true
+
 	var el = o_console.element_dragging
-	if allow_element_dragging and el != noone and el.docked and el.dock == self
+	if allow_element_dragging and dragging_radius_met and el != noone and el.docked and el.dock == self
 	{
+		dragging_radius_met = _dragging_radius <= point_distance(mouse_xoffset, mouse_yoffset, gui_mx, gui_my)
 		el.get_input()
+		
 		if not el.dragging and not mouse_on
 		{
 			remove_element(el)
+			is_front = false
 			el.dock = undefined
 			el.docked = false
 			add_console_element(el)
@@ -326,8 +332,10 @@ get_input = function(){
 					_yy = _bottom-(el.bottom-el.top)
 				}
 
-				if not allow_element_dragging or not el.dragging
+				if not allow_element_dragging or not el.dragging or not dragging_radius_met
 				{
+					var was_dragging = el.dragging
+					
 					el.x = _xx
 					el.y = _yy
 					el.run_in_dock = true
@@ -336,20 +344,46 @@ get_input = function(){
 					el.x = _xx
 					el.y = _yy
 					
-					if not allow_element_dragging and el.dragging
+					if el.dragging
 					{
-						el.dragging = false
-						if o_console.element_dragging == el o_console.element_dragging = noone
+						if not was_dragging and allow_element_dragging
+						{
+							mouse_xoffset = gui_mx
+							mouse_yoffset = gui_my
+						}
+						else if not allow_element_dragging
+						{
+							el.dragging = false
+							if o_console.element_dragging == el o_console.element_dragging = noone
+						}
 					}
+				}
 				
-					if (el.right-el.left) or (el.bottom-el.top)
-					{
-						xx = max(xx, el.right+_element_wsep)
-						right = max(right, el.right+_element_wdist)
-						bottom = max(bottom, el.bottom)
+				var el_width = (el.right-el.left)
+				var el_height = (el.bottom-el.top)
+				
+				if el_width or el_height
+				{
+					// Initially it just used the right/bottom of the element to determine
+					// the position of the next, but once dragging was introduced it had
+					// to instead use the width/height - this works for elements that
+					// aren't being dragged, but for the sake of consistency I'm keeping
+					// it as it was for elements which aren't being dragged.
 					
-						sized_element = true
+					if el.dragging
+					{
+						right = max(right, xx+el_width)
+						bottom = max(bottom, yy+el_height)
+						xx = max(xx, xx+el_width+_element_wsep)
 					}
+					else
+					{
+						right = max(right, el.right)
+						bottom = max(bottom, el.bottom)
+						xx = max(xx, el.right+_element_wsep)
+					}
+					
+					sized_element = true
 				}
 			}
 	
@@ -358,6 +392,7 @@ get_input = function(){
 			xx = left + _element_wdist
 			yy = bottom + (_element_hsep*(sized_element or i != 0))
 		}
+		right += _element_wdist
 		bottom += _element_hdist
 		_width = right-left
 	}
@@ -521,11 +556,6 @@ draw = function(){
 			el.draw()
 			el.run_in_dock = false
 		}
-	}
-	
-	if o_console.element_dragging != noone and o_console.element_dragging.docked and o_console.element_dragging.dock == self
-	{
-		o_console.element_dragging.draw()
 	}
 	
 	draw_set_color(old_color)
