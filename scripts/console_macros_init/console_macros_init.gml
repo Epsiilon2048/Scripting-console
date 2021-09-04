@@ -1,4 +1,9 @@
 
+#macro vk_rcommand 91
+#macro vk_lcommand 92
+global.super_key = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
+#macro vk_super global.super_key
+
 function initialize_console_macros(){
 
 #region Shortcuts
@@ -181,5 +186,5 @@ console_macro_add("vk_rshift",			dt_real, vk_rshift)
 console_macro_add("vk_subtract",		dt_real, vk_subtract)
 #endregion
 
-if include_builtin_functions console_macro_add_builtin()
+if include_builtin_functions console_macro_add_builtin(undefined)
 }

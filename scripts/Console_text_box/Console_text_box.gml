@@ -191,6 +191,7 @@ mouse_get_char_pos = function(){
 
 get_input = function(){
 	
+	#region Disabled defaulting
 	if not enabled
 	{
 		left = x
@@ -216,7 +217,9 @@ get_input = function(){
 		}
 		return undefined
 	}
+	#endregion
 	
+	#region Scaling
 	var tb = o_console.TEXT_BOX
 	
 	draw_set_font(o_console.font)
@@ -226,7 +229,9 @@ get_input = function(){
 	
 	var _text_wdist = floor(tb.text_wdist*asp)
 	var _text_hdist = floor(tb.text_hdist*asp)
+	#endregion
 	
+	#region Defining boundries
 	text_width = clamp(string_length(text), att.length_min, att.length_max)*cw
 	
 	left = round(x)
@@ -245,11 +250,12 @@ get_input = function(){
 	name_text_x = left + _text_wdist*att.draw_box
 	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and show_name)
 	text_y = top+1 + _text_hdist*att.draw_box
+	#endregion
 	
-	text_changed = false
+	#region Mouse inputs
 	
-	var shift = keyboard_check(vk_shift)
-	var control = keyboard_check(vk_control)
+	var mouse_left_pressed = mouse_check_button_pressed(mb_left)
+	var mouse_left = mouse_left_pressed or mouse_check_button(mb_left)
 	
 	if is_undefined(cbox_left)
 	{
@@ -288,9 +294,16 @@ get_input = function(){
 		mouse_on = true
 		mouse_on_console = true
 	}
-	
 	mouse_on_name = mouse_on and not mouse_on_box
 	
+	if scrubbing and not mouse_left
+	{
+		if not is_undefined(variable) variable_string_set(variable, value)
+		scrubbing = false
+	}
+	#endregion
+	
+	#region Dragging
 	if dragging
 	{
 		if not mouse_check_button(mb_left) dragging = false
@@ -315,31 +328,27 @@ get_input = function(){
 		o_console.element_dragging = self
 		clicking_on_console = true
 	}
-
+	#endregion
+	
+	text_changed = false
 	dclick_step ++
 
-	if scrubbing and not mouse_check_button(mb_left)
-	{
-		if not is_undefined(variable) variable_string_set(variable, value)
-		scrubbing = false
-	}
+	var key_shift = keyboard_check(vk_shift)
+	var key_super = keyboard_check(vk_control)
+	var key_escape_pressed = keyboard_check_pressed(vk_escape)
+	var key_enter_pressed = keyboard_check_pressed(vk_enter)
 
-	if mouse_check_button_pressed(mb_left) or keyboard_check_pressed(vk_escape) or (att.exit_with_enter and keyboard_check_pressed(vk_enter))
+	if mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)
 	{	
-		if mouse_on_box and scoped and att.scrubber and not typing and mouse_check_button_pressed(mb_left)
+		if mouse_on_box and scoped and att.scrubber and not typing and mouse_left_pressed
 		{
 			scrubbing = true
 			mouse_previous = gui_mx
 		}
 		
-		if mouse_on_box and mouse_check_button_pressed(mb_left)
+		if mouse_on_box and mouse_left_pressed
 		{
 			clicking = true
-			
-			tb.rleft		= 0
-			tb.rright		= 0
-			tb.rbackspace	= 0
-			tb.rdel			= 0
 		
 			if not scoped and att.scrubber 
 			{
@@ -373,7 +382,7 @@ get_input = function(){
 			{
 				char_mouse = true
 				char_pos1 = mouse_get_char_pos()
-				if not shift char_pos2 = char_pos1
+				if not key_shift char_pos2 = char_pos1
 				char_selection = char_pos1 != char_pos2
 			}
 			
@@ -401,7 +410,7 @@ get_input = function(){
 			if not is_undefined(variable) variable_string_set(variable, value)
 		}
 	}
-	else if clicking and not mouse_check_button(mb_left)
+	else if clicking and not mouse_left
 	{
 		clicking = false
 		char_mouse = false
@@ -424,6 +433,7 @@ get_input = function(){
 		blink_step = 0
 	}
 	
+	#region Update text from variable
 	if	not is_undefined(variable) and
 		((scoped and att.allow_scoped_exinput) or 
 		(not scoped and att.allow_exinput and ((o_console.step mod o_console.update_steps) == update_id mod o_console.update_steps)))
@@ -435,24 +445,46 @@ get_input = function(){
 		
 		if old_text != text colors = att.color_method(text)
 	}
+	#endregion
 	
 	if scoped
 	{
-		var rt = tb.repeat_time*(room_speed/60)
+		if att.allow_input
+		{
+			var _key_left				= keyboard_check(vk_left)
+			var _key_left_pressed		= _key_left or keyboard_check_pressed(vk_left)
+			var _key_right				= keyboard_check(vk_right)
+			var _key_right_pressed		= _key_right or keyboard_check_pressed(vk_right)
+			var _key_backspace			= keyboard_check(vk_backspace)
+			var _key_backspace_pressed	= _key_backspace or keyboard_check_pressed(vk_backspace)
+			var _key_delete				= keyboard_check(vk_delete)
+			var _key_delete_pressed		= _key_delete or keyboard_check_pressed(vk_delete)
+			
+			var rt = tb.repeat_time*(room_speed/60)
+			var r = tb.repeat_step mod ((room_speed/60)*2) == 0
+			tb.repeat_step ++
 		
-		tb.rleft		= (keyboard_check(vk_left)+tb.rleft)*keyboard_check(vk_left)
-		tb.rright		= (keyboard_check(vk_right)+tb.rright)*keyboard_check(vk_right)
-		tb.rbackspace	= (keyboard_check(vk_backspace)+tb.rbackspace)*keyboard_check(vk_backspace)
-		tb.rdel			= (keyboard_check(vk_delete)+tb.rdel)*keyboard_check(vk_delete)
+			tb.rleft		= (_key_left + tb.rleft)*_key_left
+			tb.rright		= (_key_right + tb.rright)*_key_right
+			tb.rbackspace	= (_key_backspace + tb.rbackspace)*_key_backspace
+			tb.rdel			= (_key_delete + tb.rdel)*_key_delete
 		
-		var r = tb.repeat_step mod (2*(room_speed/60)) == 0
-		tb.repeat_step ++
+			var key_left		= (r and rt < tb.rleft) or _key_left_pressed
+			var key_right		= (r and rt < tb.rright) or _key_right_pressed
+			var key_backspace	= (r and rt < tb.rbackspace) or _key_backspace_pressed
+			var key_delete		= (r and rt < tb.rdel) or _key_delete_pressed
+		}
 		
-		var key_left		= (r and rt < tb.rleft) or keyboard_check_pressed(vk_left)
-		var key_right		= (r and rt < tb.rright) or keyboard_check_pressed(vk_right)
-		var key_backspace	= (r and rt < tb.rbackspace) or keyboard_check_pressed(vk_backspace)
-		var key_delete		= (r and rt < tb.rdel) or keyboard_check_pressed(vk_delete)
+		var select_all	= false
+		var copy		= false
+		var paste		= false
 		
+		if key_super
+		{
+			select_all	= keyboard_check_pressed(ord("A"))
+			copy		= keyboard_check_pressed(ord("C")) and text != ""
+			paste		= att.allow_input and keyboard_check_pressed(ord("V")) and clipboard_has_text()
+		}
 		
 		if att.scrubber and not typing and keyboard_key != vk_nokey
 		{	
@@ -472,7 +504,6 @@ get_input = function(){
 			}
 		}
 		
-		
 		if not typing and not att.allow_alpha and (key_left or key_right)
 		{
 			value += att.incrementor_step*(key_right-key_left)
@@ -488,12 +519,12 @@ get_input = function(){
 		
 			if key_left
 			{	
-				char_pos1 = control ? string_char_next(tb.word_sep, text, char_pos1, -1) : (char_pos1-1)
-				char_selection = shift
+				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, -1) : (char_pos1-1)
+				char_selection = key_shift
 				char_mouse = false
 				blink_step = 0
 
-				if not shift
+				if not key_shift
 				{
 					char_selection = false
 					char_pos2 = char_pos1
@@ -501,12 +532,12 @@ get_input = function(){
 			}
 			if key_right
 			{	
-				char_pos1 = control ? string_char_next(tb.word_sep, text, char_pos1, 1) : (char_pos1+1)
-				char_selection = shift
+				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, 1) : (char_pos1+1)
+				char_selection = key_shift
 				char_mouse = false
 				blink_step = 0
 			
-				if not shift 
+				if not key_shift 
 				{
 					char_selection = false
 					char_pos2 = char_pos1
