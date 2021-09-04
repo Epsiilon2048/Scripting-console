@@ -35,6 +35,7 @@
     {"id":{"name":"fnt_debug6x","path":"fonts/fnt_debug6x/fnt_debug6x.yy",},"order":5,},
     {"id":{"name":"autofill_in_list","path":"scripts/autofill_in_list/autofill_in_list.yy",},"order":26,},
     {"id":{"name":"Console_dock_elements","path":"scripts/Console_dock_elements/Console_dock_elements.yy",},"order":1,},
+    {"id":{"name":"cool_thing","path":"objects/cool_thing/cool_thing.yy",},"order":9,},
     {"id":{"name":"global_script_variables","path":"scripts/global_script_variables/global_script_variables.yy",},"order":2,},
     {"id":{"name":"console_graphical_functions","path":"scripts/console_graphical_functions/console_graphical_functions.yy",},"order":4,},
     {"id":{"name":"console_window_utilities","path":"scripts/console_window_utilities/console_window_utilities.yy",},"order":13,},
