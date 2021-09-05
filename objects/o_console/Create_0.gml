@@ -442,30 +442,27 @@ var cd1 = new Console_dock() with cd1
 
 add_console_element(cd1)
 
+tb = ""
+sc = 0
+
 var cd1 = new Console_dock() with cd1
 {
 	initialize()
-	name = "Docks"
+	name = "Testing"
 	set([
 		new_cd_button("Hello world", show_debug_message),
-		new_console_dock("Name", [
-			[new_scrubber("Outline", "con.DOCK.name_outline_width", .1)],
-			["Border", new_scrubber("W", "con.DOCK.name_wdist", 1), new_scrubber("H", "con.DOCK.name_hdist", 1)],
+		new_console_dock("Text boxes", [
+			new_text_box("Text box", "o_console.tb"),
 		]),
-		new_console_dock("Elements", [
-			["Border", new_scrubber("W", "con.DOCK.element_wdist", 1),  new_scrubber("H", "con.DOCK.element_hdist", 1)],
-			["Separation", new_scrubber("W", "con.DOCK.element_wsep", 1), new_scrubber("H", "con.DOCK.element_hsep", 1)],
-		]),
-		new_console_dock("Dropdown triangle", [
-			[new_scrubber("Base", "con.DOCK.dropdown_base", 1), new_scrubber("Hypotenuse", "con.DOCK.dropdown_hypotenuse", 1)],
-			[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
+		new_console_dock("Scrubbers", [
+			new_scrubber("Scrubber", "o_console.sc", 1),
+			new_scrubber("Float scrubber", "o_console.sc", .1),
 		]),
 	])
 }
 
 add_console_element(cd1)
 
-q = ""
 cd2 = new Console_dock() with cd2
 {
 	initialize()
@@ -481,4 +478,14 @@ element_dragging = noone
 add_console_element(cd2)
 add_console_element(BAR)
 add_console_element(OUTPUT)
-add_console_element(new_text_box("Q", "o_console.e.Q.mouse_on"))
+add_console_element(COLOR_PICKER)
+
+object_editor = new_console_dock("o_console ("+string(id)+")", [
+	[new_scrubber("Color", "con.image_blend")],
+	[new_scrubber("Rotation", "con.image_angle")],
+	[new_scrubber("Scale X", "con.image_xscale", .1), new_scrubber("Scale Y", "con.image_yscale", .1)],
+	[new_scrubber("X      ", "con.x", 1),  new_scrubber("Y      ", "con.y", 1)],
+	[new_scrubber("Frame", "con.image_index")],
+	[new_scrubber("Image Speed", "con.image_speed")],
+])
+add_console_element(object_editor)

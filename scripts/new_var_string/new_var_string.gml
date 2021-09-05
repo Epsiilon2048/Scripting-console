@@ -4,21 +4,21 @@ global.object_index = global
 
 function variable_string_set(name, value){
 
-if o_console.object == global return variable_string(string_add_scope(name), variable_string_set, value)
+if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_set, value)
 else if instance_exists(o_console.object) with o_console.object variable_string(name, variable_string_set, value)
 else variable_string(name, variable_string_set, value)
 }
 
 function variable_string_get(name){
 
-if o_console.object == global return variable_string(string_add_scope(name), variable_string_get, undefined)
+if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_get, undefined)
 else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_get, undefined)
 else return variable_string(name, variable_string_get, undefined)
 }
 
 function variable_string_exists(name){
 
-if o_console.object == global return variable_string(string_add_scope(name), variable_string_exists, undefined)
+if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_exists, undefined)
 else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_exists, undefined)
 else return variable_string(name, variable_string_exists, undefined)
 }
@@ -62,8 +62,7 @@ if not is_string(name)	return get_fail_return(scr, exceptionExpectingString)
 if name == ""			return get_fail_return(scr, exceptionNoValue)
 
 if string_last(name) == "." name = string_delete(name, string_length(name), 1)
-
-if string_char_at(name, 1) == "." name = string(id)+name
+if string_char_at(name, 1) == "." name = is_struct(self) ? string_delete(name, 1, 1) : string(id)+name
 
 var has_accessor = string_pos("[", name)
 var pos = next_pos(name, 1, has_accessor)
@@ -90,14 +89,14 @@ if scope == -1
 		scope_segment = segment
 	}
 	else
-	{
+	{		
 		pos = 0
-		scope = id
-		scope_segment = better_object_get_name(id)
+		scope = self
+		scope_segment = is_struct(self) ? (variable_struct_exists(self, "name") ? self.name : instanceof(self)) : better_object_get_name(id)
 	}
 }
 else scope_segment = better_object_get_name(scope)
-var ds_scope = instance_exists(scope) ? string(scope.id) : ""
+var ds_scope = (is_numeric(scope) and instance_exists(scope)) ? string(scope.id) : ""
 
 var pos
 
@@ -132,7 +131,7 @@ do
 		
 		if has_accessor
 		{
-			if is_real(scope)
+			if is_numeric(scope)
 			{
 				if ds_map_exists(o_console.ds_types, ds_scope+"."+segment)
 				{

@@ -27,6 +27,63 @@ function input_set(str, add){ with o_console
 
 function output_set(output){ with o_console.OUTPUT {
 
+if instanceof(output) == "element_container"
+{
+	O1 = output
+	dock.set(output.elements)
+}
+else
+{
+	dock.association = dock
+	O1 = output
+	
+	if is_array(output)
+	{
+		var text = "["
+		for(var i = 0; i <= min(array_length(output)-1, 10); i++)
+		{
+			if is_array(output[i]) text += "\n[array]"
+			else if is_struct(output[i]) text += "{"+instanceof(output[i])+"}"
+			else text += string(output[i])
+		}
+		text += "]"
+
+		dock.set(text)
+	}
+	if is_struct(output)
+	{
+		var names = variable_struct_get_names(output)
+		for(var i = 0; i <= min(array_length(names)-1, 10); i++)
+		{
+			if is_array(names[i]) names[i] = [names[i]+":", "[array]"]
+			else if is_struct(names[i]) names[i] = [names[i]+":","{"+instanceof(names[i])+"}"]
+			else names[i] = [names[i]+":", new_cd_var(names[i])]
+		}
+		show_message(array_length(names))
+		array_insert(names, 0, "{")
+		array_push(names, "}")
+
+		dock.association = output
+		dock.set(names)
+	}
+	else
+	{
+		dock.set(string_format_float(output, 4))
+	}
+}
+}}
+
+
+
+function output_set_lines(output){
+if is_array(output) output_set(output[0]) else output_set(output)
+}
+
+
+
+
+function output_set_old(output){ with o_console.OUTPUT {
+
 var _output = output
 
 var _text
@@ -89,7 +146,7 @@ return _output
 
 
 
-function output_set_lines(output){ with o_console.OUTPUT {
+function output_set_lines_old(output){ with o_console.OUTPUT {
 
 var _output = output
 	

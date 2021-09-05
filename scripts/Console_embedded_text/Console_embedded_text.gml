@@ -3,6 +3,12 @@
 #macro cbox_false "[ ]"
 #macro cbox_NaN	  "[/]"
 
+function new_embedded_text(text){
+var e = new Embedded_text()
+e.set(text)
+return e
+}
+
 function Embedded_text() constructor{
 set = function(text){
 
@@ -216,6 +222,7 @@ get_input = function(){
 	draw_set_font(old_font)
 }
 }
+
 
 
 function draw_outline_text(x, y, text, layers){ with o_console.colors {

@@ -6,7 +6,7 @@
     "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
-  "name": "value_box",
+  "name": "get_update_turn",
   "tags": [],
   "resourceType": "GMScript",
 }

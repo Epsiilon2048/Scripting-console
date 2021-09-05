@@ -29,10 +29,10 @@ set = function(text){
 	var cw = string_width(" ")
 	var ch = string_height(" ")
 	
-	self.text = text
-	name = text
-	width = string_width(text)/cw
-	height = string_height(text)/ch
+	self.text = string(text)
+	name = self.text
+	width = string_width(self.text)/cw
+	height = string_height(self.text)/ch
 	
 	x = 0
 	y = 0
@@ -47,7 +47,7 @@ set = function(text){
 	color_method = noscript
 	
 	variable = undefined
-	float_places = 3
+	float_places = 1
 	
 	is_button = false
 	mouse_on = false
@@ -70,7 +70,7 @@ get_input = function(){
 	if not is_undefined(variable)
 	{
 		var value = variable_string_get(variable)
-		var newtext = is_real(value) ? string_format_float(value, float_places) : string(value)
+		var newtext = string_format_float(value, float_places)
 		
 		if newtext != text
 		{

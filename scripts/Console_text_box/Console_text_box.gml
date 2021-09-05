@@ -2,7 +2,10 @@
 function new_text_box(name, variable){
 var text_box = new Console_text_box()
 text_box.initialize(variable)
-text_box.name = name
+
+if not is_undefined(name) text_box.name = name
+text_box.show_name = not is_undefined(name)
+
 return text_box
 }
 
@@ -11,10 +14,27 @@ return text_box
 function new_scrubber(name, variable, step){
 var text_box = new Console_text_box()
 text_box.initialize_scrubber(variable, step)
-text_box.name = name
+
+if not is_undefined(name) text_box.name = name
+text_box.show_name = not is_undefined(name)
+
 return text_box
 }
 
+
+
+function new_value_box(name, variable, is_scrubber, scrubber_step, length_min, length_max, value_min, value_max, allow_float, float_places){
+var s = new_scrubber(name, variable, scrubber_step)
+s.att.text_color = "plain"
+s.att.scrubber = is_scrubber
+s.att.value_min = value_min
+s.att.value_max = value_max
+s.att.value_min = length_min
+s.att.value_max = length_max
+s.att.allow_float = allow_float
+s.att.float_places = float_places
+return s
+}
 
 
 function Console_text_box() constructor{
@@ -30,6 +50,9 @@ initialize = function(variable){
 	
 	x = 0
 	y = 0
+	xprevious = 0
+	yprevious = 0
+	moved = true
 	
 	text = ""
 	self.variable = variable
@@ -100,6 +123,8 @@ initialize = function(variable){
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
 	
+		update_when_is_front = true
+	
 		// The length of the box itself
 		length_min = 7
 		length_max = infinity
@@ -115,6 +140,7 @@ initialize = function(variable){
 		allow_exinput = true // If the text can be changed when the associated variable is
 		allow_scoped_exinput = false // If the text can be changed when the associated variable is when scoped
 		allow_alpha = true // Alphabetical
+		char_filter = noscript
 	
 		select_all_on_click = false
 	
@@ -132,12 +158,10 @@ initialize = function(variable){
 	
 		incrementor = true // Up/down buttons on the side
 		incrementor_step = 1
-		incrementor_curve = animcurvetype_linear
 	
 		scrubber = false // The mouse scrubbing the value
 		scrubber_step = 1
 		scrubber_pixels_per_step = 10
-		scrubber_curve = animcurvetype_linear
 	}
 }
 
@@ -189,6 +213,82 @@ mouse_get_char_pos = function(){
 }
 
 
+set_boundaries = function(){
+		
+	#region Scaling
+	var tb = o_console.TEXT_BOX
+	
+	draw_set_font(o_console.font)
+	var cw = string_width(" ")
+	var ch = string_height(" ")
+	var asp = ch/tb.char_height
+	
+	var _text_wdist = floor(tb.text_wdist*asp)
+	var _text_hdist = floor(tb.text_hdist*asp)
+	#endregion
+	
+	#region Dragging
+	if dragging
+	{
+		if not mouse_check_button(mb_left) dragging = false
+		else
+		{		
+			x = gui_mx-mouse_xoffset
+			y = gui_my-mouse_yoffset
+			
+			mouse_on = true
+			mouse_on_name = true
+			
+			mouse_on_console = true
+		}
+	}
+	#endregion
+	
+	#region Defining boundries
+	text_width = clamp(string_length(text), att.length_min, att.length_max)*cw
+	
+	left = x
+	top = y
+	
+	if docked and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Console_text_box"
+	{
+		var left_el = dock.elements[@ dock_element_y, dock_element_x-1]
+		if not left_el.show_name left = left_el.right + (att.draw_box ? 1 : cw)
+	}
+	
+	box_left = left + (show_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
+	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and show_name)
+	bottom = top + ch + _text_hdist*2*att.draw_box
+	
+	name_text_x = left + _text_wdist*att.draw_box
+	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and show_name)
+	text_y = top+1 + _text_hdist*att.draw_box
+	#endregion
+	
+}
+
+
+update_variable = function(){ if not is_undefined(variable) {
+	var old_text = text
+	var association = docked ? dock.association : self
+	
+	with association other.convert(variable_string_get(variable))
+	
+	if not att.allow_alpha
+	{
+		var old_value = value
+		value = clamp(value, att.value_min, att.value_max)
+		if old_value != value with association variable_string_set(variable, value)
+		
+		text = att.allow_float ? string_format_float(value, att.float_places) : string(round(value))
+	}
+	else text = string(value)
+		
+	if old_text != text colors = att.color_method(text)
+	if not att.lock_text_length and string_length(old_text) != string_length(text) set_boundaries()
+}}
+
+
 get_input = function(){
 	
 	#region Disabled defaulting
@@ -228,34 +328,16 @@ get_input = function(){
 	var asp = ch/tb.char_height
 	
 	var _text_wdist = floor(tb.text_wdist*asp)
-	var _text_hdist = floor(tb.text_hdist*asp)
+	//var _text_hdist = floor(tb.text_hdist*asp)
 	#endregion
 	
-	#region Defining boundries
-	text_width = clamp(string_length(text), att.length_min, att.length_max)*cw
-	
-	left = round(x)
-	top = round(y)
-	
-	if docked and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Console_text_box"
-	{
-		var left_el = dock.elements[@ dock_element_y, dock_element_x-1]
-		if not left_el.show_name left = left_el.right + (att.draw_box ? 1 : cw)
-	}
-	
-	box_left = left + (show_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
-	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and show_name)
-	bottom = top + ch + _text_hdist*2*att.draw_box
-	
-	name_text_x = left + _text_wdist*att.draw_box
-	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and show_name)
-	text_y = top+1 + _text_hdist*att.draw_box
-	#endregion
+	moved = xprevious != x or yprevious != y
+	if dragging or moved set_boundaries()
 	
 	#region Mouse inputs
 	
 	var mouse_left_pressed = mouse_check_button_pressed(mb_left)
-	var mouse_left = mouse_left_pressed or mouse_check_button(mb_left)
+	var mouse_left = mouse_check_button(mb_left)
 	
 	if is_undefined(cbox_left)
 	{
@@ -285,7 +367,7 @@ get_input = function(){
 	else if mouse_on_box and not clicking
 	{
 		mouse_on_box = false
-		if not clicking_on_console and not mouse_on_console window_set_cursor(cr_default)
+		window_set_cursor(cr_default)
 	}
 	
 	mouse_on = false
@@ -296,30 +378,42 @@ get_input = function(){
 	}
 	mouse_on_name = mouse_on and not mouse_on_box
 	
+	var association = docked ? dock.association : self
 	if scrubbing and not mouse_left
 	{
-		if not is_undefined(variable) variable_string_set(variable, value)
+		if not is_undefined(variable) with association variable_string_set(variable, value)
 		scrubbing = false
 	}
-	#endregion
 	
-	#region Dragging
-	if dragging
+	var key_shift = keyboard_check(vk_shift)
+	var key_super = keyboard_check(vk_super)
+	var key_escape_pressed = keyboard_check_pressed(vk_escape)
+	var key_enter_pressed = keyboard_check_pressed(vk_enter)
+	
+	if not (mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)) and clicking and not mouse_left
 	{
-		if not mouse_check_button(mb_left) dragging = false
-		else
-		{		
-			x = gui_mx-mouse_xoffset
-			y = gui_my-mouse_yoffset
-			
-			mouse_on = true
-			mouse_on_name = true
-			
-			mouse_on_console = true
-		}
+		clicking = false
+		char_mouse = false
+	}
+	else if char_mouse
+	{
+		char_pos1 = mouse_get_char_pos()
+		char_selection = char_pos1 != char_pos2
 	}
 	
-	if mouse_on_name and mouse_check_button_pressed(mb_left)
+	if scoped and o_console.keyboard_scope != self 
+	{
+		scoped = false
+		if att.scrubber typing = false
+	}
+	
+	if clicking
+	{
+		clicking_on_console = true
+		blink_step = 0
+	}
+
+	if mouse_on_name and mouse_left_pressed
 	{
 		dragging = true
 		mouse_xoffset = gui_mx-x
@@ -330,13 +424,9 @@ get_input = function(){
 	}
 	#endregion
 	
+	#region Scope/descope
 	text_changed = false
 	dclick_step ++
-
-	var key_shift = keyboard_check(vk_shift)
-	var key_super = keyboard_check(vk_control)
-	var key_escape_pressed = keyboard_check_pressed(vk_escape)
-	var key_enter_pressed = keyboard_check_pressed(vk_enter)
 
 	if mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)
 	{	
@@ -407,72 +497,42 @@ get_input = function(){
 				else att.float_places = max(float_count_places(att.scrubber_step, 10), string_length(text)-string_pos(".", text))
 			}
 			
-			if not is_undefined(variable) variable_string_set(variable, value)
+			if not is_undefined(variable) with association variable_string_set(variable, value)
 		}
-	}
-	else if clicking and not mouse_left
-	{
-		clicking = false
-		char_mouse = false
-	}
-	else if char_mouse
-	{
-		char_pos1 = mouse_get_char_pos()
-		char_selection = char_pos1 != char_pos2
-	}
-	
-	if scoped and o_console.keyboard_scope != self 
-	{
-		scoped = false
-		if att.scrubber typing = false
-	}
-	
-	if clicking 
-	{
-		clicking_on_console = true
-		blink_step = 0
-	}
-	
-	#region Update text from variable
-	if	not is_undefined(variable) and
-		((scoped and att.allow_scoped_exinput) or 
-		(not scoped and att.allow_exinput and ((o_console.step mod o_console.update_steps) == update_id mod o_console.update_steps)))
-	{
-		var old_text = text
-		
-		convert(variable_string_get(variable))
-		text = string_format_float(value, att.float_places)
-		
-		if old_text != text colors = att.color_method(text)
 	}
 	#endregion
 	
+	if (docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
+	{
+		update_variable()
+	}
+	
+	#region Keyboard inputs
 	if scoped
 	{
 		if att.allow_input
-		{
-			var _key_left				= keyboard_check(vk_left)
-			var _key_left_pressed		= _key_left or keyboard_check_pressed(vk_left)
-			var _key_right				= keyboard_check(vk_right)
-			var _key_right_pressed		= _key_right or keyboard_check_pressed(vk_right)
-			var _key_backspace			= keyboard_check(vk_backspace)
-			var _key_backspace_pressed	= _key_backspace or keyboard_check_pressed(vk_backspace)
-			var _key_delete				= keyboard_check(vk_delete)
-			var _key_delete_pressed		= _key_delete or keyboard_check_pressed(vk_delete)
-			
+		{	
 			var rt = tb.repeat_time*(room_speed/60)
 			var r = tb.repeat_step mod ((room_speed/60)*2) == 0
 			tb.repeat_step ++
 		
-			tb.rleft		= (_key_left + tb.rleft)*_key_left
-			tb.rright		= (_key_right + tb.rright)*_key_right
-			tb.rbackspace	= (_key_backspace + tb.rbackspace)*_key_backspace
-			tb.rdel			= (_key_delete + tb.rdel)*_key_delete
+			var _key_left				= keyboard_check(vk_left)
+			var _key_right				= keyboard_check(vk_right)
+			var _key_backspace			= keyboard_check(vk_backspace)
+			var _key_delete				= keyboard_check(vk_delete)
 		
-			var key_left		= (r and rt < tb.rleft) or _key_left_pressed
-			var key_right		= (r and rt < tb.rright) or _key_right_pressed
-			var key_backspace	= (r and rt < tb.rbackspace) or _key_backspace_pressed
-			var key_delete		= (r and rt < tb.rdel) or _key_delete_pressed
+			with tb
+			{
+				rleft		= (_key_left + rleft)*_key_left
+				rright		= (_key_right + rright)*_key_right
+				rbackspace	= (_key_backspace + rbackspace)*_key_backspace
+				rdel		= (_key_delete + rdel)*_key_delete
+
+				var key_left		= keyboard_check_pressed(vk_left) or (_key_left and (r and rt < rleft))
+				var key_right		= keyboard_check_pressed(vk_right) or (_key_right and (r and rt < rright))
+				var key_backspace	= keyboard_check_pressed(vk_backspace) or (_key_backspace and (r and rt < rbackspace))
+				var key_delete		= keyboard_check_pressed(vk_delete) or (_key_delete and (r and rt < rdel))
+			}
 		}
 		
 		var select_all	= false
@@ -484,9 +544,18 @@ get_input = function(){
 			select_all	= keyboard_check_pressed(ord("A"))
 			copy		= keyboard_check_pressed(ord("C")) and text != ""
 			paste		= att.allow_input and keyboard_check_pressed(ord("V")) and clipboard_has_text()
+			
+			if select_all or paste and (not typing and att.allow_input)
+			{
+				typing = true
+				scrubbing = false
+				char_pos1 = string_length(text)
+				char_pos2 = 0
+				char_selection = true
+			}
 		}
 		
-		if att.scrubber and not typing and keyboard_key != vk_nokey
+		if att.scrubber and not typing and (select_all or paste or keyboard_key != vk_nokey)
 		{	
 			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
 			var digits = string_digits(char) != ""
@@ -506,17 +575,25 @@ get_input = function(){
 		
 		if not typing and not att.allow_alpha and (key_left or key_right)
 		{
-			value += att.incrementor_step*(key_right-key_left)
+			value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
 			text = string_format_float(value, att.float_places)
 			
-			if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
+			if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(variable, value)
 		}
-		
 		
 		if typing
 		{
 			blink_step ++
-		
+
+			if select_all
+			{
+				char_pos1 = string_length(text)
+				char_pos2 = 0
+				char_selection = true
+				char_mouse = false
+				blink_step = 0
+			}
+
 			if key_left
 			{	
 				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, -1) : (char_pos1-1)
@@ -543,19 +620,11 @@ get_input = function(){
 					char_pos2 = char_pos1
 				}
 			}
-			if keyboard_check_multiple_pressed(vk_control, ord("A"))
-			{
-				char_pos1 = string_length(text)
-				char_pos2 = 0
-				char_selection = true
-				char_mouse = false
-				blink_step = 0
-			}
 		
 			char_pos_max = max(char_pos1, char_pos2)
 			char_pos_min = min(char_pos1, char_pos2)
 		
-			if char_selection and keyboard_check_multiple_pressed(vk_control, ord("C"))
+			if char_selection and copy
 			{
 				clipboard_set_text(slice(text, char_pos_min+1, char_pos_max+1, 1))
 				blink_step = 0
@@ -563,8 +632,6 @@ get_input = function(){
 		
 			if att.allow_input
 			{
-				var paste = keyboard_check_multiple_pressed(vk_control, ord("V")) and clipboard_has_text()
-		
 				if paste or string_length(text) < string_length(keyboard_string)
 				{
 					var newtext = text
@@ -614,6 +681,8 @@ get_input = function(){
 						if sign(overlap) != -1 char = ""
 						else char = slice(char, 1, overlap, 1)
 					}
+					
+					if att.char_filter != noscript char = att.char_filter(char)
 					
 					if text_changed or char != ""
 					{
@@ -676,7 +745,7 @@ get_input = function(){
 					keyboard_string = text
 				
 					convert(text)
-					if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
+					if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(variable, value)
 			
 					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
 	
@@ -693,13 +762,13 @@ get_input = function(){
 		{
 			if abs(gui_mx-mouse_previous) >= att.scrubber_pixels_per_step
 			{
-				value += floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step
+				value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step, att.value_min, att.value_max)
 				mouse_previous = gui_mx
 				
 				if not att.allow_float value = floor(value)
 				text = string_format_float(value, att.float_places)
 				
-				if att.set_variable_on_input and not is_undefined(variable) variable_string_set(variable, value)
+				if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(variable, value)
 			}
 		}
 	}
@@ -709,6 +778,10 @@ get_input = function(){
 	
 	char_pos_max = max(char_pos1, char_pos2)
 	char_pos_min = min(char_pos1, char_pos2)
+	#endregion
+	
+	xprevious = x
+	yprevious = y
 }
 
 
@@ -739,15 +812,15 @@ draw = function(){
 		if not (docked and not dock.is_front)
 		{
 			draw_set_color(o_console.colors.body_real)
-			if docked draw_rectangle(left, top, right, bottom, false)
+			if docked draw_rectangle(left, top, box_left, bottom, false)
 			else
 			{
-				draw_console_body(left, top, box_left, bottom)
-				draw_rectangle(box_left, top, right, bottom, false)
+				draw_rectangle(left, top, box_left, bottom, false)
+				draw_console_body(box_left, top, right, bottom)
 			}
 		}
 	
-		if show_name
+		if show_name and docked
 		{
 			draw_set_color(o_console.colors.body_accent)
 			draw_hollowrect(left, top, right, bottom, _outline_width)
@@ -796,7 +869,7 @@ draw = function(){
 		}
 	}
 	if string_length(text) > att.length_max shader_reset()
-	if scoped and typing and att.allow_input and x1 < right and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
+	if scoped and typing and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
 
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)

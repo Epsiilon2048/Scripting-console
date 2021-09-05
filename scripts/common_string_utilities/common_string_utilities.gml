@@ -92,12 +92,10 @@ if string_pos("0x", _str) == 1
 {
 	_str = string_delete(_str, 1, 2)
 	
-	if hex_to_dec(_str) >= 0 return true
-	else					 return false
+	return hex_to_dec(_str) >= 0
 }
 
-if string_digits(_str) == _str return true
-else						   return false
+return string_digits(_str) == _str
 }
 
 

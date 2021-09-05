@@ -22,7 +22,7 @@ else
 		
 		else ds_list_add(log, {
 			type: lg_output,
-			value: (value_byte_size(output[i]) > max_byte_size) ? "Value exceeding "+string(max_byte_size)+" bytes" : output[i]
+			value: 0//(value_byte_size(output[i]) > max_byte_size) ? "Value exceeding "+string(max_byte_size)+" bytes" : output[i]
 		})
 	}
 }

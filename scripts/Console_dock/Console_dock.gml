@@ -187,6 +187,8 @@ insert_vertical = function(y, element){
 
 set = function(elements){
 	
+	clear()
+	
 	if instanceof(elements) == "element_container" elements = elements.elements
 	if not is_array(elements) elements = [elements]
 	
@@ -331,6 +333,9 @@ get_input = function(){
 				{
 					_yy = _bottom-(el.bottom-el.top)
 				}
+				
+				_xx = floor(_xx)
+				_yy = floor(_yy)
 
 				if not allow_element_dragging or not el.dragging or not dragging_radius_met
 				{
@@ -565,7 +570,7 @@ draw = function(){
 }
 
 
-destroy = function(){
+clear = function(){
 	
 	for(var i = 0; i <= array_length(elements)-1; i++) for(var j = 0; j <= array_length(elements[i])-1; j++)
 	{	
@@ -574,7 +579,13 @@ destroy = function(){
 	
 	elements = []
 	e = {}
+}
+
+destroy = function(){
+	
+	clear()
 	ds_list_destroy(afterscript)
 	afterscript = -1
+	enabled = false
 }
 }
