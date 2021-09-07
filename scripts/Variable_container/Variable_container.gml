@@ -13,6 +13,7 @@ initialize = function(){
 	ds_type = undefined		// The type of DS the variable is (if it is one)
 	ds_type_implied = false	// If there is no DS accessor
 	index = undefined		// The index to access the array or DS from
+	index2 = undefined		// For DS grids
 }
 
 set_with_string = function(variable){
@@ -27,8 +28,6 @@ set = function(scope, variable, index, ds_type){
 	self.variable = variable
 	self.index = index
 	self.ds_type = ds_type
-	
-	
 }
 
 get_exists = function(){
