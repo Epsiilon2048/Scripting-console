@@ -100,6 +100,7 @@
     {"id":{"name":"o_game","path":"objects/o_game/o_game.yy",},"order":2,},
     {"id":{"name":"o_dev","path":"objects/o_dev/o_dev.yy",},"order":1,},
     {"id":{"name":"gmcl_compile","path":"scripts/gmcl_compile/gmcl_compile.yy",},"order":6,},
+    {"id":{"name":"Variable_container","path":"scripts/Variable_container/Variable_container.yy",},"order":10,},
     {"id":{"name":"gmcl_exec","path":"scripts/gmcl_exec/gmcl_exec.yy",},"order":8,},
     {"id":{"name":"console_settings_commands","path":"scripts/console_settings_commands/console_settings_commands.yy",},"order":11,},
   ],
