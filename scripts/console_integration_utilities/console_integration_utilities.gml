@@ -40,7 +40,7 @@ else
 	if is_array(output)
 	{
 		var text = "["
-		for(var i = 0; i <= min(array_length(output)-1, 10); i++)
+		for(var i = 0; i <= array_length(output)-1; i++)
 		{
 			if is_array(output[i]) text += "\n[array]"
 			else if is_struct(output[i]) text += "{"+instanceof(output[i])+"}"
@@ -53,13 +53,12 @@ else
 	if is_struct(output)
 	{
 		var names = variable_struct_get_names(output)
-		for(var i = 0; i <= min(array_length(names)-1, 10); i++)
+		for(var i = 0; i <= array_length(names)-1; i++)
 		{
 			if is_array(names[i]) names[i] = [names[i]+":", "[array]"]
 			else if is_struct(names[i]) names[i] = [names[i]+":","{"+instanceof(names[i])+"}"]
 			else names[i] = [names[i]+":", new_cd_var(names[i])]
 		}
-		show_message(array_length(names))
 		array_insert(names, 0, "{")
 		array_push(names, "}")
 
