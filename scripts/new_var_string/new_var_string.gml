@@ -11,9 +11,12 @@ else variable_string(name, variable_string_set, value)
 
 function variable_string_get(name){
 
-if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_get, undefined)
-else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_get, undefined)
-else return variable_string(name, variable_string_get, undefined)
+if run_in_console
+{
+	if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_get, undefined)
+	else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_get, undefined)
+	else return variable_string(name, variable_string_get, undefined)
+}
 }
 
 function variable_string_exists(name){

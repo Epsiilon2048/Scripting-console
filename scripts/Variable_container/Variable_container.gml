@@ -12,6 +12,7 @@ initialize = function(){
 	
 	ds_type = undefined		// The type of DS the variable is (if it is one)
 	ds_type_implied = false	// If there is no DS accessor
+	index_address = ""
 	index = undefined		// The index to access the array or DS from
 	index2 = undefined		// For DS grids
 }
@@ -43,6 +44,11 @@ set_index = function(index_x, index_y){
 	index2 = index_y
 }
 
+get_index = function(){
+	index = variable_string_get(index_address)
+	return index
+}
+
 get = function(){
 	
 	exists = variable_struct_exists(scope, variable)
@@ -64,16 +70,16 @@ get = function(){
 		return value
 		
 	case ds_type_list:
-		exists = ds_exists(value, ds_type_list) or index >= ds_list_size(value)
+		exists = ds_exists(value, ds_type_list) and index >= ds_list_size(value)
 		value = value[| index]
 		return value
 	case ds_type_map:
-		exists = ds_exists(value, ds_type_map) or not ds_map_exists(value, index)
+		exists = ds_exists(value, ds_type_map) and ds_map_exists(value, index)
 		value = value[? index]
 		return value
 	case ds_type_grid:
-		exists = ds_exists(value, ds_type_grid)
-		
+		exists = not is_undefined(index) and not is_undefined(index2) and ds_exists(value, ds_type_grid) and ds_grid_width(value) > index and ds_grid_height(value) > index2
+		value = value[# index, index2]
 		return value
 	}
 }
@@ -84,7 +90,6 @@ refresh_scope = function(){
 }
 
 get_from_address = function(){
-	
 	refresh_scope()
 	return get()
 }
