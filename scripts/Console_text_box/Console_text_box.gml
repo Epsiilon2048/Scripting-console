@@ -555,7 +555,7 @@ get_input = function(){
 			}
 		}
 		
-		if att.scrubber and not typing and (select_all or paste or keyboard_key != vk_nokey)
+		if att.scrubber and not typing and (select_all or paste or keyboard_lastchar != "")
 		{	
 			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
 			var digits = string_digits(char) != ""
@@ -632,7 +632,7 @@ get_input = function(){
 		
 			if att.allow_input
 			{
-				if paste or string_length(text) < string_length(keyboard_string)
+				if paste or keyboard_lastchar != "" or string_length(text) < string_length(keyboard_string)
 				{
 					var newtext = text
 					var char 
