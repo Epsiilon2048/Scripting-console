@@ -40,7 +40,6 @@ initialize = function(name, func){
 	enabled = true
 	
 	set_name(name)
-	self.func = func
 	
 	sprite = undefined
 	sprite_color = undefined
@@ -156,18 +155,19 @@ get_input = function(){
 		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale
 	}
 	
-	if clicking and (not mouse_check_button(mb_left) or released_script == noscript or held_script == noscript)
+	mouse_on = not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
+	
+	if clicking and (not mouse_check_button(mb_left) or (released_script == noscript and held_script == noscript))
 	{
 		clicking = false
-		released_script()
+		if mouse_on released_script()
 	}
 	else if clicking 
 	{
 		clicking_on_console = true
 		held_script()
 	}
-	
-	mouse_on = not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
+
 	if mouse_on 
 	{
 		if mouse_check_button_pressed(mb_left)
@@ -186,7 +186,7 @@ get_input = function(){
 
 draw = function(){
 	
-	if not enabled return undefined
+	if right == x and bottom == y return undefined
 	
 	var bt = o_console.CD_BUTTON
 	

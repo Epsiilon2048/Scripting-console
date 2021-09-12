@@ -3,7 +3,7 @@
 function new_cd_text(text, color){
 
 var t = new Cd_text()
-t.set(text)
+t.initialize(text)
 t.color = color
 return t
 }
@@ -21,18 +21,11 @@ return v
 
 function Cd_text() constructor{
 
-set = function(text){
+initialize = function(text){
 	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
+	enabled = true
 	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
-	
-	self.text = string(text)
-	name = self.text
-	width = string_width(self.text)/cw
-	height = string_height(self.text)/ch
+	set(text)
 	
 	x = 0
 	y = 0
@@ -54,12 +47,35 @@ set = function(text){
 	clicking = false
 	
 	func = noscript
+}
+
+
+set = function(text){
+
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
+	
+	var cw = string_width(" ")
+	var ch = string_height(" ")
+	
+	self.text = string(text)
+	name = self.text
+	width = string_width(self.text)/cw
+	height = string_height(self.text)/ch	
 	
 	draw_set_font(old_font)
 }
 
-
 get_input = function(){
+	
+	if not enabled
+	{
+		left = x
+		top = y
+		right = x
+		bottom = y
+		return undefined
+	}
 	
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
@@ -104,6 +120,8 @@ get_input = function(){
 
 
 draw = function(){
+
+	if right == x and bottom == y return undefined
 
 	var old_color = draw_get_color()
 	var old_font = draw_get_font()

@@ -207,6 +207,41 @@ with CHECKBOX {
 	width = 17
 }
 
+
+with SLIDER {
+	
+	height			 = 39
+	height_condensed = 15
+	text_offset		 = 10
+	
+	update_every_frame	  = true
+	lock_value_to_step	  = true
+	correct_not_real	  = true
+	
+	font = o_console.font
+	marker_font = -1 //set later
+	
+	divider_width = 2
+}
+
+with CD_BUTTON {
+	
+	char_height = 23
+	
+	wdist = 10
+	hdist = 5
+}
+	
+with SEPARATOR {
+	
+	char_height = 23
+	width = 1.4
+	double_sep = 3
+	
+	wdist = other.DOCK.element_wdist/2
+}
+
+
 with COLOR_PICKER {
 	
 	size = 100
@@ -407,36 +442,5 @@ with COLOR_PICKER {
 	draw = function(){
 		dock.draw()
 	}
-}
-
-with SLIDER {
-	
-	height			 = 39
-	height_condensed = 15
-	text_offset		 = 10
-	
-	update_every_frame	  = true
-	lock_value_to_step	  = true
-	correct_not_real	  = true
-	
-	font = o_console.font
-	marker_font = -1 //set later
-	
-	divider_width = 2
-}
-
-with CD_BUTTON {
-	
-	char_height = 20
-	
-	wdist = 15
-	hdist = 4
-}
-	
-with SEPARATOR {
-	
-	char_height = 23
-	width = 1.4
-	double_sep = 3
 }
 }}

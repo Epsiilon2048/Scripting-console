@@ -118,7 +118,7 @@ draw_set_font(old_font)
 
 function draw_console_window(win){ with win {
 
-if not enabled return undefined
+if right == x and bottom == y return undefined
 
 var wn = o_console.WINDOW
 

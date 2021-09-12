@@ -203,6 +203,8 @@ set = function(elements){
 			set_element(j, i, self.elements[i][j])
 		}
 	}
+	
+	get_input()
 }
 
 
@@ -470,7 +472,7 @@ after_dock = function(){
 
 draw = function(){
 	
-	if not enabled return undefined
+	if right == x and bottom == y return undefined
 	
 	var dc = o_console.DOCK
 	

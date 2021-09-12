@@ -12,6 +12,8 @@ for(var i = 0; i <= array_length(list)-1; i++){
 }
 }
 
+element_dragging = noone
+
 e = {}
 
 update_steps = 10
@@ -151,9 +153,16 @@ keyboard_scope = noone
 
 do_autofill = false
 
+color_schemes = {}
+cs_index = cs_greenbeans
+embed_text = true
+step = 0
+
 index_functions()
 index_assets()
 initialize_console_macros()
+initialize_color_schemes()
+initialize_console_docs()
 initialize_console_graphics()
 
 identifiers = {
@@ -285,20 +294,10 @@ ctx.set([])
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
-color_schemes = {}
-
 console_key = vk_tilde
 
 show_hidden_commands = false
 show_hidden_args = false
-
-embed_text = true
-window_embed_text = true
-collapse_windows = true
-
-display_show_objects = false
-
-output_set_window = true
 
 text_outline = 8
 
@@ -311,8 +310,6 @@ autofill_from_float = false
 
 force_body_solid = false
 
-cs_index = cs_greenbeans
-
 right_mb = false
 
 //these are just for the help command
@@ -324,15 +321,10 @@ prev_exception = {longMessage: "No errors yet! Yay!!"}
 var old_font = draw_get_font()
 draw_set_font(font)
 
-step = 0
-
 win_w = display_get_gui_width()
 win_h = display_get_gui_height()
 
 console_string = ""
-char_pos1 = 1
-char_pos2 = 1
-char_pos_dir = 0 //the direction the selection is moving in based on arrow keys
 
 left		= false
 right		= false
@@ -418,89 +410,6 @@ mouse_get_char_pos = function(rounding_method){
 
 output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
 
-initialize_color_schemes()
-initialize_console_docs()
-
 startup = true
-
-
-var cd1 = new Console_dock() with cd1
-{
-	initialize()
-	name = "Docks"
-	set([
-		new_cd_button("Hello world", show_debug_message),
-		[new_scrubber("Outline", "con.DOCK.name_outline_width", .1)],
-		["Border", new_scrubber("W", "con.DOCK.name_wdist", 1), new_scrubber("H", "con.DOCK.name_hdist", 1)],
-		new_separator(),
-		["Border", new_scrubber("W", "con.DOCK.element_wdist", 1),  new_scrubber("H", "con.DOCK.element_hdist", 1)],
-		["Separation", new_scrubber("W", "con.DOCK.element_wsep", 1), new_scrubber("H", "con.DOCK.element_hsep", 1)],
-		new_separator(),
-		[new_scrubber("Base", "con.DOCK.dropdown_base", 1), new_scrubber("Hypotenuse", "con.DOCK.dropdown_hypotenuse", 1)],
-		[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
-	])
-}
-
-add_console_element(cd1)
-
 tb = ""
 sc = 0
-
-var cd1 = new Console_dock() with cd1
-{
-	initialize()
-	name = "Testing"
-	set([
-		new_cd_button("Hello world", show_debug_message),
-		new_console_dock("Text boxes", [
-			new_text_box("Text box", "o_console.tb"),
-		]),
-		new_console_dock("Scrubbers", [
-			new_scrubber("Scrubber", "o_console.sc", 1),
-			new_scrubber("Float scrubber", "o_console.sc", .1),
-		]),
-	])
-}
-
-add_console_element(cd1)
-
-cd2 = new Console_dock() with cd2
-{
-	initialize()
-	name = "Command line"
-	allow_element_dragging = false
-	set([
-		other.BAR
-	])
-}
-
-element_dragging = noone
-
-add_console_element(cd2)
-add_console_element(BAR)
-add_console_element(OUTPUT)
-add_console_element(COLOR_PICKER)
-
-object_editor = new_console_dock("o_console", [
-	[new_display_box("id", "id", false)], 
-	[new_display_box("object index", "object_index", false)],
-	[new_scrubber("x", "x", 1),  new_scrubber("y", "y", 1)],
-	new_console_dock("Image", [
-		[new_scrubber("sprite fps", "image_speed", .01)],
-		[new_scrubber("frame", "image_index", 1)],
-		[new_scrubber("angle", "image_angle", 1)],
-		[new_scrubber("x scale", "image_xscale", .1), new_scrubber("y scale", "image_yscale", .1)],
-		[new_scrubber("color blend", "image_blend", 1)],
-		[new_scrubber("alpha", "image_alpha", .01)],
-	]),
-	new_console_dock("Movement", [
-		[new_scrubber("speed", "speed", 1)], 
-		[new_scrubber("direction", "direction", 1)],
-		[new_scrubber("friction", "friction", .1)], 
-		[new_scrubber("hspeed", "hspeed", 1), new_scrubber("vspeed", "vspeed", 1)],
-		[new_scrubber("gravity", "gravity", 1)],
-		[new_scrubber("gravity direction", "gravity_direction", 1)],
-	]),
-])
-object_editor.association = o_console
-add_console_element(object_editor)

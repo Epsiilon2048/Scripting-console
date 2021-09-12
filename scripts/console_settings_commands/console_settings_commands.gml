@@ -5,7 +5,6 @@ if not is_undefined(color_schemes[$ value])
 {
 	colors = color_schemes[$ value]
 	
-	color_string = gmcl_string_color(console_string, char_pos1)
 	cs_index = value
 
 	if run_in_embed

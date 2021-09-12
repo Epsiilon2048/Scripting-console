@@ -128,6 +128,8 @@ initialize = function(variable){
 	
 	colors = undefined
 	
+	scrubbed = false
+	
 	update_id = o_console.TEXT_BOX.update_id++
 	
 	convert = function(value){
@@ -138,6 +140,8 @@ initialize = function(variable){
 			self.value = undefined
 		}
 	}
+	
+	association = undefined
 	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
@@ -189,13 +193,13 @@ initialize_scrubber = function(variable, step){
 
 	initialize(variable)
 
-	if is_undefined(step) att.scrubber_step = 1
-	else att.scrubber_step = step
+	if is_undefined(step) scrubber_step = 1
+	else scrubber_step = step
 
 	typing = false
 	
-	att.incrementor_step = att.scrubber_step
-	att.float_places = ((att.scrubber_step mod 1) == 0) ? undefined : float_count_places(att.scrubber_step, 10)
+	att.incrementor_step = scrubber_step
+	att.float_places = ((scrubber_step mod 1) == 0) ? undefined : float_count_places(scrubber_step, 10)
 	att.length_min = 4
 	att.length_max = infinity
 	att.scrubber = true
@@ -283,21 +287,20 @@ set_boundaries = function(){
 	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and show_name)
 	text_y = top+1 + _text_hdist*att.draw_box
 	#endregion
-	
 }
 
 
 update_variable = function(){ if not is_undefined(variable) {
 	var old_text = text
-	var association = docked ? dock.association : self
+	var _association = is_undefined(association) ? (docked ? dock.association : self) : association
 	
-	with association other.convert(variable_string_get(other.variable))
+	with _association other.convert(variable_string_get(other.variable))
 	
 	if not att.allow_alpha and is_numeric(value)
 	{
 		var old_value = value
 		value = clamp(value, att.value_min, att.value_max)
-		if old_value != value with association variable_string_set(other.variable, other.value)
+		if old_value != value with _association variable_string_set(other.variable, other.value)
 		
 		text = att.allow_float ? string_format_float(value, att.float_places) : string(round(value))
 	}
@@ -397,11 +400,23 @@ get_input = function(){
 	}
 	mouse_on_name = mouse_on and not mouse_on_box
 	
-	var association = (docked) ? dock.association : self
+	var _association = is_undefined(association) ? (docked ? dock.association : self) : association
 	if scrubbing and not mouse_left
 	{
-		if not is_undefined(variable) with association variable_string_set(other.variable, other.value)
+		if not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 		scrubbing = false
+		if not scrubbed and att.select_all_on_click 
+		{
+			typing = true
+			char_pos1 = string_length(text)
+			char_pos2 = 0
+			char_selection = true
+			
+			o_console.keyboard_scope = self
+			scoped = true
+			keyboard_string = text
+		}
+		scrubbed = false
 	}
 	
 	var key_shift = keyboard_check(vk_shift)
@@ -510,13 +525,13 @@ get_input = function(){
 			if not att.allow_alpha and att.allow_float
 			{
 				var pos = string_pos(".", text)
-				var step_places = float_count_places(att.scrubber_step, 10)
+				var step_places = float_count_places(scrubber_step, 10)
 				
 				if pos == 0 and not step_places att.float_places = undefined
-				else att.float_places = max(float_count_places(att.scrubber_step, 10), string_length(text)-string_pos(".", text))
+				else att.float_places = max(float_count_places(scrubber_step, 10), string_length(text)-string_pos(".", text))
 			}
 			
-			if att.allow_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
+			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 		}
 	}
 	#endregion
@@ -604,7 +619,7 @@ get_input = function(){
 			value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
 			text = string_format_float(value, att.float_places)
 			
-			if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
+			if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 		}
 		
 		if typing and att.allow_input
@@ -765,7 +780,7 @@ get_input = function(){
 					keyboard_string = text
 				
 					convert(text)
-					if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
+					if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 			
 					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
 	
@@ -775,6 +790,7 @@ get_input = function(){
 				
 					colors = att.color_method(text)
 					blink_step = 0
+					show_debug_message(random(5))
 				}
 			}
 		}
@@ -782,13 +798,14 @@ get_input = function(){
 		{
 			if abs(gui_mx-mouse_previous) >= att.scrubber_pixels_per_step
 			{
-				value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step, att.value_min, att.value_max)
+				value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*scrubber_step, att.value_min, att.value_max)
 				mouse_previous = gui_mx
+				scrubbed = true
 				
 				if not att.allow_float value = floor(value)
 				text = string_format_float(value, att.float_places)
 				
-				if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
+				if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 				
 				set_boundaries()
 			}
@@ -809,7 +826,7 @@ get_input = function(){
 
 draw = function(){
 	
-	if not enabled return undefined
+	if right == x and bottom == y return undefined
 	
 	var old_color = draw_get_color()
 	var old_alpha = draw_get_alpha()
