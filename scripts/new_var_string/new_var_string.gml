@@ -46,13 +46,13 @@ static get_fail_return = function(scr, exception, segment){
 		case variable_string_exists:		return false
 		case variable_string_get:			return undefined
 		case variable_string_set:			return undefined
-		case variable_string_exists_error:	return {error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
+		case variable_string_exists_error:	return {value: undefined, exists: false, error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
 	}
 	return undefined
 }
 
-var set_var			= not is_undefined(value)
-var set_return		= (scr == variable_string_exists) ? true : undefined
+var set_var		= not is_undefined(value)
+var set_return	= (scr == variable_string_exists) ? true : undefined
 
 if not is_string(name)	return get_fail_return(scr, exceptionExpectingString)
 if name == ""			return get_fail_return(scr, exceptionNoValue)
@@ -92,6 +92,7 @@ if scope == -1
 	}
 }
 else scope_segment = better_object_get_name(scope)
+
 var ds_scope = (is_numeric(scope) and instance_exists(scope)) ? string(scope.id) : ""
 
 var pos
@@ -351,14 +352,14 @@ do
 			scope_segment += segment
 		break
 		case "#":
-			if not is_numeric(scope)																	return get_fail_return(scr, exceptionBadAccessor, scope_segment)
-			if not comma																				return get_fail_return(scr, exceptionGridExpectingComma, scope_segment)
-			if not ds_exists(scope, ds_type_grid)														return get_fail_return(scr, exceptionDsNotExists, scope_segment)
-			if not (is_numeric(index.x) or is_numeric(index.y))											return get_fail_return(scr, exceptionBadIndex, scope_segment+plain_segment)
-			if index.x < 0																				return get_fail_return(scr, exceptionIndexBelowZero, index.x)
-			if index.y < 0																				return get_fail_return(scr, exceptionIndexBelowZero, index.y)
-			if not returning and ds_grid_width(scope) <= index.x										return get_fail_return(scr, exceptionIndexExceedsBounds, index.x)
-			if not returning and ds_grid_height(scope) <= index.y										return get_fail_return(scr, exceptionIndexExceedsBounds, index.y)
+			if not is_numeric(scope)								return get_fail_return(scr, exceptionBadAccessor, scope_segment)
+			if not comma											return get_fail_return(scr, exceptionGridExpectingComma, scope_segment)
+			if not ds_exists(scope, ds_type_grid)					return get_fail_return(scr, exceptionDsNotExists, scope_segment)
+			if not (is_numeric(index.x) or is_numeric(index.y))		return get_fail_return(scr, exceptionBadIndex, scope_segment+plain_segment)
+			if index.x < 0											return get_fail_return(scr, exceptionIndexBelowZero, index.x)
+			if index.y < 0											return get_fail_return(scr, exceptionIndexBelowZero, index.y)
+			if not returning and ds_grid_width(scope) <= index.x	return get_fail_return(scr, exceptionIndexExceedsBounds, index.x)
+			if not returning and ds_grid_height(scope) <= index.y	return get_fail_return(scr, exceptionIndexExceedsBounds, index.y)
 			
 			if not pos and set_var
 			{
@@ -374,6 +375,6 @@ do
 until pos == 0
 
 if scr == variable_string_exists		return true
-if scr == variable_string_exists_error	return undefined
+if scr == variable_string_exists_error	return {value: scope, exists: true, error: undefined, plain: segment}
 return scope
 }

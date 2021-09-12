@@ -1,7 +1,7 @@
 
 function help(){
 
-return format_output([
+return new_embedded_text([
 	"Help & info\n",
 	{str: "Command list\n", scr: command_help, output: true},
 	{str: "GMCL syntax\n", scr: syntax_help, output: true},
@@ -92,7 +92,7 @@ else
 	)
 }
 
-return format_output(text, true, command_help, "Command list")
+return new element_container([new_embedded_text(text)])//format_output(text, true, command_help, "Command list")
 }}
 
 

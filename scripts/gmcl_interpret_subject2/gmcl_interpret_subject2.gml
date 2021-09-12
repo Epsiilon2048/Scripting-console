@@ -215,8 +215,9 @@ else
 		}
 		else
 		{
-			error = variable_string_exists_error(_arg)
-			if is_undefined(error)
+			variable = variable_string_exists_error(_arg)
+			error = variable.error
+			if variable.exists
 			{
 				type = dt_variable
 				value = string_add_scope(_arg, true)
