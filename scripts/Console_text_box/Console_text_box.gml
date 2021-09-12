@@ -851,6 +851,7 @@ draw = function(){
 		if not (docked and not dock.is_front)
 		{
 			draw_set_color(o_console.colors.body_real)
+			
 			if docked draw_rectangle(left, top, box_left, bottom, false)
 			else
 			{

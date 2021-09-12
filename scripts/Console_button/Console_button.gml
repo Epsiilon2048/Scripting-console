@@ -39,6 +39,8 @@ initialize = function(name, func){
 	
 	enabled = true
 	
+	can_click = true
+	
 	set_name(name)
 	
 	sprite = undefined
@@ -155,12 +157,12 @@ get_input = function(){
 		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale
 	}
 	
-	mouse_on = not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
+	mouse_on = can_click and not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
 	
-	if clicking and (not mouse_check_button(mb_left) or (released_script == noscript and held_script == noscript))
+	if clicking and (not can_click or not mouse_check_button(mb_left) or (released_script == noscript and held_script == noscript))
 	{
 		clicking = false
-		if mouse_on released_script()
+		if mouse_on and can_click released_script()
 	}
 	else if clicking 
 	{
@@ -207,16 +209,14 @@ draw = function(){
 	
 	var is_front = not (docked and not dock.is_front)
 	
-	if draw_box
+	if draw_box and clicking
 	{
-		if mouse_on or clicking
-		{
-			draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
-			draw_rectangle(left, top, right, bottom, false)
-		}
+		draw_set_color(o_console.colors.embed_hover)
+		draw_rectangle(left, top, right, bottom, false)
 	}
 	
-	if clicking	and draw_box			draw_set_color(o_console.colors.body_real)
+	if not can_click					draw_set_color(o_console.colors.body_accent)
+	else if clicking and draw_box		draw_set_color(o_console.colors.body_real)
 	else if clicking and not draw_box	draw_set_color(o_console.colors.plain)
 	else if mouse_on					draw_set_color(o_console.colors.embed_hover)
 	else if is_front or not draw_box	draw_set_color(o_console.colors.embed)
@@ -224,7 +224,8 @@ draw = function(){
 	
 	if not clicking and draw_box draw_hollowrect(left, top, right, bottom, 1)
 	
-	if not is_front and not clicking and draw_box draw_set_color(o_console.colors.embed)
+	if not is_front and not clicking and draw_box and can_click draw_set_color(o_console.colors.embed)
+	
 	
 	if not is_undefined(sprite)
 	{

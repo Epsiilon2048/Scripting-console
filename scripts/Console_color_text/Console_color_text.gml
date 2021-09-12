@@ -42,8 +42,8 @@ for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 	var len = char_width*string_length(_text)
 	
 	var c = color_text.colors[i].col
-	var hl = color_text.colors[i].hl
-	var ol = color_text.colors[i].ol
+	var hl = variable_struct_get(color_text.colors[i], "hl")
+	var ol = variable_struct_get(color_text.colors[i], "ol")
 	if not is_undefined(hl)
 	{
 		draw_set_color( is_string(hl) ? o_console.colors[$ hl] : hl )

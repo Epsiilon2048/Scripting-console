@@ -38,6 +38,7 @@ var bar_dock = new Console_dock() with bar_dock
 		other.BAR
 	])
 }
+bar_dock.enabled = false
 
 var id_box = new_display_box("id", "id", false)
 var index_box = new_display_box("object index", "object_index", false)
@@ -49,24 +50,41 @@ var y_scrubber = new_scrubber("y", "y", 1)
 x_scrubber.att.draw_box = false
 y_scrubber.att = x_scrubber.att
 
-var var_name_text_box = new_text_box("Name", "con.object_editor.__variable_add_name__")
+var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
-var var_error_message = new_cd_text("Variable does not exist", "real")
+var var_error_message = new_cd_text("Variable does not exist", dt_real)
 var var_separator = new_separator()
+var_name_text_box.association = var_name_text_box
+var_name_text_box.__variable_add_name__ = ""
 var_name_text_box.show_name = false
 var_name_text_box.att.length_min = 15
+var_name_text_box.att.scoped_color = dt_variable
+var_name_text_box.button = var_add_button
+with var_name_text_box att.color_method = function(text){
+	var exists = variable_instance_exists(dock.association, text)
+	button.can_click = exists
+	return {text: text, colors: [{pos: string_length(text)+1, col: (exists ? dt_variable : "plain")}]}
+}
 
 with var_add_button
 {
 	text_box = var_name_text_box
 	error_text = var_error_message
 	separator = var_separator
+	can_click = false
 	released_script = function(){
 		if variable_instance_exists(dock.association, text_box.text)
 		{
 			dock.insert_vertical(0, new_text_box(text_box.text, text_box.text))
 			error_text.enabled = false
 			separator.enabled = true
+			
+			with text_box
+			{
+				text = ""
+				value = ""
+				colors = att.color_method(text)
+			}
 		}
 		else
 		{
