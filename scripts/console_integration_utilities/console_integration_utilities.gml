@@ -29,13 +29,13 @@ function output_set(output){ with o_console.OUTPUT {
 
 if instanceof(output) == "element_container"
 {
-	O1 = output
+	o_console.O1 = output
 	dock.set(output.elements)
 }
 else
 {
 	dock.association = dock
-	O1 = output
+	o_console.O1 = output
 	
 	if is_array(output)
 	{

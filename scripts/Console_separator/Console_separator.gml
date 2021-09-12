@@ -11,7 +11,6 @@ function Console_separator() constructor{
 
 initialize = function(){
 	
-	format_for_dock(undefined)
 	name = "Separator"
 	
 	double = false

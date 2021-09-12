@@ -127,7 +127,8 @@ else BAR.blink_step = 0
 
 if not is_undefined(object) and instance_exists(object) 
 {
-	BAR.sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
+	if is_struct(object) BAR.sidetext_string = variable_struct_exists_get(object, "name", variable_struct_exists_get(object, "id", instanceof(object)))
+	else BAR.sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
 }
 else BAR.sidetext_string = "noone"
 

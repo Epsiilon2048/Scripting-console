@@ -4,29 +4,25 @@ global.object_index = global
 
 function variable_string_set(name, value){
 
-if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_set, value)
-else if instance_exists(o_console.object) with o_console.object variable_string(name, variable_string_set, value)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object variable_string(name, variable_string_set, value)
 else variable_string(name, variable_string_set, value)
 }
 
 function variable_string_get(name){
 
-if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_get, undefined)
-else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_get, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_get, undefined)
 else return variable_string(name, variable_string_get, undefined)
 }
 
 function variable_string_exists(name){
 
-if o_console.object == global return variable_string(string_add_scope(name, undefined), variable_string_exists, undefined)
-else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_exists, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_exists, undefined)
 else return variable_string(name, variable_string_exists, undefined)
 }
 
 function variable_string_exists_error(name){
 
-if o_console.object == global return variable_string(name, variable_string_exists_error, undefined)
-else if instance_exists(o_console.object) with o_console.object return variable_string(name, variable_string_exists_error, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_exists_error, undefined)
 else return variable_string(name, variable_string_exists_error, undefined)
 }
 

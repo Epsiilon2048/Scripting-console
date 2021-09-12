@@ -10,8 +10,6 @@ function Console_slider() constructor{
 	
 initialize = function(variable, x, y, var_min, var_max, var_step){
 	
-	format_for_dock(undefined)
-	
 	self.variable = variable
 		
 	self.meter = false

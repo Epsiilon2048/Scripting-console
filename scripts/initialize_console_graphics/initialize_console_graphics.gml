@@ -22,19 +22,20 @@ if run_in_embed return undefined
 
 with DOCK {
 	
+	docked = false
 	char_height = 23
 	
-	name_outline_width = 1.7
-	name_wdist = 15
-	name_hdist = 5
+	name_outline_width = 1.4
+	name_wdist = 9
+	name_hdist = 4
 	
-	element_wdist = 21
-	element_hdist = 21
+	element_wdist = 17
+	element_hdist = 18
 	
-	element_wsep = 14
-	element_hsep = 17
+	element_wsep = 12
+	element_hsep = 15
 	
-	dropdown_hypotenuse = 10
+	dropdown_hypotenuse = 9
 	dropdown_base = 17
 	dropdown_wdist = 8
 	
@@ -55,7 +56,7 @@ with TEXT_BOX {
 	repeat_time = 30
 	repeat_step = 0
 	
-	outline_width = 1.7
+	outline_width = 1.4
 	
 	rleft = 0
 	rright = 0
@@ -67,15 +68,24 @@ with TEXT_BOX {
 	word_sep = " .,\"()[]/"
 }
 
-with BAR {
+with SCROLLBAR {
 	
-	format_for_dock(undefined)
+	char_height = 23
+	
+	outline_width = 1.4
+	bar_width = 50
+	bar_width_condensed = 20
+	
+	mouse_offset = 0
+}
+
+with BAR {
 	
 	enabled = false
 	
 	char_height = 23
 	
-	outline_width = 1.7
+	outline_width = 1.4
 	docked_width = 1000
 	
 	x = undefined		// These are for placing the bar somewhere else
@@ -135,7 +145,7 @@ with WINDOW {
 
 with OUTPUT {
 	
-	format_for_dock(undefined)
+	docked = false
 	
 	text = new Embedded_text()
 	text.set()
@@ -295,9 +305,10 @@ with COLOR_PICKER {
 		
 		allow_float = false
 		
-		length_min = 1
+		length_min = 6
+		length_max = 15
+		lock_text_length = true
 		value_conversion = real
-		//text_color = "real"
 	}
 	
 	with hue_text_box.att
@@ -312,7 +323,6 @@ with COLOR_PICKER {
 		
 		value_min = 0
 		value_max = 255
-	
 	}
 	
 	with r_text_box.att
@@ -383,8 +393,6 @@ with COLOR_PICKER {
 		var old_rgb = r+g+b
 		var old_hsv = hue+sat+val
 		var old_hex = hex
-		var old_color = color
-		
 		hue_text_box.att.value_max = hsv_255 ? 255 : 100
 		dock.get_input()
 		
@@ -428,7 +436,7 @@ with CD_BUTTON {
 with SEPARATOR {
 	
 	char_height = 23
-	width = 1.7
+	width = 1.4
 	double_sep = 3
 }
 }}

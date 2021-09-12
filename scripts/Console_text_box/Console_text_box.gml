@@ -10,6 +10,25 @@ return text_box
 }
 
 
+function new_display_box(name, variable, draw_box){
+var text_box = new_text_box(name, variable)
+text_box.att.allow_input = false
+text_box.att.draw_box = draw_box
+text_box.att.length_min = 0
+
+return text_box
+}
+
+
+function new_static_display_box(name, text, draw_box){
+var text_box = new_display_box(name, undefined, draw_box)
+text_box.value = text
+text_box.text = text
+
+return text_box
+}
+
+
 
 function new_scrubber(name, variable, step){
 var text_box = new Console_text_box()
@@ -41,7 +60,7 @@ function Console_text_box() constructor{
 
 initialize = function(variable){
 	
-	format_for_dock(undefined)
+	docked = false
 	
 	name = is_undefined(variable) ? "Text box" : string(variable)
 	enabled = true
@@ -272,13 +291,13 @@ update_variable = function(){ if not is_undefined(variable) {
 	var old_text = text
 	var association = docked ? dock.association : self
 	
-	with association other.convert(variable_string_get(variable))
+	with association other.convert(variable_string_get(other.variable))
 	
-	if not att.allow_alpha
+	if not att.allow_alpha and is_numeric(value)
 	{
 		var old_value = value
 		value = clamp(value, att.value_min, att.value_max)
-		if old_value != value with association variable_string_set(variable, value)
+		if old_value != value with association variable_string_set(other.variable, other.value)
 		
 		text = att.allow_float ? string_format_float(value, att.float_places) : string(round(value))
 	}
@@ -378,10 +397,10 @@ get_input = function(){
 	}
 	mouse_on_name = mouse_on and not mouse_on_box
 	
-	var association = docked ? dock.association : self
+	var association = (docked) ? dock.association : self
 	if scrubbing and not mouse_left
 	{
-		if not is_undefined(variable) with association variable_string_set(variable, value)
+		if not is_undefined(variable) with association variable_string_set(other.variable, other.value)
 		scrubbing = false
 	}
 	
@@ -497,7 +516,7 @@ get_input = function(){
 				else att.float_places = max(float_count_places(att.scrubber_step, 10), string_length(text)-string_pos(".", text))
 			}
 			
-			if not is_undefined(variable) with association variable_string_set(variable, value)
+			if att.allow_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
 		}
 	}
 	#endregion
@@ -555,6 +574,13 @@ get_input = function(){
 			}
 		}
 		
+		if (char_selection or not typing) and copy
+		{
+			if not typing clipboard_set_text(text)
+			else clipboard_set_text(slice(text, char_pos_min+1, char_pos_max+1, 1))
+			blink_step = 0
+		}
+		
 		if att.scrubber and not typing and (select_all or paste or keyboard_key != vk_nokey)
 		{	
 			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
@@ -578,10 +604,10 @@ get_input = function(){
 			value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
 			text = string_format_float(value, att.float_places)
 			
-			if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(variable, value)
+			if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
 		}
 		
-		if typing
+		if typing and att.allow_input
 		{
 			blink_step ++
 
@@ -623,12 +649,6 @@ get_input = function(){
 		
 			char_pos_max = max(char_pos1, char_pos2)
 			char_pos_min = min(char_pos1, char_pos2)
-		
-			if char_selection and copy
-			{
-				clipboard_set_text(slice(text, char_pos_min+1, char_pos_max+1, 1))
-				blink_step = 0
-			}
 		
 			if att.allow_input
 			{
@@ -745,7 +765,7 @@ get_input = function(){
 					keyboard_string = text
 				
 					convert(text)
-					if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(variable, value)
+					if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
 			
 					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
 	
@@ -768,7 +788,9 @@ get_input = function(){
 				if not att.allow_float value = floor(value)
 				text = string_format_float(value, att.float_places)
 				
-				if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(variable, value)
+				if att.set_variable_on_input and not is_undefined(variable) with association variable_string_set(other.variable, other.value)
+				
+				set_boundaries()
 			}
 		}
 	}

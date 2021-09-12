@@ -136,6 +136,7 @@ DOCK = {}
 TEXT_BOX = {}
 BAR = {}
 OUTPUT = {}
+SCROLLBAR = {}
 AUTOFILL = {}
 CHECKBOX = {}
 WINDOW = {}
@@ -480,12 +481,26 @@ add_console_element(BAR)
 add_console_element(OUTPUT)
 add_console_element(COLOR_PICKER)
 
-object_editor = new_console_dock("o_console ("+string(id)+")", [
-	[new_scrubber("Color", "con.image_blend")],
-	[new_scrubber("Rotation", "con.image_angle")],
-	[new_scrubber("Scale X", "con.image_xscale", .1), new_scrubber("Scale Y", "con.image_yscale", .1)],
-	[new_scrubber("X      ", "con.x", 1),  new_scrubber("Y      ", "con.y", 1)],
-	[new_scrubber("Frame", "con.image_index")],
-	[new_scrubber("Image Speed", "con.image_speed")],
+object_editor = new_console_dock("o_console", [
+	[new_display_box("id", "id", false)], 
+	[new_display_box("object index", "object_index", false)],
+	[new_scrubber("x", "x", 1),  new_scrubber("y", "y", 1)],
+	new_console_dock("Image", [
+		[new_scrubber("sprite fps", "image_speed", .01)],
+		[new_scrubber("frame", "image_index", 1)],
+		[new_scrubber("angle", "image_angle", 1)],
+		[new_scrubber("x scale", "image_xscale", .1), new_scrubber("y scale", "image_yscale", .1)],
+		[new_scrubber("color blend", "image_blend", 1)],
+		[new_scrubber("alpha", "image_alpha", .01)],
+	]),
+	new_console_dock("Movement", [
+		[new_scrubber("speed", "speed", 1)], 
+		[new_scrubber("direction", "direction", 1)],
+		[new_scrubber("friction", "friction", .1)], 
+		[new_scrubber("hspeed", "hspeed", 1), new_scrubber("vspeed", "vspeed", 1)],
+		[new_scrubber("gravity", "gravity", 1)],
+		[new_scrubber("gravity direction", "gravity_direction", 1)],
+	]),
 ])
+object_editor.association = o_console
 add_console_element(object_editor)

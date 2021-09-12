@@ -62,13 +62,13 @@ function Console_dock() constructor{
 
 initialize = function(){
 	
-	format_for_dock(undefined)
+	docked = false
 	dock_valign = fa_top
 	
 	enabled = true
 	
 	name = ""
-	association = noone
+	association = self
 	
 	x = 0
 	y = 0
@@ -207,7 +207,7 @@ set = function(elements){
 
 
 get_input = function(){
-	
+
 	if not enabled 
 	{
 		left = x
@@ -244,6 +244,8 @@ get_input = function(){
 	
 	var element_active = false
 	var was_clicking_on_console = clicking_on_console
+	
+	if docked association = dock.association
 	
 	if dragging
 	{

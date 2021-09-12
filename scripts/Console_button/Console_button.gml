@@ -37,8 +37,6 @@ set_sprite = function(sprite){
 
 initialize = function(name, func){
 	
-	format_for_dock(undefined)
-	
 	enabled = true
 	
 	set_name(name)
@@ -158,6 +156,17 @@ get_input = function(){
 		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale
 	}
 	
+	if clicking and (not mouse_check_button(mb_left) or released_script == noscript or held_script == noscript)
+	{
+		clicking = false
+		released_script()
+	}
+	else if clicking 
+	{
+		clicking_on_console = true
+		held_script()
+	}
+	
 	mouse_on = not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
 	if mouse_on 
 	{
@@ -165,21 +174,10 @@ get_input = function(){
 		{
 			clicking = true
 			pressed_script()
+			held_script()
 		}
 		
 		mouse_on_console = true
-	}
-	
-	if clicking and not mouse_check_button(mb_left)
-	{
-		clicking = false
-		released_script()
-	}
-	
-	else if clicking 
-	{
-		clicking_on_console = true
-		held_script()
 	}
 
 	draw_set_font(old_font)
