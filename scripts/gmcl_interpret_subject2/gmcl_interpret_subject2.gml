@@ -215,7 +215,7 @@ else
 		}
 		else
 		{
-			variable = variable_string_exists_error(_arg)
+			variable = variable_string_error(_arg)
 			error = variable.error
 			if variable.exists
 			{

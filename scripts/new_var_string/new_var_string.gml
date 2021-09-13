@@ -20,10 +20,10 @@ if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(
 else return variable_string(name, variable_string_exists, undefined)
 }
 
-function variable_string_exists_error(name){
+function variable_string_error(name){
 
-if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_exists_error, undefined)
-else return variable_string(name, variable_string_exists_error, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_error, undefined)
+else return variable_string(name, variable_string_error, undefined)
 }
 
 function variable_string(name, scr, value){
@@ -46,7 +46,7 @@ static get_fail_return = function(scr, exception, segment){
 		case variable_string_exists:		return false
 		case variable_string_get:			return undefined
 		case variable_string_set:			return undefined
-		case variable_string_exists_error:	return {value: undefined, exists: false, error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
+		case variable_string_error:	return {value: undefined, exists: false, error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
 	}
 	return undefined
 }
@@ -375,6 +375,6 @@ do
 until pos == 0
 
 if scr == variable_string_exists		return true
-if scr == variable_string_exists_error	return {value: scope, exists: true, error: undefined, plain: segment}
+if scr == variable_string_error	return {value: scope, exists: true, error: undefined, plain: segment}
 return scope
 }

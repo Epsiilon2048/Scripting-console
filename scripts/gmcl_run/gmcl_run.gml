@@ -76,7 +76,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			for(var j = 0; j <= array_length(com[i].variables)-1; j++)
 			{
 				var varstring = args[com[i].variables[j]]
-				var value = variable_string_exists_error(varstring)
+				var value = variable_string_error(varstring)
 				
 				with o_console.object if value.exists
 				{

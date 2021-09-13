@@ -199,7 +199,7 @@ else
 		}
 		else
 		{
-			error = variable_string_exists_error(_arg)
+			error = variable_string_error(_arg)
 			if is_undefined(error)
 			{
 				type = dt_variable
