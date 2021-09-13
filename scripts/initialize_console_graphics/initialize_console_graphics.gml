@@ -126,23 +126,6 @@ with BAR {
 	draw = draw_console_bar
 }
 
-with WINDOW {
-	
-	char_height = 17
-	
-	width = 600
-	height = 500
-	
-	sidebar_min = 2
-	sidebar_max = 3
-	sidebar_lerp = .35
-
-	mouse_border = 14
-	
-	border_w = 20
-	border_h = 10
-}
-
 with OUTPUT {
 	
 	docked = false

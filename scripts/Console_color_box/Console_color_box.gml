@@ -1,62 +1,5 @@
 
-function new_text_box(name, variable){
-var text_box = new Console_text_box()
-text_box.initialize(variable)
-
-if not is_undefined(name) text_box.name = name
-text_box.show_name = not is_undefined(name)
-
-return text_box
-}
-
-
-function new_display_box(name, variable, draw_box){
-var text_box = new_text_box(name, variable)
-text_box.att.allow_input = false
-text_box.att.draw_box = draw_box
-text_box.att.length_min = 0
-
-return text_box
-}
-
-
-function new_static_display_box(name, text, draw_box){
-var text_box = new_display_box(name, undefined, draw_box)
-text_box.value = text
-text_box.text = text
-
-return text_box
-}
-
-
-
-function new_scrubber(name, variable, step){
-var text_box = new Console_text_box()
-text_box.initialize_scrubber(variable, step)
-
-if not is_undefined(name) text_box.name = name
-text_box.show_name = not is_undefined(name)
-
-return text_box
-}
-
-
-
-function new_value_box(name, variable, is_scrubber, scrubber_step, length_min, length_max, value_min, value_max, allow_float, float_places){
-var s = new_scrubber(name, variable, scrubber_step)
-s.att.text_color = "plain"
-s.att.scrubber = is_scrubber
-s.att.value_min = value_min
-s.att.value_max = value_max
-s.att.value_min = length_min
-s.att.value_max = length_max
-s.att.allow_float = allow_float
-s.att.float_places = float_places
-return s
-}
-
-
-function Console_text_box() constructor{
+function Console_color_box() constructor{
 
 initialize = function(variable){
 	
@@ -73,10 +16,8 @@ initialize = function(variable){
 	yprevious = 0
 	moved = true
 	
-	text = ""
-	initial_ghost_text = ""
 	self.variable = variable
-	value = 0
+	color = 0
 	scoped = false
 	
 	mouse_on = false
@@ -87,28 +28,6 @@ initialize = function(variable){
 	
 	mouse_xoffset = 0
 	mouse_yoffset = 0
-	
-	typing = true
-	scrubbing = false
-	
-	mouse_previous = 0
-	
-	scroll = 0
-	
-	dclick_step = 0
-	
-	char_pos1 = 0
-	char_pos2 = 0
-	char_selection = false
-	char_mouse = false
-	
-	text_changed = false
-	
-	char_pos_max = 0
-	char_pos_min = 0
-	
-	text_width = 0
-	blink_step = 0
 	
 	left = 0
 	top = 0
@@ -122,98 +41,28 @@ initialize = function(variable){
 	cbox_right = undefined
 	cbox_bottom = undefined
 	
-	text_x = 0
-	text_y = 0
-	
 	name_text_x = 0
-	
-	colors = undefined
-	
-	enter_func = noscript
-	
-	allow_printing = true
-	
-	scrubbed = false
+	name_text_y = 0
 	
 	update_id = o_console.TEXT_BOX.update_id++
-	
-	convert = function(value){
-		try{
-			self.value = att.value_conversion(value)
-		}
-		catch(_){
-			self.value = undefined
-		}
-	}
 	
 	association = undefined
 	
 	att = {} with att {
-		draw_box = true // Whether or not the box is drawn around the text
+		draw_box = true // Whether or not the box is drawn around the color
 	
 		update_when_is_front = true
-	
-		// The length of the box itself
-		length_min = 7
-		length_max = infinity
-		lock_text_length = false // Whether or not the text can be longer than the max length
-	
-		exit_with_enter = true // If pressing enter descopes
-	
-		text_color = "plain"
-		scoped_color = "output"
-		color_method = noscript // The script used to color the string
+
+		length = 2 // Character widths
 		
-		allow_input = true // If the text can be edited
-		allow_exinput = true // If the text can be changed when the associated variable is
-		allow_scoped_exinput = false // If the text can be changed when the associated variable is when scoped
-		allow_alpha = true // Alphabetical
-		char_filter = noscript
-	
-		select_all_on_click = false
+		scoped_color = "output"
+		
+		allow_input = true // If the color can be edited
+		allow_exinput = true // If the color can be changed when the associated variable is
+		allow_scoped_exinput = false // If the color can be changed when the associated variable is when scoped
 	
 		set_variable_on_input = true // Set variable every time theres input, rather than just once it's descoped
-	
-		value_conversion = string // How the value is converted from the text
-	
-		// If not allowing alphabet
-		allow_float = true
-		
-		float_places = undefined
-	
-		value_min = -infinity
-		value_max = infinity
-	
-		incrementor = true // Up/down buttons on the side
-		incrementor_step = 1
-	
-		scrubber = false // The mouse scrubbing the value
-		scrubber_step = 1
-		scrubber_pixels_per_step = 10
 	}
-}
-
-
-initialize_scrubber = function(variable, step){
-
-	initialize(variable)
-
-	if is_undefined(step) scrubber_step = 1
-	else scrubber_step = step
-
-	typing = false
-	
-	att.incrementor_step = scrubber_step
-	att.float_places = ((scrubber_step mod 1) == 0) ? undefined : float_count_places(scrubber_step, 10)
-	att.length_min = 4
-	att.length_max = infinity
-	att.scrubber = true
-	att.select_all_on_click = true
-	att.allow_alpha = false
-	att.value_conversion = real
-	att.set_variable_on_input = true
-	att.text_color = dt_real
-	att.scoped_color = dt_real
 }
 
 
@@ -236,17 +85,6 @@ set_att = function(att){
 	return self
 }
 
-
-
-mouse_get_char_pos = function(){
-	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
-	var cw = string_width(" ")
-	draw_set_font(old_font)
-	
-	return clamp( floor((gui_mx-text_x+3) / cw), 0, string_length(text)+1 )
-}
 
 
 set_boundaries = function(){
@@ -281,24 +119,16 @@ set_boundaries = function(){
 	#endregion
 	
 	#region Defining boundries
-	text_width = clamp(string_length(text), att.length_min, att.length_max)*cw
 	
 	left = x
 	top = y
 	
-	if docked and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Console_text_box"
-	{
-		var left_el = dock.elements[@ dock_element_y, dock_element_x-1]
-		if not left_el.show_name left = left_el.right + (att.draw_box ? 1 : cw)
-	}
-	
 	box_left = left + (show_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
-	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and show_name)
+	right = box_left + att.length*cw + _text_wdist*2*att.draw_box + cw*(not att.draw_box and show_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	
 	name_text_x = left + _text_wdist*att.draw_box
-	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and show_name)
-	text_y = top+1 + _text_hdist*att.draw_box
+	name_text_y = top+1 + _text_hdist*att.draw_box
 	#endregion
 }
 
@@ -307,40 +137,17 @@ update_variable = function(){ if not is_undefined(variable) {
 	
 	if is_undefined(variable) return undefined
 	
-	var old_text = text
 	var _association = is_undefined(association) ? (docked ? dock.association : self) : association
+	with _association other.color = variable_string_get(other.variable)
 	
-	with _association other.convert(variable_string_get(other.variable))
-	
-	if not att.allow_alpha and is_numeric(value)
-	{
-		var old_value = value
-		value = clamp(value, att.value_min, att.value_max)
-		if old_value != value with _association variable_string_set(other.variable, other.value)
-		
-		text = att.allow_float ? string_format_float(value, att.float_places) : string(round(value))
-	}
-	else text = string(value)
-		
-	if old_text != text colors = att.color_method(text)
-	if not att.lock_text_length and string_length(old_text) != string_length(text) set_boundaries()
+	if is_string(color) color = o_console.colors[$ color]
+	if not is_numeric(color) color = c_black
 }}
-
-
-
-get_printout = function(){
-	update_variable()
-	if not allow_printing return undefined
-	else if is_string(variable) return variable+" = "+text+";"
-	else return text
-}
-
 
 
 undock = function(){
 	if is_undefined(association) association = dock.association
 }
-
 
 
 get_input = function(){
@@ -356,19 +163,10 @@ get_input = function(){
 		text_x = x
 		text_y = y
 		
-		text_changed = false
 		mouse_on = false
 		clicking = false
+		scoped = false
 		
-		char_pos2 = char_pos1
-		char_pos_selection = false
-		
-		if scoped
-		{
-			scoped = false
-			if att.scrubber typing = false
-			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
-		}
 		return undefined
 	}
 	#endregion

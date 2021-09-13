@@ -15,7 +15,7 @@ var cd1 = new_console_dock("Docks", [
 		[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
 ])
 
-add_console_element(cd1)
+//add_console_element(cd1)
 
 var cd1 = new_console_dock("Text box testing", [
 		new_console_dock("Text boxes", [
@@ -27,7 +27,7 @@ var cd1 = new_console_dock("Text box testing", [
 		]),
 ])
 
-add_console_element(cd1)
+//add_console_element(cd1)
 
 var bar_dock = new Console_dock() with bar_dock
 {
@@ -40,37 +40,51 @@ var bar_dock = new Console_dock() with bar_dock
 }
 bar_dock.enabled = false
 
-var id_box = new_display_box("/ ID", "id", false)
-var index_box = new_display_box("Object", "object_index", false)
+
+
+var id_box = new_display_box("id", "id", false)
+id_box.allow_printing = false
 id_box.att.select_all_on_click = true
+
+var index_box = new_display_box("Object", "object_index", false)
+index_box.allow_printing = false
 index_box.att = id_box.att
 
 var x_scrubber = new_scrubber("x", "x", 1)
 var y_scrubber = new_scrubber("y", "y", 1)
-x_scrubber.att.draw_box = false
-y_scrubber.att = x_scrubber.att
 
 var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
-var var_error_message = new_cd_text("Variable does not exist", dt_real)
-var var_explanation = new_cd_text("Enter a variable name to add!")
-var_name_text_box.association = var_name_text_box
-var_name_text_box.__variable_add_name__ = ""
-var_name_text_box.show_name = false
-var_name_text_box.initial_ghost_text = "Enter variable"
-var_name_text_box.att.length_min = string_length(var_name_text_box.initial_ghost_text)+2
-var_name_text_box.att.scoped_color = dt_variable
-var_name_text_box.button = var_add_button
-with var_name_text_box att.color_method = function(text){
-	var exists = variable_instance_exists(dock.association, text)
-	button.can_click = exists
-	return {text: text, colors: [{pos: string_length(text)+1, col: (exists ? dt_variable : "plain")}]}
+var var_explanation = new_cd_text("Enter a variable name to add!", undefined)
+
+var var_name_text_box = new_text_box("Name", "__variable_add_name__")
+with var_name_text_box
+{
+	association = var_name_text_box
+	button = var_add_button
+	show_name = false
+	initial_ghost_text = "Enter variable"
+	allow_printing = false
+	att.exit_with_enter = false
+	att.length_min = string_length(initial_ghost_text)+5
+	att.scoped_color = dt_variable
+	
+	__variable_add_name__ = ""
+
+	att.color_method = function(text){
+		var exists = variable_instance_exists(dock.association, text)
+		button.can_click = exists
+		return {text: text, colors: [{pos: string_length(text)+1, col: (exists ? dt_variable : "plain")}]}
+	}
+	
+	enter_func = function(){
+		button.released_script()
+	}
 }
 
 with var_add_button
 {
 	text_box = var_name_text_box
-	error_text = var_error_message
 	explanation_text = var_explanation
 	can_click = false
 	released_script = function(){
@@ -79,19 +93,10 @@ with var_add_button
 		if variable_instance_exists(dock.association, text_box.text)
 		{
 			dock.insert_vertical(0, new_text_box(text_box.text, text_box.text))
-			error_text.enabled = false
 			text_box.__variable_add_name__ = ""
-		}
-		else
-		{
-			error_text.enabled = true
-			if text_box.text == "" error_text.set("Must enter variable name")
-			else error_text.set("Variable does not exist")
 		}
 	}
 }
-
-var_error_message.enabled = false
 
 var image_dock = new_console_dock("Image", [
 	[new_scrubber("frame speed", "image_speed", .01)],
@@ -114,7 +119,6 @@ var movement_dock = new_console_dock("Movement", [
 ])
 var variable_dock = new_console_dock("Variables", [
 	[var_add_button, var_name_text_box],
-	[var_error_message],
 	new_separator(),
 	[var_explanation],
 ])
@@ -123,7 +127,7 @@ image_dock.show = false
 movement_dock.show = false
 variable_dock.show = false
 
-object_editor = new_console_dock("o_console", [
+object_editor = new_console_dock("cool_thing", [
 	[index_box, id_box],
 	[x_scrubber, y_scrubber],
 	[image_dock],
@@ -131,10 +135,10 @@ object_editor = new_console_dock("o_console", [
 	[variable_dock],
 ])
 object_editor.__variable_add_name__ = ""
-object_editor.association = o_console
+object_editor.association = cool_thing
 add_console_element(object_editor)
 add_console_element(bar_dock)
 add_console_element(BAR)
 add_console_element(OUTPUT)
-add_console_element(COLOR_PICKER)
+//add_console_element(COLOR_PICKER)
 }

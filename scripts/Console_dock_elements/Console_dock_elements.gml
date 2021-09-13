@@ -52,6 +52,8 @@ initialize = function(text){
 
 set = function(text){
 
+	if not variable_struct_exists(self, "enabled") initialize()
+
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
