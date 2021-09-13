@@ -148,6 +148,7 @@ CTX_STRIP = {}
 SLIDER = {}
 SEPARATOR = {}
 CD_BUTTON = {}
+MEASURER = {}
 
 keyboard_scope = noone
 
@@ -599,6 +600,10 @@ with var_add_button
 
 
 
+color_thing = new Console_color_box()
+color_thing.initialize()
+color_thing.name = "color thing"
+
 DISPLAY = new_console_dock("Display",[
 	[var_add_button, var_text_box],
 	new_separator(),
@@ -611,4 +616,5 @@ add_console_element(bar_dock)
 add_console_element(BAR)
 add_console_element(OUTPUT)
 add_console_element(DISPLAY)
-//add_console_element(COLOR_PICKER)
+add_console_element(color_thing)
+add_console_element(COLOR_PICKER)

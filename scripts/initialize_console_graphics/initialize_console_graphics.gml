@@ -426,4 +426,16 @@ with COLOR_PICKER {
 		dock.draw()
 	}
 }
+
+with MEASURER {
+	enabled = false
+	setting = 1
+	x1 = undefined
+	y1 = undefined
+	x2 = undefined
+	y2 = undefined
+	length = 0
+	width = 0
+	height = 0
+}
 }}

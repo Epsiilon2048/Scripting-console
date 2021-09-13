@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"Console_measurer","path":"scripts/Console_measurer/Console_measurer.yy",},"order":9,},
     {"id":{"name":"Console_button","path":"scripts/Console_button/Console_button.yy",},"order":2,},
     {"id":{"name":"gmcl_build_error","path":"scripts/gmcl_build_error/gmcl_build_error.yy",},"order":31,},
     {"id":{"name":"console_window_functions","path":"scripts/console_window_functions/console_window_functions.yy",},"order":2,},
@@ -145,7 +146,7 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2.3.3.574",
+    "IDEVersion": "2.3.4.577",
   },
   "resourceVersion": "1.4",
   "name": "Scripting-console",

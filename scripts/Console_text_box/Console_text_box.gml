@@ -386,7 +386,7 @@ get_input = function(){
 	#endregion
 	
 	moved = xprevious != x or yprevious != y
-	if dragging or moved set_boundaries()
+	if dragging or moved or right == x set_boundaries()
 	
 	#region Mouse inputs
 	

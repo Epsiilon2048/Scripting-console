@@ -7,4 +7,6 @@ for(var i = ds_list_size(elements)-1; i >= 0; i--)
 
 if element_dragging != noone element_dragging.draw()
 
+draw_console_measurer()
+
 event_commands_exec(event_commands.gui)

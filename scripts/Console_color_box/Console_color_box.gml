@@ -53,7 +53,7 @@ initialize = function(variable){
 	
 		update_when_is_front = true
 
-		length = 2 // Character widths
+		length = 3 // Character widths
 		
 		scoped_color = "output"
 		
@@ -171,17 +171,7 @@ get_input = function(){
 	}
 	#endregion
 	
-	#region Scaling
-	var tb = o_console.TEXT_BOX
-	
-	draw_set_font(o_console.font)
-	var cw = string_width(" ")
-	var ch = string_height(" ")
-	var asp = ch/tb.char_height
-	
-	var _text_wdist = floor(tb.text_wdist*asp)
-	//var _text_hdist = floor(tb.text_hdist*asp)
-	#endregion
+	if enabled and right == x set_boundaries()
 	
 	moved = xprevious != x or yprevious != y
 	if dragging or moved set_boundaries()
@@ -213,7 +203,7 @@ get_input = function(){
 		if not mouse_on_box
 		{
 			mouse_on_box = true
-			window_set_cursor((att.scrubber and not typing) ? cr_size_we : cr_beam)
+			window_set_cursor(cr_handpoint)
 		}
 	}
 	else if mouse_on_box and not clicking
@@ -231,51 +221,20 @@ get_input = function(){
 	mouse_on_name = mouse_on and not mouse_on_box
 	
 	var _association = is_undefined(association) ? (docked ? dock.association : self) : association
-	if scrubbing and not mouse_left
-	{
-		if not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
-		scrubbing = false
-		if not scrubbed and att.select_all_on_click 
-		{
-			typing = true
-			char_pos1 = string_length(text)
-			char_pos2 = 0
-			char_selection = true
-			
-			o_console.keyboard_scope = self
-			scoped = true
-			keyboard_string = text
-		}
-		scrubbed = false
-	}
 	
-	var key_shift = keyboard_check(vk_shift)
 	var key_super = keyboard_check(vk_super)
 	var key_escape_pressed = keyboard_check_pressed(vk_escape)
 	var key_enter_pressed = keyboard_check_pressed(vk_enter)
 	
-	if not (mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)) and clicking and not mouse_left
+	if not (mouse_left_pressed or key_escape_pressed or key_enter_pressed) and clicking and not mouse_left
 	{
 		clicking = false
 		char_mouse = false
 	}
-	else if char_mouse
-	{
-		char_pos1 = mouse_get_char_pos()
-		char_selection = char_pos1 != char_pos2
-	}
 	
-	if scoped and o_console.keyboard_scope != self 
-	{
-		scoped = false
-		if att.scrubber typing = false
-	}
+	if scoped and o_console.keyboard_scope != noone scoped = false
 	
-	if clicking
-	{
-		clicking_on_console = true
-		blink_step = 0
-	}
+	if clicking clicking_on_console = true
 
 	if mouse_on_name and mouse_left_pressed
 	{
@@ -289,77 +248,16 @@ get_input = function(){
 	#endregion
 	
 	#region Scope/descope
-	text_changed = false
-	dclick_step ++
-
-	if mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)
+	if mouse_left_pressed or key_escape_pressed or key_enter_pressed
 	{	
-		if mouse_on_box and scoped and att.scrubber and not typing and mouse_left_pressed
-		{
-			scrubbing = true
-			mouse_previous = gui_mx
-		}
-		
 		if mouse_on_box and mouse_left_pressed
 		{
 			clicking = true
-		
-			if not scoped and att.scrubber 
-			{
-				scrubbing = true
-				mouse_previous = gui_mx
-				typing = false
-				char_selection = false
-				char_pos1 = 0
-				char_pos2 = 0
-			}
-			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*(room_speed/60)) or (not scoped and att.select_all_on_click)
-			{
-				char_selection = true
-				typing = true
-				
-				if att.allow_alpha
-				{
-					char_pos1 = string_char_next(tb.word_sep, text, char_pos1, 1)
-					char_pos2 = string_char_next(tb.word_sep, text, char_pos1, -1)
-					char_pos1 -= string_pos(string_char_at(text, char_pos1), tb.word_sep) != 0
-				}
-				else
-				{
-					char_pos1 = string_length(text)
-					char_pos2 = 0
-				}
-				
-				window_set_cursor(cr_beam)
-			}
-			else
-			{
-				char_mouse = true
-				char_pos1 = mouse_get_char_pos()
-				if not key_shift char_pos2 = char_pos1
-				char_selection = char_pos1 != char_pos2
-			}
-			
-			o_console.keyboard_scope = self
 			scoped = true
-			keyboard_string = text
-			
-			dclick_step = 0
 		}
 		else if scoped
 		{
-			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
 			scoped = false
-			if att.scrubber typing = false
-			
-			if not att.allow_alpha and att.allow_float
-			{
-				var pos = string_pos(".", text)
-				var step_places = float_count_places(scrubber_step, 10)
-				
-				if pos == 0 and not step_places att.float_places = undefined
-				else att.float_places = max(float_count_places(scrubber_step, 10), string_length(text)-string_pos(".", text))
-			}
 			
 			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 		}
@@ -374,279 +272,69 @@ get_input = function(){
 	#region Keyboard inputs
 	if scoped
 	{
-		if att.allow_input
-		{	
-			var rt = tb.repeat_time*(room_speed/60)
-			var r = tb.repeat_step mod ((room_speed/60)*2) == 0
-			tb.repeat_step ++
-		
-			var _key_left				= keyboard_check(vk_left)
-			var _key_right				= keyboard_check(vk_right)
-			var _key_backspace			= keyboard_check(vk_backspace)
-			var _key_delete				= keyboard_check(vk_delete)
-		
-			with tb
-			{
-				rleft		= (_key_left + rleft)*_key_left
-				rright		= (_key_right + rright)*_key_right
-				rbackspace	= (_key_backspace + rbackspace)*_key_backspace
-				rdel		= (_key_delete + rdel)*_key_delete
-
-				var key_left		= keyboard_check_pressed(vk_left) or (_key_left and (r and rt < rleft))
-				var key_right		= keyboard_check_pressed(vk_right) or (_key_right and (r and rt < rright))
-				var key_backspace	= keyboard_check_pressed(vk_backspace) or (_key_backspace and (r and rt < rbackspace))
-				var key_delete		= keyboard_check_pressed(vk_delete) or (_key_delete and (r and rt < rdel))
-			}
-		}
-		
-		var select_all	= false
 		var copy		= false
 		var paste		= false
 		
 		if key_super
 		{
-			select_all	= keyboard_check_pressed(ord("A"))
 			copy		= keyboard_check_pressed(ord("C")) and text != ""
 			paste		= att.allow_input and keyboard_check_pressed(ord("V")) and clipboard_has_text()
-			
-			if select_all or paste and (not typing and att.allow_input)
-			{
-				typing = true
-				scrubbing = false
-				char_pos1 = string_length(text)
-				char_pos2 = 0
-				char_selection = true
-			}
 		}
 		
-		if (char_selection or not typing) and copy
+		if copy clipboard_set_text(color)
+		else if paste
 		{
-			if not typing clipboard_set_text(text)
-			else clipboard_set_text(slice(text, char_pos_min+1, char_pos_max+1, 1))
-			blink_step = 0
-		}
-		
-		if att.scrubber and not typing and (select_all or paste or keyboard_key != vk_nokey)
-		{	
-			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
-			var digits = string_digits(char) != ""
-			if digits or key_backspace or key_delete or (sign(att.value_min) == -1 and string_pos("-", char)) or (att.allow_float and string_pos(".", char))
+			var color_changed = false
+			var clipboard = clipboard_get_text()
+			var char = string_char_at(clipboard, 1)
+			
+			var is_hex
+			if char == "$" or char == "#" 
 			{
-				typing = true
-				scrubbing = false
-				char_pos1 = string_length(text)
-				if digits or key_backspace or key_delete
-				{
-					char_pos2 = 0
-					char_selection = true
-				}
-				else char_pos2 = char_pos1
-				show_debug_message(1)
+				clipboard = "0x"+string_delete(clipboard, 1, 1)
+				is_hex = true
 			}
-		}
-		
-		if not typing and not att.allow_alpha and (key_left or key_right)
-		{
-			value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
-			text = string_format_float(value, att.float_places)
+			else is_hex = string_is_float("0x"+clipboard)
 			
-			if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
-		}
-		
-		if typing and att.allow_input
-		{
-			blink_step ++
-
-			if select_all
+			if is_hex
 			{
-				char_pos1 = string_length(text)
-				char_pos2 = 0
-				char_selection = true
-				char_mouse = false
-				blink_step = 0
+				color = hex_to_color(clipboard)
+				color_changed = true
 			}
-
-			if key_left
-			{	
-				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, -1) : (char_pos1-1)
-				char_selection = key_shift
-				char_mouse = false
-				blink_step = 0
-
-				if not key_shift
-				{
-					char_selection = false
-					char_pos2 = char_pos1
-				}
-			}
-			if key_right
-			{	
-				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, 1) : (char_pos1+1)
-				char_selection = key_shift
-				char_mouse = false
-				blink_step = 0
-			
-				if not key_shift 
-				{
-					char_selection = false
-					char_pos2 = char_pos1
-				}
-			}
-		
-			char_pos_max = max(char_pos1, char_pos2)
-			char_pos_min = min(char_pos1, char_pos2)
-		
-			if att.allow_input
+			else if not (slice(clipboard, 1, 3, 1) == "0x" or string_digits(clipboard) == "")
 			{
-				if paste or (keyboard_lastchar != "" or string_length(text) < string_length(keyboard_string))
+				var group = ""
+				var r = undefined
+				var g = undefined
+				var b = undefined
+				for(var i = 1; i <= string_length(clipboard); i++)
 				{
-					var newtext = text
-					var char = ""
-					if paste char = clipboard_get_text()
-					else char = slice(keyboard_string, string_length(text)+1, -1, 1)
-			
-					if char_selection newtext = string_delete(newtext, char_pos_min+1, char_pos_max-char_pos_min)
-			
-					if not att.allow_alpha 
+					var char = string_char_at(clipboard, i)
+					if string_is_int(string_char_at(clipboard, i))
 					{
-						if sign(att.value_min) == -1 and string_pos("-", char)
-						{
-							char_pos1 = char_pos_min
-							
-							if string_char_at(newtext, 1) == "-" 
-							{
-								newtext = string_delete(newtext, 1, 1)
-								char_pos1 --
-							}
-							else 
-							{
-								newtext = "-"+newtext
-								char_pos1 ++
-							}
-							char_pos_min = char_pos1
-							text_changed = true
-						}
-						if att.allow_float and string_pos(".", char)
-						{
-							char_pos1 = char_pos_min
-							var pos = string_pos(".", newtext)
-							if pos == 0 pos = infinity
-							newtext = string_delete(newtext, pos, 1)
-							newtext = string_insert(".", newtext, char_pos1+(char_pos1 < pos))
-							char_pos1 += (char_pos1 < pos)
-							char_pos_min = char_pos1
-							text_changed = true
-						}
-						char = string_digits(char)
+						group += char
 					}
-				
-					if att.lock_text_length and (string_length(char)+string_length(newtext)) > att.length_max
-					{
-						var overlap = -(att.length_max-(string_length(char)+string_length(newtext)))
-					
-						if sign(overlap) != -1 char = ""
-						else char = slice(char, 1, overlap, 1)
+					else if group != ""
+					{	
+						if is_undefined(r) r = min(real(group), 255)
+						else if is_undefined(g) g = min(real(group), 255)
+						else if is_undefined(b) b = min(real(group), 255)
+						else break
+						group = ""
 					}
-					
-					if att.char_filter != noscript char = att.char_filter(char)
-					
-					if text_changed or char != ""
-					{
-						char_pos1 = char_pos_min
-						char_selection = false
-						
-						if not att.allow_alpha and char != "" and (newtext == "0" or newtext == "-0")
-						{
-							newtext = (newtext == "-0") ? "-" : ""
-							char_pos1 --
-						}
-						
-						text = string_insert(char, newtext, char_pos1+1)
-						char_pos1 += string_length(char)
-						char_pos2 = char_pos1
-						text_changed = true
-					}
-					keyboard_string = text
 				}
-		
-				if (key_backspace or (char_selection and key_delete)) and (char_selection or char_pos1 != 0)
+				if is_undefined(b) and group != "" b = real(group)
+				
+				if not is_undefined(g) and not is_undefined(b)
 				{
-					if char_selection
-					{
-						text = string_delete(text, char_pos_min+1, char_pos_max-char_pos_min)
-						char_pos1 = char_pos_min
-					}
-					else 
-					{
-						text = string_delete(text, char_pos1, 1)
-						char_pos1 --
-					}
-					char_pos2 = char_pos1
-					char_selection = false
-					text_changed = true
+					color = make_color_rgb(r, g, b)
+					color_changed = true
 				}
-				else if key_delete and (char_selection or char_pos1 != string_length(text))
-				{
-					text = string_delete(text, char_pos1+1, 1)
-					text_changed = true
-				}
-		
-				if text_changed
-				{
-					if not att.allow_alpha
-					{
-						if not string_is_float(text)
-						{
-							text = "0"
-							char_pos1 = 1
-							char_pos2 = char_pos1
-							char_selection = false
-						}
-						else
-						{
-							text = string_format_float(clamp(real(text), att.value_min, att.value_max), att.float_places)
-						}
-					}
 				
-					convert(text)
-					
-					if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
-			
-					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
-	
-					right = box_left + text_width + (att.draw_box ? _text_wdist*2 : 0)
-				
-					char_mouse = false
-				
-					colors = att.color_method(text)
-					blink_step = 0
-					keyboard_string = text
-				}
-			}
-		}
- 		else if scrubbing
-		{
-			if abs(gui_mx-mouse_previous) >= att.scrubber_pixels_per_step
-			{
-				value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*scrubber_step, att.value_min, att.value_max)
-				mouse_previous = gui_mx
-				scrubbed = true
-				
-				if not att.allow_float value = floor(value)
-				text = string_format_float(value, att.float_places)
-				
-				if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
-				
-				set_boundaries()
+				if color_changed and att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 			}
 		}
 	}
-	
-	char_pos1 = clamp(char_pos1, 0, string_length(text))
-	char_pos2 = clamp(char_pos2, 0, string_length(text))
-	
-	char_pos_max = max(char_pos1, char_pos2)
-	char_pos_min = min(char_pos1, char_pos2)
 	#endregion
 	
 	xprevious = x
@@ -667,89 +355,38 @@ draw = function(){
 	draw_set_font(o_console.font)
 	var tb = o_console.TEXT_BOX
 
-	var cw = string_width(" ")
 	var ch = string_height(" ")
+	var asp = ch/tb.char_height
 	
-	if att.draw_box
+	var _outline_width = tb.outline_width*asp
+	
+	if not (docked and not dock.is_front)
 	{
-		var asp = ch/tb.char_height
-	
-		var _text_wdist = floor(tb.text_wdist*asp)
-		var _text_hdist = floor(tb.text_hdist*asp)
-		var _outline_width = tb.outline_width*asp
-	
-		if not (docked and not dock.is_front)
-		{
-			draw_set_color(o_console.colors.body_real)
-			
-			if docked draw_rectangle(left, top, box_left, bottom, false)
-			else
-			{
-				draw_rectangle(left, top, box_left, bottom, false)
-				draw_console_body(box_left, top, right, bottom)
-			}
-		}
-	
-		if show_name and docked
-		{
-			draw_set_color(o_console.colors.body_accent)
-			draw_hollowrect(left, top, right, bottom, _outline_width)
-		}
-	
-		if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
-		else draw_set_color(o_console.colors.body_accent)
-		draw_hollowrect(box_left, top, right, bottom, _outline_width)
+		draw_set_color(o_console.colors.body_real)
+		draw_rectangle(left, top, box_left, bottom, false)
 	}
-	else
+	draw_set_color(color)
+	draw_rectangle(box_left, top, right, bottom, false)
+	
+	if show_name and docked
 	{
-		var _text_wdist = 0
-		var _text_hdist = 0
+		draw_set_color(o_console.colors.body_accent)
+		draw_hollowrect(left, top, right, bottom, _outline_width)
 	}
 	
-	draw_set_color(o_console.colors.body_accent)
-	draw_set_halign(fa_left)
-	draw_set_valign(fa_top)
+	if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
+	else draw_set_color(o_console.colors.body_accent)
+	if att.draw_box draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	
 	if show_name
 	{
+		draw_set_halign(fa_left)
+		draw_set_valign(fa_top)
+	
 		draw_set_color(o_console.colors.output)
-		draw_text(name_text_x, text_y, name)
+		draw_text(name_text_x, name_text_y, name)
 	}
 	
-	if ((text == "") ? string_length(initial_ghost_text) : string_length(text)) > att.length_max clip_rect_cutout(box_left, top, right, bottom)
-	
-	if text != ""
-	{
-		if att.color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
-		else
-		{
-			draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
-			draw_text(text_x, text_y, text)
-		}
-	}
-	else if initial_ghost_text != ""
-	{
-		draw_set_color(o_console.colors.body_accent)
-		draw_text(text_x, text_y, initial_ghost_text)
-	}
-	
-	draw_set_color(o_console.colors[$ att.text_color])
-	if scoped and typing and o_console.keyboard_scope == self
-	{
-		var x1 = text_x+cw*char_pos1
-		var y1 = text_y
-		var y2 = text_y+ch-1
-		
-		if char_selection and char_pos1 != char_pos2
-		{
-			draw_set_alpha(tb.char_selection_alpha)
-			draw_rectangle(text_x+cw*char_pos_min, y1, text_x+cw*char_pos_max, y2, false)
-			draw_set_alpha(1)
-		}
-	}
-	if string_length(text) > att.length_max shader_reset()
-	if scoped and typing and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
-
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)
 	draw_set_font(old_font)
