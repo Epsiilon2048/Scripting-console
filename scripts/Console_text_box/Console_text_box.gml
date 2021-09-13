@@ -74,6 +74,7 @@ initialize = function(variable){
 	moved = true
 	
 	text = ""
+	initial_ghost_text = ""
 	self.variable = variable
 	value = 0
 	scoped = false
@@ -167,7 +168,7 @@ initialize = function(variable){
 	
 		select_all_on_click = false
 	
-		set_variable_on_input = false // Set variable every time theres input, rather than just once it's descoped
+		set_variable_on_input = true // Set variable every time theres input, rather than just once it's descoped
 	
 		value_conversion = string // How the value is converted from the text
 	
@@ -291,6 +292,9 @@ set_boundaries = function(){
 
 
 update_variable = function(){ if not is_undefined(variable) {
+	
+	if is_undefined(variable) return undefined
+	
 	var old_text = text
 	var _association = is_undefined(association) ? (docked ? dock.association : self) : association
 	
@@ -667,10 +671,10 @@ get_input = function(){
 		
 			if att.allow_input
 			{
-				if paste or keyboard_lastchar != "" or string_length(text) < string_length(keyboard_string)
+				if paste or (keyboard_lastchar != "" and string_length(text) < string_length(keyboard_string))
 				{
 					var newtext = text
-					var char 
+					var char = ""
 					if paste char = clipboard_get_text()
 					else char = slice(keyboard_string, string_length(text)+1, -1, 1)
 			
@@ -736,6 +740,7 @@ get_input = function(){
 						text_changed = true
 					}
 					keyboard_string = text
+					//show_debug_message(string(random(5))+" "+text)
 				}
 		
 				if (key_backspace or (char_selection and key_delete)) and (char_selection or char_pos1 != 0)
@@ -776,11 +781,11 @@ get_input = function(){
 							text = string_format_float(clamp(real(text), att.value_min, att.value_max), att.float_places)
 						}
 					}
-					
-					keyboard_string = text
 				
 					convert(text)
+					
 					if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
+					with _association show_debug_message(string(att.set_variable_on_input)+" / "+other.value)
 			
 					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
 	
@@ -790,11 +795,11 @@ get_input = function(){
 				
 					colors = att.color_method(text)
 					blink_step = 0
-					show_debug_message(random(5))
+					keyboard_string = text
 				}
 			}
 		}
-		else if scrubbing
+ 		else if scrubbing
 		{
 			if abs(gui_mx-mouse_previous) >= att.scrubber_pixels_per_step
 			{
@@ -886,12 +891,21 @@ draw = function(){
 		draw_text(name_text_x, text_y, name)
 	}
 	
-	if string_length(text) > att.length_max clip_rect_cutout(box_left, top, right, bottom)
-	if att.color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
-	else
+	if ((text == "") ? string_length(initial_ghost_text) : string_length(text)) > att.length_max clip_rect_cutout(box_left, top, right, bottom)
+	
+	if text != ""
 	{
-		draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
-		draw_text(text_x, text_y, text)
+		if att.color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
+		else
+		{
+			draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
+			draw_text(text_x, text_y, text)
+		}
+	}
+	else if initial_ghost_text != ""
+	{
+		draw_set_color(o_console.colors.body_accent)
+		draw_text(text_x, text_y, initial_ghost_text)
 	}
 	
 	draw_set_color(o_console.colors[$ att.text_color])

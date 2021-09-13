@@ -209,9 +209,9 @@ draw = function(){
 	
 	var is_front = not (docked and not dock.is_front)
 	
-	if draw_box and clicking
+	if draw_box
 	{
-		draw_set_color(o_console.colors.embed_hover)
+		draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
 		draw_rectangle(left, top, right, bottom, false)
 	}
 	

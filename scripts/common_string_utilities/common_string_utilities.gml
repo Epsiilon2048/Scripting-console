@@ -119,7 +119,7 @@ return string_is_int(_str)
 
 
 
-function string_format_float(float, decimal_places){ //formats a float into a string, rounding to the 10^6 place (rather than 100s place)
+function string_format_float(float, decimal_places){ //formats a float into a string
 
 if not is_numeric(float) or (is_undefined(decimal_places) and (float mod 1) == 0) return string(float)
 

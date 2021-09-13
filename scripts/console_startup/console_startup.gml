@@ -40,8 +40,8 @@ var bar_dock = new Console_dock() with bar_dock
 }
 bar_dock.enabled = false
 
-var id_box = new_display_box("id", "id", false)
-var index_box = new_display_box("object index", "object_index", false)
+var id_box = new_display_box("/ ID", "id", false)
+var index_box = new_display_box("Object", "object_index", false)
 id_box.att.select_all_on_click = true
 index_box.att = id_box.att
 
@@ -53,11 +53,12 @@ y_scrubber.att = x_scrubber.att
 var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
 var var_error_message = new_cd_text("Variable does not exist", dt_real)
-var var_separator = new_separator()
+var var_explanation = new_cd_text("Enter a variable name to add!")
 var_name_text_box.association = var_name_text_box
 var_name_text_box.__variable_add_name__ = ""
 var_name_text_box.show_name = false
-var_name_text_box.att.length_min = 15
+var_name_text_box.initial_ghost_text = "Enter variable"
+var_name_text_box.att.length_min = string_length(var_name_text_box.initial_ghost_text)+2
 var_name_text_box.att.scoped_color = dt_variable
 var_name_text_box.button = var_add_button
 with var_name_text_box att.color_method = function(text){
@@ -70,21 +71,16 @@ with var_add_button
 {
 	text_box = var_name_text_box
 	error_text = var_error_message
-	separator = var_separator
+	explanation_text = var_explanation
 	can_click = false
 	released_script = function(){
+		
+		explanation_text.enabled = false
 		if variable_instance_exists(dock.association, text_box.text)
 		{
 			dock.insert_vertical(0, new_text_box(text_box.text, text_box.text))
 			error_text.enabled = false
-			separator.enabled = true
-			
-			with text_box
-			{
-				text = ""
-				value = ""
-				colors = att.color_method(text)
-			}
+			text_box.__variable_add_name__ = ""
 		}
 		else
 		{
@@ -96,13 +92,14 @@ with var_add_button
 }
 
 var_error_message.enabled = false
-var_separator.enabled = false
 
 var image_dock = new_console_dock("Image", [
 	[new_scrubber("frame speed", "image_speed", .01)],
 	[new_scrubber("frame", "image_index", 1)],
+	new_separator(),
 	[new_scrubber("x scale", "image_xscale", .1), new_scrubber("y scale", "image_yscale", .1)],
 	[new_scrubber("angle", "image_angle", 1)],
+	new_separator(),
 	[new_scrubber("color blend", "image_blend", 1)],
 	[new_scrubber("alpha", "image_alpha", .01)],
 ])
@@ -111,13 +108,15 @@ var movement_dock = new_console_dock("Movement", [
 	[new_scrubber("direction", "direction", 1)],
 	[new_scrubber("friction", "friction", .1)], 
 	[new_scrubber("hspeed", "hspeed", 1), new_scrubber("vspeed", "vspeed", 1)],
+	new_separator(),
 	[new_scrubber("gravity", "gravity", 1)],
 	[new_scrubber("gravity direction", "gravity_direction", 1)],
 ])
 var variable_dock = new_console_dock("Variables", [
 	[var_add_button, var_name_text_box],
 	[var_error_message],
-	var_separator,
+	new_separator(),
+	[var_explanation],
 ])
 
 image_dock.show = false
@@ -125,8 +124,7 @@ movement_dock.show = false
 variable_dock.show = false
 
 object_editor = new_console_dock("o_console", [
-	[id_box], 
-	[index_box],
+	[index_box, id_box],
 	[x_scrubber, y_scrubber],
 	[image_dock],
 	[movement_dock],
