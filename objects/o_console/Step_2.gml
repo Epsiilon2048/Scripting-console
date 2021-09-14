@@ -49,5 +49,7 @@ else if not bird_mode and colors.sprite == bird_mode_
 }
 #endregion
 
+console_measurer_inputs()
+
 event_commands_exec(event_commands.step_end)
 step ++

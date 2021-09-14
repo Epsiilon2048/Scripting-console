@@ -428,10 +428,10 @@ with COLOR_PICKER {
 }
 
 with MEASURER {
-	enabled = false
+	enabled = true
 	setting = 1
-	x1 = undefined
-	y1 = undefined
+	x1 = 0
+	y1 = 0
 	x2 = undefined
 	y2 = undefined
 	length = 0
