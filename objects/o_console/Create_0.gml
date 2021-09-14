@@ -466,6 +466,8 @@ index_box.att = id_box.att
 
 var x_scrubber = new_scrubber("x", "x", 1)
 var y_scrubber = new_scrubber("y", "y", 1)
+x_scrubber.att.scrubber_pixels_per_step = 1
+y_scrubber.att.scrubber_pixels_per_step = 1
 
 var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
@@ -523,10 +525,10 @@ var image_dock = new_console_dock("Image", [
 	[new_scrubber("alpha", "image_alpha", .01)],
 ])
 var movement_dock = new_console_dock("Movement", [
-	[new_scrubber("speed", "speed", 1)], 
+	[new_scrubber("speed", "speed", .1)], 
 	[new_scrubber("direction", "direction", 1)],
 	[new_scrubber("friction", "friction", .1)], 
-	[new_scrubber("hspeed", "hspeed", 1), new_scrubber("vspeed", "vspeed", 1)],
+	[new_scrubber("hspeed", "hspeed", .1), new_scrubber("vspeed", "vspeed", .1)],
 	new_separator(),
 	[new_scrubber("gravity", "gravity", 1)],
 	[new_scrubber("gravity direction", "gravity_direction", 1)],
@@ -548,7 +550,6 @@ object_editor = new_console_dock("cool_thing", [
 	[movement_dock],
 	[variable_dock],
 ])
-object_editor.__variable_add_name__ = ""
 object_editor.association = cool_thing
 
 
