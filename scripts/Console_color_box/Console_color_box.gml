@@ -56,6 +56,8 @@ initialize = function(variable){
 	
 	association = undefined
 	
+	using_color_picker = false
+	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the color
 	
@@ -174,6 +176,7 @@ get_input = function(){
 		mouse_on = false
 		clicking = false
 		scoped = false
+		using_color_picker = false
 		
 		return undefined
 	}
@@ -240,7 +243,12 @@ get_input = function(){
 		char_mouse = false
 	}
 	
-	if scoped and o_console.keyboard_scope != noone scoped = false
+	if scoped and o_console.keyboard_scope != noone 
+	{
+		o_console.COLOR_PICKER.global_box = false
+		using_color_picker = false
+		scoped = false
+	}
 	
 	if clicking clicking_on_console = true
 
@@ -256,17 +264,19 @@ get_input = function(){
 	#endregion
 	
 	#region Scope/descope
-	if mouse_left_pressed or key_escape_pressed or key_enter_pressed
+	if (mouse_left_pressed and not using_color_picker) or key_escape_pressed or key_enter_pressed or (using_color_picker and not o_console.COLOR_PICKER.global_box.enabled)
 	{	
-		if mouse_on_box and mouse_left_pressed
+		if mouse_on_box and mouse_left_pressed and not using_color_picker
 		{
 			clicking = true
 			scoped = true
-			call_color_box(variable, undefined, undefined)
+			using_color_picker = true
+			with _association call_color_box(other.variable, undefined, undefined)
 		}
 		else if scoped
 		{
 			scoped = false
+			using_color_picker = false
 			
 			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.color)
 		}
