@@ -229,27 +229,25 @@ with COLOR_PICKER {
 	
 	char_height = 23
 	
-	x = 0
-	y = 0
-	
 	mouse_on = false
 	
 	variable = ""
 	
 	svsquare = generate_satval_square()
-	hstrip	  = generate_hue_strip()
+	hstrip = generate_hue_strip()
 	
 	outline = 1.7
 	
-	dist = 20
-	sep = 15
+	dist = 9
+	sep = 9
 	
-	svsquare_length = 100
-	dropper_radius = 11
+	svsquare_length = 140
+	dropper_radius = 8
+	hpicker_height = 15
 	
-	hstrip_width = 50
+	hstrip_width = 26
 	
-	colorbar_height = 53
+	colorbar_height = 29
 	
 	hue = 0
 	sat = 255
@@ -265,23 +263,23 @@ with COLOR_PICKER {
 	
 	hsv_255 = false
 	
-	hue_text_box = new_scrubber("Hue", "o_console.COLOR_PICKER.hue", 1)
+	hue_text_box = new_scrubber("Hue", "hue", 1)
 	hue_text_box.show_name = false
-	sat_text_box = new_scrubber("Sat", "o_console.COLOR_PICKER.sat", 1)
+	sat_text_box = new_scrubber("Sat", "sat", 1)
 	sat_text_box.show_name = false
-	val_text_box = new_scrubber("Val", "o_console.COLOR_PICKER.val", 1)
+	val_text_box = new_scrubber("Val", "val", 1)
 	val_text_box.show_name = false
 	
-	r_text_box = new_scrubber("Red", "o_console.COLOR_PICKER.r", 1)
+	r_text_box = new_scrubber("Red", "r", 1)
 	r_text_box.show_name = false
-	g_text_box = new_scrubber("Green", "o_console.COLOR_PICKER.g", 1)
+	g_text_box = new_scrubber("Green", "g", 1)
 	g_text_box.show_name = false
-	b_text_box = new_scrubber("Blue", "o_console.COLOR_PICKER.b", 1)
+	b_text_box = new_scrubber("Blue", "b", 1)
 	b_text_box.show_name = false
 	
-	hex_text_box = new_text_box("Hex", "o_console.COLOR_PICKER.hex")
+	hex_text_box = new_text_box("Hex", "hex")
 	hex_text_box.show_name = false
-	gml_text_box = new_text_box("GML", "o_console.COLOR_PICKER.color")
+	gml_text_box = new_text_box("GML", "color")
 	gml_text_box.show_name = false
 	
 	with hex_text_box.att
@@ -323,8 +321,8 @@ with COLOR_PICKER {
 		
 		allow_float = false
 		
-		length_min = 6
-		length_max = 15
+		length_min = 8
+		length_max = 8
 		lock_text_length = true
 		value_conversion = real
 	}
@@ -376,11 +374,20 @@ with COLOR_PICKER {
 		draw_box = false
 	}
 	
+	color_picker = new Console_color_picker() with color_picker
+	{
+		initialize("o_bg.color")
+	}
+	
 	dock = new_console_dock("Color picker", [
+		[color_picker],
 		["RGB", r_text_box, g_text_box, b_text_box],
 		["HSV", hue_text_box, sat_text_box, val_text_box, "/", hsv_255_button,],
 		["Hex", hex_text_box, "GML", gml_text_box],
 	])
+	dock.association = self
+	
+	
 	
 	get_input = function(){
 		
@@ -389,6 +396,7 @@ with COLOR_PICKER {
 		r = color_get_red(color)
 		g = color_get_green(color)
 		b = color_get_blue(color)
+		hex = color_to_hex(color)
 		
 		if not (hue_text_box.scoped or sat_text_box.scoped or val_text_box.scoped)
 		{
@@ -408,17 +416,41 @@ with COLOR_PICKER {
 			}
 		}
 		
+		var hsv = hsv_255 ? 1 : 2.55
+		
 		var old_rgb = r+g+b
 		var old_hsv = hue+sat+val
 		var old_hex = hex
 		hue_text_box.att.value_max = hsv_255 ? 255 : 100
+		
 		dock.get_input()
+		if color_picker.color_changed
+		{
+			color = o_bg.color
+			hue = color_picker.hue*hsv
+			sat = color_picker.sat*hsv
+			val = color_picker.val*hsv
+		}
+		else
+		{
+			if old_rgb != r+g+b
+			{
+				color = make_color_rgb(r, g, b)
+			}
+			else if old_hex != hex
+			{
+				color = hex_to_color(hex)
+			}
+			else if old_hsv != hue+sat+val
+			{
+				color = make_color_hsv(hue*hsv, sat*hsv, val*hsv)
+				color_picker.hue = hue*hsv
+				color_picker.sat = sat*hsv
+				color_picker.val = val*hsv
+			}
 		
-		if old_rgb != r+g+b			color = make_color_rgb(r, g, b)
-		if old_hsv != hue+sat+val	color = hsv_255 ? make_color_hsv(hue, sat, val) : make_color_hsv(hue*2.55, sat*2.55, val*2.55)
-		if old_hex != hex			color = hex_to_color(hex)
-		
-		o_bg.color = color
+			o_bg.color = color
+		}
 	}
 	
 	

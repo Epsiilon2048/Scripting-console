@@ -3,6 +3,7 @@
 #macro mouse_on_console o_console.mouse_on
 #macro clicking_on_console o_console.clicking_on
 
+run_in_console = false
 clicking_on_console = false
 mouse_on_console = false
 
@@ -383,8 +384,6 @@ O3 = ""
 O4 = ""
 O5 = ""
 
-run_in_console = false
-
 cs_template = cs_greenbeans
 
 var greetings = [
@@ -415,8 +414,8 @@ sc = 0
 
 
 
-var cd1 = new_console_dock("Docks", [
-		new_cd_button("Hello world", show_debug_message),
+var element_adjusting = new_console_dock("Element adjusting", [
+	new_console_dock("Dock", [
 		[new_scrubber("Outline", "con.DOCK.name_outline_width", .1)],
 		["Border", new_scrubber("W", "con.DOCK.name_wdist", 1), new_scrubber("H", "con.DOCK.name_hdist", 1)],
 		new_separator(),
@@ -425,21 +424,27 @@ var cd1 = new_console_dock("Docks", [
 		new_separator(),
 		[new_scrubber("Base", "con.DOCK.dropdown_base", 1), new_scrubber("Hypotenuse", "con.DOCK.dropdown_hypotenuse", 1)],
 		[new_scrubber("Border", "con.DOCK.dropdown_wdist", 1)],
+	]),
+	new_console_dock("Color picker", [
+		new_scrubber("Outline", "con.COLOR_PICKER.outline", .1),
+		new_scrubber("Border distance", "con.COLOR_PICKER.dist", 1),
+		new_scrubber("Separation", "con.COLOR_PICKER.sep", 1),
+		new_separator(),
+		"Saturation/value square",
+		new_scrubber("Square length", "con.COLOR_PICKER.svsquare_length", 1),
+		new_scrubber("Dropper radius", "con.COLOR_PICKER.dropper_radius", 1),
+		new_separator(),
+		"Hue bar",
+		new_scrubber("Bar width", "con.COLOR_PICKER.hstrip_width", 1),
+		new_scrubber("Picker height", "con.COLOR_PICKER.hpicker_height", 1),
+		new_separator(),
+		"Color strip",
+		new_scrubber("Strip height", "con.COLOR_PICKER.colorbar_height", 1),
+	]),
+	new_cd_button("Reset all", initialize_console_graphics)
 ])
 
-//add_console_element(cd1)
-
-var cd1 = new_console_dock("Text box testing", [
-		new_console_dock("Text boxes", [
-			new_text_box("Text box", "o_console.tb"),
-		]),
-		new_console_dock("Scrubbers", [
-			new_scrubber("Scrubber", "o_console.sc", 1),
-			new_scrubber("Float scrubber", "o_console.sc", .1),
-		]),
-])
-
-//add_console_element(cd1)
+add_console_element(element_adjusting)
 
 var bar_dock = new Console_dock() with bar_dock
 {

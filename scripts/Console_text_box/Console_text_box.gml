@@ -315,15 +315,17 @@ update_variable = function(){ if not is_undefined(variable) {
 	if not att.allow_alpha and is_numeric(value)
 	{
 		var old_value = value
-		value = clamp(value, att.value_min, att.value_max)
+		value = clamp(value, att.value_min, att.value_max)		
 		if old_value != value with _association variable_string_set(other.variable, other.value)
 		
 		text = att.allow_float ? string_format_float(value, att.float_places) : string(round(value))
 	}
 	else text = string(value)
-		
+	
+	if att.lock_text_length and string_length(text) > att.length_max text = slice(text, 1, att.length_max+1, 1)
+	
 	if old_text != text colors = att.color_method(text)
-	if not att.lock_text_length and string_length(old_text) != string_length(text) set_boundaries()
+	if string_length(old_text) != string_length(text) set_boundaries()
 }}
 
 
