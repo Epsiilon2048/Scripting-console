@@ -318,6 +318,7 @@ with COLOR_PICKER {
 		allow_alpha = false
 		set_variable_on_input = true
 		update_when_is_front = true
+		select_all_on_click = true
 		
 		allow_float = false
 		
@@ -454,9 +455,7 @@ with COLOR_PICKER {
 	}
 	
 	
-	draw = function(){
-		dock.draw()
-	}
+	draw = dock.draw
 }
 
 with MEASURER {
