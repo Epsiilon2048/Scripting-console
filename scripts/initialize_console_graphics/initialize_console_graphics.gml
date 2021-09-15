@@ -116,7 +116,7 @@ with BAR {
 		variable = "o_console.console_string"
 		show_name = false
 		att.draw_box = false
-		att.color_method = gmcl_string_color
+		color_method = gmcl_string_color
 		att.exit_with_enter = false
 		att.set_variable_on_input = true
 		att.allow_scoped_exinput = true
@@ -249,40 +249,23 @@ with COLOR_PICKER {
 	
 	colorbar_height = 29
 	
-	hue = 0
-	sat = 255
-	val = 255
+	color_picker_dock_size = 1.24
 	
-	r = 255
-	g = 255
-	b = 255
+	var_att = new_text_box("", "").att
+	hsv_att = new_scrubber("", "", 1).att
+	rgb_att = new_scrubber("", "", 1).att
+	hex_att = new_text_box("", "").att
+	gml_att = new_text_box("", "").att
 	
-	hex = rgb_to_hex(r, g, b)
+	with var_att
+	{
+		length_min = 22
+		set_variable_on_input = false
+		allow_scoped_exinput = false
+		scoped_color = dt_variable
+	}
 	
-	color = make_color_hsv(hue, sat, val)
-	
-	hsv_255 = false
-	
-	hue_text_box = new_scrubber("Hue", "hue", 1)
-	hue_text_box.show_name = false
-	sat_text_box = new_scrubber("Sat", "sat", 1)
-	sat_text_box.show_name = false
-	val_text_box = new_scrubber("Val", "val", 1)
-	val_text_box.show_name = false
-	
-	r_text_box = new_scrubber("Red", "r", 1)
-	r_text_box.show_name = false
-	g_text_box = new_scrubber("Green", "g", 1)
-	g_text_box.show_name = false
-	b_text_box = new_scrubber("Blue", "b", 1)
-	b_text_box.show_name = false
-	
-	hex_text_box = new_text_box("Hex", "hex")
-	hex_text_box.show_name = false
-	gml_text_box = new_text_box("GML", "color")
-	gml_text_box.show_name = false
-	
-	with hex_text_box.att
+	with hex_att
 	{
 		draw_box = false
 		
@@ -292,27 +275,9 @@ with COLOR_PICKER {
 		length_min = 6
 		length_max = 6
 		lock_text_length = true
-		
-		//text_color = "real"
-		
-		char_filter = function(char){
-			
-			static hex_chars = "0123456789ABCDEF"
-			char = string_upper(char)
-			var new_char = ""
-			
-			for(var i = 1; i <= string_length(char); i++)
-			{
-				var _char = string_char_at(char, i)
-				
-				if string_pos(_char, hex_chars) new_char += _char
-			}
-			
-			return new_char
-		}
 	}
 	
-	with gml_text_box.att
+	with gml_att
 	{
 		draw_box = false
 		allow_alpha = false
@@ -325,10 +290,9 @@ with COLOR_PICKER {
 		length_min = 8
 		length_max = 8
 		lock_text_length = true
-		value_conversion = real
 	}
 	
-	with hue_text_box.att
+	with hsv_att
 	{
 		draw_box = false
 		update_when_is_front = true
@@ -342,7 +306,7 @@ with COLOR_PICKER {
 		value_max = 255
 	}
 	
-	with r_text_box.att
+	with rgb_att
 	{
 		draw_box = false
 		update_when_is_front = true
@@ -357,105 +321,24 @@ with COLOR_PICKER {
 		value_max = 255
 	}
 	
-	sat_text_box.att = hue_text_box.att
-	val_text_box.att = hue_text_box.att
-	g_text_box.att = r_text_box.att
-	b_text_box.att = r_text_box.att
-	
-	var toggle_hsv_255 = function(){
-		
-		hsv_255 = not hsv_255
-		hsv_255_button.set_name(hsv_255 ? "255" : "100")
-	}
-	
-	hsv_255_button = new Cd_button() with hsv_255_button
-	{
-		initialize(other.hsv_255 ? "255" : "100", noscript)
-		pressed_script = toggle_hsv_255
-		draw_box = false
-	}
-	
-	color_picker = new Console_color_picker() with color_picker
-	{
-		initialize("o_bg.color")
-	}
-	
-	dock = new_console_dock("Color picker", [
-		[color_picker],
-		["RGB", r_text_box, g_text_box, b_text_box],
-		["HSV", hue_text_box, sat_text_box, val_text_box, "/", hsv_255_button,],
-		["Hex", hex_text_box, "GML", gml_text_box],
-	])
-	dock.association = self
-	
-	
+	ignore_input = true
+	global_box = new Console_color_picker()
+	global_box.initialize()
 	
 	get_input = function(){
 		
-		color = o_bg.color
-		
-		r = color_get_red(color)
-		g = color_get_green(color)
-		b = color_get_blue(color)
-		hex = color_to_hex(color)
-		
-		if not (hue_text_box.scoped or sat_text_box.scoped or val_text_box.scoped)
+		global_box.get_input()
+		if global_box.enabled and not ignore_input and not global_box.mouse_on and mouse_check_button_pressed(mb_any)
 		{
-			val = color_get_value(color)
-			if not hsv_255 val /= 2.55
-			
-			if color_get_hue(color) 
-			{
-				hue = color_get_hue(color)
-				if not hsv_255 hue /= 2.55
-			}
-			
-			if val 
-			{
-				sat = color_get_saturation(color)
-				if not hsv_255 sat /= 2.55
-			}
+			global_box.enabled = false
 		}
 		
-		var hsv = hsv_255 ? 1 : 2.55
-		
-		var old_rgb = r+g+b
-		var old_hsv = hue+sat+val
-		var old_hex = hex
-		hue_text_box.att.value_max = hsv_255 ? 255 : 100
-		
-		dock.get_input()
-		if color_picker.color_changed
-		{
-			color = o_bg.color
-			hue = color_picker.hue*hsv
-			sat = color_picker.sat*hsv
-			val = color_picker.val*hsv
-		}
-		else
-		{
-			if old_rgb != r+g+b
-			{
-				color = make_color_rgb(r, g, b)
-			}
-			else if old_hex != hex
-			{
-				color = hex_to_color(hex)
-			}
-			else if old_hsv != hue+sat+val
-			{
-				color = make_color_hsv(hue*hsv, sat*hsv, val*hsv)
-				color_picker.hue = hue*hsv
-				color_picker.sat = sat*hsv
-				color_picker.val = val*hsv
-			}
-		
-			o_bg.color = color
-		}
+		ignore_input = false
 	}
 	
-	
-	draw = dock.draw
+	draw = function(){
+		if not ignore_input global_box.draw()
+	}
 }
 
 with MEASURER {

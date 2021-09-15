@@ -6,7 +6,7 @@
     "path": "folders/Console/Graphical elements.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Console_color_picker_old",
+  "name": "Script87",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -16,6 +16,9 @@ initialize = function(variable){
 	right = 0
 	bottom = 0
 	
+	width = 0
+	height = 0
+	
 	in_left = 0
 	in_top = 0
 	in_right = 0
@@ -78,6 +81,27 @@ update_variable = function(){
 
 get_input = function(){
 
+	if not enabled
+	{
+		left = x
+		top = y
+		right = x
+		bottom = y
+		
+		color_changed = false
+		
+		mouse_on = false
+		mouse_on_svsquare = false
+		mouse_on_hstrip = false
+		mouse_on_colorbar = false
+		
+		clicking = false
+		sv_picking = false
+		h_picking = false
+		
+		return undefined
+	}
+
 	static mouse_was_on = false
 
 	var old_font = draw_get_font()
@@ -86,18 +110,23 @@ get_input = function(){
 
 	var co = o_console.COLOR_PICKER
 	var ch = string_height(" ")
-	var asp = (ch/co.char_height)*size
-	var _dist = round(co.dist*asp)
-	var _sep = round(co.sep*asp)
+	var asp = ch/co.char_height
+	var size_asp = asp*size
+	var _dist = round(co.dist*size_asp)
+	var _sep = round(co.sep*size_asp)
 	var _outline = round(co.outline*asp)
-	var _svsquare_length = round(co.svsquare_length*asp)
-	var _hstrip_width = round(co.hstrip_width*asp)
-	var _colorbar_height = round(co.colorbar_height*asp)
+	var _svsquare_length = round(co.svsquare_length*size_asp)
+	var _hstrip_width = round(co.hstrip_width*size_asp)
+	var _colorbar_height = round(co.colorbar_height*size_asp)
 
+
+	width = _dist*2+_outline*4+_svsquare_length+_sep+_hstrip_width
+	height = _dist*2+_outline*4+_svsquare_length+_sep+_colorbar_height
+	
 	left = x
 	top = y
-	right = left+_dist*2+_outline*4+_svsquare_length+_sep+_hstrip_width
-	bottom = top+_dist*2+_outline*4+_svsquare_length+_sep+_colorbar_height
+	right = left+width
+	bottom = top+height
 
 	in_left = left+_dist
 	in_right = right-_dist
@@ -202,6 +231,8 @@ get_input = function(){
 
 draw = function(){
 
+	if right == x and bottom == y return undefined
+
 	static u_position = shader_get_uniform(shd_hue, "u_Position")
 
 	var old_color = draw_get_color()
@@ -211,7 +242,8 @@ draw = function(){
 
 	var co = o_console.COLOR_PICKER
 	var ch = string_height(" ")
-	var asp = (ch/co.char_height)*size
+	var asp = ch/co.char_height
+	var size_asp = asp*size
 	var _outline = round(co.outline*asp)
 	var _dropper_radius = round(co.dropper_radius*asp)
 	var _hpicker_height = round(co.hpicker_height*asp)

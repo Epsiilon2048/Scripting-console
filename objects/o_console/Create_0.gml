@@ -444,7 +444,6 @@ var element_adjusting = new_console_dock("Element adjusting", [
 	new_cd_button("Reset all", initialize_console_graphics)
 ])
 
-add_console_element(element_adjusting)
 
 var bar_dock = new Console_dock() with bar_dock
 {
@@ -490,7 +489,7 @@ with var_name_text_box
 	
 	__variable_add_name__ = ""
 
-	att.color_method = function(text){
+	color_method = function(text){
 		var exists = variable_instance_exists(dock.association, text)
 		button.can_click = exists
 		return {text: text, colors: [{pos: string_length(text)+1, col: (exists ? dt_variable : "plain")}]}
@@ -577,7 +576,7 @@ with var_text_box
 	
 	__variable_add_var__ = ""
 
-	att.color_method = function(text){
+	color_method = function(text){
 		button.can_click = variable_string_exists(text)
 		return gmcl_string_color(text, undefined)
 	}
@@ -606,9 +605,8 @@ with var_add_button
 
 
 
-color_thing = new Console_color_box()
-color_thing.initialize()
-color_thing.name = "color thing"
+color_thing = new Console_color_dock()
+color_thing.initialize("o_bg.color", true, true, true, true, true)
 
 DISPLAY = new_console_dock("Display",[
 	[var_add_button, var_text_box],
@@ -618,9 +616,9 @@ DISPLAY = new_console_dock("Display",[
 //DISPLAY.enabled = false
 
 add_console_element(object_editor)
-add_console_element(bar_dock)
+//add_console_element(element_adjusting)
+//add_console_element(bar_dock)
 add_console_element(BAR)
 add_console_element(OUTPUT)
 add_console_element(DISPLAY)
 add_console_element(color_thing)
-add_console_element(COLOR_PICKER)

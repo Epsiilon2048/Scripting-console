@@ -129,8 +129,6 @@ initialize = function(variable){
 	
 	colors = undefined
 	
-	enter_func = noscript
-	
 	allow_printing = true
 	
 	scrubbed = false
@@ -139,7 +137,7 @@ initialize = function(variable){
 	
 	convert = function(value){
 		try{
-			self.value = att.value_conversion(value)
+			self.value = value_conversion(value)
 		}
 		catch(_){
 			self.value = undefined
@@ -147,6 +145,12 @@ initialize = function(variable){
 	}
 	
 	association = undefined
+	
+	enter_func = noscript
+	char_filter = noscript
+	color_method = noscript // The script used to color the string
+	value_conversion = string // How the value is converted from the text
+	
 	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
@@ -162,19 +166,15 @@ initialize = function(variable){
 	
 		text_color = "plain"
 		scoped_color = "output"
-		color_method = noscript // The script used to color the string
-		
+
 		allow_input = true // If the text can be edited
 		allow_exinput = true // If the text can be changed when the associated variable is
 		allow_scoped_exinput = false // If the text can be changed when the associated variable is when scoped
 		allow_alpha = true // Alphabetical
-		char_filter = noscript
 	
 		select_all_on_click = false
 	
 		set_variable_on_input = true // Set variable every time theres input, rather than just once it's descoped
-	
-		value_conversion = string // How the value is converted from the text
 	
 		// If not allowing alphabet
 		allow_float = true
@@ -203,6 +203,7 @@ initialize_scrubber = function(variable, step){
 
 	typing = false
 	
+	value_conversion = real
 	att.incrementor_step = scrubber_step
 	att.float_places = ((scrubber_step mod 1) == 0) ? undefined : float_count_places(scrubber_step, 10)
 	att.length_min = 4
@@ -210,7 +211,6 @@ initialize_scrubber = function(variable, step){
 	att.scrubber = true
 	att.select_all_on_click = true
 	att.allow_alpha = false
-	att.value_conversion = real
 	att.set_variable_on_input = true
 	att.text_color = dt_real
 	att.scoped_color = dt_real
@@ -324,7 +324,7 @@ update_variable = function(){ if not is_undefined(variable) {
 	
 	if att.lock_text_length and string_length(text) > att.length_max text = slice(text, 1, att.length_max+1, 1)
 	
-	if old_text != text colors = att.color_method(text)
+	if old_text != text colors = color_method(text)
 	if string_length(old_text) != string_length(text) set_boundaries()
 }}
 
@@ -570,7 +570,7 @@ get_input = function(){
 	}
 	#endregion
 	
-	if (docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
+	if (not scoped and docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
 	{
 		update_variable()
 	}
@@ -752,7 +752,7 @@ get_input = function(){
 						else char = slice(char, 1, overlap, 1)
 					}
 					
-					if att.char_filter != noscript char = att.char_filter(char)
+					if char_filter != noscript char = char_filter(char)
 					
 					if text_changed or char != ""
 					{
@@ -822,7 +822,7 @@ get_input = function(){
 				
 					char_mouse = false
 				
-					colors = att.color_method(text)
+					colors = color_method(text)
 					blink_step = 0
 					keyboard_string = text
 				}
@@ -924,7 +924,7 @@ draw = function(){
 	
 	if text != ""
 	{
-		if att.color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
+		if color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
 		else
 		{
 			draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])

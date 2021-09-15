@@ -8,6 +8,8 @@ run_in_embed   = false
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
+COLOR_PICKER.get_input()
+
 #region Get inputs for UI elements
 var was_clicking = clicking_on_console
 var front = -1

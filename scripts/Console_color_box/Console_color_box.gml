@@ -262,6 +262,7 @@ get_input = function(){
 		{
 			clicking = true
 			scoped = true
+			call_color_box(variable, undefined, undefined)
 		}
 		else if scoped
 		{
