@@ -176,8 +176,6 @@ identifiers = {
 	c: dt_color,
 }
 
-draw_order = ds_create(ds_type_list, "draw_order")
-
 #macro script_exists better_script_exists
 
 #macro failedColor ""
@@ -521,7 +519,7 @@ var image_dock = new_console_dock("Image", [
 	[new_scrubber("x scale", "image_xscale", .1), new_scrubber("y scale", "image_yscale", .1)],
 	[new_scrubber("angle", "image_angle", 1)],
 	new_separator(),
-	[new_scrubber("color blend", "image_blend", 1)],
+	[new_color_box("color blend", "image_blend")],
 	[new_scrubber("alpha", "image_alpha", .01)],
 ])
 var movement_dock = new_console_dock("Movement", [
@@ -567,6 +565,8 @@ with var_text_box
 	initial_ghost_text = "variable"
 	allow_printing = false
 	att.exit_with_enter = false
+	att.set_variable_on_input = false
+	att.allow_scoped_exinput = false
 	att.length_min = string_length(initial_ghost_text)+12
 	att.scoped_color = dt_variable
 	
@@ -574,7 +574,7 @@ with var_text_box
 
 	att.color_method = function(text){
 		button.can_click = variable_string_exists(text)
-		return gmcl_string_color(text)
+		return gmcl_string_color(text, undefined)
 	}
 	
 	enter_func = function(){

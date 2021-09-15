@@ -6,7 +6,12 @@ var mouse_left_pressed = not mouse_on_console and not clicking_on_console and mo
 switch setting
 {
 default: 
-	if mouse_left_pressed setting = 1
+	if mouse_left_pressed 
+	{
+		setting = 1
+		x2 = undefined
+		y2 = undefined
+	}
 break
 case 1:
 	x1 = clamp(gui_mx, 0, gui_width)

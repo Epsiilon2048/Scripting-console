@@ -1,11 +1,19 @@
 
+function new_color_box(name, variable){
+var c = new Console_color_box()
+c.initialize(variable)
+c.name = name
+return c
+}
+
+
 function Console_color_box() constructor{
 
 initialize = function(variable){
 	
 	docked = false
 	
-	name = is_undefined(variable) ? "Text box" : string(variable)
+	name = is_undefined(variable) ? "Color box" : string(variable)
 	enabled = true
 	
 	show_name = true
@@ -259,7 +267,7 @@ get_input = function(){
 		{
 			scoped = false
 			
-			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
+			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.color)
 		}
 	}
 	#endregion
@@ -272,16 +280,16 @@ get_input = function(){
 	#region Keyboard inputs
 	if scoped
 	{
-		var copy		= false
-		var paste		= false
+		var copy = false
+		var paste = false
 		
 		if key_super
 		{
-			copy		= keyboard_check_pressed(ord("C")) and text != ""
-			paste		= att.allow_input and keyboard_check_pressed(ord("V")) and clipboard_has_text()
+			copy = keyboard_check_pressed(ord("C")) and text != ""
+			paste = att.allow_input and keyboard_check_pressed(ord("V")) and clipboard_has_text()
 		}
 		
-		if copy clipboard_set_text(color)
+		if copy clipboard_set_text(color_to_hex(color))
 		else if paste
 		{
 			var color_changed = false
@@ -294,7 +302,7 @@ get_input = function(){
 				clipboard = "0x"+string_delete(clipboard, 1, 1)
 				is_hex = true
 			}
-			else is_hex = string_is_float("0x"+clipboard)
+			else is_hex = string_is_float(clipboard) or string_is_float("0x"+clipboard)
 			
 			if is_hex
 			{
@@ -330,8 +338,11 @@ get_input = function(){
 					color = make_color_rgb(r, g, b)
 					color_changed = true
 				}
-				
-				if color_changed and att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
+			}
+			
+			if color_changed and att.set_variable_on_input and not is_undefined(variable)
+			{
+				with _association variable_string_set(other.variable, other.color)
 			}
 		}
 	}
@@ -368,15 +379,21 @@ draw = function(){
 	draw_set_color(color)
 	draw_rectangle(box_left, top, right, bottom, false)
 	
-	if show_name and docked
+	if att.draw_box
 	{
-		draw_set_color(o_console.colors.body_accent)
-		draw_hollowrect(left, top, right, bottom, _outline_width)
+		if show_name and docked
+		{
+			draw_set_color(o_console.colors.body_accent)
+			draw_hollowrect(left, top, right, bottom, _outline_width)
+		}
+		
+		draw_set_color(o_console.colors.body_real)
+		draw_hollowrect(box_left, top, right, bottom, _outline_width*2)
+		
+		if scoped and att.allow_input	draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
+		else							draw_set_color(o_console.colors.body_accent)
+		draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	}
-	
-	if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
-	else draw_set_color(o_console.colors.body_accent)
-	if att.draw_box draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	
 	if show_name
 	{

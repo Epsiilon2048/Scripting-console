@@ -227,7 +227,7 @@ with SEPARATOR {
 
 with COLOR_PICKER {
 	
-	size = 100
+	char_height = 23
 	
 	x = 0
 	y = 0
@@ -236,20 +236,20 @@ with COLOR_PICKER {
 	
 	variable = ""
 	
-	sv_square = generate_satval_square()
-	h_strip	  = generate_hue_strip()
+	svsquare = generate_satval_square()
+	hstrip	  = generate_hue_strip()
 	
-	border_width = 1
-	border_alpha = 0.2
+	outline = 1.7
 	
-	sv_square_dropper_radius = 11
+	dist = 20
+	sep = 15
 	
-	h_strip_width	   = 50
-	h_strip_dist	   = 20
-	h_strip_bar_height = 18
+	svsquare_length = 100
+	dropper_radius = 11
 	
-	color_bar_dist	 = 20
-	color_bar_height = 53
+	hstrip_width = 50
+	
+	colorbar_height = 53
 	
 	hue = 0
 	sat = 255
@@ -428,7 +428,7 @@ with COLOR_PICKER {
 }
 
 with MEASURER {
-	enabled = true
+	enabled = false
 	setting = 1
 	x1 = 0
 	y1 = 0

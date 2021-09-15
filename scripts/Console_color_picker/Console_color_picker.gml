@@ -1,147 +1,83 @@
 
-function draw_color_picker(){ 
-	
-static mouse_on_h  = false
-static mouse_on_sv = false
+function color_picker_inputs(picker){ with picker {
 
-static u_position = shader_get_uniform(shd_hue, "u_Position")
+var old_font = draw_get_font()
 
-static _color = 0
-	
-with o_console.COLOR_PICKER { if variable_string_exists(variable) {
+draw_set_font(o_console.font)
 
-var old_alpha = draw_get_alpha()
+var co = o_console.COLOR_PICKER
+var ch = string_height(" ")
+var asp = (ch/co.char_height)*size
+var _dist = round(co.dist*asp)
+var _sep = round(co.sep*asp)
+var _outline = round(co.outline*asp)
+var _svsquare_length = round(co.svsquare_length*asp)
+var _hstrip_width = round(co.hstrip_width*asp)
+var _colorbar_height = round(co.colorbar_height*asp)
 
-var _size = size/255
-var _h_strip_pos = 255+h_strip_dist
-var _border_color = -o_console.colors.body_real
+left = x
+top = y
+right = left+_dist*2+_outline*4+_svsquare_length+_sep+_hstrip_width
+bottom = top+_dist*2+_outline*4+_svsquare_length+_sep+_colorbar_height
 
-mouse_on = draw_console_bubble_body(
-	x, 
-	y, 
-	x + (_h_strip_pos+h_strip_width)*_size, 
-	y + round( (255+color_bar_dist+color_bar_height)*_size )
-)
+in_left = left+_dist
+in_right = right-dist
+in_top = top+dist
+in_bottom = bottom-dist
 
-if mouse_check_button_pressed(mb_left)
+svsquare_right = in_left+_svsquare_length
+svsquare_bottom = in_top+_svsquare_length
+hstrip_left = in_right-_hstrip_width
+colorbar_top = in_bottom-_colorbar_height
+
+if not mouse_on_console and not clicking_on_console
 {
-	if gui_mouse_between(x+255*_size, y, x+(_h_strip_pos+h_strip_width)*_size, y+255*_size)
-	{
-		mouse_on_h = true
-	}
-	else if gui_mouse_between(x*_size, y, x+255*_size, y+255*_size)
-	{
-		mouse_on_sv = true
-	}
-}
-if (mouse_on_h or mouse_on_sv) and mouse_check_button(mb_left)
-{
-	if mouse_on_h
-	{
-		hue = clamp((gui_my-y)/_size, 0, 255)
-	}
-	else if mouse_on_sv
-	{
-		sat = clamp((gui_mx-x)/_size, 0, 255)
-		val = clamp(255-(gui_my-y)/_size, 0, 255)
-	}
-	
-	_color = make_color_hsv(hue, sat, val)
-	variable_string_set(variable, _color)
+	mouse_on = gui_mouse_between(left, top, right, bottom)
+	mouse_on_svsquare = mouse_on and gui_mouse_between(in_left, in_top, svsquare_right, svsquare_bottom)
+	mouse_on_hstrip = mouse_on and gui_mouse_between(hstrip_left, in_top, in_right, svsquare_bottom)
+	mouse_on_colorbar = mouse_on and gui_mouse_between(in_left, colorbar_top, in_right, in_bottom)
 }
 else
 {
-	var _newcol = variable_string_get(variable)
-	
-	if _color != _newcol
-	{
-		hue = color_get_hue(_newcol)
-		sat = color_get_saturation(_newcol)
-		val = color_get_value(_newcol)
-	}
-	
-	_color = _newcol
-	
-	mouse_on_h  = false
-	mouse_on_sv = false
+	mouse_on = false
+	mouse_on_svsquare = false
+	mouse_on_hstrip = false
+	mouse_on_colorbar = false
 }
 
+var _hsv = hsv_255 ? 255 : 100
+
+dropper_x = (sat/_hsv)*_svsquare_length
+dropper_y = (val/_hsv)*_svsquare_length
+
+draw_set_font(old_font)
+}}
 
 
-//Draw sv square
-var x1 = x
-var x2 = x + size
 
-var y1 = y
-var y2 = y + size
+function draw_color_picker(picker){ with picker {
 
-draw_set_alpha(border_alpha)
-draw_rectangle_color(
-	x1-border_width, y1-border_width, x2+border_width-1, y2+border_width-1,
-	_border_color, _border_color, _border_color, _border_color, false
-)
+var old_color = draw_get_color()
+var old_font = draw_get_font()
 
-draw_set_alpha(1)
-shader_set(shd_hue)
-shader_set_uniform_f(u_position, (-hue/255)*(pi*2))
-draw_sprite_pos(sv_square, 0, x1, y1, x2, y1, x2, y2, x1, y2, 1)
-shader_reset()
+draw_set_font(o_console.font)
 
+var co = o_console.COLOR_PICKER
+var ch = string_height(" ")
+var asp = ch/co.char_height
+var _outline = round(co.outline*asp)
+var _svsquare_dist = round(co.svsquare_dist*asp)
 
-//Draw hue strip
-var x1 = x + round( _h_strip_pos*_size )
-var x2 = x + round( (_h_strip_pos+h_strip_width)*_size )
+if not docked draw_console_body(left, top, right, bottom)
+draw_set_color(o_console.colors.body_accent)
+draw_hollowrect(left, top, right, bottom, 1)
 
-var y1 = y
-var y2 = y + round( 255*_size )
+draw_sprite_stretched(co.svsquare, 0, in_left, in_top, svsquare_right, svsquare_bottom)
+draw_sprite_stretched(co.hstrip, 0, hstrip_left, in_top, in_right, svsquare_bottom)
 
-draw_set_alpha(border_alpha)
-draw_rectangle_color(
-	x1-border_width, y1-border_width, x2+border_width-1, y2+border_width-1, 
-	_border_color, _border_color, _border_color, _border_color, false
-)
+draw_set_color(color)
+draw_rectangle(in_left, colorbar_top, in_right, in_bottom)
 
-draw_set_alpha(1)
-draw_sprite_pos(h_strip, 0, x1, y1, x2, y1, x2, y2, x1, y2, 1)
-
-
-//Draw hue strip bar
-var x1 = x1
-var x2 = x2-1
-
-var y1 = max(y1+1, y + (hue - h_strip_bar_height/2)*_size - 1)
-var y2 = min(y2-1, y + (hue + h_strip_bar_height/2)*_size + 1)
-
-draw_rectangle_color(x1, y1-1, x2, y2+1, c_black, c_black, c_black, c_black, true)
-
-var c = make_color_hsv(hue, 255, 255)
-draw_rectangle_color(x1, y1, x2, y2, c, c, c, c, false)
-
-draw_rectangle_color(x1+1, y1, x2-1, y2, c_white, c_white, c_white, c_white, true)
-
-
-//Draw hv square dropper
-var r  = round(sv_square_dropper_radius*_size)
-var x1 = round( x+sat*_size )
-var y1 = round( y+(255-val)*_size )
-
-draw_circle_color(x1, y1, r+2+round(.5*_size), c_black, c_black, false)
-draw_circle_color(x1, y1, r+1, c_white, c_white, false)
-draw_circle_color(x1, y1,r-round(.5*_size), _color, _color, false)
-
-
-//Draw color bar
-var x1 = x
-var x2 = x + round( (_h_strip_pos+h_strip_width)*_size )
-
-var y1 = y + round( (255+color_bar_dist)*_size )
-var y2 = y + round( (255+color_bar_dist+color_bar_height)*_size )
-
-draw_set_alpha(border_alpha)
-draw_rectangle_color(x1-border_width, y1-border_width, x2+border_width, y2+border_width, _border_color, _border_color, _border_color, _border_color, false)
-
-draw_set_alpha(1)
-draw_rectangle_color(x1, y1, x2, y2, _color, _color, _color, _color, false)
-
-draw_set_alpha(old_alpha)
-}}}
+draw_set_font(old_color)
+draw_set_font(old_font)
+}}
