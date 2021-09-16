@@ -220,7 +220,7 @@ get_input = function(){
 	else if mouse_on_box and not clicking
 	{
 		mouse_on_box = false
-		window_set_cursor(cr_default)
+		if not using_color_picker window_set_cursor(cr_default)
 	}
 	
 	mouse_on = false
@@ -264,7 +264,7 @@ get_input = function(){
 	#endregion
 	
 	#region Scope/descope
-	if (mouse_left_pressed and not using_color_picker) or key_escape_pressed or key_enter_pressed or (using_color_picker and not o_console.COLOR_PICKER.global_box.enabled)
+	if mouse_left_pressed or key_escape_pressed or key_enter_pressed or (using_color_picker and not o_console.COLOR_PICKER.global_box.enabled)
 	{	
 		if mouse_on_box and mouse_left_pressed and not using_color_picker
 		{
@@ -283,7 +283,12 @@ get_input = function(){
 	}
 	#endregion
 	
-	if (docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
+	if using_color_picker
+	{
+		color = o_console.COLOR_PICKER.global_box.color
+		if docked clicking = o_console.COLOR_PICKER.global_box.clicking
+	}
+	else if (docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
 	{
 		update_variable()
 	}
@@ -296,7 +301,7 @@ get_input = function(){
 		
 		if key_super
 		{
-			copy = keyboard_check_pressed(ord("C")) and text != ""
+			copy = keyboard_check_pressed(ord("C"))
 			paste = att.allow_input and keyboard_check_pressed(ord("V")) and clipboard_has_text()
 		}
 		

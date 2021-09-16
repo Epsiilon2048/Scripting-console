@@ -242,7 +242,7 @@ with COLOR_PICKER {
 	sep = 9
 	
 	svsquare_length = 140
-	dropper_radius = 8
+	dropper_length = 10
 	hpicker_height = 15
 	
 	hstrip_width = 26

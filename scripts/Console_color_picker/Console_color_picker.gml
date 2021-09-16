@@ -40,6 +40,8 @@ initialize = function(variable){
 	
 	color_changed = false
 	
+	draw_box = true
+	
 	hue = 0
 	sat = 255
 	val = 255
@@ -112,7 +114,7 @@ get_input = function(){
 	var ch = string_height(" ")
 	var asp = ch/co.char_height
 	var size_asp = asp*size
-	var _dist = round(co.dist*size_asp)
+	var _dist = draw_box ? round(co.dist*size_asp) : 0
 	var _sep = round(co.sep*size_asp)
 	var _outline = round(co.outline*asp)
 	var _svsquare_length = round(co.svsquare_length*size_asp)
@@ -169,12 +171,12 @@ get_input = function(){
 	if mouse_on_svsquare and not h_picking
 	{
 		mouse_was_on = true
-		window_set_cursor(clicking ? cr_none : cr_cross)
+		if docked window_set_cursor(clicking ? cr_none : cr_cross)
 	}
 	else if mouse_was_on
 	{
 		mouse_was_on = false
-		window_set_cursor(cr_default)
+		if docked window_set_cursor(cr_default)
 	}
 
 	if clicking 
@@ -245,12 +247,15 @@ draw = function(){
 	var asp = ch/co.char_height
 	var size_asp = asp*size
 	var _outline = round(co.outline*asp)
-	var _dropper_radius = round(co.dropper_radius*asp)
+	var _dropper_length = round(co.dropper_length*asp)
 	var _hpicker_height = round(co.hpicker_height*asp)
 
-	if not docked draw_console_body(left, top, right, bottom)
-	draw_set_color(o_console.colors.body_accent)
-	draw_hollowrect(left, top, right, bottom, _outline)
+	if draw_box
+	{
+		if not docked draw_console_body(left, top, right, bottom)
+		draw_set_color(o_console.colors.body_accent)
+		draw_hollowrect(left, top, right, bottom, _outline)
+	}
 
 	var _in_left = in_left+_outline
 	var _in_top = in_top+_outline
@@ -276,17 +281,24 @@ draw = function(){
 
 	var hpicker_y1 = max(hue_y-_hpicker_height/2, _in_top)
 	var hpicker_y2 = min(hue_y+_hpicker_height/2, _svsquare_bottom)
-
+	
+	var dropper_x1 = dropper_x-_dropper_length/2
+	var dropper_y1 = dropper_y-_dropper_length/2
+	var dropper_x2 = dropper_x+_dropper_length/2
+	var dropper_y2 = dropper_y+_dropper_length/2
+	
+	var _o = _outline*2
 	draw_set_color(c_white)
-	draw_circle(dropper_x, dropper_y, _dropper_radius, false)
-	draw_rectangle(_hstrip_left-2, hpicker_y1-2, _in_right+2, hpicker_y2+2, false)
+	draw_rectangle(dropper_x1-_o, dropper_y1-_o, dropper_x2+_o, dropper_y2+_o, false)
+	draw_rectangle(hstrip_left-_outline, hpicker_y1-_o, in_right+_outline, hpicker_y2+_o, false)
 
+	_o = _outline
 	draw_set_color(c_black)
-	draw_circle(dropper_x, dropper_y, _dropper_radius-1, false)
-	draw_rectangle(_hstrip_left-1, hpicker_y1-1, _in_right+1, hpicker_y2+1, false)
+	draw_rectangle(dropper_x1-_o, dropper_y1-_o, dropper_x2+_o, dropper_y2+_o, false)
+	draw_rectangle(hstrip_left, hpicker_y1-_o, in_right, hpicker_y2+_o, false)
 
 	draw_set_color(color)
-	draw_circle(dropper_x, dropper_y, _dropper_radius-2, false)
+	draw_rectangle(dropper_x1, dropper_y1, dropper_x2, dropper_y2, false)
 
 	draw_set_color(make_color_hsv(hue, 255, 255))
 	draw_rectangle(_hstrip_left, hpicker_y1, _in_right, hpicker_y2, false)

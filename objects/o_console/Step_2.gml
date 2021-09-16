@@ -9,6 +9,7 @@ gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
 COLOR_PICKER.get_input()
+cs_editor.association = o_console.colors
 
 #region Get inputs for UI elements
 var was_clicking = clicking_on_console

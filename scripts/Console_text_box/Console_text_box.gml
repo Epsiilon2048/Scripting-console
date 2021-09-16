@@ -48,8 +48,8 @@ s.att.text_color = "plain"
 s.att.scrubber = is_scrubber
 s.att.value_min = value_min
 s.att.value_max = value_max
-s.att.value_min = length_min
-s.att.value_max = length_max
+s.att.length_min = length_min
+s.att.length_max = length_max
 s.att.allow_float = allow_float
 s.att.float_places = float_places
 return s

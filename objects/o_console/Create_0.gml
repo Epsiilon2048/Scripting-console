@@ -615,7 +615,42 @@ DISPLAY = new_console_dock("Display",[
 ])
 //DISPLAY.enabled = false
 
+cs_editor = new_console_dock("Color scheme editor", [
+	new_console_dock("IDE properties", [
+		new_value_box("Body alpha", "body_alpha", true, .01, 1, infinity, -infinity, infinity, true, undefined),
+		new_value_box("Body real alpha", "body_real_alpha", true, .01, 1, infinity, 0, 1, true, undefined),
+		new_value_box("Body blendmode", "body_bm", false, 1, 1, 1, 0, 9, false, 0),
+		new_value_box("Body outline", "bevel", false, 1, 1, 2, 0, 30, false, 0),
+		//new_separator(),
+		//new_value_box("Body sprite", "sprite", false, 1, 1, 4, -1, infinity, false, 0),
+		//new_value_box("Body sprite anchored", "sprite", false, 1, 1, 2, 0, 1, false, 0),
+		//new_scrubber("Body sprite alpha", "sprite_alpha", .01),
+	]),
+	new_console_dock("IDE colors", [
+		new_color_box("Main", "output"),
+		new_color_box("Body", "body"),
+		new_color_box("Body real", "body_real"),
+		new_color_box("Body accent", "body_accent"),
+		new_separator(),
+		[new_color_box("Button", "embed"), new_color_box("Button hovering", "embed_hover")],
+		new_separator(),
+		[new_color_box("Black", "black"), new_color_box("White", "white")],
+		[new_color_box("Red", "red"), new_color_box("Green", "green"), new_color_box("Blue", "blue")],
+	]),
+	new_console_dock("Text colors", [
+		[new_color_box("Plain     ", "plain"),		new_color_box("Numeric   ", dt_real)],
+		[new_color_box("String    ", dt_string),	new_color_box("Color     ", dt_color)],
+		[new_color_box("Variable  ", dt_variable),	new_color_box("Script    ", dt_method)],
+		[new_color_box("Asset     ", dt_asset),		new_color_box("Instance  ", dt_instance)],
+		[new_color_box("Unknown   ", dt_unknown),	new_color_box("Deprecated", dt_deprecated)],
+		new_color_box("Built-in variable", dt_builtinvar),
+		new_color_box("Compiler tag", dt_tag),
+	]),
+])
+cs_editor.association = o_console.colors
+
 add_console_element(object_editor)
+add_console_element(cs_editor)
 //add_console_element(element_adjusting)
 //add_console_element(bar_dock)
 add_console_element(BAR)

@@ -164,17 +164,17 @@ get_input = function(){
 	else
 	{
 		var color_changed = false
-		if using_rgb and old_rgb != r+g+b
+		if using_rgb and (r_text_box.text_changed or g_text_box.text_changed or b_text_box.text_changed)
 		{
 			color_picker.color = make_color_rgb(r, g, b)
 			color_changed = true
 		}
-		else if using_hex and old_hex != hex
+		else if using_hex and hex_text_box.text_changed
 		{
 			color_picker.color = hex_to_color(hex)
 			color_changed = true
 		}
-		else if using_hsv and old_hsv != hue+sat+val
+		else if using_hsv and (hue_text_box.text_changed or sat_text_box.text_changed or val_text_box.text_changed)
 		{
 			color_picker.color = make_color_hsv(hue*hsv, sat*hsv, val*hsv)
 			color_picker.hue = hue*hsv
