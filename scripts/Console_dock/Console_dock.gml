@@ -67,6 +67,8 @@ initialize = function(){
 	
 	enabled = true
 	
+	push_from_bottom = false
+	
 	name = ""
 	association = self
 	
@@ -278,7 +280,7 @@ get_dropdown_input = function(){
 	var dropdown_x2 = right
 	var dropdown_y2 = top+bar_height
 		
-	mouse_on_dropdown = gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
+	mouse_on_dropdown = (not mouse_on_console or mouse_on) and gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
 	
 	if mouse_on_dropdown
 	{
@@ -619,13 +621,11 @@ draw = function(){
 	
 	if show for(var i = 0; i <= array_length(elements)-1; i++) for(var j = 0; j <= array_length(elements[i])-1; j++)
 	{	
-		var el = elements[@ i, j]
-					
-		if not el.dragging
+		with elements[@ i, j] if not dragging
 		{
-			el.run_in_dock = true
-			el.draw()
-			el.run_in_dock = false
+			run_in_dock = true
+			draw()
+			run_in_dock = false
 		}
 	}
 	
