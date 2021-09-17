@@ -285,7 +285,6 @@ get_input = function(){
 	
 	if using_color_picker
 	{
-		color = o_console.COLOR_PICKER.global_box.color
 		if docked clicking = o_console.COLOR_PICKER.global_box.clicking
 	}
 	else if (docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))

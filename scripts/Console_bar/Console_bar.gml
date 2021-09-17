@@ -222,12 +222,12 @@ if BAR.docked
 {
 	var _outline_width = round(BAR.outline_width*asp)
 	
-	draw_set_color(o_console.colors.body_accent)
+	draw_set_color(colors.body_accent)
 	draw_hollowrect(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, _outline_width)
 	draw_hollowrect(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, _outline_width)
 }
 
-draw_set_color(colors.output)
+draw_set_color(BAR.text_box.scoped ? colors.output : colors.plain)
 draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
 
 BAR.text_box.draw()

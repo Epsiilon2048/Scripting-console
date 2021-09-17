@@ -324,6 +324,7 @@ with COLOR_PICKER {
 	ignore_input = true
 	global_box = new Console_color_picker()
 	global_box.initialize()
+	global_box.enabled = false
 	
 	get_input = function(){
 		

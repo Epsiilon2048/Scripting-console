@@ -16,11 +16,14 @@ function call_color_box(variable, x, y){
 		self.variable = variable
 		self.association = association
 			
-		if x+width > gui_width self.x = x-width-1
-		else self.x = x+1
+		if x+width > gui_width self.x = x-width-5
+		else self.x = x+5
 			
-		if y-height < 0 self.y = y+1
-		else self.y = y-height-1
+		if y-height < 0 self.y = y+5
+		else self.y = y-height-5
+		
+		update_variable()
+		hue = color_get_hue(color)
 	}
 }
 }
