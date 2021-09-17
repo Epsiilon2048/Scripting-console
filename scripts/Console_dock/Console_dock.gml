@@ -563,13 +563,13 @@ draw = function(){
 	{
 		if is_front and show_name
 		{
-			draw_set_color(o_console.colors.body_real)
+			draw_set_color(dc.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
 		}
-		draw_set_color(o_console.colors.body_accent)
+		draw_set_color(dc.colors.body_accent)
 		draw_hollowrect(left, top, right, bottom, _outline_width)
 		
-		if is_front draw_set_color(o_console.colors.output)
+		if is_front draw_set_color(dc.colors.output)
 	}
 	else
 	{
@@ -577,16 +577,16 @@ draw = function(){
 		
 		if show_name
 		{
-			draw_set_color(o_console.colors.body_real)
+			draw_set_color(dc.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
-			draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
+			draw_set_color(is_front ? dc.colors.plain : dc.colors.body_accent)
 		}
 	}
 	if show_name 
 	{
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
-		draw_set_color(o_console.colors.body_accent)
+		draw_set_color(dc.colors.body_accent)
 		draw_hollowrect(left, top, right, top + bar_height, _outline_width)
 
 		if show
@@ -608,7 +608,7 @@ draw = function(){
 			var dropdown_y3 = dropdown_y2-_dropdown_base/2
 		}
 	
-		draw_set_color(o_console.colors.body_accent)
+		draw_set_color(dc.colors.body_accent)
 		draw_triangle(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2, dropdown_x3, dropdown_y3, false)
 	}
 	

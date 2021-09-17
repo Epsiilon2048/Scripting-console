@@ -884,7 +884,7 @@ draw = function(){
 	
 		if not (docked and not dock.is_front)
 		{
-			draw_set_color(o_console.colors.body_real)
+			draw_set_color(tb.colors.body_real)
 			
 			if docked draw_rectangle(left, top, box_left, bottom, false)
 			else
@@ -896,12 +896,12 @@ draw = function(){
 	
 		if show_name and docked
 		{
-			draw_set_color(o_console.colors.body_accent)
+			draw_set_color(tb.colors.body_accent)
 			draw_hollowrect(left, top, right, bottom, _outline_width)
 		}
 	
-		if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
-		else draw_set_color(o_console.colors.body_accent)
+		if scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : tb.colors[$ att.scoped_color])
+		else draw_set_color(tb.colors.body_accent)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	}
 	else
@@ -910,13 +910,13 @@ draw = function(){
 		var _text_hdist = 0
 	}
 	
-	draw_set_color(o_console.colors.body_accent)
+	draw_set_color(tb.colors.body_accent)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
 	if show_name
 	{
-		draw_set_color(o_console.colors.output)
+		draw_set_color(tb.colors.output)
 		draw_text(name_text_x, text_y, name)
 	}
 	
@@ -927,17 +927,17 @@ draw = function(){
 		if color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
 		else
 		{
-			draw_set_color(is_numeric(att.text_color) ? att.text_color : o_console.colors[$ att.text_color])
+			draw_set_color(is_numeric(att.text_color) ? att.text_color : tb.colors[$ att.text_color])
 			draw_text(text_x, text_y, text)
 		}
 	}
 	else if initial_ghost_text != ""
 	{
-		draw_set_color(o_console.colors.body_accent)
+		draw_set_color(tb.colors.body_accent)
 		draw_text(text_x, text_y, initial_ghost_text)
 	}
 	
-	draw_set_color(o_console.colors[$ att.text_color])
+	draw_set_color(tb.colors[$ att.text_color])
 	if scoped and typing and o_console.keyboard_scope == self
 	{
 		var x1 = text_x+cw*char_pos1

@@ -17,6 +17,7 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 	color_picker = new Console_color_picker()
 	color_picker.initialize(variable)
 	color_picker.size = cd.color_picker_dock_size
+	color_picker.draw_box = false
 	
 	var elements = [color_picker]
 	

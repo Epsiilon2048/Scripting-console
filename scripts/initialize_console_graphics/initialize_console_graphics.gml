@@ -3,14 +3,17 @@ function initialize_console_graphics(scale){ with o_console {
 
 if is_undefined(scale)
 {
-	var display_w = display_get_width()
+	var display_width = display_get_width()/display_get_dpi_x()
 	
-	scale = 2 + (display_w >= 1920) + (display_w >= 2560) + (display_w >= 3840)
+	scale = 2 + (display_width >= 14) + (display_width >= 23) + (display_width >= 28) + (display_width >= 31)
 	show_debug_message("Console IDE automatically scaled to "+string(scale)+" based on display size")
-	// Below 1080p	2x
-	// 1080p		3x
-	// 2k			4x
-	// 4k and above	5x
+	
+	// Scales based on display size:
+	// 14in		2x
+	// 23in		3x
+	// 28in		4x
+	// 31in		5x
+	// Above	6x
 }
 
 self.scale(scale)
@@ -40,6 +43,8 @@ with DOCK {
 	dropdown_wdist = 8
 	
 	dragging_radius = 30
+
+	colors = o_console.colors
 }
 
 with TEXT_BOX {
@@ -66,6 +71,8 @@ with TEXT_BOX {
 	update_id = 0
 
 	word_sep = " .,\"()[]/"
+	
+	colors = o_console.colors
 }
 
 with SCROLLBAR {
@@ -77,6 +84,8 @@ with SCROLLBAR {
 	bar_width_condensed = 20
 	
 	mouse_offset = 0
+	
+	colors = o_console.colors
 }
 
 with BAR {
@@ -124,6 +133,8 @@ with BAR {
 	
 	get_input = console_bar_inputs
 	draw = draw_console_bar
+	
+	colors = o_console.colors
 }
 
 with OUTPUT {
@@ -149,6 +160,8 @@ with OUTPUT {
 	
 	get_input = console_output_inputs
 	draw = draw_console_output
+	
+	colors = o_console.colors
 }
 
 with AUTOFILL {
@@ -183,11 +196,14 @@ with AUTOFILL {
 	mouse_border = 6
 	mouse_dragging_top = false
 	mouse_dragging_right = false
+	
+	colors = o_console.colors
 }
 
 with CHECKBOX {
 	
 	width = 17
+	colors = o_console.colors
 }
 
 
@@ -205,6 +221,8 @@ with SLIDER {
 	marker_font = -1 //set later
 	
 	divider_width = 2
+	
+	colors = o_console.colors
 }
 
 with CD_BUTTON {
@@ -213,6 +231,8 @@ with CD_BUTTON {
 	
 	wdist = 10
 	hdist = 5
+	
+	colors = o_console.colors
 }
 	
 with SEPARATOR {
@@ -222,6 +242,8 @@ with SEPARATOR {
 	double_sep = 3
 	
 	wdist = other.DOCK.element_wdist/2
+	
+	colors = o_console.colors
 }
 
 
@@ -322,35 +344,44 @@ with COLOR_PICKER {
 	}
 	
 	ignore_input = true
-	global_box = new Console_color_picker()
-	global_box.initialize()
-	global_box.enabled = false
+
+	global_color_picker = new Console_color_picker()
+	global_color_picker.initialize()
+	global_color_picker.enabled = false
 	
 	get_input = function(){
 		
-		global_box.get_input()
-		if global_box.enabled and not ignore_input and not global_box.mouse_on and mouse_check_button_pressed(mb_any)
+		global_color_picker.get_input()
+		if global_color_picker.enabled and not ignore_input and not global_color_picker.mouse_on and mouse_check_button_pressed(mb_any)
 		{
-			global_box.enabled = false
+			global_color_picker.enabled = false
 		}
 		
 		ignore_input = false
 	}
 	
 	draw = function(){
-		if not ignore_input global_box.draw()
+		if not ignore_input global_color_picker.draw()
 	}
+	
+	colors = o_console.colors
 }
 
 with MEASURER {
+	
 	enabled = false
+	
 	setting = 1
+	
 	x1 = 0
 	y1 = 0
 	x2 = undefined
 	y2 = undefined
+	
 	length = 0
 	width = 0
 	height = 0
+	
+	colors = o_console.colors
 }
 }}
