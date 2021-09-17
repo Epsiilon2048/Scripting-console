@@ -133,20 +133,22 @@ draw = function(){
 	draw_set_font(o_console.font)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
+
+	var dc = o_console.DOCK
 	
 	if not is_button or not (mouse_on or clicking)
 	{
 		if color_method == noscript
 		{
-			if is_undefined(color) draw_set_color(is_button ? o_console.colors.embed : o_console.colors.output)
-			else draw_set_color(is_numeric(color) ? color : o_console.colors[$ color])
+			if is_undefined(color) draw_set_color(is_button ? dc.colors.embed : dc.colors.output)
+			else draw_set_color(is_numeric(color) ? color : dc.colors[$ color])
 			draw_text(x, y+1, text)
 		}
 		else draw_color_text(x, y+1, color_text)
 	}
 	else
 	{
-		draw_set_color(clicking ? o_console.colors.plain : o_console.colors.embed_hover)
+		draw_set_color(clicking ? dc.colors.plain : dc.colors.embed_hover)
 		draw_text(x, y+1, text)
 	}
 	

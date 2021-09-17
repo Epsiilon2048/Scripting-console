@@ -211,20 +211,20 @@ draw = function(){
 	
 	if draw_box
 	{
-		draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
+		draw_set_color(clicking ? bt.colors.embed_hover : bt.colors.body_real)
 		draw_rectangle(left, top, right, bottom, false)
 	}
 	
-	if not can_click					draw_set_color(o_console.colors.body_accent)
-	else if clicking and draw_box		draw_set_color(o_console.colors.body_real)
-	else if clicking and not draw_box	draw_set_color(o_console.colors.plain)
-	else if mouse_on					draw_set_color(o_console.colors.embed_hover)
-	else if is_front or not draw_box	draw_set_color(o_console.colors.embed)
-	else								draw_set_color(o_console.colors.body_accent)
+	if not can_click					draw_set_color(bt.colors.body_accent)
+	else if clicking and draw_box		draw_set_color(bt.colors.body_real)
+	else if clicking and not draw_box	draw_set_color(bt.colors.plain)
+	else if mouse_on					draw_set_color(bt.colors.embed_hover)
+	else if is_front or not draw_box	draw_set_color(bt.colors.embed)
+	else								draw_set_color(bt.colors.body_accent)
 	
 	if not clicking and draw_box draw_hollowrect(left, top, right, bottom, 1)
 	
-	if not is_front and not clicking and draw_box and can_click draw_set_color(o_console.colors.embed)
+	if not is_front and not clicking and draw_box and can_click draw_set_color(bt.colors.embed)
 	
 	
 	if not is_undefined(sprite)
@@ -234,7 +234,7 @@ draw = function(){
 		{
 			_sprite_color = draw_get_color()
 		}
-		else _sprite_color = is_numeric(sprite_color) ? _sprite_color : o_console.colors[$ sprite_color]
+		else _sprite_color = is_numeric(sprite_color) ? _sprite_color : bt.colors[$ sprite_color]
 		
 		draw_sprite_ext(sprite, subimg, text_x, text_y, _image_scale, _image_scale, 0, _sprite_color, 1)
 	}

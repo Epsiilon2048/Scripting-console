@@ -245,7 +245,7 @@ get_input = function(){
 	
 	if scoped and o_console.keyboard_scope != noone 
 	{
-		o_console.COLOR_PICKER.global_box = false
+		o_console.COLOR_PICKER.global_color_picker = false
 		using_color_picker = false
 		scoped = false
 	}
@@ -264,7 +264,7 @@ get_input = function(){
 	#endregion
 	
 	#region Scope/descope
-	if mouse_left_pressed or key_escape_pressed or key_enter_pressed or (using_color_picker and not o_console.COLOR_PICKER.global_box.enabled)
+	if mouse_left_pressed or key_escape_pressed or key_enter_pressed or (using_color_picker and not o_console.COLOR_PICKER.global_color_picker.enabled)
 	{	
 		if mouse_on_box and mouse_left_pressed and not using_color_picker
 		{
@@ -285,8 +285,8 @@ get_input = function(){
 	
 	if using_color_picker
 	{
-		color = o_console.COLOR_PICKER.global_box.color
-		if docked clicking = o_console.COLOR_PICKER.global_box.clicking
+		color = o_console.COLOR_PICKER.global_color_picker.color
+		if docked clicking = o_console.COLOR_PICKER.global_color_picker.clicking
 	}
 	else if (docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
 	{
@@ -389,7 +389,7 @@ draw = function(){
 	
 	if not (docked and not dock.is_front)
 	{
-		draw_set_color(o_console.colors.body_real)
+		draw_set_color(tb.colors.body_real)
 		draw_rectangle(left, top, box_left, bottom, false)
 	}
 	draw_set_color(color)
@@ -399,15 +399,15 @@ draw = function(){
 	{
 		if show_name and docked
 		{
-			draw_set_color(o_console.colors.body_accent)
+			draw_set_color(tb.colors.body_accent)
 			draw_hollowrect(left, top, right, bottom, _outline_width)
 		}
 		
-		draw_set_color(o_console.colors.body_real)
+		draw_set_color(tb.colors.body_real)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width*2)
 		
-		if scoped and att.allow_input	draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
-		else							draw_set_color(o_console.colors.body_accent)
+		if scoped and att.allow_input	draw_set_color(is_real(att.scoped_color) ? att.scoped_color : tb.colors[$ att.scoped_color])
+		else							draw_set_color(tb.colors.body_accent)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	}
 	
@@ -416,7 +416,7 @@ draw = function(){
 		draw_set_halign(fa_left)
 		draw_set_valign(fa_top)
 	
-		draw_set_color(o_console.colors.output)
+		draw_set_color(tb.colors.output)
 		draw_text(name_text_x, name_text_y, name)
 	}
 	

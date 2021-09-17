@@ -201,15 +201,13 @@ var asp = ch/BAR.char_height
 var _text_dist		= ceil(BAR.text_dist*asp)
 var _sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
 
-var sidetext_width = string_length(BAR.sidetext_string)*cw
-
 var draw_dock_body
 if BAR.docked
 {
 	if BAR.dock.is_front
 	{
 		draw_dock_body = draw_rectangle
-		draw_set_color(o_console.colors.body_real)
+		draw_set_color(BAR.colors.body_real)
 	}
 	else draw_dock_body = noscript
 }
@@ -222,7 +220,7 @@ if BAR.docked
 {
 	var _outline_width = round(BAR.outline_width*asp)
 	
-	draw_set_color(o_console.colors.body_accent)
+	draw_set_color(BAR.colors.body_accent)
 	draw_hollowrect(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, _outline_width)
 	draw_hollowrect(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, _outline_width)
 }
