@@ -2,6 +2,8 @@
 mouse_on_console = false
 clicking_on_console = false
 
+//atf = gmcl_get_argument(console_string, BAR.text_box.char_pos1)
+
 run_in_console = false
 run_in_embed   = false
 

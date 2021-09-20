@@ -4,29 +4,29 @@ global.object_index = global
 
 function variable_string_set(name, value){
 
-if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object variable_string(name, variable_string_set, value)
-else variable_string(name, variable_string_set, value)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object __variable_string__(name, variable_string_set, value)
+else __variable_string__(name, variable_string_set, value)
 }
 
 function variable_string_get(name){
 
-if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_get, undefined)
-else return variable_string(name, variable_string_get, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return __variable_string__(name, variable_string_get, undefined)
+else return __variable_string__(name, variable_string_get, undefined)
 }
 
 function variable_string_exists(name){
 
-if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_exists, undefined)
-else return variable_string(name, variable_string_exists, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return __variable_string__(name, variable_string_exists, undefined)
+else return __variable_string__(name, variable_string_exists, undefined)
 }
 
-function variable_string_error(name){
+function variable_string_info(name){
 
-if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return variable_string(name, variable_string_error, undefined)
-else return variable_string(name, variable_string_error, undefined)
+if o_console.run_in_console and (instance_exists(o_console.object) or is_struct(o_console.object)) with o_console.object return __variable_string__(name, variable_string_info, undefined)
+else return __variable_string__(name, variable_string_info, undefined)
 }
 
-function variable_string(name, scr, value){
+function __variable_string__(name, scr, value){
 
 static accessors = "@|$?#"
 static next_pos = function(str, startpos, has_accessor){
@@ -46,7 +46,7 @@ static get_fail_return = function(scr, exception, segment){
 		case variable_string_exists:		return false
 		case variable_string_get:			return undefined
 		case variable_string_set:			return undefined
-		case variable_string_error:	return {value: undefined, exists: false, error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
+		case variable_string_info:	return {value: undefined, scope: undefined, exists: false, error: exception, plain: is_undefined(segment) ? undefined : string(segment)}
 	}
 	return undefined
 }
@@ -94,6 +94,7 @@ if scope == -1
 else scope_segment = better_object_get_name(scope)
 
 var ds_scope = (is_numeric(scope) and instance_exists(scope)) ? string(scope.id) : ""
+var prev_scope = undefined
 
 var pos
 
@@ -102,6 +103,8 @@ global.scrvar.name = string(name)
 
 do
 {
+	prev_scope = scope
+	
 	if not (has_accessor and string_char_at(name, pos) == "[")
 	{
 		if marker != 0 and not is_struct(scope) and not (is_numeric(scope) and instance_exists(scope)) return get_fail_return(scr, exceptionBadScope, scope_segment)
@@ -375,6 +378,6 @@ do
 until pos == 0
 
 if scr == variable_string_exists		return true
-if scr == variable_string_error	return {value: scope, exists: true, error: undefined, plain: segment}
+if scr == variable_string_info	return {value: scope, scope: prev_scope, exists: true, error: undefined, plain: segment}
 return scope
 }

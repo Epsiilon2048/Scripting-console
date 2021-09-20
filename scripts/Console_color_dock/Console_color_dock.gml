@@ -24,7 +24,7 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 	if use_varbox
 	{
 		var_text_box = new_text_box("Variable", "color_picker.variable").set_att(cd.var_att)
-		var_text_box.show_name = false
+		var_text_box.draw_name = false
 		var_text_box.initial_ghost_text = "Variable"
 		var_text_box.color_method = gmcl_string_color
 		
@@ -37,11 +37,11 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 		b = 255
 		
 		r_text_box = new_scrubber("Red", "r", 1).set_att(cd.rgb_att)
-		r_text_box.show_name = false
+		r_text_box.draw_name = false
 		g_text_box = new_scrubber("Green", "g", 1).set_att(cd.rgb_att)
-		g_text_box.show_name = false
+		g_text_box.draw_name = false
 		b_text_box = new_scrubber("Blue", "b", 1).set_att(cd.rgb_att)
-		b_text_box.show_name = false
+		b_text_box.draw_name = false
 		
 		array_push(elements, ["RGB", r_text_box, g_text_box, b_text_box])
 	}
@@ -54,11 +54,11 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 		hsv_255 = false
 	
 		hue_text_box = new_scrubber("Hue", "hue", 1).set_att(cd.hsv_att)
-		hue_text_box.show_name = false
+		hue_text_box.draw_name = false
 		sat_text_box = new_scrubber("Sat", "sat", 1).set_att(cd.hsv_att)
-		sat_text_box.show_name = false
+		sat_text_box.draw_name = false
 		val_text_box = new_scrubber("Val", "val", 1).set_att(cd.hsv_att)
-		val_text_box.show_name = false
+		val_text_box.draw_name = false
 		
 		var toggle_hsv_255 = function(){
 			hsv_255 = not hsv_255
@@ -78,7 +78,7 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 	{
 		hex = "FFFFFF"
 		hex_text_box = new_text_box("Hex", "hex").set_att(cd.hex_att)
-		hex_text_box.show_name = false
+		hex_text_box.draw_name = false
 		
 		hex_text_box.char_filter = function(char){
 			static hex_chars = "0123456789ABCDEF"
@@ -98,7 +98,7 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 	if use_gml
 	{
 		gml_text_box = new_text_box("GML", "color").set_att(cd.gml_att)
-		gml_text_box.show_name = false
+		gml_text_box.draw_name = false
 		gml_text_box.value_conversion = real
 	}
 	

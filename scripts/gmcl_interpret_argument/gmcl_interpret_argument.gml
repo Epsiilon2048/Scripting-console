@@ -199,7 +199,7 @@ else
 		}
 		else
 		{
-			error = variable_string_error(_arg)
+			error = variable_string_info(_arg)
 			if is_undefined(error)
 			{
 				type = dt_variable
@@ -213,6 +213,7 @@ return {
 	value: value, 
 	type: type,
 	plain: string(arg),
+	iden: iden_type,
 	error: error
 }
 }}

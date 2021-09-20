@@ -92,7 +92,8 @@ initialize = function(){
 	show = true
 	show_next = false
 	
-	show_name = true
+	draw_name = true
+	draw_name_bar = true
 	
 	dragging = false
 	mouse_xoffset = 0
@@ -360,7 +361,7 @@ get_input = function(){
 	top = y
 	right = left
 	bottom = top
-	if show_name bottom += ch + _name_hdist*2
+	if draw_name bottom += ch + _name_hdist*2
 
 	var dragging_radius_met = true
 
@@ -387,7 +388,7 @@ get_input = function(){
 	}
 	else
 	{		
-		if show_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
+		if draw_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
 		bottom += _element_hdist
 		
 		var xx = left + _element_wdist
@@ -496,7 +497,7 @@ get_input = function(){
 	if not is_undefined(height) bottom = max(top, top+height)
 	
 	mouse_on = not was_clicking_on_console and gui_mouse_between(left, top, right, bottom)
-	mouse_on_bar = mouse_on and show_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
+	mouse_on_bar = mouse_on and draw_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
 	
 	if not docked get_dropdown_input()
 	
@@ -548,7 +549,6 @@ draw = function(){
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
-	var cw = string_width(" ")
 	var ch = string_height(" ")
 	var asp = ch/dc.char_height
 	
@@ -563,7 +563,7 @@ draw = function(){
 
 	if docked and not dragging
 	{
-		if is_front and show_name
+		if is_front and draw_name and draw_name_bar
 		{
 			draw_set_color(dc.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
@@ -577,19 +577,19 @@ draw = function(){
 	{
 		draw_console_body(left, top, right, bottom)
 		
-		if show_name
+		if draw_name and draw_name_bar
 		{
 			draw_set_color(dc.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
 			draw_set_color(is_front ? dc.colors.plain : dc.colors.body_accent)
 		}
 	}
-	if show_name 
+	if draw_name 
 	{
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(dc.colors.body_accent)
-		draw_hollowrect(left, top, right, top + bar_height, _outline_width)
+		if draw_name_bar draw_hollowrect(left, top, right, top + bar_height, _outline_width)
 
 		if show
 		{
@@ -610,7 +610,6 @@ draw = function(){
 			var dropdown_y3 = dropdown_y2-_dropdown_base/2
 		}
 	
-		draw_set_color(dc.colors.body_accent)
 		draw_triangle(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2, dropdown_x3, dropdown_y3, false)
 	}
 	

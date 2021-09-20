@@ -4,7 +4,7 @@ var text_box = new Console_text_box()
 text_box.initialize(variable)
 
 if not is_undefined(name) text_box.name = name
-text_box.show_name = not is_undefined(name)
+text_box.draw_name = not is_undefined(name)
 
 return text_box
 }
@@ -35,7 +35,7 @@ var text_box = new Console_text_box()
 text_box.initialize_scrubber(variable, step)
 
 if not is_undefined(name) text_box.name = name
-text_box.show_name = not is_undefined(name)
+text_box.draw_name = not is_undefined(name)
 
 return text_box
 }
@@ -65,7 +65,7 @@ initialize = function(variable){
 	name = is_undefined(variable) ? "Text box" : string(variable)
 	enabled = true
 	
-	show_name = true
+	draw_name = true
 	
 	x = 0
 	y = 0
@@ -150,7 +150,7 @@ initialize = function(variable){
 	char_filter = noscript
 	color_method = noscript // The script used to color the string
 	value_conversion = string // How the value is converted from the text
-	
+	autofill_method = gmcl_autofill
 	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
@@ -289,15 +289,15 @@ set_boundaries = function(){
 	if docked and dock_element_x > 0 and instanceof(dock.elements[@ dock_element_y, dock_element_x-1]) == "Console_text_box"
 	{
 		var left_el = dock.elements[@ dock_element_y, dock_element_x-1]
-		if not left_el.show_name left = left_el.right + (att.draw_box ? 1 : cw)
+		if not left_el.draw_name left = left_el.right + (att.draw_box ? 1 : cw)
 	}
 	
-	box_left = left + (show_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
-	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and show_name)
+	box_left = left + (draw_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
+	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and draw_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	
 	name_text_x = left + _text_wdist*att.draw_box
-	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and show_name)
+	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and draw_name)
 	text_y = top+1 + _text_hdist*att.draw_box
 	#endregion
 }
@@ -894,7 +894,7 @@ draw = function(){
 			}
 		}
 	
-		if show_name and docked
+		if draw_name and docked
 		{
 			draw_set_color(tb.colors.body_accent)
 			draw_hollowrect(left, top, right, bottom, _outline_width)
@@ -914,7 +914,7 @@ draw = function(){
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
-	if show_name
+	if draw_name
 	{
 		draw_set_color(tb.colors.output)
 		draw_text(name_text_x, text_y, name)

@@ -16,7 +16,7 @@ initialize = function(variable){
 	name = is_undefined(variable) ? "Color box" : string(variable)
 	enabled = true
 	
-	show_name = true
+	draw_name = true
 	
 	x = 0
 	y = 0
@@ -133,8 +133,8 @@ set_boundaries = function(){
 	left = x
 	top = y
 	
-	box_left = left + (show_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
-	right = box_left + att.length*cw + _text_wdist*2*att.draw_box + cw*(not att.draw_box and show_name)
+	box_left = left + (draw_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
+	right = box_left + att.length*cw + _text_wdist*2*att.draw_box + cw*(not att.draw_box and draw_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	
 	name_text_x = left + _text_wdist*att.draw_box
@@ -397,7 +397,7 @@ draw = function(){
 	
 	if att.draw_box
 	{
-		if show_name and docked
+		if draw_name and docked
 		{
 			draw_set_color(tb.colors.body_accent)
 			draw_hollowrect(left, top, right, bottom, _outline_width)
@@ -411,7 +411,7 @@ draw = function(){
 		draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	}
 	
-	if show_name
+	if draw_name
 	{
 		draw_set_halign(fa_left)
 		draw_set_valign(fa_top)

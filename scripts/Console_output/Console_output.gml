@@ -7,11 +7,11 @@ if ot.docked and not ot.run_in_dock return undefined
 
 //if output_as_window
 //{
-	ot.dock.show_name = true
+	ot.dock.draw_name = true
 //}
 //else
 //{
-//	ot.dock.show_name = false
+//	ot.dock.draw_name = false
 //	ot.dock.x = 0
 //	ot.dock.y = 0
 //}

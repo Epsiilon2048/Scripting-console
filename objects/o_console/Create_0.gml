@@ -468,7 +468,7 @@ with var_name_text_box
 {
 	association = var_name_text_box
 	button = var_add_button
-	show_name = false
+	draw_name = false
 	initial_ghost_text = "Enter variable"
 	allow_printing = false
 	att.exit_with_enter = false
@@ -553,7 +553,7 @@ with var_text_box
 {
 	association = var_text_box
 	button = var_add_button
-	show_name = false
+	draw_name = false
 	initial_ghost_text = "variable"
 	allow_printing = false
 	att.exit_with_enter = false
@@ -582,7 +582,7 @@ with var_add_button
 	released_script = function(){
 		
 		explanation_text.enabled = false
-		var variable = variable_string_error(var_box.text)
+		var variable = variable_string_info(var_box.text)
 		if variable.exists
 		{
 			dock.insert_vertical(0, is_numeric(variable.value) ? new_scrubber(var_box.text, var_box.text, 1) : new_text_box(var_box.text, var_box.text))

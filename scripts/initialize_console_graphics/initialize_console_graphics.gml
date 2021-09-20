@@ -123,7 +123,7 @@ with BAR {
 	{
 		initialize()
 		variable = "o_console.console_string"
-		show_name = false
+		draw_name = false
 		att.draw_box = false
 		color_method = gmcl_string_color
 		att.exit_with_enter = false
@@ -166,6 +166,8 @@ with OUTPUT {
 
 with AUTOFILL {
 	
+	show = false
+	
 	char_height = 17
 	
 	index = -1
@@ -192,10 +194,6 @@ with AUTOFILL {
 	text_sep = 1
 	
 	mouse_on = false
-	
-	mouse_border = 6
-	mouse_dragging_top = false
-	mouse_dragging_right = false
 	
 	colors = o_console.colors
 }
