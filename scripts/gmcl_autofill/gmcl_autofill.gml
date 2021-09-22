@@ -1,4 +1,8 @@
-function gmcl_autofill_old(gmcl_string, char_pos){ with o_console {
+function gmcl_autofill_old(gmcl_string, char_pos, rules){ with o_console {
+
+static allows = function(rules, field){
+	return is_undefined(rules) ? true : variable_struct_exists_get(rules, field, false)
+}
 
 AUTOFILL.index = -1
 
@@ -18,7 +22,7 @@ var sc = char_pos_arg.scope != ""
 var idn = char_pos_arg.iden
 var ch = is_undefined(idn) or idn == dt_string
 
-if sc and (ch or idn == dt_variable)
+if sc and allows(rules, "scope") and (ch or idn == dt_variable)
 {		
 	if is_numeric(char_pos_arg.scope) scope_variables = variable_instance_get_names(char_pos_arg.scope)
 	else scope_variables = variable_struct_get_names(variable_string_get(char_pos_arg.scope))
@@ -34,10 +38,10 @@ var v = char_pos_arg.variable
 
 // Tried an optimization where it would retain it's previous range if characters were only added; didnt work for some reason
 // so as long as it's not causing real performance issues I'm just not gonna bother
-autofill.macros		= (not sc and (ch or idn == dt_method)) ?  autofill_in_list(macro_list, v, undefined) : -1
-autofill.methods	= (not sc and (ch or idn == dt_method or idn == dt_asset)) ? autofill_in_list(method_list, v, undefined) : -1
-autofill.assets		= (not sc and (ch or idn == dt_variable or idn == dt_asset)) ? autofill_in_list(asset_list, v, undefined) : -1
-autofill.instance	= (not sc and (ch or idn == dt_variable)) ?  autofill_in_list(instance_variables, v, undefined) : -1
+autofill.macros		= (not sc and allows(rules, "macros")	and (ch or idn == dt_method)) ?  autofill_in_list(macro_list, v, undefined) : -1
+autofill.methods	= (not sc and allows(rules, "methods")	and (ch or idn == dt_method or idn == dt_asset)) ? autofill_in_list(method_list, v, undefined) : -1
+autofill.assets		= (not sc and allows(rules, "assets")	and (ch or idn == dt_variable or idn == dt_asset)) ? autofill_in_list(asset_list, v, undefined) : -1
+autofill.instance	= (not sc and allows(rules, "instance")	and (ch or idn == dt_variable)) ?  autofill_in_list(instance_variables, v, undefined) : -1
 	
 if not is_undefined(char_pos_arg.iden) and char_pos_arg.variable == ""
 {

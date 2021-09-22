@@ -14,7 +14,6 @@ draw_set_font(font)
 draw_set_halign(fa_left)
 draw_set_valign(fa_bottom)
 
-var cw = string_width(" ")
 var ch = string_height(" ")
 
 var entries = (
@@ -40,8 +39,11 @@ var _height = ceil( min(entries_height+1, at.height*asp) )
 var _border_w = round(at.border_w*asp)
 var _border_h = round(at.border_h*asp)
 
-at.x = o_console.keyboard_scope.cbox_left
-at.y = o_console.keyboard_scope.cbox_top
+with o_console.keyboard_scope
+{
+	at.x = is_undefined(cbox_left) ? left : cbox_left
+	at.y = is_undefined(cbox_top) ? top : cbox_top
+}
 
 var x1 = at.x
 var y1 = at.y
@@ -134,7 +136,7 @@ for(var i = range.min; i <= range.max; i++)
 	if text_y-ch < y1-1
 	{
 		var this = color_method(access(list, i))
-		var selected = at.index == item_index or (at.mouse_on_item and gui_mouse_between(x1, text_y, x2, text_y-ch))
+		var selected = at.index == item_index //or (at.mouse_on_item and gui_mouse_between(x1, text_y, x2, text_y-ch))
 		var color = o_console.colors[$ this.entry_color]
 
 		if selected

@@ -569,6 +569,10 @@ with var_text_box
 		return gmcl_string_color(text, undefined)
 	}
 	
+	autofill_method = function(command, char_pos){
+		return gmcl_autofill_old(command, char_pos, {instance: true, assets: true, scope: true})
+	}
+	
 	enter_func = function(){
 		button.released_script()
 	}
@@ -624,11 +628,11 @@ cs_editor = new_console_dock("Color scheme editor", [
 ])
 cs_editor.association = o_console.colors
 
-add_console_element(object_editor)
-add_console_element(cs_editor)
+//add_console_element(object_editor)
+//add_console_element(cs_editor)
 //add_console_element(element_adjusting)
 //add_console_element(bar_dock)
 add_console_element(BAR)
 add_console_element(OUTPUT)
 add_console_element(DISPLAY)
-add_console_element(color_thing)
+//add_console_element(color_thing)
