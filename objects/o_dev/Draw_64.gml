@@ -28,17 +28,28 @@ if animating != 0
 var height = o_console.BAR.text_box.cbox_bottom-o_console.BAR.text_box.cbox_top
 var width = height*anim
 
-var ldx1 = lengthdir_x(height/2, 360*anim)
-var ldy1 = lengthdir_y(height/2, 360*anim)
-var ldx2 = -ldy1*anim
-var ldy2 = ldx1*anim
+if not surface_exists(surf) 
+{
+	surf = surface_create(height+2, height+2)
+}
+else if surface_get_width(surf) != height
+{
+	surface_resize(surf, height+2, height+2)
+}
 
-var x1 = x+width/2
-var y1 = y-height/2
-var x2 = x-width/2
-var y2 = y+height/2
+surface_set_target(surf)
+draw_clear_alpha(c_black, 0)
+var x1 = height/2+1 - width/2
+var y1 = 1
+var x2 = height/2+1 + width/2
+var y2 = height+2
 
 draw_set_color(o_console.colors.output)
 
-//draw_rectangle(x1, y1, x2, y2, false)
 draw_ellipse(x1, y1, x2, y2, false)
+
+surface_reset_target()
+gpu_set_texfilter(true)
+draw_surface_ext(surf, x, y, 1, 1, 360*anim, c_white, 1)
+//draw_surface(surf, x-height/2, y-height/2)
+gpu_set_texfilter(false)
