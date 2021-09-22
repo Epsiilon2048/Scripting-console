@@ -126,6 +126,7 @@ with BAR {
 		draw_name = false
 		att.draw_box = false
 		color_method = gmcl_string_color
+		autofill_method = gmcl_autofill_old
 		att.exit_with_enter = false
 		att.set_variable_on_input = true
 		att.allow_scoped_exinput = true
@@ -166,6 +167,9 @@ with OUTPUT {
 
 with AUTOFILL {
 	
+	x = 0
+	y = 0
+	
 	show = false
 	
 	char_height = 17
@@ -196,6 +200,11 @@ with AUTOFILL {
 	mouse_on = false
 	
 	colors = o_console.colors
+	
+	mouse_border = 10
+	mouse_dragging_top	 = false
+	mouse_dragging_right = false
+	scrollbar = {width: 0}
 }
 
 with CHECKBOX {

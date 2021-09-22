@@ -150,7 +150,7 @@ initialize = function(variable){
 	char_filter = noscript
 	color_method = noscript // The script used to color the string
 	value_conversion = string // How the value is converted from the text
-	autofill_method = gmcl_autofill
+	autofill_method = noscript
 	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
@@ -384,7 +384,7 @@ get_input = function(){
 	var asp = ch/tb.char_height
 	
 	var _text_wdist = floor(tb.text_wdist*asp)
-	//var _text_hdist = floor(tb.text_hdist*asp)
+	var _text_hdist = floor(tb.text_hdist*asp)
 	#endregion
 	
 	moved = xprevious != x or yprevious != y
@@ -796,7 +796,7 @@ get_input = function(){
 				}
 		
 				if text_changed
-				{
+				{			
 					if not att.allow_alpha
 					{
 						if not string_is_float(text)
@@ -825,6 +825,14 @@ get_input = function(){
 					colors = color_method(text)
 					blink_step = 0
 					keyboard_string = text
+					
+					if autofill_method != noscript
+					{
+						autofill_method(text, char_pos1)
+						o_console.AUTOFILL.show = true
+						o_console.AUTOFILL.x = left
+						o_console.AUTOFILL.y = top - _text_hdist
+					}
 				}
 			}
 		}

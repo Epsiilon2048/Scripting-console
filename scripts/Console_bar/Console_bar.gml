@@ -225,7 +225,7 @@ if BAR.docked
 	draw_hollowrect(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, _outline_width)
 }
 
-draw_set_color(BAR.text_box.scoped ? colors.output : colors.plain)
+draw_set_color(colors.output)
 draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
 
 BAR.text_box.draw()

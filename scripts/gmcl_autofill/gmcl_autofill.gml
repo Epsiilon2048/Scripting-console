@@ -1,4 +1,4 @@
-function gmcl_autofill(gmcl_string, char_pos){ with o_console {
+function gmcl_autofill_old(gmcl_string, char_pos){ with o_console {
 
 AUTOFILL.index = -1
 
@@ -11,8 +11,8 @@ if not is_string(gmcl_string)
 	autofill.scope = -1
 	return undefined
 }
-gmcl_interpret_argument()
-char_pos_arg = gmcl_get_argument(gmcl_string, char_pos)
+
+char_pos_arg = gmcl_get_argument_old(gmcl_string, char_pos)
 	
 var sc = char_pos_arg.scope != ""
 var idn = char_pos_arg.iden
