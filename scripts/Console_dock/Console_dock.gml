@@ -94,6 +94,7 @@ initialize = function(){
 	
 	draw_name = true
 	draw_name_bar = true
+	draw_outline = true
 	
 	dragging = false
 	mouse_xoffset = 0
@@ -568,8 +569,9 @@ draw = function(){
 			draw_set_color(dc.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
 		}
+		
 		draw_set_color(dc.colors.body_accent)
-		draw_hollowrect(left, top, right, bottom, _outline_width)
+		if draw_outline draw_hollowrect(left, top, right, bottom, _outline_width)
 		
 		if is_front draw_set_color(dc.colors.output)
 	}
