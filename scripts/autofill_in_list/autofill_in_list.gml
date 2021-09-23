@@ -1,6 +1,5 @@
 
 function autofill_in_list(array_or_ds_list, criteria, range){ with global.scrvar {
-
 criteria = string(criteria)
 
 if first_is_digit(criteria) return -1
@@ -97,6 +96,5 @@ for(i = 1; i <= c_len; i++)
 
 	index = _min + ceil((_max-_min)/2)
 }
-
 return {min: _min, max: _max}
 }}
