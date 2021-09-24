@@ -645,7 +645,6 @@ get_input = function(){
 					char_selection = true
 				}
 				else char_pos2 = char_pos1
-				show_debug_message(1)
 			}
 		}
 		

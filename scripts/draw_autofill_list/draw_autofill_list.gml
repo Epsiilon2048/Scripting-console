@@ -29,7 +29,6 @@ if entries <= -1
 	at.mouse_on = false
 	return -1
 }
-show_debug_message(1)
 
 var asp = ch/at.char_height
 var _text_sep = ceil(at.text_sep*asp)
@@ -326,7 +325,6 @@ draw_list(autofill.instance, instance_variables, variable_color)
 draw_list(autofill.assets, asset_list, asset_color)
 draw_list(autofill.methods, method_list, method_color)
 draw_list(autofill.macros, macro_list, macro_color)
-show_debug_message(0)
 
 shader_reset()
 

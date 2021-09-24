@@ -22,7 +22,6 @@ var _min = is_struct(range) ? range.min : 0
 var _max = is_struct(range) ? range.max : (list_size-1)
 if is_struct(range) 
 {
-	show_debug_message(range)
 	range.used = true
 }
 
