@@ -228,6 +228,12 @@ if BAR.docked
 draw_set_color(colors.output)
 draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
 
+
+
+
+
+
+
 BAR.text_box.draw()
 
 draw_set_color(colors.output)

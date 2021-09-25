@@ -117,6 +117,15 @@ with BAR {
 	text_dist = 18
 	sidebar_width = 3
 	
+	sidebar_circle = false
+	sidebar_animation = 0
+	sidebar_lerp = .48
+	sidebar_overshoot_mult = .13
+	sidebar_overshot = false
+	sidebar_overshoot_lerp = sidebar_lerp*.7
+	sidebar_height_dampner = .6
+	sidebar_surface = -1
+	
 	mouse_on = false
 	
 	text_box = new Console_text_box() with text_box

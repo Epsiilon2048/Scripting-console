@@ -5,50 +5,80 @@
 //shader_reset()
 //sw.draw()
 
-var height = o_console.BAR.text_box.cbox_bottom-o_console.BAR.text_box.cbox_top
-height *= sc
+var length = o_console.BAR.text_box.cbox_bottom-o_console.BAR.text_box.cbox_top
+length *= sc
 
 if keyboard_check_pressed(vk_space)
 {
 	animating = (anim > 0) ? -1 : 1
 }
 
-var wsep = 1+ceil(height*overshoot)/2
+var wsep = 1+ceil(length*overshoot)/2
 
 if not surface_exists(surf) 
 {
-	surf = surface_create(height+wsep*2, height+2)
+	surf = surface_create(length+wsep*2, length+2)
 }
-else if surface_get_width(surf) != height+2
+else if surface_get_width(surf) != length+2
 {
-	surface_resize(surf, height+wsep*2, height+2)
+	surface_resize(surf, length+wsep*2, length+2)
 }
 
 surface_set_target(surf)
 draw_clear_alpha(c_black, 0)
 draw_set_color(o_console.colors.output)
 
-var c = height/2+wsep
+var cx = length/2+wsep
+var cy = length/2+1
 if animating == 1
 {
-	var width = height*anim*(1+overshoot)
+	var width = max(3, length*anim)
+	var height = length-max(0, width-length)*height_dampner
 	
-	draw_ellipse(c-width/2, 1, c+width/2, height+1, false)
-	anim = lerp(anim, 1, inc)
+	draw_ellipse(cx-width/2, cy-height/2, cx+width/2, cy+height/2, false)
+	if overshot 
+	{
+		anim = lerp(anim, 1, inc*overshoot_dampner)
+		
+		if anim-1 < .001
+		{
+			animating = 0
+			overshot = false
+			anim = 1
+		}
+	}
+	else
+	{
+		anim = lerp(anim, 1+overshoot, inc)
+		
+		if ((1+overshoot)-anim) < .001
+		{
+			overshot = true
+			anim = 1+overshoot
+		}
+	}
 	
 }
 else if animating == -1 
 {
-	anim = 0
-	animating = false
+	var width = max(2, length*anim)
+	draw_roundrect_ext(cx-width/2, 1, cx+width/2, length+1, width, width, false)
+	anim = lerp(anim, 0, inc)
+	
+	if width == 2
+	{
+		animating = false
+		anim = 0
+	}
 }
 else if anim > 0
 {
-	draw_circle(c, c, height/2, false)
+	draw_circle(cx, cy, length/2, false)
 }
-else
+
+if animating != 1 and anim != 1
 {
-	draw_rectangle(c-1, wsep, c+1, height+wsep, false)
+	draw_rectangle(cx-1, 1, cx+1, length+1, false)
 }
 
 surface_reset_target()
