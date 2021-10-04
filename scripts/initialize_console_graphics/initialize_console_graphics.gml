@@ -158,6 +158,7 @@ with OUTPUT {
 	dock.initialize()
 	dock.set(text)
 	dock.name = "Console output"
+	dock.draw_name_bar = false
 
 	fade_time = 6 //seconds
 	fade_step = 0

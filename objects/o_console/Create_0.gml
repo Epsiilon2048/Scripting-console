@@ -548,8 +548,7 @@ var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
 var var_explanation = new_cd_text("Enter a variable name to add!", undefined)
 
-var var_text_box = new_text_box("Variable", "__variable_add_var__")
-with var_text_box
+var var_text_box = new_text_box("Variable", "__variable_add_var__") with var_text_box
 {
 	association = var_text_box
 	button = var_add_button
@@ -561,7 +560,7 @@ with var_text_box
 	att.allow_scoped_exinput = false
 	att.length_min = string_length(initial_ghost_text)+12
 	att.scoped_color = dt_variable
-	
+
 	__variable_add_var__ = ""
 
 	color_method = function(text){
@@ -578,9 +577,15 @@ with var_text_box
 	}
 }
 
+var type_text_box = new_text_box("Variable type", )
+
+var scrubber_inc_text_box = new_value_box("Scrubber inc", )
+
 with var_add_button
 {
 	var_box = var_text_box
+	type_box = type_text_box
+	scrubber_inc_box = scrubber_inc_text_box
 	explanation_text = var_explanation
 	can_click = false
 	released_script = function(){
@@ -589,7 +594,27 @@ with var_add_button
 		var variable = variable_string_info(var_box.text)
 		if variable.exists
 		{
-			dock.insert_vertical(0, is_numeric(variable.value) ? new_scrubber(var_box.text, var_box.text, 1) : new_text_box(var_box.text, var_box.text))
+			var el
+			
+			switch asset_get_index(type_box.text)
+			{
+			default:
+				if is_numeric(variable.value)		el = new_scrubber(var_box.text, var_box.text, 1/(10*float_count_places(variable.value, 4)))
+				else if is_string(variable.value)	el = new_text_box(var_box.text, var_box.text)
+				else								el = new_display_box(var_box.text, var_box.text, true)
+			break
+			case new_text_box:
+				el = new_text_box(var_box.text, var_box.text)
+			break
+			case new_scrubber:
+				el = new_scrubber(var_box.text, var_box.text, scrubber_inc_box.value)
+			break
+			case new_display_box:
+				el = new_display_box(var_box.text, var_box.text, true)
+			break
+			}
+			
+			dock.insert_vertical(0, el)
 			var_box.__variable_add_name__ = ""
 		}
 	}
@@ -629,7 +654,7 @@ cs_editor = new_console_dock("Color scheme editor", [
 cs_editor.association = o_console.colors
 
 //add_console_element(object_editor)
-//add_console_element(cs_editor)
+add_console_element(cs_editor)
 //add_console_element(element_adjusting)
 //add_console_element(bar_dock)
 add_console_element(BAR)
