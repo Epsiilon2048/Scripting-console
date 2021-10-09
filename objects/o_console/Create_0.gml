@@ -165,7 +165,7 @@ index_assets()
 initialize_console_macros()
 initialize_color_schemes()
 initialize_console_docs()
-initialize_console_graphics()
+initialize_console_graphics(undefined)
 
 identifiers = {
 	r: dt_real,
@@ -516,7 +516,7 @@ var image_dock = new_console_dock("Image", [
 ])
 var movement_dock = new_console_dock("Movement", [
 	[new_scrubber("speed", "speed", .1)], 
-	[new_scrubber("direction", "direction", 1)],
+	[new_scrubber("direction", "direction", 1)], 
 	[new_scrubber("friction", "friction", .1)], 
 	[new_scrubber("hspeed", "hspeed", .1), new_scrubber("vspeed", "vspeed", .1)],
 	new_separator(),
@@ -559,6 +559,7 @@ with var_text_box
 	att.exit_with_enter = false
 	att.set_variable_on_input = false
 	att.allow_scoped_exinput = false
+	att.exit_with_enter = true
 	att.length_min = string_length(initial_ghost_text)+12
 	att.scoped_color = dt_variable
 	
@@ -574,6 +575,7 @@ with var_text_box
 	}
 	
 	enter_func = function(){
+		__variable_add_var__ = ""
 		button.released_script()
 	}
 }
@@ -584,14 +586,15 @@ with var_add_button
 	explanation_text = var_explanation
 	can_click = false
 	released_script = function(){
-		
 		explanation_text.enabled = false
 		var variable = variable_string_info(var_box.text)
 		if variable.exists
 		{
 			dock.insert_vertical(0, is_numeric(variable.value) ? new_scrubber(var_box.text, var_box.text, 1) : new_text_box(var_box.text, var_box.text))
-			var_box.__variable_add_name__ = ""
+			var_box.__variable_add_var__ = ""
+			var_box.text = ""
 		}
+		var_box.update_variable()
 	}
 }
 

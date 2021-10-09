@@ -146,6 +146,8 @@ initialize = function(variable){
 	
 	association = undefined
 	
+	added_float_places = 0
+	
 	enter_func = noscript
 	char_filter = noscript
 	color_method = noscript // The script used to color the string
@@ -209,7 +211,7 @@ initialize_scrubber = function(variable, step){
 	att.length_min = 4
 	att.length_max = infinity
 	att.scrubber = true
-	att.select_all_on_click = true
+	att.select_all_on_click = false
 	att.allow_alpha = false
 	att.set_variable_on_input = true
 	att.text_color = dt_real
@@ -312,15 +314,24 @@ update_variable = function(){ if not is_undefined(variable) {
 	
 	with _association other.convert(variable_string_get(other.variable))
 	
-	if not att.allow_alpha and is_numeric(value)
+	var places = undefined
+	if is_numeric(value) places = is_undefined(att.float_places) ? float_count_places(value, max(3, added_float_places)) : att.float_places+added_float_places
+	
+	if not att.allow_alpha
 	{
-		var old_value = value
-		value = clamp(value, att.value_min, att.value_max)		
-		if old_value != value with _association variable_string_set(other.variable, other.value)
-		
-		text = att.allow_float ? string_format_float(value, att.float_places) : string(round(value))
+		if not is_numeric(value)
+		{
+			text = "NaN"
+			value = NaN
+		}
+		else text = string_format_float(value, places)
 	}
-	else text = string(value)
+	else 
+	{
+		text = string_format_float(value, places)
+		
+		
+	}
 	
 	if att.lock_text_length and string_length(text) > att.length_max text = slice(text, 1, att.length_max+1, 1)
 	
@@ -417,7 +428,8 @@ get_input = function(){
 		if not mouse_on_box
 		{
 			mouse_on_box = true
-			window_set_cursor((att.scrubber and not typing) ? cr_size_we : cr_beam)
+			if att.scrubber window_set_cursor(cr_size_we)
+			else window_set_cursor(cr_beam)
 		}
 	}
 	else if mouse_on_box and not clicking
@@ -458,6 +470,7 @@ get_input = function(){
 	var key_escape_pressed = keyboard_check_pressed(vk_escape)
 	var key_enter_pressed = keyboard_check_pressed(vk_enter)
 	
+	if key_enter_pressed enter_func()
 	if not (mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)) and clicking and not mouse_left
 	{
 		clicking = false
@@ -560,17 +573,15 @@ get_input = function(){
 			{
 				var pos = string_pos(".", text)
 				var step_places = float_count_places(scrubber_step, 10)
-				
-				if pos == 0 and not step_places att.float_places = undefined
-				else att.float_places = max(float_count_places(scrubber_step, 10), string_length(text)-string_pos(".", text))
 			}
 			
 			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
+			update_variable()
 		}
 	}
 	#endregion
 	
-	if (not scoped and docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput) or (not scoped and att.allow_exinput and get_update_turn(update_id))
+	if (not scoped and docked and dock.is_front and att.update_when_is_front) or (scoped and att.allow_scoped_exinput and not typing) or (not scoped and att.allow_exinput and get_update_turn(update_id))
 	{
 		update_variable()
 	}
@@ -634,7 +645,7 @@ get_input = function(){
 		{	
 			var char = slice(keyboard_string, string_length(text)+1, -1, 1)
 			var digits = string_digits(char) != ""
-			if digits or key_backspace or key_delete or (sign(att.value_min) == -1 and string_pos("-", char)) or (att.allow_float and string_pos(".", char))
+			if digits or key_backspace or key_delete or ((sign(att.value_min) == -1 or sign(value) == -1) and string_pos("-", char)) or (att.allow_float and string_pos(".", char))
 			{
 				typing = true
 				scrubbing = false
@@ -650,8 +661,15 @@ get_input = function(){
 		
 		if not typing and not att.allow_alpha and (key_left or key_right)
 		{
-			value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
+			if value mod att.incrementor_step != 0
+			{
+				if key_left value -= value mod att.incrementor_step
+				else value += att.incrementor_step - (value mod att.incrementor_step)
+				
+			}
+			else value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
 			text = string_format_float(value, att.float_places)
+			added_float_places = 0
 			
 			if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 		}
@@ -706,13 +724,19 @@ get_input = function(){
 					var newtext = text
 					var char = ""
 					if paste char = clipboard_get_text()
-					else char = slice(keyboard_string, string_length(text)+1, -1, 1)
+					char += slice(keyboard_string, string_length(text)+1, -1, 1)
 			
 					if char_selection newtext = string_delete(newtext, char_pos_min+1, char_pos_max-char_pos_min)
+				
+					for(var i = 1; i <= string_length(char); i++)
+					{
+						var num = ord(string_char_at(char, i))
+						if 32 > num or num > 126 char = string_delete(char, i, 1)
+					}
 			
 					if not att.allow_alpha 
 					{
-						if sign(att.value_min) == -1 and string_pos("-", char)
+						if (sign(att.value_min) == -1 or sign(value) == -1) and string_pos("-", char)
 						{
 							char_pos1 = char_pos_min
 							
@@ -731,14 +755,30 @@ get_input = function(){
 						}
 						if att.allow_float and string_pos(".", char)
 						{
-							char_pos1 = char_pos_min
+							char = string_delete(char, string_pos(".", char), 1)
 							var pos = string_pos(".", newtext)
-							if pos == 0 pos = infinity
-							newtext = string_delete(newtext, pos, 1)
-							newtext = string_insert(".", newtext, char_pos1+(char_pos1 < pos))
-							char_pos1 += (char_pos1 < pos)
-							char_pos_min = char_pos1
-							text_changed = true
+							
+							if char_pos1+1 == pos
+							{
+								char_pos1 = ++char_pos_min
+								text_changed = true
+							}
+							else if char_pos1 != pos
+							{
+								char_pos1 = char_pos_min
+								
+								if pos
+								{
+									newtext = string_delete(newtext, pos, 1)
+									char_pos1 -= char_pos1 > pos
+								}
+								newtext = string_insert(".", newtext, char_pos1+1)
+							
+								char_pos1 += 1
+
+								char_pos_min = char_pos1
+								text_changed = true
+							}
 						}
 						char = string_digits(char)
 					}
@@ -777,7 +817,14 @@ get_input = function(){
 					if char_selection
 					{
 						text = string_delete(text, char_pos_min+1, char_pos_max-char_pos_min)
+						text = string_delete(text, char_pos_min+1, char_pos_max-char_pos_min)
 						char_pos1 = char_pos_min
+					}
+					else if key_super
+					{
+						var prev = max(1, string_char_next(tb.word_sep, text, char_pos1, -1))
+						text = string_delete(text, prev, char_pos1-prev+1+(prev == 0))
+						char_pos1 = prev+1-(char_pos1 != 1)*2
 					}
 					else 
 					{
@@ -790,28 +837,46 @@ get_input = function(){
 				}
 				else if key_delete and (char_selection or char_pos1 != string_length(text))
 				{
-					text = string_delete(text, char_pos1+1, 1)
+					if key_super
+					{
+						var next = max(1, string_char_next(tb.word_sep, text, char_pos1+1, 1))
+						text = string_delete(text, char_pos1+1, next-char_pos1)
+					}
+					else text = string_delete(text, char_pos1+1, 1)
 					text_changed = true
 				}
 		
 				if text_changed
-				{			
+				{	
+					var _value = text
 					if not att.allow_alpha
 					{
-						if not string_is_float(text)
+						if text = "" or text == "-" or text == "."
+						{
+							_value = "0"
+						}
+						else if not string_is_float(text)
 						{
 							text = "0"
 							char_pos1 = 1
 							char_pos2 = char_pos1
 							char_selection = false
+							_value = text
 						}
 						else
 						{
-							text = string_format_float(clamp(real(text), att.value_min, att.value_max), att.float_places)
+							var remove = 0
+							if string_char_at(text, 1) == "." remove = 1
+							else if (slice(text, 1, 3, 1) == "-.") remove = 2
+							
+							added_float_places = max(0, float_count_places(real(text), 8) - (is_undefined(att.float_places) ? 0 : att.float_places))
+							
+							text = string_delete(string_format_float(clamp(real(text), att.value_min, att.value_max), float_count_places(real(text), 8)) + (string_last(text) == "." ? "." : ""), remove, 1)
+							_value = text
 						}
 					}
 				
-					convert(text)
+					convert(_value)
 					
 					if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 			
@@ -842,6 +907,8 @@ get_input = function(){
 				value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*scrubber_step, att.value_min, att.value_max)
 				mouse_previous = gui_mx
 				scrubbed = true
+				
+				added_float_places = 0
 				
 				if not att.allow_float value = floor(value)
 				text = string_format_float(value, att.float_places)

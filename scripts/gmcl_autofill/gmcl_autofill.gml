@@ -15,7 +15,6 @@ if not is_string(gmcl_string)
 	autofill.scope = -1
 	return undefined
 }
-
 char_pos_arg = gmcl_get_argument_old(gmcl_string, char_pos)
 	
 var sc = char_pos_arg.scope != ""
