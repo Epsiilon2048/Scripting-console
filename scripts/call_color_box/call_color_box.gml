@@ -26,7 +26,7 @@ with global_color_picker
 	if y-height < 0 self.y = y+5
 	else self.y = y-height-5
 		
-	update_variable()
 	hue = color_get_hue(color)
+	update_variable()
 }
 }}

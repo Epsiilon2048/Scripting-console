@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Unsorted",
-    "path": "folders/Console/Unsorted.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "new_ctx",
+  "name": "call_color_box",
   "tags": [],
   "resourceType": "GMScript",
 }

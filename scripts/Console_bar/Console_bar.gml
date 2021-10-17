@@ -94,6 +94,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 		BAR.text_box.char_pos1 = string_length(console_string)
 		BAR.text_box.char_pos2 = BAR.text_box.char_pos1
 		BAR.text_box.char_pos_selection = false
+		BAR.text_box.update_variable()
 	}
 	
 	#region Parse command
@@ -208,7 +209,7 @@ if BAR.docked
 	if BAR.dock.is_front
 	{
 		draw_dock_body = draw_rectangle
-		draw_set_color(BAR.colors.body_real)
+		draw_set_color(o_console.colors.body_real)
 	}
 	else draw_dock_body = noscript
 }
@@ -221,7 +222,7 @@ if BAR.docked
 {
 	var _outline_width = round(BAR.outline_width*asp)
 	
-	draw_set_color(BAR.colors.body_accent)
+	draw_set_color(o_console.colors.body_accent)
 	draw_hollowrect(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, _outline_width)
 	draw_hollowrect(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, _outline_width)
 }
@@ -234,13 +235,12 @@ if keyboard_check_pressed(vk_space)
 	BAR.sidebar_circle = not BAR.sidebar_circle
 }
 
-//var wsep = 1+ceil(length*BAR.sidebar_overshoot_mult)/2
-
 draw_set_color(o_console.colors.output)
 
 var cx = BAR.left+_sidebar_width/2-2
 var cy = BAR.top + length/2-1
 
+/*
 if BAR.sidebar_circle and BAR.sidebar_animation != 1
 {
 	var width = max(3, length*BAR.sidebar_animation)
@@ -283,6 +283,7 @@ else if BAR.sidebar_animation > 0
 }
 
 if not BAR.sidebar_circle and BAR.sidebar_animation == 0
+*/
 {
 	draw_rectangle(BAR.left, BAR.top, BAR.left+_sidebar_width, BAR.bottom, false)
 }

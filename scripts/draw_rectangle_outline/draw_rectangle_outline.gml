@@ -15,8 +15,8 @@ else if w == 0
 }
 else
 {
-	draw_rectangle(_x1, _y1, _x2-w, _y1+w, false)
-	draw_rectangle(_x2-w, _y1, _x2, _y2-w, false)
+	draw_rectangle(_x1, _y1, _x2-w-1, _y1+w, false)
+	draw_rectangle(_x2-w, _y1, _x2, _y2-w-1, false)
 	draw_rectangle(_x2+1, _y2-w, _x1+w, _y2, false)
 	draw_rectangle(_x1, _y2+1, _x1+w, _y1+w, false)
 }

@@ -6,7 +6,7 @@
     "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Script87",
+  "name": "datatype_string",
   "tags": [],
   "resourceType": "GMScript",
 }

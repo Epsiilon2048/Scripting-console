@@ -38,6 +38,13 @@ initialize = function(variable){
 	sv_picking = false
 	h_picking = false
 	
+	sv_scoped = false
+	h_scoped = false
+	
+	hue_y = 0
+	dropper_x = 0
+	dropper_y = 0
+	
 	color_changed = false
 	
 	draw_box = true
@@ -77,6 +84,22 @@ update_variable = function(){
 			sat = color_get_saturation(color)
 		}
 	}
+	
+	if color != old_color
+	{
+		draw_set_font(o_console.font)
+		
+		var co = o_console.COLOR_PICKER
+		var ch = string_height(" ")
+		var asp = ch/co.char_height
+		var size_asp = asp*size
+		var _outline = round(co.outline*asp)
+		var _svsquare_length = round(co.svsquare_length*size_asp)
+		
+		dropper_x = _outline + clamp(sat/255, 0, 1)*_svsquare_length
+		dropper_y = _outline + clamp(1-val/255, 0, 1)*_svsquare_length
+		hue_y = _outline + clamp(hue/255, 0, 1)*_svsquare_length
+	}
 }
 
 
@@ -100,6 +123,8 @@ get_input = function(){
 		clicking = false
 		sv_picking = false
 		h_picking = false
+		sv_scoped = false
+		h_scoped = false
 		
 		return undefined
 	}
@@ -155,6 +180,8 @@ get_input = function(){
 				clicking = true
 				sv_picking = mouse_on_svsquare
 				h_picking = mouse_on_hstrip
+				sv_scoped = mouse_on_svsquare
+				h_scoped = mouse_on_hstrip
 				clicking_on_console = true
 			}
 		}
@@ -165,6 +192,12 @@ get_input = function(){
 		mouse_on_svsquare = false
 		mouse_on_hstrip = false
 		mouse_on_colorbar = false
+		
+		if mouse_check_button(mb_left)
+		{
+			sv_scoped = false
+			h_scoped = false
+		}
 	}
 	
 	
@@ -192,25 +225,15 @@ get_input = function(){
 
 	if sv_picking
 	{
-		dropper_x = clamp(gui_mx, in_left+_outline, in_left+_outline+_svsquare_length)
-		dropper_y = clamp(gui_my, in_top+_outline, in_top+_outline+_svsquare_length)
-		sat = (dropper_x-in_left-_outline)/(svsquare_right-in_left-_outline*2)*255
-		val = 255-(dropper_y-in_top-_outline)/(svsquare_bottom-in_top-_outline*2)*255
+		dropper_x = clamp(gui_mx-in_left, _outline, _outline+_svsquare_length)
+		dropper_y = clamp(gui_my-in_top, _outline, _outline+_svsquare_length)
+		sat = (dropper_x-_outline)/(svsquare_right-in_left-_outline*2)*255
+		val = 255-(dropper_y-_outline)/(svsquare_bottom-in_top-_outline*2)*255
 	}
-	else
+	else if h_picking
 	{
-		dropper_x = round(in_left+_outline + clamp(sat/255, 0, 1)*_svsquare_length)
-		dropper_y = round(in_top+_outline + clamp(1-val/255, 0, 1)*_svsquare_length)
-	}
-	
-	if h_picking
-	{
-		hue_y = clamp(gui_my, in_top+_outline, in_top+_outline+_svsquare_length)
-		hue = (hue_y-in_top-_outline)/(svsquare_bottom-in_top-_outline*2)*255
-	}
-	else
-	{
-		hue_y = in_top+_outline + clamp(hue/255, 0, 1)*_svsquare_length
+		hue_y = clamp(gui_my-in_top, _outline, _outline+_svsquare_length)
+		hue = (hue_y-_outline)/(svsquare_bottom-in_top-_outline*2)*255
 	}
 	
 	color_changed = false
@@ -245,7 +268,6 @@ draw = function(){
 	var co = o_console.COLOR_PICKER
 	var ch = string_height(" ")
 	var asp = ch/co.char_height
-	var size_asp = asp*size
 	var _outline = round(co.outline*asp)
 	var _dropper_length = round(co.dropper_length*asp)
 	var _hpicker_height = round(co.hpicker_height*asp)
@@ -265,7 +287,7 @@ draw = function(){
 	var _hstrip_left = hstrip_left+_outline
 
 	shader_set(shd_hue)
-	shader_set_uniform_f(u_position, (-hue/255)*(pi*2))
+	shader_set_uniform_f(u_position, (hue/255)*(pi*2))
 	draw_sprite_stretched(co.svsquare, 0, _in_left, _in_top, _svsquare_right-_in_left+1, _svsquare_bottom-_in_top+1)
 	shader_reset()
 	
@@ -279,13 +301,24 @@ draw = function(){
 	draw_hollowrect(hstrip_left, in_top, in_right, svsquare_bottom, _outline)
 	draw_hollowrect(in_left, colorbar_top, in_right, in_bottom, _outline)
 
-	var hpicker_y1 = max(hue_y-_hpicker_height/2, _in_top)
-	var hpicker_y2 = min(hue_y+_hpicker_height/2, _svsquare_bottom)
+	if sv_scoped
+	{
+		draw_set_color(o_console.colors.output)
+		draw_hollowrect(in_left-_outline, in_top-_outline, svsquare_right+_outline, svsquare_bottom+_outline, _outline)
+	}
+	else if h_scoped
+	{
+		draw_set_color(o_console.colors.output)
+		draw_hollowrect(hstrip_left-_outline, in_top-_outline, in_right+_outline, svsquare_bottom+_outline, _outline)
+	}
+
+	var hpicker_y1 = max(in_top+hue_y-_hpicker_height/2, _in_top)
+	var hpicker_y2 = min(in_top+hue_y+_hpicker_height/2, _svsquare_bottom)
 	
-	var dropper_x1 = dropper_x-_dropper_length/2
-	var dropper_y1 = dropper_y-_dropper_length/2
-	var dropper_x2 = dropper_x+_dropper_length/2
-	var dropper_y2 = dropper_y+_dropper_length/2
+	var dropper_x1 = in_left+dropper_x-_dropper_length/2
+	var dropper_y1 = in_top+dropper_y-_dropper_length/2
+	var dropper_x2 = in_left+dropper_x+_dropper_length/2
+	var dropper_y2 = in_top+dropper_y+_dropper_length/2
 	
 	var _o = _outline*2
 	draw_set_color(c_white)

@@ -2,6 +2,7 @@
 function display(variable, step){
 
 var t = new_text_box(variable, variable)
+t.instant_update = true
 t.att.allow_input = false
 
 add_console_element(t)

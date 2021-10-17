@@ -27,6 +27,7 @@ initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 		var_text_box.draw_name = false
 		var_text_box.initial_ghost_text = "Variable"
 		var_text_box.color_method = gmcl_string_color
+		var_text_box.autofill_method = gmcl_autofill_old
 		
 		array_push(elements, [var_text_box])
 	}

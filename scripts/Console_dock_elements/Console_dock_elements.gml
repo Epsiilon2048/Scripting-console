@@ -140,21 +140,135 @@ draw = function(){
 	{
 		if color_method == noscript
 		{
-			if is_undefined(color) draw_set_color(is_button ? dc.colors.embed : dc.colors.output)
-			else draw_set_color(is_numeric(color) ? color : dc.colors[$ color])
+			if is_undefined(color) draw_set_color(is_button ? o_console.colors.embed : o_console.colors.output)
+			else draw_set_color(is_numeric(color) ? color : o_console.colors[$ color])
 			draw_text(x, y+1, text)
 		}
 		else draw_color_text(x, y+1, color_text)
 	}
 	else
 	{
-		draw_set_color(clicking ? dc.colors.plain : dc.colors.embed_hover)
+		draw_set_color(clicking ? o_console.colors.plain : o_console.colors.embed_hover)
 		draw_text(x, y+1, text)
 	}
 	
 	draw_set_color(old_color)
 	draw_set_font(old_font)
 	draw_set_halign(old_halign)	draw_set_valign(old_valign)
+}
+}
+	
+	
+	
+function new_cd_checkbox(text, variable){
+var c = new Cd_checkbox()
+c.initialize(text, variable)
+return c
+}
+	
+	
+	
+function Cd_checkbox() constructor{
+	
+initialize = function(text, variable){
+		
+	enabled = true
+	
+	x = 0
+	y = 0
+	
+	left = 0
+	top = 0
+	right = 0
+	bottom = 0
+	
+	on = false
+	
+	self.text = text
+	self.variable = variable
+	
+	text_color = "output"
+	on_color = "plain"
+	off_color = "plain"
+	error_color = "plain"
+	
+	mouse_on = false
+	clicking = false
+	
+	error = false
+	
+	func = noscript
+	
+	update_id = o_console.TEXT_BOX.update_id++
+}
+
+
+get_input = function(){
+	
+	if not enabled
+	{
+		left = x
+		top = y
+		right = x
+		bottom = y
+		
+		mouse_on = false
+		clicking = false
+		
+		return undefined
+	}
+	
+	var cb = o_console.CHECKBOX
+	var ch = string_height(" ")
+	var asp = ch/cb.char_height
+	var _width = round(cb.width*asp)
+	
+	left = x
+	right = left+_width
+	top = y
+	bottom = top+_width
+	
+	if not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
+	{
+		mouse_on = true
+		mouse_on_console = true
+		
+		if mouse_check_button_pressed(mb_left)
+		{
+			clicking = true
+			clicking_on_console = true
+			on = not on
+			func()
+			with dock.association variable_string_set(other.variable, other.on)
+		}
+	}
+	else
+	{
+		mouse_on = false
+	}
+	
+	if clicking and mouse_check_button(mb_left)
+	{
+		clicking_on_console = true
+	}
+	else clicking = false
+	
+	error = false
+	if not clicking and (dock.is_front or get_update_turn(update_id))
+	{
+		with dock.association var info = variable_string_info(other.variable)
+		
+		if not info.exists or not is_numeric(info.value) error = true
+		else on = bool(info.value)
+	}
+}
+
+
+draw = function(){
+	
+	if right == x and top == y return undefined
+	
+	draw_checkbox(x, y, on, mouse_on or clicking)
 }
 }
 #endregion

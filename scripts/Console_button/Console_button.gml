@@ -90,6 +90,7 @@ get_input = function(){
 	}
 	
 	var bt = o_console.CD_BUTTON
+	var tb = o_console.TEXT_BOX
 	
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
@@ -98,9 +99,11 @@ get_input = function(){
 	var ch = string_height(" ")
 	
 	var asp = ch/bt.char_height
+	var tb_asp = ch/tb.char_height
 	
 	var _wdist = round(bt.wdist*asp)
 	var _hdist = round(bt.hdist*asp)
+	var _outline_width = tb.outline_width*tb_asp
 	
 	var _image_scale = image_scale
 	if scale_from_global _image_scale *= asp
@@ -149,12 +152,12 @@ get_input = function(){
 	if is_undefined(sprite)
 	{
 		text_x = left+(right-left)/2
-		text_y = top+(bottom-top)/2+1
+		text_y = top+(bottom-top)/2+_outline_width
 	}
 	else
 	{
-		text_x = left + _wdist*draw_box + (name_width + (sprite_get_xoffset(sprite)-name_width))*_image_scale
-		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale
+		text_x = left + _wdist*draw_box + (name_width + (sprite_get_xoffset(sprite)-name_width))*_image_scale + _outline_width
+		text_y = top + _hdist*draw_box + (name_height + (sprite_get_yoffset(sprite)-name_height))*_image_scale + _outline_width
 	}
 	
 	mouse_on = can_click and not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
@@ -191,6 +194,7 @@ draw = function(){
 	if right == x and bottom == y return undefined
 	
 	var bt = o_console.CD_BUTTON
+	var tb = o_console.TEXT_BOX
 	
 	var old_font = draw_get_font()
 	var old_halign = draw_get_halign()
@@ -203,6 +207,9 @@ draw = function(){
 	var ch = string_height(" ")
 	
 	var asp = ch/bt.char_height
+	var tb_asp = ch/tb.char_height
+	
+	var _outline_width = tb.outline_width*tb_asp
 	
 	var _image_scale = image_scale
 	if scale_from_global _image_scale *= asp
@@ -211,20 +218,20 @@ draw = function(){
 	
 	if draw_box
 	{
-		draw_set_color(clicking ? bt.colors.embed_hover : bt.colors.body_real)
+		draw_set_color(clicking ? o_console.colors.embed_hover : o_console.colors.body_real)
 		draw_rectangle(left, top, right, bottom, false)
 	}
 	
-	if not can_click					draw_set_color(bt.colors.body_accent)
-	else if clicking and draw_box		draw_set_color(bt.colors.body_real)
-	else if clicking and not draw_box	draw_set_color(bt.colors.plain)
-	else if mouse_on					draw_set_color(bt.colors.embed_hover)
-	else if is_front or not draw_box	draw_set_color(bt.colors.embed)
-	else								draw_set_color(bt.colors.body_accent)
+	if not can_click					draw_set_color(o_console.colors.body_accent)
+	else if clicking and draw_box		draw_set_color(o_console.colors.body_real)
+	else if clicking and not draw_box	draw_set_color(o_console.colors.plain)
+	else if mouse_on					draw_set_color(o_console.colors.embed_hover)
+	else if is_front or not draw_box	draw_set_color(o_console.colors.embed)
+	else								draw_set_color(o_console.colors.body_accent)
 	
-	if not clicking and draw_box draw_hollowrect(left, top, right, bottom, 1)
+	if not clicking and draw_box draw_hollowrect(left, top, right, bottom, _outline_width)
 	
-	if not is_front and not clicking and draw_box and can_click draw_set_color(bt.colors.embed)
+	if not is_front and not clicking and draw_box and can_click draw_set_color(o_console.colors.embed)
 	
 	
 	if not is_undefined(sprite)
@@ -234,7 +241,7 @@ draw = function(){
 		{
 			_sprite_color = draw_get_color()
 		}
-		else _sprite_color = is_numeric(sprite_color) ? _sprite_color : bt.colors[$ sprite_color]
+		else _sprite_color = is_numeric(sprite_color) ? _sprite_color : o_console.colors[$ sprite_color]
 		
 		draw_sprite_ext(sprite, subimg, text_x, text_y, _image_scale, _image_scale, 0, _sprite_color, 1)
 	}

@@ -131,6 +131,51 @@ color_schemes[$ cs_rainbowsoup] = { author: "rainlizard", builtinvar : 12704952,
 
 color_schemes[$ cs_sublimate] = { author : "iivii", selection : 3416867, color : 13434879, sprite_alpha : 1, deprecated : 9392695, body_bm : bm_subtract, asset : 7361535, embed_hover : 13299962, builtinvar : 6940601, sprite_anchor : 0, builtin : true, real : 7893488, body_real : 4074793, embed : 16617983, instance : 15372999, sprite : -1, variable : 16755783, tag : 16617983, body_real_alpha : 0.10, method : 14904319, body : -4074793, string : 9300163, output : 16755783, ex_output : 16777215, plain : 11828337, outline_layers : 0, bevel : true, body_accent : 5783354, body_alpha : 1 }
 
+color_schemes[$ cs_gms2] = create_color_scheme4(0,0,0,0) with color_schemes[$ cs_gms2] 
+{
+	body = 0xc2cbb3
+	body_real = 0x1c181f
+	body_accent = 0x524b56
+	body_bm = bm_subtract
+	body_alpha = 1
+	
+	plain = 0xc0c0c0
+
+	output			= 0xc0c0c0
+	ex_output		= 0xc0c0c0
+	embed			= 0x00ffff
+	embed_hover		= 0xffb871
+	selection		= 0xffefcf
+
+	outline_layers	= 0
+
+	sprite			= -1
+	sprite_anchor	= false
+	sprite_alpha	= 1
+
+	bevel			= true
+
+	body_real_alpha	= .1
+
+	self.black			= c_black
+	self.white			= c_white
+	self.red			= c_red
+	self.green			= c_green
+	self.blue			= c_blue
+
+	self[$ dt_real]			= 0x8080ff
+	self[$ dt_string]		= 0x00ffff
+	self[$ dt_asset]		= 0x8080ff
+	self[$ dt_variable]		= 0xffb1b2
+	self[$ dt_method]		= 0x71b8ff
+	self[$ dt_instance]		= 0x8080ff
+	self[$ dt_room]			= 0x8080ff
+	self[$ dt_builtinvar]	= 0x5ae558
+	self[$ dt_color]		= 0x8080ff
+	self[$ dt_tag]			= 0x5b5bff
+	self[$ dt_unknown]		= 0x5b995b
+	self[$ dt_deprecated]	= 0xff6000
+}
 rainbow = false
 bird_mode = false
 color_scheme(cs_index)

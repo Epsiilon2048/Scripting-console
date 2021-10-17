@@ -44,7 +44,7 @@ with DOCK {
 	
 	dragging_radius = 30
 
-	colors = o_console.colors
+	
 }
 
 with TEXT_BOX {
@@ -72,7 +72,7 @@ with TEXT_BOX {
 
 	word_sep = " .,\"()[]/"
 	
-	colors = o_console.colors
+	
 }
 
 with SCROLLBAR {
@@ -85,7 +85,7 @@ with SCROLLBAR {
 	
 	mouse_offset = 0
 	
-	colors = o_console.colors
+	
 }
 
 with BAR {
@@ -144,7 +144,7 @@ with BAR {
 	get_input = console_bar_inputs
 	draw = draw_console_bar
 	
-	colors = o_console.colors
+	
 }
 
 with OUTPUT {
@@ -172,7 +172,7 @@ with OUTPUT {
 	get_input = console_output_inputs
 	draw = draw_console_output
 	
-	colors = o_console.colors
+	
 }
 
 with AUTOFILL {
@@ -209,7 +209,7 @@ with AUTOFILL {
 	
 	mouse_on = false
 	
-	colors = o_console.colors
+	
 	
 	mouse_border = 10
 	mouse_dragging_top	 = false
@@ -219,8 +219,11 @@ with AUTOFILL {
 
 with CHECKBOX {
 	
-	width = 17
-	colors = o_console.colors
+	char_height = 23
+	width = 16
+	
+	mouse_on_saturation_add = -133
+	mouse_on_value_add = 11
 }
 
 
@@ -238,8 +241,6 @@ with SLIDER {
 	marker_font = -1 //set later
 	
 	divider_width = 2
-	
-	colors = o_console.colors
 }
 
 with CD_BUTTON {
@@ -248,8 +249,6 @@ with CD_BUTTON {
 	
 	wdist = 10
 	hdist = 5
-	
-	colors = o_console.colors
 }
 	
 with SEPARATOR {
@@ -259,8 +258,6 @@ with SEPARATOR {
 	double_sep = 3
 	
 	wdist = other.DOCK.element_wdist/2
-	
-	colors = o_console.colors
 }
 
 
@@ -336,9 +333,10 @@ with COLOR_PICKER {
 		draw_box = false
 		update_when_is_front = true
 		
-		length_min = 3
+		length_min = 5
 		length_max = 5
-		allow_float = false
+		allow_float = true
+		float_places = 1
 		lock_text_length = true
 		
 		value_min = 0
@@ -350,8 +348,8 @@ with COLOR_PICKER {
 		draw_box = false
 		update_when_is_front = true
 	
-		length_min = 3
-		length_max = 3
+		length_min = 5
+		length_max = 5
 		lock_text_length = true
 		
 		allow_float = false
@@ -369,7 +367,7 @@ with COLOR_PICKER {
 	get_input = function(){
 		
 		global_color_picker.get_input()
-		if global_color_picker.enabled and not ignore_input and not global_color_picker.mouse_on and mouse_check_button_pressed(mb_any)
+		if global_color_picker.enabled and not ignore_input and (keyboard_check_pressed(vk_enter) or keyboard_check_pressed(vk_escape) or (not global_color_picker.mouse_on and mouse_check_button_pressed(mb_any)))
 		{
 			global_color_picker.enabled = false
 		}
@@ -380,9 +378,49 @@ with COLOR_PICKER {
 	draw = function(){
 		if not ignore_input global_color_picker.draw()
 	}
-	
-	colors = o_console.colors
 }
+
+
+with CTX_MENU
+{
+	char_height = 23
+	
+	enabled = false
+	
+	wdist = 10
+	hdist = 0
+	
+	sep = 10
+	
+	x = 0
+	y = 0
+	
+	left = 0
+	top = 0
+	right = 0
+	bottom = 0
+	
+	prev_right = 0
+	
+	mouse_on = false
+	clicking = false
+	
+	init = false
+	
+	element_mouse_on = -1
+	element_clicking = -1
+	
+	moe_y1 = 0  // Mouse On Element
+	moe_y2 = 0
+	mce_y1 = 0  // Mouse Clicking Element
+	mce_y2 = 0
+	
+	mouse_on_alpha = .05
+	clicking_alpha = .1
+	
+	elements = []
+}
+
 
 with MEASURER {
 	
@@ -398,7 +436,5 @@ with MEASURER {
 	length = 0
 	width = 0
 	height = 0
-	
-	colors = o_console.colors
 }
 }}

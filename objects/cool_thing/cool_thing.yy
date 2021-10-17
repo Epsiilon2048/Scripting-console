@@ -4,7 +4,7 @@
     "path": "sprites/bird_mode_/bird_mode_.yy",
   },
   "solid": false,
-  "visible": false,
+  "visible": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": null,

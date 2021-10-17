@@ -58,6 +58,9 @@ initialize = function(variable){
 	
 	using_color_picker = false
 	
+	copy = false
+	paste = false
+	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the color
 	
@@ -161,7 +164,10 @@ undock = function(){
 
 
 get_input = function(){
-	
+
+	copy = false
+	paste = false
+		
 	#region Disabled defaulting
 	if not enabled
 	{
@@ -271,9 +277,9 @@ get_input = function(){
 			clicking = true
 			scoped = true
 			using_color_picker = true
-			with _association call_color_box(other.variable, undefined, undefined)
+			call_color_box_ext(variable, undefined, undefined, self, _association)
 		}
-		else if scoped
+		else if scoped and (key_escape_pressed or key_enter_pressed) or (mouse_left_pressed and not o_console.COLOR_PICKER.global_color_picker.mouse_on)
 		{
 			scoped = false
 			using_color_picker = false
@@ -296,9 +302,6 @@ get_input = function(){
 	#region Keyboard inputs
 	if scoped
 	{
-		var copy = false
-		var paste = false
-		
 		if key_super
 		{
 			copy = keyboard_check_pressed(ord("C"))
@@ -389,7 +392,7 @@ draw = function(){
 	
 	if not (docked and not dock.is_front)
 	{
-		draw_set_color(tb.colors.body_real)
+		draw_set_color(o_console.colors.body_real)
 		draw_rectangle(left, top, box_left, bottom, false)
 	}
 	draw_set_color(color)
@@ -399,15 +402,15 @@ draw = function(){
 	{
 		if draw_name and docked
 		{
-			draw_set_color(tb.colors.body_accent)
+			draw_set_color(o_console.colors.body_accent)
 			draw_hollowrect(left, top, right, bottom, _outline_width)
 		}
 		
-		draw_set_color(tb.colors.body_real)
+		draw_set_color(o_console.colors.body_real)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width*2)
 		
-		if scoped and att.allow_input	draw_set_color(is_real(att.scoped_color) ? att.scoped_color : tb.colors[$ att.scoped_color])
-		else							draw_set_color(tb.colors.body_accent)
+		if not copy and scoped and att.allow_input	draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
+		else							draw_set_color(o_console.colors.body_accent)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	}
 	
@@ -416,7 +419,7 @@ draw = function(){
 		draw_set_halign(fa_left)
 		draw_set_valign(fa_top)
 	
-		draw_set_color(tb.colors.output)
+		draw_set_color(o_console.colors.output)
 		draw_text(name_text_x, name_text_y, name)
 	}
 	
