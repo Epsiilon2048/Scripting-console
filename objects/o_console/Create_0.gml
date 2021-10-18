@@ -23,6 +23,9 @@ for(var i = 0; i <= array_length(list)-1; i++){
 
 element_dragging = noone
 
+a = {a: 1, b: 12}
+b = {a: 2, b: 55}
+
 e = {}
 
 update_steps = 10
@@ -232,8 +235,6 @@ identifiers = {
 #macro exceptionBotchedReal "Botched real"
 #macro exceptionBotchedVariable "Botched variable"
 #macro exceptionBotchedColor "Botched color"
-
-#macro vk_tilde 192
 
 #macro gui_mx device_mouse_x_to_gui(0)
 #macro gui_my device_mouse_y_to_gui(0)
@@ -754,14 +755,15 @@ tb_editor = new_console_dock("Advanced text box editor",[
 tb_editor.association = ctb
 
 
-add_console_element(ctb)
-add_console_element(tb_editor)
-add_console_element(object_editor)
-add_console_element(cs_editor)
-add_console_element(element_adjusting)
+//add_console_element(ctb)
+//add_console_element(tb_editor)
+//add_console_element(object_editor)
+//add_console_element(cs_editor)
+//add_console_element(element_adjusting)
 //add_console_element(bar_dock)
 add_console_element(BAR)
 add_console_element(OUTPUT)
 add_console_element(DISPLAY)
-add_console_element(color_thing)
+//add_console_element(color_thing)
+DISPLAY.enabled = false
 BAR.enabled = false

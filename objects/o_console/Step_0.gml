@@ -25,5 +25,4 @@ else if not bird_mode and colors.sprite == bird_mode_
 }
 #endregion
 
-
 event_commands_exec(event_commands.step)

@@ -2,7 +2,9 @@
 #macro vk_rcommand 91
 #macro vk_lcommand 92
 global.super_key = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
+global.tilde_key = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 #macro vk_super global.super_key
+#macro vk_tilde global.tilde_key
 
 function initialize_console_macros(){
 

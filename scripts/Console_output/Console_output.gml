@@ -1,6 +1,9 @@
 
 function console_output_inputs(){ with o_console {
-	
+
+OUTPUT.dock.enabled = o_console.BAR.enabled
+
+
 var ot = OUTPUT
 	
 if ot.docked and not ot.run_in_dock return undefined
