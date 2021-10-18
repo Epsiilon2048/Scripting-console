@@ -23,9 +23,6 @@ for(var i = 0; i <= array_length(list)-1; i++){
 
 element_dragging = noone
 
-a = {a: 1, b: 12}
-b = {a: 2, b: 55}
-
 e = {}
 
 update_steps = 10
@@ -393,7 +390,7 @@ tb = ""
 sc = 0
 
 
-
+/*
 var element_adjusting = new_console_dock("Element adjusting", [
 	new_console_dock("Dock", [
 		[new_scrubber("Outline", "con.DOCK.name_outline_width", .1)],
@@ -424,7 +421,7 @@ var element_adjusting = new_console_dock("Element adjusting", [
 	new_cd_button("Reset all", initialize_console_graphics)
 ])
 
-
+*/
 var bar_dock = new Console_dock() with bar_dock
 {
 	initialize()
@@ -435,7 +432,7 @@ var bar_dock = new Console_dock() with bar_dock
 	])
 }
 bar_dock.enabled = false
-
+/*
 
 
 var id_box = new_display_box("id", "id", false)
@@ -534,7 +531,7 @@ object_editor = new_console_dock("cool_thing", [
 ])
 object_editor.association = cool_thing
 object_editor.hide_all()
-
+*/
 
 
 var var_name_text_box = new_text_box("Name", "__variable_add_name__")
@@ -646,7 +643,7 @@ DISPLAY = new_console_dock("Display",[
 ])
 DISPLAY.allow_element_dragging = true
 DISPLAY.hide_all()
-
+/*
 var bm_box = new_text_box("blendmode", "body_bm")
 with bm_box
 {
@@ -753,7 +750,7 @@ tb_editor = new_console_dock("Advanced text box editor",[
 	]),
 ])
 tb_editor.association = ctb
-
+*/
 
 //add_console_element(ctb)
 //add_console_element(tb_editor)
