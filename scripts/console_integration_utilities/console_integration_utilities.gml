@@ -27,6 +27,8 @@ function input_set(str, add){ with o_console
 
 function output_set(output){ with o_console.OUTPUT {
 
+if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
+
 if instanceof(output) == "element_container"
 {
 	o_console.O1 = output
@@ -36,7 +38,7 @@ else
 {
 	dock.association = dock
 	o_console.O1 = output
-	
+		
 	if is_array(output)
 	{
 		var text = "["
@@ -55,14 +57,14 @@ else
 		var names = variable_struct_get_names(output)
 		for(var i = 0; i <= array_length(names)-1; i++)
 		{
-			if is_array(names[i]) names[i] = [names[i]+":", "[array]"]
-			else if is_struct(names[i]) names[i] = [names[i]+":","{"+instanceof(names[i])+"}"]
-			else names[i] = [names[i]+":", new_cd_var(names[i])]
+			if is_array(output[$ names[i]]) names[i] = [names[i]+":", "[array]"]
+			else if is_struct(output[$ names[i]]) names[i] = [names[i]+":","{"+instanceof(output[$ names[i]])+"}"]
+			else names[i] = [names[i]+":", new_display_box(undefined, names[i], false)]
 		}
 		array_insert(names, 0, "{")
 		array_push(names, "}")
 
-		dock.association = output
+		dock.association = output		
 		dock.set(names)
 	}
 	else

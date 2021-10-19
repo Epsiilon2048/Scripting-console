@@ -10,7 +10,6 @@ ds_list_destroy(suggestions)
 ds_list_destroy(lite_suggestions)
 ds_list_destroy(method_list)
 ds_list_destroy(asset_list)
-ds_list_destroy(draw_order)
 ds_list_destroy(elements)
 
 ds_map_destroy(ds_types)

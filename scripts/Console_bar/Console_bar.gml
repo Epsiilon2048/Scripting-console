@@ -94,6 +94,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 		BAR.text_box.char_pos1 = string_length(console_string)
 		BAR.text_box.char_pos2 = BAR.text_box.char_pos1
 		BAR.text_box.char_pos_selection = false
+		BAR.text_box.update_variable()
 	}
 	
 	#region Parse command
@@ -120,6 +121,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 		BAR.text_box.blink_step = 0
 		keyboard_string = ""
 		console_string = ""
+		BAR.text_box.update_variable()
 	}
 	#endregion
 }
@@ -201,8 +203,6 @@ var asp = ch/BAR.char_height
 var _text_dist		= ceil(BAR.text_dist*asp)
 var _sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
 
-var sidetext_width = string_length(BAR.sidetext_string)*cw
-
 var draw_dock_body
 if BAR.docked
 {
@@ -215,7 +215,7 @@ if BAR.docked
 }
 else draw_dock_body = draw_console_body
 
-draw_dock_body(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, false)	// Draw bar
+draw_dock_body(BAR.left, BAR.top, BAR.bar_right, BAR.bottom, false)				// Draw bar
 draw_dock_body(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, false)		// Draw sidetext bar
 
 if BAR.docked
@@ -227,8 +227,68 @@ if BAR.docked
 	draw_hollowrect(BAR.sidetext_left, BAR.top, BAR.right, BAR.bottom, _outline_width)
 }
 
-draw_set_color(colors.output)
-draw_rectangle(BAR.left-_sidebar_width, BAR.top, BAR.left, BAR.bottom, false)					// Draw sidebar
+
+var length = BAR.bottom - BAR.top+1
+
+if keyboard_check_pressed(vk_space)
+{
+	BAR.sidebar_circle = not BAR.sidebar_circle
+}
+
+draw_set_color(o_console.colors.output)
+
+var cx = BAR.left+_sidebar_width/2-2
+var cy = BAR.top + length/2-1
+
+/*
+if BAR.sidebar_circle and BAR.sidebar_animation != 1
+{
+	var width = max(3, length*BAR.sidebar_animation)
+	var height = length-max(0, width-length)*BAR.sidebar_height_dampner
+	
+	draw_ellipse(cx-width/2, cy-height/2, cx+width/2, cy+height/2, false)
+	if BAR.sidebar_overshot 
+	{
+		BAR.sidebar_animation = lerp(BAR.sidebar_animation, 1, BAR.sidebar_overshoot_lerp)
+		
+		if BAR.sidebar_animation-1 < .001
+		{
+			BAR.sidebar_overshot = false
+			BAR.sidebar_animation = 1
+		}
+	}
+	else
+	{
+		BAR.sidebar_animation = lerp(BAR.sidebar_animation, 1+BAR.sidebar_overshoot_mult, BAR.sidebar_lerp)
+		
+		if ((1+BAR.sidebar_overshoot_mult)-BAR.sidebar_animation) < .001
+		{
+			BAR.sidebar_overshot = true
+			BAR.sidebar_animation = 1+BAR.sidebar_overshoot_mult
+		}
+	}
+	
+}
+else if not BAR.sidebar_circle and BAR.sidebar_animation != 0
+{
+	var width = max(2, length*BAR.sidebar_animation)
+	draw_roundrect_ext(cx-width/2, BAR.top, cx+width/2, BAR.bottom, width, width, false)
+	BAR.sidebar_animation = lerp(BAR.sidebar_animation, 0, BAR.sidebar_lerp)
+	
+	if width == _sidebar_width BAR.sidebar_animation = 0
+}
+else if BAR.sidebar_animation > 0
+{
+	draw_circle(cx, cy, length/2, false)
+}
+
+if not BAR.sidebar_circle and BAR.sidebar_animation == 0
+*/
+{
+	draw_rectangle(BAR.left, BAR.top, BAR.left+_sidebar_width, BAR.bottom, false)
+}
+
+
 
 BAR.text_box.draw()
 

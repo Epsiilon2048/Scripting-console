@@ -35,7 +35,7 @@ else
 		macro_type = macro.type
 		
 		if macro.type == dt_string	_arg = "\""+string(macro.value)+"\""
-		else if is_numeric(macro)	_arg = string_format_float(macro.value)
+		else if is_numeric(macro)	_arg = string_format_float(macro.value, undefined)
 		else						_arg = string(macro.value)
 		
 		arg_first = string_char_at(_arg, 1)
@@ -199,7 +199,7 @@ else
 		}
 		else
 		{
-			error = variable_string_exists_error(_arg)
+			error = variable_string_info(_arg).error
 			if is_undefined(error)
 			{
 				type = dt_variable
@@ -213,6 +213,7 @@ return {
 	value: value, 
 	type: type,
 	plain: string(arg),
+	iden: iden_type,
 	error: error
 }
 }}

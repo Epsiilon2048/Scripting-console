@@ -3,14 +3,17 @@ function initialize_console_graphics(scale){ with o_console {
 
 if is_undefined(scale)
 {
-	var display_w = display_get_width()
+	var display_width = display_get_width()/display_get_dpi_x()
 	
-	scale = 2 + (display_w >= 1920) + (display_w >= 2560) + (display_w >= 3840)
+	scale = 2 + (display_width >= 14) + (display_width >= 23) + (display_width >= 28) + (display_width >= 31)
 	show_debug_message("Console IDE automatically scaled to "+string(scale)+" based on display size")
-	// Below 1080p	2x
-	// 1080p		3x
-	// 2k			4x
-	// 4k and above	5x
+	
+	// Scales based on display size:
+	// 14in		2x
+	// 23in		3x
+	// 28in		4x
+	// 31in		5x
+	// Above	6x
 }
 
 self.scale(scale)
@@ -40,6 +43,8 @@ with DOCK {
 	dropdown_wdist = 8
 	
 	dragging_radius = 30
+
+	
 }
 
 with TEXT_BOX {
@@ -66,6 +71,8 @@ with TEXT_BOX {
 	update_id = 0
 
 	word_sep = " .,\"()[]/"
+	
+	
 }
 
 with SCROLLBAR {
@@ -77,6 +84,8 @@ with SCROLLBAR {
 	bar_width_condensed = 20
 	
 	mouse_offset = 0
+	
+	
 }
 
 with BAR {
@@ -108,15 +117,25 @@ with BAR {
 	text_dist = 18
 	sidebar_width = 3
 	
+	sidebar_circle = false
+	sidebar_animation = 0
+	sidebar_lerp = .48
+	sidebar_overshoot_mult = .13
+	sidebar_overshot = false
+	sidebar_overshoot_lerp = sidebar_lerp*.7
+	sidebar_height_dampner = .6
+	sidebar_surface = -1
+	
 	mouse_on = false
 	
 	text_box = new Console_text_box() with text_box
 	{
 		initialize()
 		variable = "o_console.console_string"
-		show_name = false
+		draw_name = false
 		att.draw_box = false
-		att.color_method = gmcl_string_color
+		color_method = gmcl_string_color
+		autofill_method = gmcl_autofill_old
 		att.exit_with_enter = false
 		att.set_variable_on_input = true
 		att.allow_scoped_exinput = true
@@ -124,23 +143,8 @@ with BAR {
 	
 	get_input = console_bar_inputs
 	draw = draw_console_bar
-}
-
-with WINDOW {
 	
-	char_height = 17
 	
-	width = 600
-	height = 500
-	
-	sidebar_min = 2
-	sidebar_max = 3
-	sidebar_lerp = .35
-
-	mouse_border = 14
-	
-	border_w = 20
-	border_h = 10
 }
 
 with OUTPUT {
@@ -154,6 +158,7 @@ with OUTPUT {
 	dock.initialize()
 	dock.set(text)
 	dock.name = "Console output"
+	dock.draw_name_bar = false
 
 	fade_time = 6 //seconds
 	fade_step = 0
@@ -166,9 +171,16 @@ with OUTPUT {
 	
 	get_input = console_output_inputs
 	draw = draw_console_output
+	
+	
 }
 
 with AUTOFILL {
+	
+	x = 0
+	y = 0
+	
+	show = false
 	
 	char_height = 17
 	
@@ -197,14 +209,21 @@ with AUTOFILL {
 	
 	mouse_on = false
 	
-	mouse_border = 6
-	mouse_dragging_top = false
+	
+	
+	mouse_border = 10
+	mouse_dragging_top	 = false
 	mouse_dragging_right = false
+	scrollbar = {width: 0}
 }
 
 with CHECKBOX {
 	
-	width = 17
+	char_height = 23
+	width = 16
+	
+	mouse_on_saturation_add = -133
+	mouse_on_value_add = 11
 }
 
 
@@ -244,64 +263,45 @@ with SEPARATOR {
 
 with COLOR_PICKER {
 	
-	size = 100
-	
-	x = 0
-	y = 0
+	char_height = 23
 	
 	mouse_on = false
 	
 	variable = ""
 	
-	sv_square = generate_satval_square()
-	h_strip	  = generate_hue_strip()
+	svsquare = generate_satval_square()
+	hstrip = generate_hue_strip()
 	
-	border_width = 1
-	border_alpha = 0.2
+	outline = 1.7
 	
-	sv_square_dropper_radius = 11
+	dist = 9
+	sep = 9
 	
-	h_strip_width	   = 50
-	h_strip_dist	   = 20
-	h_strip_bar_height = 18
+	svsquare_length = 140
+	dropper_length = 10
+	hpicker_height = 15
 	
-	color_bar_dist	 = 20
-	color_bar_height = 53
+	hstrip_width = 26
 	
-	hue = 0
-	sat = 255
-	val = 255
+	colorbar_height = 29
 	
-	r = 255
-	g = 255
-	b = 255
+	color_picker_dock_size = 1.24
 	
-	hex = rgb_to_hex(r, g, b)
+	var_att = new_text_box("", "").att
+	hsv_att = new_scrubber("", "", 1).att
+	rgb_att = new_scrubber("", "", 1).att
+	hex_att = new_text_box("", "").att
+	gml_att = new_text_box("", "").att
 	
-	color = make_color_hsv(hue, sat, val)
+	with var_att
+	{
+		length_min = 22
+		set_variable_on_input = false
+		allow_scoped_exinput = false
+		scoped_color = dt_variable
+	}
 	
-	hsv_255 = false
-	
-	hue_text_box = new_scrubber("Hue", "o_console.COLOR_PICKER.hue", 1)
-	hue_text_box.show_name = false
-	sat_text_box = new_scrubber("Sat", "o_console.COLOR_PICKER.sat", 1)
-	sat_text_box.show_name = false
-	val_text_box = new_scrubber("Val", "o_console.COLOR_PICKER.val", 1)
-	val_text_box.show_name = false
-	
-	r_text_box = new_scrubber("Red", "o_console.COLOR_PICKER.r", 1)
-	r_text_box.show_name = false
-	g_text_box = new_scrubber("Green", "o_console.COLOR_PICKER.g", 1)
-	g_text_box.show_name = false
-	b_text_box = new_scrubber("Blue", "o_console.COLOR_PICKER.b", 1)
-	b_text_box.show_name = false
-	
-	hex_text_box = new_text_box("Hex", "o_console.COLOR_PICKER.hex")
-	hex_text_box.show_name = false
-	gml_text_box = new_text_box("GML", "o_console.COLOR_PICKER.color")
-	gml_text_box.show_name = false
-	
-	with hex_text_box.att
+	with hex_att
 	{
 		draw_box = false
 		
@@ -311,62 +311,45 @@ with COLOR_PICKER {
 		length_min = 6
 		length_max = 6
 		lock_text_length = true
-		
-		//text_color = "real"
-		
-		char_filter = function(char){
-			
-			static hex_chars = "0123456789ABCDEF"
-			char = string_upper(char)
-			var new_char = ""
-			
-			for(var i = 1; i <= string_length(char); i++)
-			{
-				var _char = string_char_at(char, i)
-				
-				if string_pos(_char, hex_chars) new_char += _char
-			}
-			
-			return new_char
-		}
 	}
 	
-	with gml_text_box.att
+	with gml_att
 	{
 		draw_box = false
 		allow_alpha = false
 		set_variable_on_input = true
 		update_when_is_front = true
+		select_all_on_click = true
 		
 		allow_float = false
 		
-		length_min = 6
-		length_max = 15
+		length_min = 8
+		length_max = 8
 		lock_text_length = true
-		value_conversion = real
 	}
 	
-	with hue_text_box.att
+	with hsv_att
 	{
 		draw_box = false
 		update_when_is_front = true
 		
-		length_min = 3
+		length_min = 5
 		length_max = 5
-		allow_float = false
+		allow_float = true
+		float_places = 1
 		lock_text_length = true
 		
 		value_min = 0
 		value_max = 255
 	}
 	
-	with r_text_box.att
+	with rgb_att
 	{
 		draw_box = false
 		update_when_is_front = true
 	
-		length_min = 3
-		length_max = 3
+		length_min = 5
+		length_max = 5
 		lock_text_length = true
 		
 		allow_float = false
@@ -375,72 +358,83 @@ with COLOR_PICKER {
 		value_max = 255
 	}
 	
-	sat_text_box.att = hue_text_box.att
-	val_text_box.att = hue_text_box.att
-	g_text_box.att = r_text_box.att
-	b_text_box.att = r_text_box.att
-	
-	var toggle_hsv_255 = function(){
-		
-		hsv_255 = not hsv_255
-		hsv_255_button.set_name(hsv_255 ? "255" : "100")
-	}
-	
-	hsv_255_button = new Cd_button() with hsv_255_button
-	{
-		initialize(other.hsv_255 ? "255" : "100", noscript)
-		pressed_script = toggle_hsv_255
-		draw_box = false
-	}
-	
-	dock = new_console_dock("Color picker", [
-		["RGB", r_text_box, g_text_box, b_text_box],
-		["HSV", hue_text_box, sat_text_box, val_text_box, "/", hsv_255_button,],
-		["Hex", hex_text_box, "GML", gml_text_box],
-	])
+	ignore_input = true
+
+	global_color_picker = new Console_color_picker()
+	global_color_picker.initialize()
+	global_color_picker.enabled = false
 	
 	get_input = function(){
 		
-		color = o_bg.color
-		
-		r = color_get_red(color)
-		g = color_get_green(color)
-		b = color_get_blue(color)
-		
-		if not (hue_text_box.scoped or sat_text_box.scoped or val_text_box.scoped)
+		global_color_picker.get_input()
+		if global_color_picker.enabled and not ignore_input and (keyboard_check_pressed(vk_enter) or keyboard_check_pressed(vk_escape) or (not global_color_picker.mouse_on and mouse_check_button_pressed(mb_any)))
 		{
-			val = color_get_value(color)
-			if not hsv_255 val /= 2.55
-			
-			if color_get_hue(color) 
-			{
-				hue = color_get_hue(color)
-				if not hsv_255 hue /= 2.55
-			}
-			
-			if val 
-			{
-				sat = color_get_saturation(color)
-				if not hsv_255 sat /= 2.55
-			}
+			global_color_picker.enabled = false
 		}
 		
-		var old_rgb = r+g+b
-		var old_hsv = hue+sat+val
-		var old_hex = hex
-		hue_text_box.att.value_max = hsv_255 ? 255 : 100
-		dock.get_input()
-		
-		if old_rgb != r+g+b			color = make_color_rgb(r, g, b)
-		if old_hsv != hue+sat+val	color = hsv_255 ? make_color_hsv(hue, sat, val) : make_color_hsv(hue*2.55, sat*2.55, val*2.55)
-		if old_hex != hex			color = hex_to_color(hex)
-		
-		o_bg.color = color
+		ignore_input = false
 	}
-	
 	
 	draw = function(){
-		dock.draw()
+		if not ignore_input global_color_picker.draw()
 	}
+}
+
+
+with CTX_MENU
+{
+	char_height = 23
+	
+	enabled = false
+	
+	wdist = 10
+	hdist = 0
+	
+	sep = 10
+	
+	x = 0
+	y = 0
+	
+	left = 0
+	top = 0
+	right = 0
+	bottom = 0
+	
+	prev_right = 0
+	
+	mouse_on = false
+	clicking = false
+	
+	init = false
+	
+	element_mouse_on = -1
+	element_clicking = -1
+	
+	moe_y1 = 0  // Mouse On Element
+	moe_y2 = 0
+	mce_y1 = 0  // Mouse Clicking Element
+	mce_y2 = 0
+	
+	mouse_on_alpha = .05
+	clicking_alpha = .1
+	
+	elements = []
+}
+
+
+with MEASURER {
+	
+	enabled = false
+	
+	setting = 1
+	
+	x1 = 0
+	y1 = 0
+	x2 = undefined
+	y2 = undefined
+	
+	length = 0
+	width = 0
+	height = 0
 }
 }}

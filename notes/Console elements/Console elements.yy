@@ -1,7 +1,7 @@
 {
   "parent": {
-    "name": "Scripting-console",
-    "path": "Scripting-console.yyp",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.1",
   "name": "Console elements",

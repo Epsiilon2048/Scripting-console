@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Unsorted",
-    "path": "folders/Console/Unsorted.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "gmcl_interpret_subject_old",
+  "name": "datatype_string",
   "tags": [],
   "resourceType": "GMScript",
 }

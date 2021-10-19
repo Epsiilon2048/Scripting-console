@@ -1,7 +1,7 @@
 
 function help(){
 
-return new_embedded_text([
+return format_output([
 	"Help & info\n",
 	{str: "Command list\n", scr: command_help, output: true},
 	{str: "GMCL syntax\n", scr: syntax_help, output: true},
@@ -18,7 +18,7 @@ return new_embedded_text([
 	{str: "Credits\n\n", scr: Epsiilon, output: true},
 	
 	{str: "Help menu", col: "embed_hover"}
-], true, help)
+], true)
 }
 
 
@@ -92,7 +92,7 @@ else
 	)
 }
 
-return new element_container([new_embedded_text(text)])//format_output(text, true, command_help, "Command list")
+return format_output(text, true, command_help, "Command list")
 }}
 
 

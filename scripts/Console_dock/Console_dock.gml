@@ -67,6 +67,8 @@ initialize = function(){
 	
 	enabled = true
 	
+	push_from_bottom = false
+	
 	name = ""
 	association = self
 	
@@ -78,6 +80,8 @@ initialize = function(){
 	right = 0
 	bottom = 0
 	
+	right_previous = 0
+	
 	width = undefined
 	height = undefined
 	
@@ -87,16 +91,21 @@ initialize = function(){
 	mouse_on_bar = false
 	mouse_on_dropdown = false
 	
+	was_clicking_on_console = false
+	element_active = false
+	
 	show = true
 	show_next = false
 	
-	show_name = true
+	draw_name = true
+	draw_name_bar = true
+	draw_outline = true
 	
 	dragging = false
 	mouse_xoffset = 0
 	mouse_yoffset = 0
 	
-	allow_element_dragging = true
+	allow_element_dragging = false
 	
 	is_front = false
 	
@@ -104,6 +113,7 @@ initialize = function(){
 	e = {}
 	afterscript = ds_list_create()
 }
+
 
 
 update_elements = function(y){
@@ -119,9 +129,10 @@ update_elements = function(y){
 }
 
 
+
 set_element = function(x, y, element){
 	
-	if not is_struct(element) element = new_cd_text(element, "output")
+	if not is_struct(element) element = new_cd_text(string(element), "output")
 
 	if is_undefined(x) elements[y] = element
 	else
@@ -141,6 +152,7 @@ set_element = function(x, y, element){
 }
 
 
+
 remove_element = function(element){
 	
 	var xx = element.dock_element_x
@@ -156,11 +168,13 @@ remove_element = function(element){
 }
 
 
+
 destroy_element = function(element){
 	
 	remove_element(element)
 	if variable_struct_exists(element, "destroy") element.destroy()
 }
+
 
 
 insert_horizontal = function(x, y, element){
@@ -175,6 +189,7 @@ insert_horizontal = function(x, y, element){
 }
 
 
+
 insert_vertical = function(y, element){
 	
 	y = max(y, array_length(elements))
@@ -183,6 +198,7 @@ insert_vertical = function(y, element){
 	set_element(0, y, element)
 	update_elements(y+1)
 }
+
 
 
 set = function(elements){
@@ -208,6 +224,154 @@ set = function(elements){
 }
 
 
+
+show_all = function(showing){
+	
+	if is_undefined(showing) showing = true
+	
+	for(var i = 0; i <= array_length(elements)-1; i++)
+	for(var j = 0; j <= array_length(elements[i])-1; j++)
+	{
+		var el = elements[@ i, j]
+		
+		if instanceof(el) == "Console_dock" el.show = showing
+	}
+}
+
+
+
+hide_all = function(){
+	
+	show_all(false)
+}
+
+
+
+get_printout = function(){
+	
+	var printout = ""
+	
+	for(var i = 0; i <= array_length(elements)-1; i++)
+	for(var j = 0; j <= array_length(elements[i])-1; j++)
+	{
+		var el = elements[@ i, j]
+		if variable_struct_exists(el, "get_printout")
+		{
+			var print = el.get_printout()
+			if not is_undefined(print) printout += string(print)+"\n"
+		}
+	}
+	
+	return (docked ? "\n" : "") + printout
+}
+
+
+
+after_dock = function(){ 
+	if docked is_front = dock.is_front
+
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
+	
+	var dc = o_console.DOCK
+	
+	var ch =  string_height(" ")
+	var asp = ch/dc.char_height
+	
+	var _outline_width = round(dc.name_outline_width*asp)
+	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
+	var _element_wdist = round(dc.element_wdist*asp)
+	var _element_wsep = round(dc.element_wsep*asp)
+		
+	draw_set_font(old_font)
+
+	if not is_undefined(width) 
+	{
+		right = max(right, left+width)
+	}
+	else if not dragging and docked and dock_element_x == array_length(dock.elements[dock_element_y])-1 
+	{
+		right = (dock.left+dock._width)-_element_wdist
+	}
+	
+	if not is_undefined(height) bottom = max(top, top+height)
+	
+	mouse_on = not was_clicking_on_console and gui_mouse_between(left, top, right, bottom)
+	mouse_on_bar = mouse_on and draw_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
+	
+	get_dropdown_input()
+	
+	//if not mouse_on_dropdown and not clicking_on_console and mouse_check_button_pressed(mb_left) and mouse_on_bar
+	//{
+	//	dragging = true
+	//	mouse_xoffset = gui_mx-x
+	//	mouse_yoffset = gui_my-y
+	//	
+	//	o_console.element_dragging = self
+	//}
+	
+	if not docked
+	{
+		if dragging or element_active or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
+		{
+			is_front = true
+		}
+		else if clicking_on_console or (mouse_check_button_pressed(mb_any) and not mouse_on_dropdown)
+		{
+			is_front = false
+		}
+	}
+	
+	if dragging or show_next or (mouse_on and mouse_check_button_pressed(mb_any)) clicking_on_console = true
+	if mouse_on mouse_on_console = true 
+	
+	right_previous = right
+	
+	for(var i = 0; i <= ds_list_size(afterscript)-1; i++)
+	{
+		afterscript[| i].after_dock()
+	}
+}
+
+
+
+get_dropdown_input = function(){
+	
+	var dc = o_console.DOCK
+	
+	var old_font = draw_get_font()
+	draw_set_font(o_console.font)
+	
+	var ch = string_height(" ")
+	var asp = ch/dc.char_height
+
+	var _outline_width = round(dc.name_outline_width*asp)
+	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
+	var _dropdown_base = round(dc.dropdown_base*asp)
+	var _dropdown_wdist = round(dc.dropdown_wdist*asp)+_outline_width
+	
+	var bar_height = ch + _name_hdist*2
+	
+	var dropdown_x1 = right-_dropdown_wdist*2-_dropdown_base
+	var dropdown_y1 = top
+	var dropdown_x2 = right
+	var dropdown_y2 = top+bar_height
+
+	mouse_on_dropdown = (not mouse_on_console or mouse_on) and gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
+	
+	if mouse_on_dropdown
+	{
+		mouse_on_console = true
+		if mouse_check_button_pressed(mb_left)
+		{
+			show_next = true
+		}
+	}
+	draw_set_font(old_font)
+}
+
+
+
 get_input = function(){
 
 	if not enabled 
@@ -216,6 +380,8 @@ get_input = function(){
 		top = y
 		right = x
 		bottom = y
+		
+		right_previous = x
 		
 		dragging = false
 		
@@ -242,10 +408,8 @@ get_input = function(){
 	var _dropdown_wdist = round(dc.dropdown_wdist*asp)+_outline_width
 	var _dragging_radius = round(dc.dragging_radius*asp)
 	
-	var bar_height = ch + _name_hdist*2
-	
-	var element_active = false
-	var was_clicking_on_console = clicking_on_console
+	element_active = false
+	was_clicking_on_console = clicking_on_console
 	
 	if docked association = dock.association
 	
@@ -275,7 +439,7 @@ get_input = function(){
 	top = y
 	right = left
 	bottom = top
-	if show_name bottom += ch + _name_hdist*2
+	if draw_name bottom += ch + _name_hdist*2
 
 	var dragging_radius_met = true
 
@@ -287,6 +451,7 @@ get_input = function(){
 		
 		if not el.dragging and not mouse_on
 		{
+			if variable_struct_exists(el, "undock") el.undock()
 			remove_element(el)
 			is_front = false
 			el.dock = undefined
@@ -301,7 +466,7 @@ get_input = function(){
 	}
 	else
 	{		
-		if show_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
+		if draw_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
 		bottom += _element_hdist
 		
 		var xx = left + _element_wdist
@@ -406,32 +571,6 @@ get_input = function(){
 		_width = right-left
 	}
 	
-	if not is_undefined(width) right = max(right, left+width)
-	if not is_undefined(height) bottom = max(top, top+height)
-	
-	mouse_on = not was_clicking_on_console and gui_mouse_between(left, top, right, bottom)
-	mouse_on_bar = mouse_on and show_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
-	
-	if mouse_on_bar
-	{
-		var dropdown_x1 = right-_dropdown_wdist*2-_dropdown_base
-		var dropdown_y1 = top
-		var dropdown_x2 = right
-		var dropdown_y2 = top+bar_height
-		
-		mouse_on_dropdown = gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
-	}
-	else mouse_on_dropdown = false
-	
-	if mouse_on_dropdown
-	{
-		mouse_on_console = true
-		if mouse_check_button_pressed(mb_left)
-		{
-			show_next = true
-		}
-	}
-	
 	if not mouse_on_dropdown and not clicking_on_console and mouse_check_button_pressed(mb_left) and mouse_on_bar
 	{
 		dragging = true
@@ -441,33 +580,11 @@ get_input = function(){
 		o_console.element_dragging = self
 	}
 	
-	if not docked
-	{
-		if dragging or element_active or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
-		{
-			is_front = true
-		}
-		else if clicking_on_console or (mouse_check_button_pressed(mb_any) and not mouse_on_dropdown)
-		{
-			is_front = false
-		}
-	}
-	
-	if dragging or show_next or (mouse_on and mouse_check_button_pressed(mb_any)) clicking_on_console = true
-	if mouse_on mouse_on_console = true 
-	
-	for(var i = 0; i <= ds_list_size(afterscript)-1; i++)
-	{
-		afterscript[| i].after_dock()
-	}
+	if not docked after_dock()
 	
 	draw_set_font(old_font)
 }
 
-
-after_dock = function(){
-	is_front = dock.is_front
-}
 
 
 draw = function(){
@@ -484,7 +601,6 @@ draw = function(){
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
-	var cw = string_width(" ")
 	var ch = string_height(" ")
 	var asp = ch/dc.char_height
 	
@@ -499,13 +615,14 @@ draw = function(){
 
 	if docked and not dragging
 	{
-		if is_front and show_name
+		if is_front and draw_name and draw_name_bar
 		{
 			draw_set_color(o_console.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
 		}
+		
 		draw_set_color(o_console.colors.body_accent)
-		draw_hollowrect(left, top, right, bottom, _outline_width)
+		if draw_outline draw_hollowrect(left, top, right, bottom, _outline_width)
 		
 		if is_front draw_set_color(o_console.colors.output)
 	}
@@ -513,19 +630,19 @@ draw = function(){
 	{
 		draw_console_body(left, top, right, bottom)
 		
-		if show_name
+		if draw_name and draw_name_bar
 		{
 			draw_set_color(o_console.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
 			draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
 		}
 	}
-	if show_name 
+	if draw_name 
 	{
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(o_console.colors.body_accent)
-		draw_hollowrect(left, top, right, top + bar_height, _outline_width)
+		if draw_name_bar draw_hollowrect(left, top, right, top + bar_height, _outline_width)
 
 		if show
 		{
@@ -546,7 +663,6 @@ draw = function(){
 			var dropdown_y3 = dropdown_y2-_dropdown_base/2
 		}
 	
-		draw_set_color(o_console.colors.body_accent)
 		draw_triangle(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2, dropdown_x3, dropdown_y3, false)
 	}
 	
@@ -557,13 +673,11 @@ draw = function(){
 	
 	if show for(var i = 0; i <= array_length(elements)-1; i++) for(var j = 0; j <= array_length(elements[i])-1; j++)
 	{	
-		var el = elements[@ i, j]
-					
-		if not el.dragging
+		with elements[@ i, j] if not dragging
 		{
-			el.run_in_dock = true
-			el.draw()
-			el.run_in_dock = false
+			run_in_dock = true
+			draw()
+			run_in_dock = false
 		}
 	}
 	
@@ -572,6 +686,7 @@ draw = function(){
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
 }
+
 
 
 clear = function(){
@@ -584,6 +699,8 @@ clear = function(){
 	elements = []
 	e = {}
 }
+
+
 
 destroy = function(){
 	

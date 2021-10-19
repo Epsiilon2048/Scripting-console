@@ -2,7 +2,9 @@
 #macro vk_rcommand 91
 #macro vk_lcommand 92
 global.super_key = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
+global.tilde_key = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 #macro vk_super global.super_key
+#macro vk_tilde global.tilde_key
 
 function initialize_console_macros(){
 
@@ -56,13 +58,7 @@ console_macro_add("cs_humanrights",		dt_string, cs_humanrights)
 console_macro_add("cs_rainbowsoup",		dt_string, cs_rainbowsoup)
 console_macro_add("cs_royal",			dt_string, cs_royal)
 console_macro_add("cs_sublimate",		dt_string, cs_sublimate)
-#endregion
-
-#region Value box types					
-console_macro_add("vb_bool",			dt_string, vb_bool)
-console_macro_add("vb_color",			dt_string, vb_color)
-console_macro_add("vb_scrubber",		dt_string, vb_scrubber)
-console_macro_add("vb_static",			dt_string, vb_static)
+console_macro_add("cs_gms2",			dt_string, cs_gms2)
 #endregion
 
 #region Boolean

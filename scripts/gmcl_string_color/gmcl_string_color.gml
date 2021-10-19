@@ -337,7 +337,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						possible_accessors = get_possible_accessors(value)
 					}
 				}
-			}
+			} 
 				
 			if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
 			if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col, _hl, _ol)
@@ -352,7 +352,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			{
 				if _char_pos <= i 
 				{
-					subject_interpret = gmcl_interpret_subject( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment), undefined ).description
+					subject_interpret = gmcl_interpret_subject( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment) ).description
 				}
 					
 				subject = false

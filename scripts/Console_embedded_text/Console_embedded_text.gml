@@ -12,11 +12,11 @@ return e
 function Embedded_text() constructor{
 set = function(text){
 
-	if not variable_struct_exists(self, "formatted_for_dock") 
-	{
-		format_for_dock(undefined)
-		dock_valign = fa_top
-	}
+	//if not variable_struct_exists(self, "formatted_for_dock") 
+	//{
+	//	format_for_dock(undefined)
+	dock_valign = fa_top
+	//}
 
 	static _colors_list			= ds_list_create()
 	static _clickable_list		= ds_list_create()

@@ -1,4 +1,4 @@
-function gmcl_get_argument(command, pos){ with o_console {
+function gmcl_get_argument_old(command, pos){ with o_console {
 
 static sep = " ;,=()[]:@#$?|"
 

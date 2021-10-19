@@ -122,9 +122,9 @@ colors.ex_output		= ex_output
 colors.embed			= embed
 colors.embed_hover		= embed_hover
 colors.plain			= plaintext
-colors.selection		= body
+colors.selection		= body // Not being used
 
-colors.outline_layers	= 0
+colors.outline_layers	= 0 // (mostly) not being used
 
 colors.sprite			= -1
 colors.sprite_anchor	= false
@@ -133,6 +133,12 @@ colors.sprite_alpha		= 1
 colors.bevel			= true
 
 colors.body_real_alpha	= .1
+
+colors.black			= c_black
+colors.white			= c_white
+colors.red				= c_red
+colors.green			= c_green
+colors.blue				= c_blue
 
 colors[$ dt_real]		= real
 colors[$ dt_string]		= string

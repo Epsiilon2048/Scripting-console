@@ -8,7 +8,6 @@ REAL (base16)	Return base10 of
 STRING			Return
 METHOD			Run method with args
 OBJECT			Set console scope to asset index
-ROOM			Change to room
 ASSET			Return asset index
 UNDEFINED		Throw error
 */
@@ -29,7 +28,7 @@ static method_exec = function(ind, args){
 		}
 				
 		if is_undefined(output)		return ""
-		else if is_numeric(output)	return string_format_float(output)
+		else if is_numeric(output)	return string_format_float(output, undefined)
 		else						return output
 	}
 	catch(_exception)
@@ -67,7 +66,6 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	else
 	{
 		if not is_undefined(com[i].error) output_string[i] = com[i].error
-
 		else
 		{
 			var args = array_struct_get(com[i].args, "value")
@@ -76,9 +74,12 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			for(var j = 0; j <= array_length(com[i].variables)-1; j++)
 			{
 				var varstring = args[com[i].variables[j]]
-				var value = variable_string_exists_error(varstring)
 				
-				with o_console.object if value.exists
+				run_in_console = true
+				var value = variable_string_info(varstring)
+				run_in_console = false
+				
+				if is_struct(value) and value.exists
 				{
 					args[com[i].variables[j]] = value.value
 				}
@@ -153,13 +154,10 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				else
 				{
 					var _value = args[i]
-				
+					
 					variable_string_set(subject.value, _value)
-			
-					var string_value
-					if is_numeric(_value) string_value = string_format_float(_value)
-					else			   string_value = string(_value)
-			
+					
+					var string_value = string_format_float(_value)
 					output_string[i] = "Set "+subject.plain+" to "+string_value
 				}
 	

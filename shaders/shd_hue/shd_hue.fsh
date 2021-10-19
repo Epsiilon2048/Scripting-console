@@ -2,22 +2,30 @@ varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 uniform float u_Position;
 
-// https://en.wikipedia.org/wiki/YIQ
+vec3 rgb2hsv(vec3 c)
+{
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
 
-const mat3 rgb2yiq = mat3(0.299, 0.587, 0.114, 0.595716, -0.274453, -0.321263, 0.211456, -0.522591, 0.311135);
-const mat3 yiq2rgb = mat3(1.0, 0.9563, 0.6210, 1.0, -0.2721, -0.6474, 1.0, -1.1070, 1.7046);
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
 
 void main()
 {
-    vec4 tColor = texture2D(gm_BaseTexture, v_vTexcoord);
-    vec3 yColor = (tColor.rgb * v_vColour.rgb) * rgb2yiq; 
-
-    float originalHue = atan(yColor.b, yColor.g);
-    float finalHue = originalHue + u_Position;
-
-    float chroma = sqrt(yColor.b * yColor.b + yColor.g * yColor.g);
-    
-    vec3 yFinalColor = vec3(yColor.r, chroma * cos(finalHue), chroma * sin(finalHue));
-    
-    gl_FragColor = vec4(yFinalColor * yiq2rgb, tColor.a * v_vColour.a);
+	vec4 base_col = v_vColour * texture2D( gm_BaseTexture, v_vTexcoord );
+	
+	vec3 hsv = vec3(rgb2hsv(base_col.rgb));
+	hsv[0] = u_Position/6.25;
+	gl_FragColor = vec4(hsv2rgb(hsv), base_col.a);
+	
 }

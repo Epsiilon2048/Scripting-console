@@ -175,7 +175,7 @@ for(var l = 0; l <= array_length(lines)-1; l++)
 
 		var comp_line = array_create(array_length(line)-1)
 
-		var subject = gmcl_interpret_subject(line[0], array_length(line))
+		var subject = gmcl_interpret_subject(line[0])
 		var error = is_undefined(subject.error) ? undefined : gmcl_build_error("compile", subject.error, subject.plain)
 
 		if subject.type == dt_instance object = subject.value

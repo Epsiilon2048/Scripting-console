@@ -36,7 +36,7 @@ else
 		macro_type = macro.type
 		
 		if macro.type == dt_string	_arg = "\""+string(macro.value)+"\""
-		else if is_numeric(macro)	_arg = string_format_float(macro.value)
+		else if is_numeric(macro)	_arg = string_format_float(macro.value, undefined)
 		else						_arg = string(macro.value)
 		
 		arg_first = string_char_at(_arg, 1)
@@ -215,7 +215,7 @@ else
 		}
 		else
 		{
-			variable = variable_string_exists_error(_arg)
+			variable = variable_string_info(_arg)
 			error = variable.error
 			if variable.exists
 			{

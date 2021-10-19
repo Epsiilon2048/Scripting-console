@@ -1,20 +1,23 @@
 
 function console_output_inputs(){ with o_console {
-	
+
+OUTPUT.dock.enabled = o_console.BAR.enabled
+
+
 var ot = OUTPUT
 	
 if ot.docked and not ot.run_in_dock return undefined
 
-if output_as_window
-{
-	ot.dock.show_name = true
-}
-else
-{
-	ot.dock.show_name = false
-	ot.dock.x = 0
-	ot.dock.y = win_height-(ot.dock.bottom-ot.dock.top)
-}
+//if output_as_window
+//{
+	ot.dock.draw_name = true
+//}
+//else
+//{
+//	ot.dock.draw_name = false
+//	ot.dock.x = 0
+//	ot.dock.y = 0
+//}
 
 ot.dock.get_input()
 
@@ -35,5 +38,5 @@ var ot = OUTPUT
 
 if ot.docked and not ot.run_in_dock return undefined
 
-ot.dock.draw()
+if not ot.dock.dragging ot.dock.draw()
 }}

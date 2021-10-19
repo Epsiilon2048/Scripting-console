@@ -2,6 +2,9 @@ function draw_autofill_list(){ with o_console {
 
 var at = o_console.AUTOFILL
 
+if instanceof(o_console.keyboard_scope) != "Console_text_box" at.show = false
+if not at.show return undefined 
+
 var old_color = draw_get_color()
 var old_font = draw_get_font()
 var old_halign = draw_get_halign()
@@ -11,7 +14,6 @@ draw_set_font(font)
 draw_set_halign(fa_left)
 draw_set_valign(fa_bottom)
 
-var cw = string_width(" ")
 var ch = string_height(" ")
 
 var entries = (
@@ -37,13 +39,19 @@ var _height = ceil( min(entries_height+1, at.height*asp) )
 var _border_w = round(at.border_w*asp)
 var _border_h = round(at.border_h*asp)
 
-var x1 = BAR.left
-var y1 = OUTPUT.bottom
+with o_console.keyboard_scope
+{
+	at.x = is_undefined(cbox_left) ? left : cbox_left
+	at.y = is_undefined(cbox_top) ? top : cbox_top
+}
+
+var x1 = at.x
+var y1 = at.y
 var x2 = x1 + _width + _border_w*2
 var y2 = y1 - _height - _border_h*2 - 1
 
 at.mouse_on = gui_mouse_between(x1, y1, x2, y2)
-at.mouse_on_item = gui_mouse_between(x1, y1, x2-SCROLLBAR.width*asp-_border_w*2, y2)
+at.mouse_on_item = gui_mouse_between(x1, y1, x2-_border_w*2, y2)
 
 if at.mouse_on 
 {
@@ -90,10 +98,10 @@ var _sidetext_border = floor(at.sidetext_border*asp)
 
 var sidetext_x = x1
 var text_x = sidetext_x + _sidetext_bar + _sidetext_width + _sidetext_border
-var text_y = y1 - _border_h + _scroll
+var text_y = y1 - _border_h
 
 draw_console_body(x1, y1-1, x2, y2+1)
-clip_rect_cutout(x1+1, y2+_border_h+1, x2-_border_w*2-o_console.SCROLLBAR.width, y1-_border_h)
+clip_rect_cutout(x1+1, y2+_border_h+1, x2-_border_w*2, y1-_border_h)
 
 var tab = keyboard_check_pressed(vk_tab)
 at.index += tab
@@ -128,7 +136,7 @@ for(var i = range.min; i <= range.max; i++)
 	if text_y-ch < y1-1
 	{
 		var this = color_method(access(list, i))
-		var selected = at.index == item_index or (at.mouse_on_item and gui_mouse_between(x1, text_y, x2, text_y-ch))
+		var selected = at.index == item_index //or (at.mouse_on_item and gui_mouse_between(x1, text_y, x2, text_y-ch))
 		var color = o_console.colors[$ this.entry_color]
 
 		if selected

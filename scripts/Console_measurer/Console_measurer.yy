@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Graphical",
-    "path": "folders/Console/Unsorted/IDE components/Graphical.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "console_ctx_functions",
+  "name": "Console_measurer",
   "tags": [],
   "resourceType": "GMScript",
 }

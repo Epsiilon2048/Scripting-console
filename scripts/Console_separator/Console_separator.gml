@@ -20,6 +20,13 @@ initialize = function(){
 }
 
 
+
+get_printout = function(){
+	return ""
+}
+
+
+
 get_input = function(){
 	
 	if not enabled
