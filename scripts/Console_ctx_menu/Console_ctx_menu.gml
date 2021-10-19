@@ -223,7 +223,7 @@ for(var i = 0; i <= array_length(elements)-1; i++)
 			clicking_on_console = true
 		}
 		else
-		{			
+		{	
 			if element_mouse_on == i
 			{
 				el.ctx_func()

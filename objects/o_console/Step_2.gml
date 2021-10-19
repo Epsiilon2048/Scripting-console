@@ -13,15 +13,16 @@ draw_set_font(o_console.font)
 
 ctx_menu_get_input()
 
-//if mouse_check_button_released(mb_right) ctx_menu_set([
-//	new_ctx_text("heya", function(){show_debug_message(1)}),
-//	new_ctx_text("heya 2", function(){show_debug_message(2)}),
-//	new_ctx_text("the option", function(){show_debug_message(3)}),
-//	new_scrubber("a test of skill","0.x",1),
-//])
+if mouse_check_button_released(mb_right) ctx_menu_set([
+	new_ctx_text("heya", function(){show_debug_message(1)}),
+	new_ctx_text("heya 2", function(){show_debug_message(2)}),
+	new_ctx_text("the option", function(){show_debug_message(3)}),
+	new_scrubber("a test of skill","0.x",1),
+	new_ctx_text("the cooler option", function(){show_debug_message(3)}),
+])
 
 COLOR_PICKER.get_input()
-cs_editor.association = o_console.colors
+//cs_editor.association = o_console.colors
 
 var was_clicking = clicking_on_console
 var front = -1

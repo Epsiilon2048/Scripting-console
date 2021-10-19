@@ -79,7 +79,7 @@ builtin_excluded = [
 	"steam_",	
 	"xboxone_",	 
 	"xboxlive_",	 
-	"switch_",		// Of the nintendo variety
+	"switch_",			// Of the nintendo variety
 	"psn_",		
 	"winphone_",	 
 	"win8_",		 
