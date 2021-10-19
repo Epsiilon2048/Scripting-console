@@ -221,7 +221,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						
 					var _asset 
 					var _asset_type
-						
+					
 					if is_int
 					{
 						_asset = real(segment)
@@ -238,7 +238,11 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						_asset_type = asset_get_type(segment) 
 					}
 					
-					if _prev_iden == dt_color
+					if _macro_type == dt_undefined 
+					{
+						_col = dt_real
+					}
+					else if _prev_iden == dt_color
 					{
 						if _macro_type == dt_color or string_is_float(segment)
 						{

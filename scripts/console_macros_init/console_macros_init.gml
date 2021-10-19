@@ -10,6 +10,9 @@ function initialize_console_macros(){
 
 #region Shortcuts
 
+console_macro_add("undefined",			dt_undefined, o_console)
+console_macro_add("null",				dt_undefined, o_console)
+
 console_macro_add("con",				dt_instance, o_console)
 
 console_macro_add("var",				dt_method, create_variable)

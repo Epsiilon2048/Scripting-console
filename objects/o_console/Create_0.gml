@@ -244,6 +244,7 @@ identifiers = {
 
 #macro dt_real			"real"
 #macro dt_string		"string"
+#macro dt_undefined		"undefined"
 #macro dt_asset			"asset"
 #macro dt_variable		"variable"
 #macro dt_method		"method"

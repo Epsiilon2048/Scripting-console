@@ -34,9 +34,8 @@ else
 	{
 		macro_type = macro.type
 		
-		if macro.type == dt_string	_arg = "\""+string(macro.value)+"\""
-		else if is_numeric(macro)	_arg = string_format_float(macro.value, undefined)
-		else						_arg = string(macro.value)
+		if macro.type == dt_string	_arg = datatype_string(macro.value)
+		else						_arg = string_format_float(macro.value, undefined)
 		
 		arg_first = string_char_at(_arg, 1)
 		arg_last = (string_length(_arg) <= 1) ? "" : string_last(_arg)
@@ -45,7 +44,12 @@ else
 	var is_float = string_is_float(_arg)
 	var is_int = is_float and string_is_int(_arg)
 	
-	if is_float and iden_type != dt_string
+	if not is_undefined(macro) and macro.type == dt_undefined
+	{
+		type = dt_undefined
+		value = undefined
+	}
+	else if is_float and iden_type != dt_string
 	{
 		var arg_real = real(_arg)
 			
@@ -56,7 +60,7 @@ else
 				value = arg_real
 			break
 			case dt_asset:
-				if is_int and arg_real >= 0 and arg_real <= 0xfffffffffffffb and object_exists(arg_real)
+				if is_int and arg_real >= 0 and arg_real <= 0xfffffffffff and object_exists(arg_real)
 				{
 					value = arg_real
 					type = dt_real
