@@ -197,7 +197,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#region Undefined
 			case undefined:
 				output_string[i] = format_output(
-					[{str: "[COMPILE ERROR]", scr: compile_report, output: true}," "+subject.error], 
+					[{str: "[COMPILE ERROR]", scr: noscript}," "+subject.error], 
 				true, -1)
 			#endregion
 			}

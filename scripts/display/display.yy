@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Utilities",
-    "path": "folders/Console/Unsorted/IDE components/Utilities.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "console_debugging_utilities",
+  "name": "display",
   "tags": [],
   "resourceType": "GMScript",
 }
