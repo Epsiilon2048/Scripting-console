@@ -11,12 +11,16 @@ function Console_separator() constructor{
 
 initialize = function(){
 	
+	docked = false
+	in_ctx_menu = false
+	
 	enabled = true
 	name = "Separator"
-	
-	double = false
+
 	text = ""
 	color = "body_accent"
+	
+	parent = undefined
 }
 
 
@@ -38,6 +42,10 @@ get_input = function(){
 		return undefined
 	}
 	
+	if docked parent = dock
+	else if in_ctx_menu parent = ctx_menu
+	else return undefined
+	
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
@@ -49,6 +57,7 @@ get_input = function(){
 	left = x
 	top = y
 	right = left
+	
 	bottom = top+_width
 	
 	draw_set_font(old_font)
@@ -71,8 +80,11 @@ draw = function(){
 	var asp = ch/sp.char_height
 	var _wdist = round(sp.wdist*asp)
 	
+	var off = 0
+	if in_ctx_menu off = -1
+	
 	draw_set_color(is_numeric(color) ? color : o_console.colors[$ color])
-	draw_rectangle(dock.left+_wdist, top, dock.right-_wdist, bottom-1, false)
+	draw_rectangle(parent.left+_wdist, top+off, parent.right-_wdist, bottom-1+off, false)
 	
 	draw_set_font(old_color)
 	draw_set_font(old_font)

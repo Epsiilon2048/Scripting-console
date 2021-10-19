@@ -753,6 +753,8 @@ tb_editor = new_console_dock("Advanced text box editor",[
 tb_editor.association = ctb
 */
 
+cs_editor = {}
+
 //add_console_element(ctb)
 //add_console_element(tb_editor)
 //add_console_element(object_editor)
@@ -765,3 +767,4 @@ add_console_element(DISPLAY)
 //add_console_element(color_thing)
 DISPLAY.enabled = false
 BAR.enabled = false
+OUTPUT.dock.enabled = false

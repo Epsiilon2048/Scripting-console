@@ -109,6 +109,8 @@ initialize = function(){
 	
 	is_front = false
 	
+	right_clicking = false
+	
 	elements = []
 	e = {}
 	afterscript = ds_list_create()
@@ -281,7 +283,6 @@ after_dock = function(){
 	var _outline_width = round(dc.name_outline_width*asp)
 	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
 	var _element_wdist = round(dc.element_wdist*asp)
-	var _element_wsep = round(dc.element_wsep*asp)
 		
 	draw_set_font(old_font)
 
@@ -323,7 +324,7 @@ after_dock = function(){
 	}
 	
 	if dragging or show_next or (mouse_on and mouse_check_button_pressed(mb_any)) clicking_on_console = true
-	if mouse_on mouse_on_console = true 
+	if mouse_on mouse_on_console = true
 	
 	right_previous = right
 	
@@ -331,6 +332,18 @@ after_dock = function(){
 	{
 		afterscript[| i].after_dock()
 	}
+}
+
+
+
+generate_ctx_menu = function(){
+
+return [
+	new_ctx_text("Get printout", function(){clipboard_set_text(get_printout())}),
+	new_separator(),
+	new_ctx_text("Collapse all", hide_all),
+	new_ctx_text("Hide", function(){enabled = false}),
+]
 }
 
 
@@ -356,6 +369,17 @@ get_dropdown_input = function(){
 	var dropdown_y1 = top
 	var dropdown_x2 = right
 	var dropdown_y2 = top+bar_height
+
+	if not mouse_on_console and mouse_on
+	{
+		if mouse_check_button_pressed(mb_right) right_clicking = true
+		else if right_clicking and not mouse_check_button(mb_right)
+		{
+			ctx_menu_set(generate_ctx_menu())
+			right_clicking = false
+		}
+	}
+	else if right_clicking and not keyboard_check(mb_right) right_clicking = false
 
 	mouse_on_dropdown = (not mouse_on_console or mouse_on) and gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
 	

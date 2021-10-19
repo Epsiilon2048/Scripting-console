@@ -71,6 +71,8 @@ else
 		dock.set(string_format_float(output, 4))
 	}
 }
+
+dock.enabled = not (is_undefined(output) or output == "" or output == [] or output == [""])
 }}
 
 

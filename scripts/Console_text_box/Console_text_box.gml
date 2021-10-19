@@ -37,7 +37,6 @@ text_box.initialize_scrubber(variable, step)
 
 if not is_undefined(name) text_box.name = name
 text_box.draw_name = not is_undefined(name)
-
 return text_box
 }
 
@@ -200,6 +199,8 @@ initialize = function(variable){
 		scrubber_step = 1
 		scrubber_pixels_per_step = 10
 	}
+	
+	update_variable()
 }
 
 

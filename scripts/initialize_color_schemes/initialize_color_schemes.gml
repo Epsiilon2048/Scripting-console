@@ -175,6 +175,8 @@ color_schemes[$ cs_gms2] = create_color_scheme4(0,0,0,0) with color_schemes[$ cs
 	self[$ dt_tag]			= 0x5b5bff
 	self[$ dt_unknown]		= 0x5b995b
 	self[$ dt_deprecated]	= 0xff6000
+	
+	builtin = true
 }
 rainbow = false
 bird_mode = false
