@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Initialization",
-    "path": "folders/Console/Initialization.yy",
+    "name": "Docks",
+    "path": "folders/Console/Docks.yy",
   },
   "resourceVersion": "1.0",
-  "name": "initialize_console_graphics",
+  "name": "new_ide_editor",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -114,6 +114,9 @@ initialize = function(){
 	elements = []
 	e = {}
 	afterscript = ds_list_create()
+	
+	before_func = noscript
+	after_func = noscript
 }
 
 
@@ -398,6 +401,8 @@ get_dropdown_input = function(){
 
 get_input = function(){
 
+	before_func()
+
 	if not enabled 
 	{
 		left = x
@@ -605,6 +610,7 @@ get_input = function(){
 	}
 	
 	if not docked after_dock()
+	after_func()
 	
 	draw_set_font(old_font)
 }

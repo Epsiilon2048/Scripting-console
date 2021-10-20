@@ -392,6 +392,17 @@ undock = function(){
 
 
 
+generate_ctx_menu = function(){
+
+var m = [
+	new_ctx_text("Settings", function(){clipboard_set_text(get_printout())}),
+]
+
+return m
+}
+
+
+
 get_input = function(){
 	
 	copy = false

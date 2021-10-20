@@ -260,10 +260,6 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					{
 						_col = dt_method
 					}
-					else if _prev_iden == dt_room and room_exists(_asset) and (is_int or _asset_type == asset_room) and (_macro_type == -1 or _macro_type == dt_room)
-					{
-						_col = dt_room
-					}
 					else if _prev_iden == dt_asset and _asset != -1 and (_macro_type == -1 or _macro_type == dt_asset) and (not is_int or object_exists(_asset))
 					{
 						_col = dt_asset

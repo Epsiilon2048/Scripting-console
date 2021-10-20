@@ -6,7 +6,7 @@
     "path": "folders/Console/Initialization.yy",
   },
   "resourceVersion": "1.0",
-  "name": "initialize_console_graphics",
+  "name": "initialize_display",
   "tags": [],
   "resourceType": "GMScript",
 }

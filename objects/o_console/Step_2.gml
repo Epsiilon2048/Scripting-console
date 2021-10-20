@@ -5,6 +5,8 @@ clicking_on_console = false
 run_in_console = false
 run_in_embed   = false
 
+if not enabled exit
+
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 

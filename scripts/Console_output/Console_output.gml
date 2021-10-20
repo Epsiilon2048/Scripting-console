@@ -5,16 +5,7 @@ var ot = OUTPUT
 	
 if ot.docked and not ot.run_in_dock return undefined
 
-//if output_as_window
-//{
-	ot.dock.draw_name = true
-//}
-//else
-//{
-//	ot.dock.draw_name = false
-//	ot.dock.x = 0
-//	ot.dock.y = 0
-//}
+ot.dock.draw_name = true
 
 ot.dock.get_input()
 

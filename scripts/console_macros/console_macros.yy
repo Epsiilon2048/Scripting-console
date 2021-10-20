@@ -6,7 +6,7 @@
     "path": "folders/Console.yy",
   },
   "resourceVersion": "1.0",
-  "name": "console_startup",
+  "name": "console_macros",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -297,7 +297,6 @@ return format_output([
 	{str: "\nvariable    ",	scr: value_box, args: ["o_console.colors."+dt_variable,		vb_color]},
 	{str: "\nmethod      ",	scr: value_box, args: ["o_console.colors."+dt_method,		vb_color]},
 	{str: "\ninstance    ",	scr: value_box, args: ["o_console.colors."+dt_instance,		vb_color]},
-	{str: "\nroom        ",	scr: value_box, args: ["o_console.colors."+dt_room,			vb_color]},
 	{str: "\ntag         ",	scr: value_box, args: ["o_console.colors."+dt_tag,			vb_color]},"(compiler instructions)",
 	{str: "\ndeprecated  ",	scr: value_box, args: ["o_console.colors."+dt_deprecated,	vb_color]},"(commands no longer in use)\n\n",
 
