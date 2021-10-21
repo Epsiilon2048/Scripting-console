@@ -36,12 +36,14 @@ if ds_list_find_index(macro_list, name) == -1 ds_list_file(macro_list, name)
 function index_functions(){
 
 var i = 100001
-while script_exists(i)
+while better_script_exists(i)
 {
 	var name = script_get_name(i++)
 	
 	if string_pos("___struct___", name) != 1 and string_pos("anon_", name) != 1
-	ds_list_add(method_list, name)
+	{
+		ds_list_add(method_list, name)
+	}
 }
 
 ds_list_sort(method_list, true)
@@ -54,8 +56,8 @@ try {
 	shader_get_name(ind)
 	return true
 }
-catch(exception){
-	var _ = exception //get rid of that dumbass warning sign thing
+catch(_){
+	delete _ //get rid of that dumbass warning sign thing
 	return false
 }
 }
@@ -103,7 +105,7 @@ for(var i = 0; i <= 10000; i++)
 {
 	var name = script_get_name(i)
 	
-	if script_exists(i)
+	if better_script_exists(i)
 	{	
 		var excluded = false
 		

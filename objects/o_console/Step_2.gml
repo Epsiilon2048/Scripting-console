@@ -5,7 +5,42 @@ clicking_on_console = false
 run_in_console = false
 run_in_embed   = false
 
-if not enabled exit
+if enabled and not initialized and keyboard_check_pressed(console_key)
+{
+	var init = [
+		initialize_autofill_index,
+		initialize_console_macros,
+		initialize_color_schemes,
+		initialize_console_docs,
+		initialize_console_graphics,
+		initialize_bar_and_output,
+		user_console_startup,
+	]
+	
+	var time = get_timer()
+	var t = time
+
+	for(var i = 0; i <= array_length(init)-1; i++)
+	{
+		init[i]()
+		
+		var _t = get_timer()
+		
+		var ms = (_t-t)/10000
+		var lag = (ms/(room_speed/100))
+		show_debug_message(stitch("<< ",script_get_name(init[i])," >> Initialized in ",ms," ms (",lag," steps)"))
+		
+		t = _t
+	}
+	
+	initialized = true
+	
+	var ms = (t-time)/10000
+	var lag = (ms/(room_speed/100))
+	show_debug_message(stitch("<< CONSOLE SETUP >> Initialized in ",ms," ms / ",lag," steps / ",lag/room_speed," seconds"))
+}
+
+if not enabled or not initialized exit
 
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
@@ -16,7 +51,6 @@ draw_set_font(o_console.font)
 ctx_menu_get_input()
 
 COLOR_PICKER.get_input()
-cs_editor.association = o_console.colors
 
 var was_clicking = clicking_on_console
 var front = -1

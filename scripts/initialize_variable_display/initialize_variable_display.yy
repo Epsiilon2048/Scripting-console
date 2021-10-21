@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Initialization",
+    "path": "folders/Console/Initialization.yy",
   },
   "resourceVersion": "1.0",
-  "name": "console_macros",
+  "name": "initialize_variable_display",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -1,5 +1,5 @@
 
-function initialize_object_editor(object){
+function new_objet_editor(object){
 
 var id_box = new_display_box("id", "id", false)
 id_box.allow_printing = false

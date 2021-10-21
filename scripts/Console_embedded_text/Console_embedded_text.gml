@@ -263,7 +263,7 @@ function embedded_text_inputs(x, y, text, plaintext_color, alpha){
 var cw = string_width(" ")
 var ch = string_height(" ")
 
-if is_undefined(text) or not is_struct(text) or not o_console.embed_text return undefined
+if is_undefined(text) or not is_struct(text) return undefined
 
 text.left = x
 text.top = y
@@ -381,14 +381,6 @@ if is_undefined(text) or not is_struct(text)
 {
 	draw_outline_text(x, y, text, undefined)
 	draw_text(x, y, text)
-	draw_set_halign(old_halign)
-	draw_set_valign(old_valign)
-	return undefined
-}
-else if not o_console.embed_text
-{
-	draw_outline_text(x, y, text.plain, undefined)
-	draw_text(x, y, text.plain)
 	draw_set_halign(old_halign)
 	draw_set_valign(old_valign)
 	return undefined

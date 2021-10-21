@@ -1,5 +1,5 @@
 
-function initialize_display(){ with o_console {
+function initialize_variable_display(){ with o_console {
 
 var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
@@ -104,4 +104,5 @@ DISPLAY = new_console_dock("Display",[
 	[var_explanation],
 ])
 DISPLAY.allow_element_dragging = true
+add_console_element(DISPLAY)
 }}

@@ -1,5 +1,5 @@
 
-function initialize_cs_editor(){
+function new_colorscheme_editor(){
 
 var bm_box = new_text_box("blendmode", "body_bm")
 with bm_box

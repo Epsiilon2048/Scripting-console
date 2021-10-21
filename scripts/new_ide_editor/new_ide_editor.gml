@@ -1,5 +1,5 @@
 
-function initialize_ide_editor(){
+function new_ide_editor(){
 
 var editor = new_console_dock("Element adjusting", [
 	new_console_dock("Dock", [

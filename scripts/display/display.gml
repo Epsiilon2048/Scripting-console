@@ -1,9 +1,24 @@
 
-function display(variable, step){
+function display(variable, step){ with o_console {
 
 if is_undefined(variable)
-{
-	o_console.DISPLAY.enabled = not o_console.DISPLAY.enabled
+{	
+	if variable_struct_names_count(DISPLAY) == 0 
+	{
+		initialize_variable_display()
+		return "Initialized display"
+	}
+	else
+	{
+		var o
+		
+		DISPLAY.enabled = not DISPLAY.enabled
+		
+		if not DISPLAY.enabled	o = "Hid display dock"
+		else					o = "Enabled display dock"
+		
+		return new element_container(new_embedded_text([o+" (",{s: "undo", func: display, outp: true},")"]))
+	}
 }
 else
 {
@@ -13,7 +28,7 @@ else
 
 	add_console_element(t)
 }
-}
+}}
 
 function add_textbox(name, variable){
 

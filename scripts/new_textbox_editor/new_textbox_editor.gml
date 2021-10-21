@@ -1,5 +1,5 @@
 
-function initialize_textbox_editor(text_box){
+function new_textbox_editor(text_box){
 
 var editor = new_console_dock("Advanced text box editor",[
 	[new_display_box("Text", "text", false)],

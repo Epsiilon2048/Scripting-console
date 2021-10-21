@@ -11,9 +11,9 @@ clicking_on_console = false
 mouse_on_console = false
 
 rainbowify = function(list){
-for(var i = 0; i <= array_length(list)-1; i++){
-	colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow) 
-}
+	for(var i = 0; i <= array_length(list)-1; i++){
+		colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow) 
+	}
 }
 
 element_dragging = noone
@@ -56,87 +56,23 @@ refresh_sep = " ./;,=()[]:@?#$|"
 
 bird_mode = false
 
-builtin_excluded = [
-	//"string",
-	//"array",
-	//"ds_list",
-	//"ds_map",
-	"ds_grid_",
-	"ds_priority_",
-	"ds_queue_",
-	"ds_stack_",
-	"ads_",
-	"layer_",
-	"gesture_",
-	"keyboard_",
-	"font_",
-	"part_",			// Particles
-	"steam_",	
-	"xboxone_",	 
-	"xboxlive_",	 
-	"switch_",			// Of the nintendo variety
-	"psn_",		
-	"winphone_",	 
-	"win8_",		 
-	"vertex_",		 
-	"uwp_",		
-	"iap_",
-	"sprite_",		 
-	"skeleton_",	 
-	"sequence_",	  
-	"physics_",	 
-	"path_",		 
-	"matchmaking_", 
-	"gpu_",
-	"file_",
-	"draw_",		 
-	"display_",	 
-	"date_",		 
-	"camera_",		 
-	"buffer_",		 
-	"audio_",		 
-	"achievement_", 
-
-	// These are all odd builtin GML functions which aren't allowed in the studio, but are picked up when
-	// indexing all the builtin functions. All of them are either useless or have GML counterparts.
-	"ds_list_set_",		//ds_list_set_pre & ds_list_set_post 
-	"ds_map_set_",		//ds_map_set_pre & ds_map_set_post 
-	"ds_grid_set_p",	//ds_grid_set_pre & ds_grid_set_post
-	"array_set_",		//array_set_pre, array_set_post, array_set_2D_pre, array_set_2D_post, & array_set_2D
-	"@@",
-	"yyAsm",
-	"YoYo_",
-	"$",				//$PRINT, $FAIL, $ERROR
-	"sleep",
-	"testFailed",
-]
 
 mouse_char_pos = false
 
 elements = ds_create(ds_type_list, "elements")
 
-macro_list = ds_create(ds_type_list, "macro_list")
-method_list = ds_create(ds_type_list, "method_list")
-asset_list = ds_create(ds_type_list, "asset_list")
+macro_list = -1
+method_list = -1
+asset_list = -1
 instance_variables = []
 scope_variables = []
-lite_suggestions = ds_create(ds_type_list, "lite_suggestions")
-suggestions = ds_create(ds_type_list, "suggestions")
-
-autofill = {}; with autofill {
-	macros = -1
-	methods = -1
-	assets = -1
-	instance = -1
-	scope = -1
-	lite_suggestions = -1
-	suggestions = -1
-}
+lite_suggestions = -1
+suggestions = -1
 
 console_macros = {}
 
-subchar_pos1 = 0
-subchar_pos2 = 0
+builtin_excluded = []
+autofill = {}
 
 DOCK = {}
 TEXT_BOX = {}
@@ -156,19 +92,9 @@ MEASURER = {}
 
 keyboard_scope = noone
 
-do_autofill = false
-
 color_schemes = {}
 cs_index = cs_greenbeans
-embed_text = true
 step = 0
-
-index_functions()
-index_assets()
-initialize_console_macros()
-initialize_color_schemes()
-initialize_console_docs()
-initialize_console_graphics(undefined)
 
 identifiers = {
 	r: dt_real,
@@ -247,24 +173,8 @@ O5 = ""
 
 cs_template = cs_greenbeans
 
-var greetings = [
-	"I hope you're having a wonderful day!",
-	"Afternoon! Or morning! Or whenever!",
-	"Howsya day going?",
-	"Hiya!",
-	"Ay how's it goin?",
-	"Remember to take breaks from time to time!",
-	"yooooooo sup",
-]
-
-output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
-
 startup = false
 initialized = false
+enabled = true
 
-add_console_element(BAR)
-add_console_element(OUTPUT)
-add_console_element(DISPLAY)
-DISPLAY.enabled = false
-BAR.enabled = false
-OUTPUT.dock.enabled = false
+DISPLAY = {}

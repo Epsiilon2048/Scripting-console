@@ -53,18 +53,27 @@ else
 	}
 	if is_struct(output)
 	{
-		var names = variable_struct_get_names(output)
-		for(var i = 0; i <= array_length(names)-1; i++)
+		var io = instanceof(output)
+		
+		if io == "Console_dock" or io == "element_container"
 		{
-			if is_array(output[$ names[i]]) names[i] = [names[i]+":", "[array]"]
-			else if is_struct(output[$ names[i]]) names[i] = [names[i]+":","{"+instanceof(output[$ names[i]])+"}"]
-			else names[i] = [names[i]+":", new_display_box(undefined, names[i], false)]
+			dock.set(output.elements)
 		}
-		array_insert(names, 0, "{")
-		array_push(names, "}")
+		else
+		{
+			var names = variable_struct_get_names(output)
+			for(var i = 0; i <= array_length(names)-1; i++)
+			{
+				if is_array(output[$ names[i]]) names[i] = [names[i]+":", "[array]"]
+				else if is_struct(output[$ names[i]]) names[i] = [names[i]+":","{"+instanceof(output[$ names[i]])+"}"]
+				else names[i] = [names[i]+":", new_display_box(undefined, names[i], false)]
+			}
+			array_insert(names, 0, "{")
+			array_push(names, "}")
 
-		dock.association = output		
-		dock.set(names)
+			dock.association = output		
+			dock.set(names)
+		}
 	}
 	else
 	{

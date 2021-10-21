@@ -664,11 +664,11 @@ draw = function(){
 		{
 			draw_set_color(o_console.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
-			draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
 		}
 	}
 	if draw_name 
 	{
+		draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(o_console.colors.body_accent)
@@ -726,6 +726,7 @@ clear = function(){
 		if variable_struct_exists(elements[@ i, j], "destroy") elements[@ i, j].destroy()
 	}
 	
+	ds_list_clear(afterscript)
 	elements = []
 	e = {}
 }
@@ -738,5 +739,6 @@ destroy = function(){
 	ds_list_destroy(afterscript)
 	afterscript = -1
 	enabled = false
+	association = self
 }
 }

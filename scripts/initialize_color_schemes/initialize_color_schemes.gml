@@ -169,7 +169,6 @@ color_schemes[$ cs_gms2] = create_color_scheme4(0,0,0,0) with color_schemes[$ cs
 	self[$ dt_variable]		= 0xffb1b2
 	self[$ dt_method]		= 0x71b8ff
 	self[$ dt_instance]		= 0x8080ff
-	self[$ dt_room]			= 0x8080ff
 	self[$ dt_builtinvar]	= 0x5ae558
 	self[$ dt_color]		= 0x8080ff
 	self[$ dt_tag]			= 0x5b5bff
