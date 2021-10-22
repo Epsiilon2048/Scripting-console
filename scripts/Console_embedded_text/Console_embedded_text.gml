@@ -10,6 +10,9 @@ return e
 }
 
 function Embedded_text() constructor{
+	
+format_console_element()
+	
 set = function(text){
 
 	//if not variable_struct_exists(self, "formatted_for_dock") 

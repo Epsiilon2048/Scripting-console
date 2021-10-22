@@ -9,6 +9,8 @@ return c
 
 function Console_color_box() constructor{
 
+format_console_element()
+
 initialize = function(variable){
 	
 	docked = false

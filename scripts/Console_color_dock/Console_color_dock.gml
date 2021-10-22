@@ -1,5 +1,23 @@
 
+function new_color_dock(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
+
+if is_undefined(variable) variable = ""
+if is_undefined(use_varbox) variable = true
+if is_undefined(use_rgb) use_rgb = true
+if is_undefined(use_hsv) use_hsv = true
+if is_undefined(use_hex) use_hex = true
+if is_undefined(use_gml) use_gml = true
+
+var c = new Console_color_dock()
+c.initialize(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml)
+return c
+}
+
+
+
 function Console_color_dock() constructor{
+
+format_console_element()
 
 initialize = function(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
 	
@@ -168,17 +186,17 @@ get_input = function(){
 		var color_changed = false
 		if using_rgb and (r_text_box.text_changed or g_text_box.text_changed or b_text_box.text_changed)
 		{
-			color_picker.color = make_color_rgb(r, g, b)
+			//color_picker.color = make_color_rgb(r, g, b)
 			color_changed = true
 		}
 		else if using_hex and hex_text_box.text_changed
 		{
-			color_picker.color = hex_to_color(hex)
+			//color_picker.color = hex_to_color(hex)
 			color_changed = true
 		}
 		else if using_hsv and (hue_text_box.text_changed or sat_text_box.text_changed or val_text_box.text_changed)
 		{
-			color_picker.color = make_color_hsv(hue*hsv, sat*hsv, val*hsv)
+			//color_picker.color = make_color_hsv(hue*hsv, sat*hsv, val*hsv)
 			color_picker.hue = hue*hsv
 			color_picker.sat = sat*hsv
 			color_picker.val = val*hsv
@@ -189,6 +207,7 @@ get_input = function(){
 		{
 			var _association = is_undefined(color_picker.association) ? (docked ? dock.association : self) : color_picker.association
 			with _association variable_string_set(other.color_picker.variable, other.color_picker.color)
+			color_picker.update_variable()
 		}
 	}
 }

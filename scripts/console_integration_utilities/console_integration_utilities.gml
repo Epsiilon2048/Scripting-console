@@ -28,57 +28,54 @@ function output_set(output){ with o_console.OUTPUT {
 
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
 
-if instanceof(output) == "element_container"
-{
-	o_console.O1 = output
-	dock.set(output.elements)
-}
-else
-{
-	dock.association = dock
-	o_console.O1 = output
+dock.association = dock
+o_console.O1 = output
 		
-	if is_array(output)
+if is_array(output)
+{
+	var text = "["
+	for(var i = 0; i <= array_length(output)-1; i++)
 	{
-		var text = "["
-		for(var i = 0; i <= array_length(output)-1; i++)
-		{
-			if is_array(output[i]) text += "\n[array]"
-			else if is_struct(output[i]) text += "{"+instanceof(output[i])+"}"
-			else text += string(output[i])
-		}
-		text += "]"
-
-		dock.set(text)
+		if is_array(output[i]) text += "\n[array]"
+		else if is_struct(output[i]) text += "{"+instanceof(output[i])+"}"
+		else text += string(output[i])
 	}
-	if is_struct(output)
-	{
-		var io = instanceof(output)
-		
-		if io == "Console_dock" or io == "element_container"
-		{
-			dock.set(output.elements)
-		}
-		else
-		{
-			var names = variable_struct_get_names(output)
-			for(var i = 0; i <= array_length(names)-1; i++)
-			{
-				if is_array(output[$ names[i]]) names[i] = [names[i]+":", "[array]"]
-				else if is_struct(output[$ names[i]]) names[i] = [names[i]+":","{"+instanceof(output[$ names[i]])+"}"]
-				else names[i] = [names[i]+":", new_display_box(undefined, names[i], false)]
-			}
-			array_insert(names, 0, "{")
-			array_push(names, "}")
+	text += "]"
 
-			dock.association = output		
-			dock.set(names)
-		}
+	dock.set(text)
+}
+if is_struct(output)
+{
+	var io = instanceof(output)
+		
+	if io == "Console_dock"
+	{
+		dock.set(output.elements)
+		dock.association = is_undefined(output.association) ? dock : output.association
+	}
+	else if io == "element_container" or variable_struct_exists_get(output, "is_console_element", false)
+	{
+		dock.set(output)
 	}
 	else
 	{
-		dock.set(string_format_float(output, 4))
+		var names = variable_struct_get_names(output)
+		for(var i = 0; i <= array_length(names)-1; i++)
+		{
+			if is_array(output[$ names[i]]) names[i] = [names[i]+":", "[array]"]
+			else if is_struct(output[$ names[i]]) names[i] = [names[i]+":","{"+instanceof(output[$ names[i]])+"}"]
+			else names[i] = [names[i]+":", new_display_box(undefined, names[i], false)]
+		}
+		array_insert(names, 0, "{")
+		array_push(names, "}")
+
+		dock.association = output		
+		dock.set(names)
 	}
+}
+else
+{
+	dock.set(string_format_float(output, 4))
 }
 
 dock.enabled = not (is_undefined(output) or output == "" or output == [] or output == [""])

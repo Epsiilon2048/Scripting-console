@@ -9,7 +9,7 @@ if enabled and not initialized and keyboard_check_pressed(console_key)
 {
 	var init = [
 		initialize_autofill_index,
-		initialize_console_macros,
+		initialize_gmcl_macros,
 		initialize_color_schemes,
 		initialize_console_docs,
 		initialize_console_graphics,

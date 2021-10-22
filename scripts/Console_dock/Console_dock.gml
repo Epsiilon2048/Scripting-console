@@ -40,9 +40,10 @@ with scope
 
 
 
-function element_container(elements) constructor{
+function element_container(elements, association) constructor{
 	
 self.elements = elements
+self.association = association
 }
 
 
@@ -59,6 +60,8 @@ return d
 
 
 function Console_dock() constructor{
+
+format_console_element()
 
 initialize = function(){
 	
@@ -112,8 +115,8 @@ initialize = function(){
 	right_clicking = false
 	
 	elements = []
+	afterscript = []
 	e = {}
-	afterscript = ds_list_create()
 	
 	before_func = noscript
 	after_func = noscript
@@ -153,7 +156,7 @@ set_element = function(x, y, element){
 	
 	add_element(element)
 	
-	if variable_struct_exists(element, "after_dock") ds_list_add(afterscript, element)
+	if variable_struct_exists(element, "after_dock") array_push(afterscript, element)
 }
 
 
@@ -165,7 +168,7 @@ remove_element = function(element){
 	
 	variable_struct_remove(e, element.id)
 	array_delete(elements[yy], xx, 1)
-	ds_list_delete(afterscript, ds_list_find_index(afterscript, element))
+	array_delete(afterscript, array_find(afterscript, element), 1)
 	
 	if elements[yy] = [] array_delete(elements, yy, 1)
 	
@@ -210,7 +213,11 @@ set = function(elements){
 	
 	clear()
 	
-	if instanceof(elements) == "element_container" elements = elements.elements
+	if instanceof(elements) == "element_container" 
+	{
+		if not is_undefined(elements.association) association = elements.association
+		elements = elements.elements
+	}
 	if not is_array(elements) elements = [elements]
 	
 	self.elements = elements
@@ -331,9 +338,9 @@ after_dock = function(){
 	
 	right_previous = right
 	
-	for(var i = 0; i <= ds_list_size(afterscript)-1; i++)
+	for(var i = 0; i <= array_length(afterscript)-1; i++)
 	{
-		afterscript[| i].after_dock()
+		afterscript[i].after_dock()
 	}
 }
 
@@ -496,7 +503,7 @@ get_input = function(){
 	else
 	{		
 		if draw_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
-		bottom += _element_hdist
+		bottom = round( bottom + _element_hdist / (1+(not draw_name_bar)) )
 		
 		var xx = left + _element_wdist
 		var yy = bottom
@@ -668,7 +675,7 @@ draw = function(){
 	}
 	if draw_name 
 	{
-		draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
+		draw_set_color((is_front and draw_name_bar) ? o_console.colors.plain : o_console.colors.body_accent)
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(o_console.colors.body_accent)
@@ -726,19 +733,12 @@ clear = function(){
 		if variable_struct_exists(elements[@ i, j], "destroy") elements[@ i, j].destroy()
 	}
 	
-	ds_list_clear(afterscript)
+	afterscript = []
 	elements = []
 	e = {}
 }
 
 
 
-destroy = function(){
-	
-	clear()
-	ds_list_destroy(afterscript)
-	afterscript = -1
-	enabled = false
-	association = self
-}
+destroy = clear
 }

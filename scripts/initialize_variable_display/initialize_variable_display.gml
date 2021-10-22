@@ -70,10 +70,17 @@ with var_add_button
 			default:
 				if is_numeric(variable.value)		
 				{
-					var p = float_count_places(variable.value, 4)
-					if p == 0 p = 1
-					else p = 1/(10*float_count_places(variable.value, 4))
-					el = new_scrubber(var_box.text, var_box.text, p)
+					if variable.value == c_white
+					{
+						el = new_color_box(var_box.text, var_box.text)
+					}
+					else
+					{
+						var p = float_count_places(variable.value, 4)
+						if p == 0 p = 1
+						else p = 1/(10*float_count_places(variable.value, 4))
+						el = new_scrubber(var_box.text, var_box.text, p)
+					}
 				}
 				else if is_string(variable.value)	el = new_text_box(var_box.text, var_box.text)
 				else								el = new_display_box(var_box.text, var_box.text, true)
@@ -89,6 +96,8 @@ with var_add_button
 			break
 			}
 			
+			el.instant_update = true
+			
 			dock.insert_vertical(0, el)
 			var_box.__variable_add_name__ = ""
 		}
@@ -103,6 +112,11 @@ DISPLAY = new_console_dock("Display",[
 	new_separator(),
 	[var_explanation],
 ])
-DISPLAY.allow_element_dragging = true
+with DISPLAY
+{
+	before_func = function(){ association = o_console.object }
+	allow_element_dragging = true
+}
+
 add_console_element(DISPLAY)
 }}

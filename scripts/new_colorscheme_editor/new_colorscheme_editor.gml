@@ -63,9 +63,8 @@ var editor = new_console_dock("Color scheme editor", [
 		[new_color_box("Plain     ", "plain"),		new_color_box("Numeric   ", dt_real),	new_color_box("Asset     ", dt_asset),		new_color_box("Instance  ", dt_instance)],
 		[new_color_box("String    ", dt_string),	new_color_box("Color     ", dt_color),	new_color_box("Built-in  ", dt_builtinvar),	new_color_box("Tag       ", dt_tag)],
 		[new_color_box("Variable  ", dt_variable),	new_color_box("Script    ", dt_method),	new_color_box("Unknown   ", dt_unknown),	new_color_box("Deprecated", dt_deprecated)],
-	]),
+	])],
 	new_cd_button("Reset all", initialize_color_schemes)
-	],
 ])
 with editor before_func = function(){association = o_console.colors}
 editor.before_func()

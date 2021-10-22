@@ -1,4 +1,17 @@
 
+function array_find(array, value){
+
+for(var i = 0; i <= array_length(array)-1; i++)
+{
+	if array[i] == value return i
+}
+
+return -1
+}
+
+
+
+
 function array_struct_get(array, name){
 
 var _array = array_create(array_length(array), undefined)

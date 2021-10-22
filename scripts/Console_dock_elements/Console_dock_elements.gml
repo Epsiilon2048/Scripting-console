@@ -21,6 +21,8 @@ return v
 
 function Cd_text() constructor{
 
+format_console_element()
+
 initialize = function(text){
 	
 	enabled = true
@@ -169,6 +171,8 @@ return c
 	
 	
 function Cd_checkbox() constructor{
+	
+format_console_element()
 	
 initialize = function(text, variable){
 		

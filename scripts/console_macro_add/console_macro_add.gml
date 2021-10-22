@@ -23,13 +23,19 @@ ds_list_insert(id, i, value)
 
 
 
-
-function console_macro_add(name, type, value){ with o_console {
+function console_macro_add_ext(name, type, value, sort){ with o_console {
 
 console_macros[$ name] = {type: type, value: value}
 
-if ds_list_find_index(macro_list, name) == -1 ds_list_file(macro_list, name)
+if sort and ds_list_find_index(macro_list, name) == -1 ds_list_file(macro_list, name)
 }}
+
+
+
+function console_macro_add(name, type, value){
+
+console_macro_add_ext(name, type, value, true)
+}
 
 
 

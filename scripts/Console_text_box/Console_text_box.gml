@@ -58,6 +58,8 @@ return s
 
 function Console_text_box() constructor{
 
+format_console_element()
+
 initialize = function(variable){
 	
 	docked = false
@@ -999,7 +1001,9 @@ get_input = function(){
 			text = string_format_float(value, att.float_places)
 				
 			if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
-				
+			
+			text_changed = true
+			
 			set_boundaries()
 		}
 	}

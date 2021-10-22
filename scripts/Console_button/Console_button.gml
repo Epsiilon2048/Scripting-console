@@ -9,6 +9,8 @@ return b
 
 function Cd_button() constructor{
 
+format_console_element()
+
 set_name = function(name){
 	
 	var old_font = draw_get_font()
