@@ -186,6 +186,5 @@ am("vk_alt",			dt_real, vk_alt)
 am("vk_tilde",			dt_real, vk_tilde)
 #endregion
 
-if include_builtin_functions console_macro_add_builtin(undefined)
 ds_list_sort(macro_list, true)
 }}

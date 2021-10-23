@@ -5,8 +5,13 @@ var var_name_text_box = new_text_box("Name", "__variable_add_name__")
 var var_add_button = new_cd_button("+", noscript)
 var var_explanation = new_cd_text("Enter a variable name to add!", undefined)
 
-var var_text_box = new_text_box("Variable", "__variable_add_var__") with var_text_box
+var var_text_box = new Console_text_box() with var_text_box
 {
+	__variable_add_var__ = ""
+	
+	initialize("__variable_add_var__")
+	set_name("Variable")
+	
 	association = var_text_box
 	button = var_add_button
 	explanation_text = var_explanation
@@ -19,8 +24,6 @@ var var_text_box = new_text_box("Variable", "__variable_add_var__") with var_tex
 	att.exit_with_enter = true
 	att.length_min = string_length(initial_ghost_text)+12
 	att.scoped_color = dt_variable
-
-	__variable_add_var__ = ""
 
 	color_method = function(text){
 		var info = variable_string_info(text)

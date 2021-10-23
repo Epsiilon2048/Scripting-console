@@ -39,7 +39,7 @@ console_macro_add_ext(name, type, value, true)
 
 
 
-function index_functions(){
+function index_functions(){ with o_console {
 
 var i = 100001
 while better_script_exists(i)
@@ -53,7 +53,17 @@ while better_script_exists(i)
 }
 
 ds_list_sort(method_list, true)
+
+var cur = ""
+var prev = ""
+
+for(var i = 0; i <= ds_list_size(method_list)-1; i++)
+{
+	cur = method_list[| i]
+	if cur == prev ds_list_delete(method_list, i--)
+	prev = cur
 }
+}}
 
 
 function shader_exists(ind){
@@ -70,7 +80,7 @@ catch(_){
 
 
 
-function index_assets(){
+function index_assets(){ with o_console {
 	
 static asset = [
 	{exists: animcurve_exists,	get_name: function(curve_id){ return animcurve_get(curve_id).name }},
@@ -98,7 +108,9 @@ for(var i = 0; i <= array_length(asset)-1; i++)
 }
 
 ds_list_sort(asset_list, true)
-}
+}}
+
+
 
 
 function console_macro_add_builtin(criteria){ with o_console {
@@ -144,3 +156,4 @@ for(var i = 0; i <= 10000; i++)
 ds_list_sort(macro_list, true)
 return "Added "+string(added)+" builtin function"+((added == 1) ? "" : "s")
 }}
+

@@ -73,7 +73,4 @@ autofill = {}; with autofill {
 	lite_suggestions = -1
 	suggestions = -1
 }
-
-index_functions()
-index_assets()
 }}

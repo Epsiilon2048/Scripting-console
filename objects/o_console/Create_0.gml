@@ -173,7 +173,9 @@ O5 = ""
 
 cs_template = cs_greenbeans
 
-startup = false
+command_order = -1
+
+startup = -1
 initialized = false
 enabled = true
 
