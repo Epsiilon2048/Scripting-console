@@ -1,6 +1,8 @@
 
 function Console_color_picker() constructor{
 
+format_console_element()
+
 initialize = function(variable){
 	
 	self.variable = variable

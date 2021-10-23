@@ -8,6 +8,8 @@ return slider
 
 function Console_slider() constructor{
 	
+format_console_element()
+	
 initialize = function(variable, x, y, var_min, var_max, var_step){
 	
 	self.variable = variable

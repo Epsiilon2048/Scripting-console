@@ -24,35 +24,40 @@ function input_set(str, add){ with o_console
 
 
 
-
 function output_set(output){ with o_console.OUTPUT {
 
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
 
-if instanceof(output) == "element_container"
-{
-	o_console.O1 = output
-	dock.set(output.elements)
-}
-else
-{
-	dock.association = dock
-	o_console.O1 = output
+dock.association = dock
+o_console.O1 = output
 		
-	if is_array(output)
+if is_array(output)
+{
+	var text = "["
+	for(var i = 0; i <= array_length(output)-1; i++)
 	{
-		var text = "["
-		for(var i = 0; i <= array_length(output)-1; i++)
-		{
-			if is_array(output[i]) text += "\n[array]"
-			else if is_struct(output[i]) text += "{"+instanceof(output[i])+"}"
-			else text += string(output[i])
-		}
-		text += "]"
-
-		dock.set(text)
+		if is_array(output[i]) text += "\n[array]"
+		else if is_struct(output[i]) text += "{"+instanceof(output[i])+"}"
+		else text += string(output[i])
 	}
-	if is_struct(output)
+	text += "]"
+
+	dock.set(text)
+}
+if is_struct(output)
+{
+	var io = instanceof(output)
+		
+	if io == "Console_dock"
+	{
+		dock.set(output.elements)
+		dock.association = is_undefined(output.association) ? dock : output.association
+	}
+	else if io == "element_container" or variable_struct_exists_get(output, "is_console_element", false)
+	{
+		dock.set(output)
+	}
+	else
 	{
 		var names = variable_struct_get_names(output)
 		for(var i = 0; i <= array_length(names)-1; i++)
@@ -67,11 +72,13 @@ else
 		dock.association = output		
 		dock.set(names)
 	}
-	else
-	{
-		dock.set(string_format_float(output, 4))
-	}
 }
+else
+{
+	dock.set(string_format_float(output, 4))
+}
+
+dock.enabled = not (is_undefined(output) or output == "" or output == [] or output == [""])
 }}
 
 
@@ -79,169 +86,3 @@ else
 function output_set_lines(output){
 if is_array(output) output_set(output[0]) else output_set(output)
 }
-
-
-
-
-function output_set_old(output){ with o_console.OUTPUT {
-
-var _output = output
-
-var _text
-
-if is_undefined(_output) or _output == "" or _output == [] or _output == {}
-{
-	_text = []
-}
-else
-{	
-	if variable_struct_exists_get(_output, "__embedded__", false)
-	{
-		has_embed = true
-		_text = _output.o
-
-		if not is_array(_text) _text = [_text]
-	}
-	else
-	{
-		has_embed = false
-		_text = ""
-		
-		if is_struct(_output) and variable_struct_exists(_output, "__embedded__") _output = _output.o
-			
-		if is_struct(_output) 
-		{
-			var structnames = variable_struct_get_names(_output)
-			
-			_text += "{"
-			
-			for(var i = 0; i <= array_length(structnames)-1; i++)
-			{
-				_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
-			}
-			
-			_text += "\n}"
-		}		
-		else if is_array(_output) _text = _text + "[\n"+array_to_string(_output, "\n")+"\n]"
-		else _text = string(_output)
-
-		_text = [_text]
-	}
-		
-	alpha		= 1
-	fade_time	= 0
-}
-text.set(_text)
-with o_console
-{
-	prev_output = _output
-	O1 = output
-	O2 = ""
-	O3 = ""
-	O4 = ""
-	O5 = ""
-}
-return _output
-}}
-
-
-
-
-function output_set_lines_old(output){ with o_console.OUTPUT {
-
-var _output = output
-	
-var _text
-	
-if is_undefined(_output) or _output == "" or _output == [] or _output == {}
-{
-	_text = []
-	has_embed = false
-}
-else
-{	
-	if not is_array(_output) _output = [_output]
-	
-	has_embed = false
-		
-	for(var i = 0; i <= array_length(_output)-1; i++)
-	{
-		if variable_struct_exists_get(_output[i], "__embedded__", false)
-		{
-			has_embed = true
-			break
-		}
-	}
-	
-	if has_embed
-	{
-		_text = []
-		
-		for(var i = 0; i <= array_length(_output)-1; i++)
-		{
-			if variable_struct_exists_get(_output[i], "__embedded__", false)
-			{
-				array_copy(_text, array_length(_text), _output[i].o, 0, array_length(_output[i].o))
-				if i != array_length(_output)-1 array_push(_text, "\n")
-			}
-			else
-			{
-				if is_struct(output[i]) and variable_struct_exists(output[i], "__embedded__") _output[i] = _output[i].o
-
-				array_push(_text, string(_output[i])+"\n")
-			}
-		}
-	}
-	else
-	{
-		_text = ""
-		
-		if array_length(_output) == 1
-		{
-			_output = variable_struct_exists_get(_output[0], "o", _output[0])
-			
-			if is_struct(_output)
-			{
-				var structnames = variable_struct_get_names(_output)
-				
-				_text += "{"
-				
-				for(var i = 0; i <= array_length(structnames)-1; i++)
-				{
-					_text += "\n"+structnames[i]+": "+string(variable_struct_get(_output, structnames[i]))
-				}
-				
-				_text += "\n}"
-			}
-			else if not is_array(_output) _text = string(_output)
-		}
-		else
-		{
-			for(var i = 0; i <= array_length(_output)-1; i++)
-			{
-				if is_struct(_output[i]) and variable_struct_exists(_output[i], "__embedded__") _output[i] = _output[i].o
-			}
-		}
-		
-		if is_array(_output) _text = _text + "[\n"+array_to_string(_output, "\n")+"\n]"
-		
-		_text = [_text]
-	}
-		
-	alpha		= 1
-	fade_time	= 0
-}
-text.set(_text)
-with o_console 
-{
-	prev_output = output
-	var arlen = array_length(prev_output)
-	O1 = (arlen > 0) ? prev_output[0] : ""
-	O2 = (arlen > 1) ? prev_output[1] : ""
-	O3 = (arlen > 2) ? prev_output[2] : ""
-	O4 = (arlen > 3) ? prev_output[3] : ""
-	O5 = (arlen > 4) ? prev_output[4] : ""
-}
-return _output
-
-}}

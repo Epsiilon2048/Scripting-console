@@ -35,7 +35,6 @@ self.build = function(author){
 	self[$ dt_variable]		= 0
 	self[$ dt_method]		= 0
 	self[$ dt_instance]		= 0
-	self[$ dt_room]			= 0
 	self[$ dt_builtinvar]	= 0
 	self[$ dt_color]		= 0
 	self[$ dt_tag]			= 0

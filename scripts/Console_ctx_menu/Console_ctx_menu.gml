@@ -37,13 +37,6 @@ with scope
 
 
 
-function Ctx_container() constructor{
-
-
-}
-
-
-
 function new_ctx_text(text, func){
 
 var t = new Ctx_text()
@@ -89,10 +82,10 @@ get_input = function(){
 	
 	draw_set_font(o_console.font)
 	
-	left = x
-	top = y
-	right = x+width*string_width(" ")
-	bottom = y+height*string_height(" ")
+	left = round(x)
+	top = round(y)
+	right = left+width*string_width(" ")
+	bottom = top+height*string_height(" ")
 }
 
 
@@ -174,13 +167,13 @@ for(var i = 0; i <= array_length(elements)-1; i++)
 	
 	if i == 0 and el.ctx_add_dist bottom += _sep/2
 	
-	el.x = left+_wdist
-	el.y = bottom
+	el.x = round(left+_wdist)
+	el.y = round(bottom)
 	el.run_in_ctx_menu = true
 	el.get_input()
 	el.run_in_ctx_menu = false
-	el.x = left+_wdist
-	el.y = bottom
+	el.x = round(left+_wdist)
+	el.y = round(bottom)
 	
 	var y1 = bottom-_sep/2
 	
@@ -264,10 +257,10 @@ if not enabled
 
 function draw_ctx_menu(){ with o_console.CTX_MENU {
 
-if right == left or bottom == top return undefined
+if init or right == left or bottom == top return undefined
 
 draw_set_color(o_console.colors.body_real)
-draw_rectangle(left, top, right, bottom, false)
+draw_console_body(left, top, right, bottom)
 
 for(var i = 0; i <= array_length(elements)-1; i++)
 {	
@@ -279,6 +272,7 @@ for(var i = 0; i <= array_length(elements)-1; i++)
 	if (el.ctx_close or el.ctx_func != noscript) and (element_clicking == i or element_mouse_on == i)
 	{
 		draw_set_color(o_console.colors.plain)
+		gpu_set_blendmode(bm_add)
 		
 		if element_clicking == i 
 		{
@@ -291,6 +285,7 @@ for(var i = 0; i <= array_length(elements)-1; i++)
 			draw_rectangle(left, moe_y1, right, moe_y2, false)
 		}
 		
+		gpu_set_blendmode(bm_normal)
 		draw_set_alpha(1)
 	}
 }

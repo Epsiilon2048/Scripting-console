@@ -40,9 +40,10 @@ with scope
 
 
 
-function element_container(elements) constructor{
+function element_container(elements, association) constructor{
 	
 self.elements = elements
+self.association = association
 }
 
 
@@ -59,6 +60,8 @@ return d
 
 
 function Console_dock() constructor{
+
+format_console_element()
 
 initialize = function(){
 	
@@ -109,9 +112,14 @@ initialize = function(){
 	
 	is_front = false
 	
+	right_clicking = false
+	
 	elements = []
+	afterscript = []
 	e = {}
-	afterscript = ds_list_create()
+	
+	before_func = noscript
+	after_func = noscript
 }
 
 
@@ -148,7 +156,7 @@ set_element = function(x, y, element){
 	
 	add_element(element)
 	
-	if variable_struct_exists(element, "after_dock") ds_list_add(afterscript, element)
+	if variable_struct_exists(element, "after_dock") array_push(afterscript, element)
 }
 
 
@@ -160,7 +168,7 @@ remove_element = function(element){
 	
 	variable_struct_remove(e, element.id)
 	array_delete(elements[yy], xx, 1)
-	ds_list_delete(afterscript, ds_list_find_index(afterscript, element))
+	array_delete(afterscript, array_find(afterscript, element), 1)
 	
 	if elements[yy] = [] array_delete(elements, yy, 1)
 	
@@ -205,7 +213,11 @@ set = function(elements){
 	
 	clear()
 	
-	if instanceof(elements) == "element_container" elements = elements.elements
+	if instanceof(elements) == "element_container" 
+	{
+		if not is_undefined(elements.association) association = elements.association
+		elements = elements.elements
+	}
 	if not is_array(elements) elements = [elements]
 	
 	self.elements = elements
@@ -281,7 +293,6 @@ after_dock = function(){
 	var _outline_width = round(dc.name_outline_width*asp)
 	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
 	var _element_wdist = round(dc.element_wdist*asp)
-	var _element_wsep = round(dc.element_wsep*asp)
 		
 	draw_set_font(old_font)
 
@@ -323,14 +334,26 @@ after_dock = function(){
 	}
 	
 	if dragging or show_next or (mouse_on and mouse_check_button_pressed(mb_any)) clicking_on_console = true
-	if mouse_on mouse_on_console = true 
+	if mouse_on mouse_on_console = true
 	
 	right_previous = right
 	
-	for(var i = 0; i <= ds_list_size(afterscript)-1; i++)
+	for(var i = 0; i <= array_length(afterscript)-1; i++)
 	{
-		afterscript[| i].after_dock()
+		afterscript[i].after_dock()
 	}
+}
+
+
+
+generate_ctx_menu = function(){
+
+return [
+	new_ctx_text("Get printout", function(){clipboard_set_text(get_printout())}),
+	new_separator(),
+	new_ctx_text("Collapse all", hide_all),
+	new_ctx_text("Hide", function(){enabled = false}),
+]
 }
 
 
@@ -357,6 +380,17 @@ get_dropdown_input = function(){
 	var dropdown_x2 = right
 	var dropdown_y2 = top+bar_height
 
+	if not mouse_on_console and mouse_on
+	{
+		if mouse_check_button_pressed(mb_right) right_clicking = true
+		else if right_clicking and not mouse_check_button(mb_right)
+		{
+			ctx_menu_set(generate_ctx_menu())
+			right_clicking = false
+		}
+	}
+	else if right_clicking and not keyboard_check(mb_right) right_clicking = false
+
 	mouse_on_dropdown = (not mouse_on_console or mouse_on) and gui_mouse_between(dropdown_x1, dropdown_y1, dropdown_x2, dropdown_y2)
 	
 	if mouse_on_dropdown
@@ -373,6 +407,8 @@ get_dropdown_input = function(){
 
 
 get_input = function(){
+
+	before_func()
 
 	if not enabled 
 	{
@@ -467,7 +503,7 @@ get_input = function(){
 	else
 	{		
 		if draw_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
-		bottom += _element_hdist
+		bottom = round( bottom + _element_hdist / (1+(not draw_name_bar)) )
 		
 		var xx = left + _element_wdist
 		var yy = bottom
@@ -581,6 +617,7 @@ get_input = function(){
 	}
 	
 	if not docked after_dock()
+	after_func()
 	
 	draw_set_font(old_font)
 }
@@ -634,11 +671,11 @@ draw = function(){
 		{
 			draw_set_color(o_console.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
-			draw_set_color(is_front ? o_console.colors.plain : o_console.colors.body_accent)
 		}
 	}
 	if draw_name 
 	{
+		draw_set_color((is_front and draw_name_bar) ? o_console.colors.plain : o_console.colors.body_accent)
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(o_console.colors.body_accent)
@@ -696,17 +733,12 @@ clear = function(){
 		if variable_struct_exists(elements[@ i, j], "destroy") elements[@ i, j].destroy()
 	}
 	
+	afterscript = []
 	elements = []
 	e = {}
 }
 
 
 
-destroy = function(){
-	
-	clear()
-	ds_list_destroy(afterscript)
-	afterscript = -1
-	enabled = false
-}
+destroy = clear
 }

@@ -5,6 +5,63 @@ clicking_on_console = false
 run_in_console = false
 run_in_embed   = false
 
+if enabled and not initialized and keyboard_check_pressed(console_key) startup = 0
+
+if not initialized and startup > -1
+{
+	if startup == 0
+	{
+		steps_taken = 1
+		
+		init_list = [
+			initialize_autofill_index,
+			index_functions,
+			index_assets,
+			initialize_color_schemes,
+			initialize_console_graphics,
+			initialize_gmcl_macros,
+			console_macro_add_builtin,
+			initialize_bar_and_output,
+			initialize_console_docs,
+			user_console_startup,
+		]
+	}
+	
+	var time = get_timer()
+	var t = time
+
+	for(; startup <= array_length(init_list)-1; startup++)
+	{
+		init_list[startup]()
+		
+		var _t = get_timer()
+		
+		var ms = (_t-t)/10000
+		var lag = (ms/(room_speed/100))
+		//show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
+		
+		if lag >= .5
+		{
+			// show_debug_message("<< CONSOLE SETUP >> Yielding")
+			
+			steps_taken++
+			startup++
+			break
+		}
+	}
+	
+	if startup >= array_length(init_list)
+	{
+		initialized = true
+		show_debug_message(stitch("<< CONSOLE SETUP >> Initialized in ",steps_taken," steps"))
+		
+		delete init_list
+		delete steps_taken
+	}
+}
+
+if not enabled or not initialized exit
+
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
@@ -13,16 +70,7 @@ draw_set_font(o_console.font)
 
 ctx_menu_get_input()
 
-if mouse_check_button_released(mb_right) ctx_menu_set([
-	new_ctx_text("heya", function(){show_debug_message(1)}),
-	new_ctx_text("heya 2", function(){show_debug_message(2)}),
-	new_ctx_text("the option", function(){show_debug_message(3)}),
-	new_scrubber("a test of skill","0.x",1),
-	new_ctx_text("the cooler option", function(){show_debug_message(3)}),
-])
-
 COLOR_PICKER.get_input()
-//cs_editor.association = o_console.colors
 
 var was_clicking = clicking_on_console
 var front = -1

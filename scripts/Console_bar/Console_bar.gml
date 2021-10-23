@@ -51,6 +51,7 @@ else
 			BAR.text_box.scoped = true
 			o_console.keyboard_scope = BAR.text_box
 		}
+		OUTPUT.dock.enabled = BAR.enabled
 	}
 
 	if keyboard_check_pressed(vk_escape) 
@@ -58,6 +59,7 @@ else
 		BAR.enabled = false
 		BAR.text_box.scoped = false
 		o_console.keyboard_scope = noone
+		OUTPUT.dock.enabled = false
 	}
 }
 
@@ -99,7 +101,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 	
 	#region Parse command
 	if enter
-	{	
+	{
 		var _compile = gmcl_compile(console_string)
 		var _output  = gmcl_run(_compile)
 		

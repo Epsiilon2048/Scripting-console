@@ -1,4 +1,6 @@
 
+if not enabled or not initialized exit
+
 var old_color = draw_get_color()
 var old_alpha = draw_get_alpha()
 var old_font = draw_get_font()

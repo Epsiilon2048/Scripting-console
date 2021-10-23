@@ -206,6 +206,8 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					
 					var _macro = console_macros[$ segment]
 				
+					var _segment = segment
+				
 					if not is_undefined(_macro)
 					{
 						plain_segment = segment
@@ -219,18 +221,18 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						is_int = string_is_int(segment)
 					}
 						
-					var _asset 
+					var _asset
 					var _asset_type
-						
-					if is_int
-					{
-						_asset = real(segment)
-						_asset_type = -1
-					}
-					else if segment == string(global)
+					
+					if _segment == "global"
 					{
 						_asset = global
 						_asset_type = asset_object
+					}
+					else if is_int
+					{
+						_asset = real(segment)
+						_asset_type = -1
 					}
 					else
 					{	
@@ -238,14 +240,18 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						_asset_type = asset_get_type(segment) 
 					}
 					
-					if _prev_iden == dt_color
+					if _macro_type == dt_undefined 
+					{
+						_col = dt_real
+					}
+					else if _prev_iden == dt_color
 					{
 						if _macro_type == dt_color or string_is_float(segment)
 						{
 							_col = dt_color
 						}
 					}
-					else if (_prev_iden == dt_instance or (_prev_iden == dt_variable and (_asset_type == asset_object or _macro_type = dt_instance))) and _asset != -1 and instance_exists(_asset) and (_macro_type == -1 or _macro_type == dt_instance)
+					else if (_prev_iden == dt_instance or (_prev_iden == dt_variable and (_asset_type == asset_object or _macro_type = dt_instance))) and _asset != -1 and (instance_exists(_asset) or _asset == global) and (_macro_type == -1 or _macro_type == dt_instance)
 					{
 						_col = dt_instance
 						instscope = segment
@@ -254,17 +260,13 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					{
 						_col = dt_method
 					}
-					else if _prev_iden == dt_room and room_exists(_asset) and (is_int or _asset_type == asset_room) and (_macro_type == -1 or _macro_type == dt_room)
-					{
-						_col = dt_room
-					}
 					else if _prev_iden == dt_asset and _asset != -1 and (_macro_type == -1 or _macro_type == dt_asset) and (not is_int or object_exists(_asset))
 					{
 						_col = dt_asset
 					}
 					else if _prev_iden == -1 and _asset_type != -1
 					{
-						if _asset_type == asset_object and instance_exists(_asset)
+						if _asset_type == asset_object and (_asset == global or instance_exists(_asset))
 						{
 							_col = dt_instance
 							instscope = segment

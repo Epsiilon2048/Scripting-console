@@ -1,6 +1,8 @@
 
 function draw_color_text(x, y, color_text){
 
+format_console_element()
+
 if not is_struct(color_text) or array_length(color_text.colors) < 1 return undefined
 
 var old_color  = draw_get_color()

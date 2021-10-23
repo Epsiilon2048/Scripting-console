@@ -1,10 +1,5 @@
 
-if startup 
-{
-	console_startup()
-	startup = false
-}
-
+if not enabled or not initialized exit
 
 #region Silly theming stuff
 if rainbow rainbowify([

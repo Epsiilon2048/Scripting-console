@@ -34,7 +34,6 @@ com_add("destroy_console", {hidden: true, hiddenargs: ["are you certain?"], desc
 
 com_add_category("Logging", false)
 com_add("error_report", {desc: "Returns the exception of the previous error thrown by a console command"})
-com_add("compile_report", {desc: "Returns a report of how the previous command was interpreted"})
 
 com_add_category("Variable operations", false)
 com_add("addvar", {args: ["variable"], optargs: ["value"], desc: "Adds a value to the specified variable; value defaults to 1"})

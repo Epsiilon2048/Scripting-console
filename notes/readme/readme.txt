@@ -13,7 +13,7 @@ you can type "object.variable" to access variables within objects outside of you
  - The ability to scroll through console commands which exceed the length
  - Hovering over scripts in the commandline shows help
  - Undo and redo
- - Autofill and real time syntax errors
+ - Real time syntax errors
  - Enumerate support
  - Manual resizing of windows
  - Text icons

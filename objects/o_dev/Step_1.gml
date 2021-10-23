@@ -1,2 +1,0 @@
-
-sw.get_input()

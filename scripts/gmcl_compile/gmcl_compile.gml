@@ -21,15 +21,16 @@ SUBJECT INTERPRETATION
 ARGUMENT INTERPRETATION
 1: Check for datatype identifiers
 2: Substitute console macros
-3: If the arg is in quotes, it is a string
-4: If the arg is an asset name, it substituted with an asset index
-5: If the arg is a float, it is converted to real
-6: If the arg is a variable with either the console's scope or a specified one, it is a variable
-7: If none of these, it is marked as a syntax error
+3: If it's undefined, I mean, what do you think
+4: If the arg is in quotes, it is a string
+5: If the arg is an asset name, it substituted with an asset index
+6: If the arg is a float, it is converted to real
+7: If the arg is a variable with either the console's scope or a specified one, it is a variable
+8: If none of these, it is marked as a syntax error
 */
 
 // The compiler isn't very efficient at all. At the moment however, it probably doesn't need to be.
-// Many commands can still be compiled per step without a frame drop. Given how most commands are
+// Most commands can still be compiled per step without a frame drop. Given how most commands are
 // going to be quite short, and how it's rarely ever going to compile a command more than one time
 // per step, it probably isn't a worthwhile investment.
 
