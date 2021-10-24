@@ -57,6 +57,11 @@ if not initialized and startup > -1
 		
 		delete init_list
 		delete steps_taken
+		
+		keyboard_scope = BAR.text_box
+		BAR.text_box.scoped = true
+		BAR.text_box.blink_step = 0
+		keyboard_string = ""
 	}
 }
 
