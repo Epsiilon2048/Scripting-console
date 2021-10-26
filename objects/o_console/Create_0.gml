@@ -118,6 +118,8 @@ gui_mouse_y = gui_my
 
 console_key = vk_tilde
 
+commands = -1
+
 show_hidden_commands = false
 show_hidden_args = false
 
@@ -177,6 +179,7 @@ command_order = -1
 
 startup = -1
 initialized = false
+can_run = false
 enabled = true
 
 DISPLAY = {}

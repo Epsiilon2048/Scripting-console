@@ -1,5 +1,5 @@
 
-if not enabled or not initialized exit
+if not enabled or not can_run exit
 
 #region Silly theming stuff
 if rainbow rainbowify([

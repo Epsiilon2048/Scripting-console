@@ -32,9 +32,9 @@ return ind
 
 
 
-function ds_destroy(ds_type, ind){
+function ds_destroy(ds_type, ind){ with o_console {
 
-switch ds_type
+if ds_exists(ds_type, ind) switch ds_type
 {
 	case ds_type_grid:		ds_grid_destroy(ind)
 	break
@@ -49,28 +49,10 @@ switch ds_type
 	case ds_type_stack:		ds_stack_destroy(ind)
 }
 
-var name = o_console.ds_names[$ ds_type][@ ind].name
-ds_map_delete(o_console.ds_types, name)
-o_console.ds_names[$ ds_type][@ ind] = undefined
+if ind >= 0 and ind < array_length(ds_names[$ ds_type]) and is_struct(ds_names[$ ds_type][@ ind])
+{
+	var name = ds_names[$ ds_type][@ ind].name
+	ds_map_delete(ds_types, name)
+	ds_names[$ ds_type][@ ind] = undefined
 }
-
-
-
-function ds_grid_create_log(name){
-
-}
-function ds_list_create_log(name){
-	
-}
-function ds_map_create_log(name){
-	
-}
-function ds_queue_create_log(name){
-	
-}
-function ds_stack_create_log(name){
-	
-}
-function ds_priority_create_log(name){
-	
-}
+}}

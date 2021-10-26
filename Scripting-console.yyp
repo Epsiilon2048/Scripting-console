@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"nosprite","path":"sprites/nosprite/nosprite.yy",},"order":46,},
     {"id":{"name":"Console_measurer","path":"scripts/Console_measurer/Console_measurer.yy",},"order":13,},
     {"id":{"name":"Console_button","path":"scripts/Console_button/Console_button.yy",},"order":7,},
     {"id":{"name":"gmcl_build_error","path":"scripts/gmcl_build_error/gmcl_build_error.yy",},"order":27,},

@@ -46,7 +46,6 @@ with bm_box
 }
 
 var editor = new_console_dock("Color scheme editor", [
-	new_cd_checkbox("","0.f"),
 	[new_console_dock("IDE colors", [
 		new_color_box("Primary", "output"),
 		new_separator(),
@@ -58,7 +57,7 @@ var editor = new_console_dock("Color scheme editor", [
 		new_separator(),
 		[new_color_box("Red  ", "red"),		new_color_box("Green", "green"),	new_color_box("Blue ", "blue")],
 		[new_color_box("Black", "black"),	new_color_box("White", "white")],
-	]),""],
+	])],
 	[new_console_dock("Text colors", [
 		[new_color_box("Plain     ", "plain"),		new_color_box("Numeric   ", dt_real),	new_color_box("Asset     ", dt_asset),		new_color_box("Instance  ", dt_instance)],
 		[new_color_box("String    ", dt_string),	new_color_box("Color     ", dt_color),	new_color_box("Built-in  ", dt_builtinvar),	new_color_box("Tag       ", dt_tag)],

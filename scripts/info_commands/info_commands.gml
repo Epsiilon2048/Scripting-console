@@ -267,48 +267,15 @@ array_push(text,
 	{str: "New color scheme\n", scr: new_color_scheme, outp: true},
 	{str: "Regenerate default color schemes\n\n", scr: initialize_color_schemes},
 	
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", col: "embed_hover"}," / ",{str: "Color scheme editor", scr: color_scheme_editor, output: true},
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", col: "embed_hover"}," / ",{str: "Color scheme editor", scr: function(){output_set(new_colorscheme_editor())}, output: true},
 )
 
 return format_output(text, true, color_scheme_settings)
 }}
 
-	
-function color_scheme_editor(){ with o_console {
 
-return format_output([
-	"IDE colors",
-	{str: "\nbody        ",	scr: value_box,	args: ["o_console.colors.body",				vb_color]},"(the color behind text)",
-	{str: "\nbody_bm     ",	scr: input_set, args: ["o_console.colors.body_bm ",			true]},
-	{str: "\nbody_alpha  ",	scr: value_box,	args: ["o_console.colors.body_alpha",		vb_scrubber]},
-	{str: "\nbody_real   ",	scr: value_box,	args: ["o_console.colors.body_real",		vb_color]},"(body color when blendmode/alpha aren't applied)",
-	{str: "\nbody_accent ",	scr: value_box,	args: ["o_console.colors.body_accent",		vb_color]},"(the secondary body color)",
-	{str: "\noutput      ",	scr: value_box,	args: ["o_console.colors.output",			vb_color]},"(the 'main' color)",
-	{str: "\nex_output   ",	scr: value_box,	args: ["o_console.colors.ex_output",		vb_color]},"(output text color when exposed)",
-	{str: "\nembed       ",	scr: value_box,	args: ["o_console.colors.embed",			vb_color]},
-	{str: "\nembed_hover ",	scr: value_box,	args: ["o_console.colors.embed_hover",		vb_color]},
-	{str: "\nselection   ",	scr: value_box,	args: ["o_console.colors.selection",		vb_color]},"\n\n"+
-	
-	"Text colors",
-	{str: "\nplain       ",	scr: value_box,	args: ["o_console.colors.plain",			vb_color]},
-	{str: "\nreal        ",	scr: value_box, args: ["o_console.colors."+dt_real,			vb_color]},
-	{str: "\nstring      ",	scr: value_box, args: ["o_console.colors."+dt_string,		vb_color]},
-	{str: "\nasset       ",	scr: value_box, args: ["o_console.colors."+dt_asset,		vb_color]},
-	{str: "\nvariable    ",	scr: value_box, args: ["o_console.colors."+dt_variable,		vb_color]},
-	{str: "\nmethod      ",	scr: value_box, args: ["o_console.colors."+dt_method,		vb_color]},
-	{str: "\ninstance    ",	scr: value_box, args: ["o_console.colors."+dt_instance,		vb_color]},
-	{str: "\ntag         ",	scr: value_box, args: ["o_console.colors."+dt_tag,			vb_color]},"(compiler instructions)",
-	{str: "\ndeprecated  ",	scr: value_box, args: ["o_console.colors."+dt_deprecated,	vb_color]},"(commands no longer in use)\n\n",
 
-	"All color scheme variables are stored in o_console.colors\n\n",
-	
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", scr: color_scheme_settings, output: true}," / ",{str: "Color scheme editor", col: "embed_hover"},
-	
-], true, color_scheme_editor, "Color scheme editor")
-}}
 
-	
-	
 function Epsiilon(){
 
 return format_output([

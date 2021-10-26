@@ -5,7 +5,7 @@ clicking_on_console = false
 run_in_console = false
 run_in_embed   = false
 
-if enabled and not initialized and keyboard_check_pressed(console_key) startup = 0
+if enabled and not initialized and startup == -1 and keyboard_check_pressed(console_key) startup = 0
 
 if not initialized and startup > -1
 {
@@ -14,16 +14,28 @@ if not initialized and startup > -1
 		steps_taken = 1
 		
 		init_list = [
-			initialize_autofill_index,
-			index_functions,
-			index_assets,
 			initialize_color_schemes,
 			initialize_console_graphics,
-			initialize_gmcl_macros,
-			console_macro_add_builtin,
 			initialize_bar_and_output,
-			initialize_console_docs,
 			user_console_startup,
+			
+			function(){
+				keyboard_scope = BAR.text_box
+				BAR.text_box.scoped = true
+				keyboard_string = ""
+				can_run = true
+				show_debug_message("<< CONSOLE SETUP >> Mandatory initialization complete; can run")
+			},
+			
+			function(){ COLOR_PICKER.svsquare = generate_satval_square() },
+			function(){ COLOR_PICKER.hstrip = generate_hue_strip() },
+			
+			initialize_autofill_index,
+			initialize_gmcl_macros,
+			initialize_console_docs,
+			console_macro_add_builtin,
+			index_functions,
+			index_assets,
 		]
 	}
 	
@@ -32,20 +44,22 @@ if not initialized and startup > -1
 
 	for(; startup <= array_length(init_list)-1; startup++)
 	{
+		stay = false
+		
 		init_list[startup]()
 		
 		var _t = get_timer()
 		
 		var ms = (_t-t)/10000
 		var lag = (ms/(room_speed/100))
-		//show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
+		show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
 		
-		if lag >= .5
+		if stay or lag >= .5
 		{
 			// show_debug_message("<< CONSOLE SETUP >> Yielding")
 			
 			steps_taken++
-			startup++
+			startup += not stay
 			break
 		}
 	}
@@ -57,10 +71,11 @@ if not initialized and startup > -1
 		
 		delete init_list
 		delete steps_taken
+		delete stay
 	}
 }
 
-if not enabled or not initialized exit
+if not enabled or not can_run exit
 
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my

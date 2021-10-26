@@ -117,9 +117,20 @@ function console_macro_add_builtin(criteria){ with o_console {
 
 if is_undefined(criteria) criteria = ""
 
-var added = 0
+static i = 0
+static check_inc = 70
+var t
 
-for(var i = 0; i <= 10000; i++)
+if initialized 
+{
+	i = 0
+}
+else t = get_timer()
+
+var added = 0
+var addressed = 0
+
+for(; i <= 10000; i++)
 {
 	var name = script_get_name(i)
 	
@@ -150,10 +161,27 @@ for(var i = 0; i <= 10000; i++)
 				added ++
 			}
 		}
+		
+		if (addressed++ mod check_inc) == check_inc-1
+		{
+			var _t = get_timer()
+		
+			var ms = (_t-t)/10000
+			var lag = (ms/(room_speed/100))
+			
+			if lag >= .5
+			{
+				stay = true
+				break
+			}
+		}
 	}
 }
 
-ds_list_sort(macro_list, true)
-return "Added "+string(added)+" builtin function"+((added == 1) ? "" : "s")
+if i > 10000 
+{
+	ds_list_sort(macro_list, true)
+	return "Added "+string(added)+" builtin function"+((added == 1) ? "" : "s")
+}
 }}
 

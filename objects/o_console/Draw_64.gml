@@ -1,5 +1,5 @@
 
-if not enabled or not initialized exit
+if not enabled or not can_run exit
 
 var old_color = draw_get_color()
 var old_alpha = draw_get_alpha()
