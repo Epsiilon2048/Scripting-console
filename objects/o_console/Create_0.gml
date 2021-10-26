@@ -24,14 +24,14 @@ update_steps = 10
 
 colors = {}
 
-fonts = [
-	fnt_debug1x,
-	fnt_debug2x,
-	fnt_debug3x,
-	fnt_debug4x,
-	fnt_debug5x,
-	fnt_debug6x,
-]
+fonts = []
+var i = 1
+var asset = fnt_debug1x
+while font_exists(asset)
+{
+	array_push(fonts, asset)
+	asset = asset_get_index(stitch("fnt_debug",++i,"x"))
+}
 
 scale = function(size){ with o_console {
 	
@@ -111,6 +111,15 @@ event_commands = {
 	step_end: [],
 	draw:	  [],
 	gui:	  [],
+}
+
+tags = {} with tags {
+	add			= noscript
+	
+	step		= noscript
+	step_end	= noscript
+	draw		= noscript
+	gui			= noscript
 }
 
 gui_mouse_x = gui_mx

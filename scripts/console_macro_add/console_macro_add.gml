@@ -161,19 +161,19 @@ for(; i <= 10000; i++)
 				added ++
 			}
 		}
+	}
+	
+	if not initialized and (i mod check_inc) == check_inc-1
+	{
+		var _t = get_timer()
 		
-		if (addressed++ mod check_inc) == check_inc-1
-		{
-			var _t = get_timer()
-		
-			var ms = (_t-t)/10000
-			var lag = (ms/(room_speed/100))
+		var ms = (_t-t)/10000
+		var lag = (ms/(room_speed/100))
 			
-			if lag >= .5
-			{
-				stay = true
-				break
-			}
+		if lag >= .3
+		{
+			stay = true
+			break
 		}
 	}
 }

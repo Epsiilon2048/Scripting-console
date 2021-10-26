@@ -289,11 +289,11 @@ draw = function(){
 	var _hstrip_left = hstrip_left+_outline
 
 	shader_set(shd_hue)
-	shader_set_uniform_f(u_position, (hue/255)*(pi*2))
-	draw_sprite_stretched(co.svsquare, 0, _in_left, _in_top, _svsquare_right-_in_left+1, _svsquare_bottom-_in_top+1)
+	shader_set_uniform_f(u_position, hue/255)
+	draw_surface_stretched(co.svsquare, _in_left, _in_top, _svsquare_right-_in_left+1, _svsquare_bottom-_in_top+1)
 	shader_reset()
 	
-	draw_sprite_stretched(co.hstrip, 0, _hstrip_left, _in_top, _in_right-_hstrip_left+1, _svsquare_bottom-_in_top+1)
+	draw_surface_stretched(co.hstrip, _hstrip_left, _in_top, _in_right-_hstrip_left+1, _svsquare_bottom-_in_top+1)
 
 	draw_set_color(color)
 	draw_rectangle(in_left, colorbar_top, in_right, in_bottom, false)

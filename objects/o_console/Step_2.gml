@@ -24,18 +24,17 @@ if not initialized and startup > -1
 				BAR.text_box.scoped = true
 				keyboard_string = ""
 				can_run = true
-				show_debug_message("<< CONSOLE SETUP >> Mandatory initialization complete; can run")
+				//show_debug_message("<< CONSOLE SETUP >> Mandatory initialization complete; can run")
 			},
 			
-			function(){ COLOR_PICKER.svsquare = generate_satval_square() },
-			function(){ COLOR_PICKER.hstrip = generate_hue_strip() },
-			
+			generate_satval_square,
+			generate_hue_strip,
 			initialize_autofill_index,
 			initialize_gmcl_macros,
 			initialize_console_docs,
-			console_macro_add_builtin,
 			index_functions,
 			index_assets,
+			console_macro_add_builtin,
 		]
 	}
 	
@@ -111,5 +110,6 @@ console_measurer_inputs()
 
 event_commands_exec(event_commands.step_end)
 step ++
+
 
 draw_set_font(old_font)

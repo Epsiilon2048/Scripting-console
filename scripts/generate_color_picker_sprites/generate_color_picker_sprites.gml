@@ -3,34 +3,21 @@ function generate_satval_square(){
 
 draw_reset_properties()
 
-var c = surface_create(256, 256)
+var c = surface_create(1, 1)
 surface_set_target(c)
 
-for(var yy = 0; yy <= 255; yy++)
-for(var xx = 0; xx <= 255; xx++)
-{
-	var _col = make_color_hsv(
-		0,
-		xx,
-		255-yy
-	)
-
-	draw_set_color(_col)
-	draw_point(xx, yy)
-}
-
-var _c = sprite_create_from_surface(c, 0, 0, 256, 256, false, false, 0, 0)
+draw_point(1, 1)
 
 surface_reset_target()
-surface_free(c)
-
-return _c
+COLOR_PICKER.svsquare = c
 }
 
 
 
 
 function generate_hue_strip(){
+
+var old_color = draw_get_color()
 
 draw_reset_properties()
 
@@ -43,12 +30,7 @@ for(var yy = 0; yy <= 255; yy++)
 	draw_set_color(_col)
 	draw_point(0, yy)
 }
-draw_set_color(c_white)
-
-var _c = sprite_create_from_surface(c, 0, 0, 1, 256, false, false, 0, 0)
-
+draw_set_color(old_color)
 surface_reset_target()
-surface_free(c)
-
-return _c
+COLOR_PICKER.hstrip = c
 }
