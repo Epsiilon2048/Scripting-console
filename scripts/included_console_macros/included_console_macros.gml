@@ -5,9 +5,20 @@
 #macro console_typing (o_console.keyboard_scope != noone)
 #macro console_initialized o_console.initialized
 
+#macro vk_rcommand 91
+#macro vk_lcommand 92
+#macro vk_super global.__super_key
+#macro vk_tilde global.__tilde_key
+
+vk_super = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
+vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 
 #macro script_exists better_script_exists  // Was causing crashes for values it probably shouldn't've
 
+// Were for embedded text but mostly unused now
+#macro cbox_true  "[x]"
+#macro cbox_false "[ ]"
+#macro cbox_NaN	  "[/]"
 
 #region Shortcuts
 #macro gui_mx device_mouse_x_to_gui(0)

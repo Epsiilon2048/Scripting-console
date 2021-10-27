@@ -108,8 +108,8 @@ set_boundaries = function(){
 	var tb = o_console.TEXT_BOX
 	
 	draw_set_font(o_console.font)
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	var asp = ch/tb.char_height
 	
 	var _text_wdist = floor(tb.text_wdist*asp)
@@ -138,7 +138,7 @@ set_boundaries = function(){
 	left = x
 	top = y
 	
-	box_left = left + (draw_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
+	box_left = left + (draw_name ? (string_width_oneline(name) + _text_wdist*2*att.draw_box) : 0)
 	right = box_left + att.length*cw + _text_wdist*2*att.draw_box + cw*(not att.draw_box and draw_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	
@@ -387,7 +387,7 @@ draw = function(){
 	draw_set_font(o_console.font)
 	var tb = o_console.TEXT_BOX
 
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/tb.char_height
 	
 	var _outline_width = tb.outline_width*asp

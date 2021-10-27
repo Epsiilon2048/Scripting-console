@@ -97,14 +97,14 @@ for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); 
 		}
 		else 
 		{
-			com_start = i
+			com_start = i-1
 		}
 	}
 	else if not string_pos(char, tag_sep)
 	{
 		if char == "\\"
 		{
-			com_start = i+1
+			com_start = i//+1
 		}
 		break
 	}
@@ -118,11 +118,11 @@ if tag != ""
 	
 	if variable_struct_exists(color_text, "tag") and color_text.tag != ""
 	{
-		color_text.text = "#"+color_text.tag+" "+color_text.text
+		color_text.text = "#"+color_text.tag+color_text.text
 		
 		if is_array(color_text.colors)
 		{
-			var len = string_length(color_text.tag)+2
+			var len = string_length(color_text.tag)+1
 			
 			for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 			{

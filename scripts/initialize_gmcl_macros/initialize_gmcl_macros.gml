@@ -1,13 +1,4 @@
 
-#macro vk_rcommand 91
-#macro vk_lcommand 92
-global.super_key = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
-global.tilde_key = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
-#macro vk_super global.super_key
-#macro vk_tilde global.tilde_key
-
-
-
 function index_virtualkeys(){
 
 static am = function(name, type, value){ console_macro_add_ext(name, type, value, false) }
@@ -144,6 +135,11 @@ am("bm_src_alpha_sat",	dt_real, bm_src_alpha_sat)
 am("bm_src_color",		dt_real, bm_src_color)
 am("bm_subtract",		dt_real, bm_subtract)
 am("bm_zero",			dt_real, bm_zero)
+#endregion
+
+#region Gamespeed types
+am("gamespeed_fps",				dt_real, gamespeed_fps)
+am("gamespeed_microseconds",	dt_real, gamespeed_microseconds)
 #endregion
 
 #region Text alignments

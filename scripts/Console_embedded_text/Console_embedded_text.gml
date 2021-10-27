@@ -1,8 +1,4 @@
 
-#macro cbox_true  "[x]"
-#macro cbox_false "[ ]"
-#macro cbox_NaN	  "[/]"
-
 function new_embedded_text(text){
 var e = new Embedded_text()
 e.set(text)
@@ -190,15 +186,15 @@ set = function(text){
 	self.subclickable	= ds_list_to_array(_subclickable_list)
 
 	self.height += 1
-	self.width = string_width(self.plain)/string_width(" ")
+	self.width = string_width(self.plain)/string_width("W")
 
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
 	left = x
 	top = y
-	right = x+width*string_width(" ")
-	bottom = y+height*string_height(" ")
+	right = x+width*string_width("W")
+	bottom = y+height*string_height("W")
 
 	ds_list_clear(_colors_list)
 	ds_list_clear(_clickable_list)
@@ -263,8 +259,8 @@ if layers > 0
 
 function embedded_text_inputs(x, y, text, plaintext_color, alpha){
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 
 if is_undefined(text) or not is_struct(text) return undefined
 
@@ -363,8 +359,8 @@ if text.click_index != -1 clicking_on_console = true
 
 function draw_embedded_text(x, y, text, plaintext_color, alpha){
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 
 var old_color = draw_get_color()
 var old_alpha = draw_get_alpha()

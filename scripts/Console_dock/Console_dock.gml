@@ -287,7 +287,7 @@ after_dock = function(){
 	
 	var dc = o_console.DOCK
 	
-	var ch =  string_height(" ")
+	var ch =  string_height("W")
 	var asp = ch/dc.char_height
 	
 	var _outline_width = round(dc.name_outline_width*asp)
@@ -365,7 +365,7 @@ get_dropdown_input = function(){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/dc.char_height
 
 	var _outline_width = round(dc.name_outline_width*asp)
@@ -429,8 +429,8 @@ get_input = function(){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	var asp = ch/dc.char_height
 	
 	var _outline_width = round(dc.name_outline_width*asp)
@@ -502,7 +502,7 @@ get_input = function(){
 	}
 	else
 	{		
-		if draw_name right = left + string_length(name)*cw + _name_wdist*2 + _dropdown_base
+		if draw_name right = left + string_width_oneline(name) + _name_wdist*2 + _dropdown_base
 		bottom = round( bottom + _element_hdist / (1+(not draw_name_bar)) )
 		
 		var xx = left + _element_wdist
@@ -638,7 +638,7 @@ draw = function(){
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 	
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/dc.char_height
 	
 	var _outline_width = round(dc.name_outline_width*asp)

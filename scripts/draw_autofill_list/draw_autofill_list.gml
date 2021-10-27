@@ -14,7 +14,7 @@ draw_set_font(font)
 draw_set_halign(fa_left)
 draw_set_valign(fa_bottom)
 
-var ch = string_height(" ")
+var ch = string_height("W")
 
 var entries = (
 	((autofill.macros == -1) ? 0 : (autofill.macros.max - autofill.macros.min+1)) +

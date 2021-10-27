@@ -92,7 +92,7 @@ update_variable = function(){
 		draw_set_font(o_console.font)
 		
 		var co = o_console.COLOR_PICKER
-		var ch = string_height(" ")
+		var ch = string_height("W")
 		var asp = ch/co.char_height
 		var size_asp = asp*size
 		var _outline = round(co.outline*asp)
@@ -138,7 +138,7 @@ get_input = function(){
 	draw_set_font(o_console.font)
 
 	var co = o_console.COLOR_PICKER
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/co.char_height
 	var size_asp = asp*size
 	var _dist = draw_box ? round(co.dist*size_asp) : 0
@@ -268,7 +268,7 @@ draw = function(){
 	draw_set_font(o_console.font)
 
 	var co = o_console.COLOR_PICKER
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/co.char_height
 	var _outline = round(co.outline*asp)
 	var _dropper_length = round(co.dropper_length*asp)

@@ -40,11 +40,12 @@ with BAR {
 	sidebar_surface = -1
 	
 	mouse_on = false
-	
+
 	text_box = new Console_text_box() with text_box
 	{
 		initialize()
 		variable = "o_console.console_string"
+		value = ""
 		draw_name = false
 		att.draw_box = false
 		color_method = gmcl_string_color

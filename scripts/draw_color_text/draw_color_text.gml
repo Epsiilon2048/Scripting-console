@@ -14,8 +14,8 @@ var old_halign = draw_get_halign()
 draw_set_font(o_console.font)
 draw_set_halign(fa_left)
 
-var char_width = string_width(" ")
-var char_height = string_height(" ")
+var char_width = string_width("W")
+var char_height = string_height("W")
 
 var y1
 var y2
@@ -46,7 +46,7 @@ if tag != ""
 	draw_set_color(o_console.colors[$ dt_tag])
 	draw_text(x, y, tag)
 	
-	x += char_width*(string_length(tag)+1)
+	x += string_width_oneline(tag)
 }
 
 if not is_array(color_text.colors)
@@ -65,7 +65,7 @@ for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 {
 	var _text = string_copy( color_text.text, lastpos, color_text.colors[i].pos - lastpos )
 	
-	var len = char_width*string_length(_text)
+	var len = string_width_oneline(_text)
 	
 	var c = color_text.colors[i].col
 	var hl = variable_struct_get(color_text.colors[i], "hl")

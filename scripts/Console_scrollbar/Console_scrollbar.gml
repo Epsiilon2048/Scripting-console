@@ -49,7 +49,7 @@ set_page_boundaries = function(page_width, page_height){
 	
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var sc = o_console.SCROLLBAR
 	var asp = ch/sc.char_height
 	var _bar_width = round((condensed ? sc.bar_width_condensed : sc.bar_width)*asp)

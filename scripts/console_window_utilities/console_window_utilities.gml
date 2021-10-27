@@ -43,8 +43,8 @@ var wn = o_console.WINDOW
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 
 var asp = ch/wn.char_height
 
@@ -128,8 +128,8 @@ var old_font = draw_get_font()
 
 draw_set_font(o_console.font)
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 
 var asp = ch/wn.char_height
 
@@ -197,8 +197,8 @@ var old_font = draw_get_font()
 
 draw_set_font(o_console.font)
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 
 var asp = ch/wn.char_height
 

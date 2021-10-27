@@ -59,8 +59,8 @@ set = function(text){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	
 	self.text = string(text)
 	name = self.text
@@ -84,8 +84,8 @@ get_input = function(){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	
 	if not is_undefined(variable)
 	{
@@ -223,7 +223,7 @@ get_input = function(){
 	}
 	
 	var cb = o_console.CHECKBOX
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/cb.char_height
 	var _width = round(cb.width*asp)
 	

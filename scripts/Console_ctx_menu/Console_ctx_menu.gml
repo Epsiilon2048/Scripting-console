@@ -71,8 +71,8 @@ initialize = function(text, func)
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 
-	width = string_width(text)/string_width(" ")
-	height = string_height(text)/string_height(" ")
+	width = string_width(text)/string_width("W")
+	height = string_height(text)/string_height("W")
 	
 	draw_set_font(old_font)
 }
@@ -84,8 +84,8 @@ get_input = function(){
 	
 	left = round(x)
 	top = round(y)
-	right = left+width*string_width(" ")
-	bottom = top+height*string_height(" ")
+	right = left+width*string_width("W")
+	bottom = top+height*string_height("W")
 }
 
 
@@ -149,7 +149,7 @@ if not enabled or array_length(elements) == 0
 }
 
 draw_set_font(o_console.font)
-var ch = string_height(" ")
+var ch = string_height("W")
 var asp = ch/char_height
 
 var _wdist = round(wdist*asp)

@@ -20,6 +20,8 @@ element_dragging = noone
 
 e = {}
 
+consistent_spacing = false
+
 update_steps = 10
 
 colors = {}
@@ -36,6 +38,7 @@ while font_exists(asset)
 scale = function(size){ with o_console {
 	
 	font = fonts[ clamp(size-1, 0, array_length(fonts)-1) ]
+	consistent_spacing = font_has_consistent_kerning(font)
 }}
 
 run_in_embed = false

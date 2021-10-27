@@ -3,7 +3,7 @@ function input_set_pos(input){ with o_console.keyboard_scope {
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
 var tb = o_console.TEXT_BOX
-var ch = string_height(" ")
+var ch = string_height("W")
 var asp = ch/tb.char_height
 var _text_hdist = floor(tb.text_hdist*asp)
 draw_set_font(old_font)
@@ -55,7 +55,7 @@ convert(text)
 var _association = is_undefined(association) ? (docked ? dock.association : self) : association
 if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 			
-text_width = string_width(" ")*clamp(string_length(text), att.length_min, att.length_max)
+text_width = string_width("W")*clamp(string_length(text), att.length_min, att.length_max)
 				
 char_mouse = false
 				

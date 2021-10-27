@@ -7,7 +7,7 @@ var old_swf_aa = draw_get_swf_aa_level()
 draw_set_font(o_console.font)
 draw_set_swf_aa_level(1)
 
-var ch = string_height(" ")
+var ch = string_height("W")
 var asp = ch/char_height
 var _width = round(width*asp)
 if is_undefined(mouse_on) mouse_on = false

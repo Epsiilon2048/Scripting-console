@@ -16,8 +16,8 @@ set_name = function(name){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	
 	self.name = string(name)
 	name_width = string_width(self.name)/cw
@@ -97,8 +97,8 @@ get_input = function(){
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
 	
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	
 	var asp = ch/bt.char_height
 	var tb_asp = ch/tb.char_height
@@ -206,7 +206,7 @@ draw = function(){
 	draw_set_halign(fa_center)
 	draw_set_valign(fa_middle)
 	
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	
 	var asp = ch/bt.char_height
 	var tb_asp = ch/tb.char_height

@@ -18,8 +18,8 @@ else if BAR.run_in_dock BAR.docked = true
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 var asp = ch/BAR.char_height
 
 var _win_dist		= floor(BAR.win_dist*asp)
@@ -28,7 +28,7 @@ var _text_dist		= ceil(BAR.text_dist*asp)
 var _sep			= ceil(BAR.sep*asp)
 var _sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
 
-var sidetext_width = string_length(BAR.sidetext_string)*cw
+var sidetext_width = string_width_oneline(BAR.sidetext_string)
 
 var _x = is_undefined(BAR.x) ? _win_dist : BAR.x
 var _y = is_undefined(BAR.y) ? (gui_height - _win_dist - ch - _height) : BAR.y
@@ -115,7 +115,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 }
 else BAR.blink_step = 0
 
-if not is_undefined(object) and instance_exists(object) 
+if not is_undefined(object) and (is_struct(object) or instance_exists(object))
 {
 	if is_struct(object) BAR.sidetext_string = variable_struct_exists_get(object, "name", variable_struct_exists_get(object, "id", instanceof(object)))
 	else BAR.sidetext_string = (object == global) ? "global" : object_get_name( object.object_index )
@@ -197,8 +197,8 @@ var old_valign = draw_get_valign()
 
 draw_set_font(font)
 
-var cw = string_width(" ")
-var ch = string_height(" ")
+var cw = string_width("W")
+var ch = string_height("W")
 var asp = ch/BAR.char_height
 
 var _text_dist		= ceil(BAR.text_dist*asp)

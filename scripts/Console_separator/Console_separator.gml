@@ -50,7 +50,7 @@ get_input = function(){
 	draw_set_font(o_console.font)
 	
 	var sp = o_console.SEPARATOR
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/sp.char_height
 	var _width = max(1, round(sp.width*asp))
 	
@@ -76,7 +76,7 @@ draw = function(){
 	draw_set_font(o_console.font)
 	
 	var sp = o_console.SEPARATOR
-	var ch = string_height(" ")
+	var ch = string_height("W")
 	var asp = ch/sp.char_height
 	var _wdist = round(sp.wdist*asp)
 	

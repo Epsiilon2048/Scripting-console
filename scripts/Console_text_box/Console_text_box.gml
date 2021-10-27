@@ -79,7 +79,7 @@ initialize = function(variable){
 	initial_ghost_text = ""
 	self.variable = variable
 	variable_exists = variable_string_exists(variable)
-	value = 0
+	value = ""
 	scoped = false
 	
 	mouse_on = false
@@ -214,6 +214,7 @@ initialize_scrubber = function(variable, step){
 	else scrubber_step = step
 
 	typing = false
+	value = 0
 	
 	value_conversion = real
 	att.incrementor_step = scrubber_step
@@ -259,7 +260,7 @@ mouse_get_char_pos = function(){
 	
 	var old_font = draw_get_font()
 	draw_set_font(o_console.font)
-	var cw = string_width(" ")
+	var cw = string_width("W")
 	draw_set_font(old_font)
 	
 	return clamp( floor((gui_mx-text_x+3) / cw), 0, string_length(text)+1 )
@@ -273,8 +274,8 @@ set_boundaries = function(){
 	var tb = o_console.TEXT_BOX
 	
 	draw_set_font(o_console.font)
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	var asp = ch/tb.char_height
 	
 	var _text_wdist = floor(tb.text_wdist*asp)
@@ -299,7 +300,7 @@ set_boundaries = function(){
 	#endregion
 	
 	#region Defining boundries
-	text_width = clamp(string_length(text), att.length_min, att.length_max)*cw
+	text_width = clamp(string_width_oneline(text), att.length_min*cw, att.length_max*cw)
 	
 	left = x
 	top = y
@@ -310,7 +311,7 @@ set_boundaries = function(){
 		if not left_el.draw_name left = left_el.right + (att.draw_box ? 1 : cw)
 	}
 	
-	box_left = left + (draw_name ? (string_length(name)*cw + _text_wdist*2*att.draw_box) : 0)
+	box_left = left + (draw_name ? (string_width_oneline + _text_wdist*2*att.draw_box) : 0)
 	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and draw_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	
@@ -320,7 +321,7 @@ set_boundaries = function(){
 	text_y = top+1 + _text_hdist*att.draw_box
 	
 	if not att.scrubber or (not docked or (docked and (att.allow_dragging and dock.allow_element_dragging))) box_right = right
-	else box_right = min(right, text_x+max(1, string_length(text))*cw+_text_wdist/2)
+	else box_right = min(right, text_x+max(cw, string_width_oneline(text))+_text_wdist/2)
 	#endregion
 }
 
@@ -448,8 +449,8 @@ get_input = function(){
 	var tb = o_console.TEXT_BOX
 	
 	draw_set_font(o_console.font)
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	var asp = ch/tb.char_height
 	
 	var _text_wdist = floor(tb.text_wdist*asp)
@@ -897,6 +898,11 @@ get_input = function(){
 						char_pos1 += string_length(string(char))
 						char_pos2 = char_pos1
 						text_changed = true
+						
+						if string_pos(string_last(char), o_console.refresh_sep) 
+						{
+							o_console.AUTOFILL.show = false
+						}
 					}
 					keyboard_string = text
 					keyboard_key = vk_nokey
@@ -970,7 +976,7 @@ get_input = function(){
 					
 					if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
 			
-					text_width = cw*clamp(string_length(text), att.length_min, att.length_max)
+					//text_width = clamp(string_width_oneline(text), att.length_min*cw, att.length_max*cw)
 	
 					right = box_left + text_width + (att.draw_box ? _text_wdist*2 : 0)
 				
@@ -987,11 +993,6 @@ get_input = function(){
 						o_console.AUTOFILL.show = true
 						o_console.AUTOFILL.x = left
 						o_console.AUTOFILL.y = top - _text_hdist
-					}
-					
-					if string_pos(string_last(char), o_console.refresh_sep) 
-					{
-						o_console.AUTOFILL.show = false
 					}
 					
 					set_boundaries()
@@ -1044,8 +1045,8 @@ draw = function(){
 	draw_set_font(o_console.font)
 	var tb = o_console.TEXT_BOX
 
-	var cw = string_width(" ")
-	var ch = string_height(" ")
+	var cw = string_width("W")
+	var ch = string_height("W")
 	
 	if att.draw_box
 	{

@@ -137,11 +137,11 @@ for(var i = 0; i <= array_length(com)-1; i++)
 						{
 							switch ds_types[? ds_scope]
 							{
-								case ds_type_list: string_value = ds_list_to_array(_value)
+								case ds_type_list: string_value = string_insert("|", ds_list_to_array(_value), 2)
 								break
-								case ds_type_map: string_value = ds_map_to_struct(_value)
+								case ds_type_map: string_value = string_insert("?", ds_map_to_struct(_value), 2)
 								break
-								case ds_type_grid: string_value = "ds grid"
+								case ds_type_grid: string_value = "<ds grid>"
 							}
 						}
 					}
