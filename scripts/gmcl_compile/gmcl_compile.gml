@@ -40,6 +40,7 @@ static tag_sep   = " "
 
 if shave(" ", command) == "" return ""
 
+command = string(command)
 var _command = command
 
 var char
@@ -48,38 +49,14 @@ var com_start = 1
 
 var old_object = object
 
-#region Compiler instructions
-for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); i++)
+with console_command_get_tag(_command)
 {
-	char = string_char_at(_command, i)
-	
-	if char == "#"
-	{
-		i ++
-		do
-		{
-			char = string_char_at(_command, i)
-			tag += char
-			i ++
-		}
-		until i > string_length(_command) or (string_lettersdigits(char) != char and char != "_")
-
-		tag = string_delete(tag, string_length(tag), 1)
-		
-		if is_undefined(event_commands[$ tag])
-		{
-			tag = ""
-		}
-		else com_start = i
-	}
-	else if not string_pos(char, tag_sep)
-	{
-		if char == "\\" com_start = i+1
-		break
-	}
+	_command = self.command
+	com_start = self.com_start
+	tag = self.tag
 }
-#endregion
 
+if tag != "" return {tag: tag, commands: _command, raw: command}
 
 #region Separate commands
 var command_split = []
@@ -200,5 +177,5 @@ for(var l = 0; l <= array_length(lines)-1; l++)
 
 object = old_object
 
-return {tag: tag, commands: comp_lines, raw: string_copy(command, com_start, string_length(command)-com_start+1)}
+return {tag: "", commands: comp_lines, raw: string_copy(command, com_start, string_length(command)-com_start+1)}
 }}

@@ -114,21 +114,25 @@ ds_list_sort(asset_list, true)
 
 
 function console_macro_add_builtin(criteria){ with o_console {
-
+	
 if is_undefined(criteria) criteria = ""
+
+if criteria != "" for(var j = 0; j >= array_length(builtin_excluded)-1; j++)
+{
+	if string_pos(criteria, builtin_excluded[j]) == 1
+	{
+		array_delete(builtin_excluded, j, 1)
+	}
+}
 
 static i = 0
 static check_inc = 70
 var t
 
-if initialized 
-{
-	i = 0
-}
+if initialized i = 0
 else t = get_timer()
 
 var added = 0
-var addressed = 0
 
 for(; i <= 10000; i++)
 {

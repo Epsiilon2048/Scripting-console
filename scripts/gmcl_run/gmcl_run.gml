@@ -18,9 +18,9 @@ static method_exec = function(ind, args){
 	{
 		var output
 
-		if instance_exists(object) with object
+		if instance_exists(object)
 		{ 
-			output = script_execute_ext_builtin(ind, args)
+			with object output = script_execute_ext_builtin(ind, args)
 		}
 		else 
 		{
@@ -46,13 +46,11 @@ if compiled_command == "" return ""
 var com = compiled_command.commands
 var tag = compiled_command.tag
 
-if not is_undefined(event_commands[$ tag])
+if tag != ""
 {
-	var tag_com = struct_copy(compiled_command)
-	tag_com.tag = ""
-	
-	array_push(event_commands[$ tag], tag_com)
-	return ["Added command to "+tag+" event"]
+	var output = tags[$ tag].func(com)
+	if not is_array(output) return [output]
+	else return output
 }
 
 var output_string = array_create(array_length(com), "")

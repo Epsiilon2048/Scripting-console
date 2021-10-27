@@ -110,7 +110,7 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 			prev_command = console_string
 			prev_compile = _compile
 			
-			output_set_lines(_output)
+			if _output != [undefined] output_set_lines(_output)
 			
 			input_log_index = -1
 			ds_list_insert(input_log, 0, console_string)
@@ -118,7 +118,6 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 			
 			console_log_input(console_string, _output, false)
 		}
-		else output_set_lines(_output)
 		
 		BAR.text_box.blink_step = 0
 		keyboard_string = ""
@@ -162,6 +161,19 @@ with BAR
 	text_box.x = text_x
 	text_box.y = text_y
 	text_box.get_input()
+	
+	if text_box.text_changed
+	{
+		if variable_struct_exists_get(text_box.colors, "tag", "") != ""
+		{
+			text_box.autofill_method = o_console.tags[$ text_box.colors.tag].autofill
+			if text_box.autofill_method == noscript o_console.AUTOFILL.show = false
+		}
+		else 
+		{
+			text_box.autofill_method = gmcl_autofill_old
+		}
+	}
 }
 
 if BAR.docked and keyboard_check_pressed(console_key) and keyboard_scope == noone

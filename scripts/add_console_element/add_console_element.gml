@@ -25,6 +25,10 @@ e[$ element.id] = element
 
 function add_console_element(element){ with o_console {
 
-add_element(element)
-ds_list_insert(elements, 0, element)
+if not is_array(element) element = [element]
+for(var i = 0; i <= array_length(element)-1; i++)
+{
+	add_element(element[i])
+	ds_list_insert(elements, 0, element[i])
+}
 }}

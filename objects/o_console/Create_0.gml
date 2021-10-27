@@ -114,12 +114,13 @@ event_commands = {
 }
 
 tags = {} with tags {
-	add			= noscript
+	add			= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){add_console_element(gmcl_exec(command))}}
+	include		= {color: console_include_tag_color, autofill: noscript, func: console_include}
 	
-	step		= noscript
-	step_end	= noscript
-	draw		= noscript
-	gui			= noscript
+	step		= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("step", command)}}
+	step_end	= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("step_end", command)}}
+	draw		= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("draw", command)}}
+	gui			= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("gui", command)}}
 }
 
 gui_mouse_x = gui_mx

@@ -1,9 +1,11 @@
 
 function draw_color_text(x, y, color_text){
 
-format_console_element()
-
-if not is_struct(color_text) or array_length(color_text.colors) < 1 return undefined
+if not is_struct(color_text) 
+{
+	draw_color_text(x, y, color_text)
+	return undefined
+}
 
 var old_color  = draw_get_color()
 var old_font   = draw_get_font()
@@ -34,8 +36,30 @@ case fa_bottom:
 }
 
 var lastpos = 1
+var tag = variable_struct_exists_get(color_text, "tag", "")
+if tag != "" tag = "#"+tag
 
-draw_outline_text(x, y, color_text.text, undefined)
+draw_outline_text(x, y, tag+color_text.text, undefined)
+
+if tag != ""
+{
+	draw_set_color(o_console.colors[$ dt_tag])
+	draw_text(x, y, tag)
+	
+	x += char_width*(string_length(tag)+1)
+}
+
+if not is_array(color_text.colors)
+{
+	if not is_struct(color_text.colors)
+	{
+		color_text.colors = [{col: color_text.colors, pos: string_length(color_text.text)+1}]
+	}
+	else
+	{
+		color_text.colors = [color_text.colors]
+	}
+}
 
 for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 {

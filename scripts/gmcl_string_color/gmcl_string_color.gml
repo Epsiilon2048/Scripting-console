@@ -92,27 +92,49 @@ for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); 
 
 		if not (i > string_length(_command)+1) tag = string_delete(tag, string_length(tag), 1)
 		
-		if is_undefined(event_commands[$ tag])
+		if is_undefined(tags[$ tag])
 		{
 			tag = ""
 		}
 		else 
 		{
 			com_start = i
-			push_combine(color_list, tag_pos, dt_unknown)
-			push_combine(color_list, i, dt_tag)
 		}
 	}
 	else if not string_pos(char, tag_sep)
 	{
 		if char == "\\"
 		{
-			push_combine(color_list, i, dt_unknown)
-			push_combine(color_list, i+1, dt_tag)
 			com_start = i+1
 		}
 		break
 	}
+}
+
+if tag != ""
+{
+	_command = slice(_command, com_start, -1, 1)
+	var color_text = tags[$ tag].color(_command)
+	if is_undefined(color_text) color_text = {text: _command, colors: "plain"}
+	
+	if variable_struct_exists(color_text, "tag") and color_text.tag != ""
+	{
+		color_text.text = "#"+color_text.tag+" "+color_text.text
+		
+		if is_array(color_text.colors)
+		{
+			var len = string_length(color_text.text)
+			
+			for(var i = 0; i <= array_length(color_text.colors)-1; i++)
+			{
+				color_text.colors[i].pos += len
+			}
+		}
+	}
+	
+	color_text.tag = tag
+	
+	return color_text
 }
 
 var prev_char = ""
@@ -405,10 +427,7 @@ return {text: _command, colors: color_list, subject_interpret: subject_interpret
 }
 catch(_exception)
 {
-	console_color_time = -1
-	
 	push_combine(color_list, string_length(_command)+1, "plain")
-	
-	return {text: _command, colors: color_list}
+	return {text: command, colors: color_list}
 }
 }}
