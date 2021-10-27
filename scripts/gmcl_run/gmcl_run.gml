@@ -181,9 +181,8 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 			#region String
 			case dt_string:
-				if string_pos("\n", subject.value)	output_string[i] = subject.value
-				else								output_string[i] = "\""+subject.value+"\""
-			break
+				output_string[i] = subject.value
+			break 
 			#endregion
 	
 			#region Color

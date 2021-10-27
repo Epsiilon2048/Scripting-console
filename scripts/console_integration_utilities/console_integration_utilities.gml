@@ -1,25 +1,26 @@
 
-function input_set(str, add){ with o_console
-{
+function input_set(str, add){ with o_console.BAR {
 	input_log_index = -1
-	BAR.enabled = true
+	enabled = true
 	
 	if is_undefined(add) or not add 
 	{
-		ds_list_insert(input_log, 0, console_string)
+		//ds_list_insert(input_log, 0, console_string)
 		console_string = str
 	}
 	else
 	{
-		console_string = string_insert(str, console_string, char_pos1)
-		char_pos1 += string_length(str)
-		char_pos2 = char_pos1
+		console_string = string_insert(str, console_string, text_box.char_pos1)
+		text_box.char_pos1 += string_length(str)
+		text_box.char_pos2 = text_box.char_pos1
 	}
 
 	keyboard_string = console_string
-	color_string = gmcl_string_color(console_string, char_pos1)
-	char_pos1 = string_length(console_string)+1
-	char_pos2 = char_pos1
+	colors = text_box.color_method(console_string, text_box.char_pos1)
+	text_box.char_pos1 = string_length(console_string)+1
+	text_box.char_pos2 = text_box.char_pos1
+	
+	text_box.update_variable()
 }}
 
 
@@ -73,9 +74,11 @@ if is_struct(output)
 		dock.set(names)
 	}
 }
-else
+else 
 {
-	dock.set(datatype_string(string_format_float(output, 4)))
+	if is_string(output) and not string_pos("\n", output) dock.set(datatype_string(output))
+	else if is_numeric(output) dock.set(string_format_float(output, float_count_places(output, 4)))
+	else dock.set(string(output))
 }
 
 dock.enabled = not (is_undefined(output) or output == "" or output == [] or output == [""])

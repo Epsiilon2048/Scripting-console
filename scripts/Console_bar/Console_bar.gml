@@ -83,7 +83,12 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 			console_string = input_log_save
 			input_log_save = ""
 		}
-		else if input_log_index != -1
+		else if input_log_index == -1
+		{
+			console_string = ""
+			input_log_save = ""
+		}
+		else
 		{
 			input_log_index --
 			console_string = input_log[| input_log_index]
@@ -97,32 +102,14 @@ if BAR.enabled and keyboard_scope == BAR.text_box
 		BAR.text_box.char_pos2 = BAR.text_box.char_pos1
 		BAR.text_box.char_pos_selection = false
 		BAR.text_box.update_variable()
+		keyboard_string = console_string
 	}
 	
 	#region Parse command
 	if enter
 	{
-		var _compile = gmcl_compile(console_string)
-		var _output  = gmcl_run(_compile)
-		
-		if is_struct(_compile)
-		{
-			prev_command = console_string
-			prev_compile = _compile
-			
-			if _output != [undefined] output_set_lines(_output)
-			
-			input_log_index = -1
-			ds_list_insert(input_log, 0, console_string)
-			if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
-			
-			console_log_input(console_string, _output, false)
-		}
-		
-		BAR.text_box.blink_step = 0
-		keyboard_string = ""
-		console_string = ""
-		BAR.text_box.update_variable()
+		BAR.text_box.text = ""
+		executing = true
 	}
 	#endregion
 }
@@ -309,10 +296,11 @@ BAR.text_box.draw()
 draw_set_color(colors.output)
 draw_set_halign(fa_right)
 draw_set_valign(fa_top)
-draw_text(BAR.right-_text_dist, BAR.text_box.y+1, BAR.sidetext_string)							// Draw sidetext
+draw_text(BAR.right-_text_dist, BAR.text_box.y+1, BAR.sidetext_string)	// Draw sidetext
 
 draw_set_color(old_color)
 draw_set_font(old_font)
 draw_set_halign(old_halign)
 draw_set_valign(old_valign)
+
 }}

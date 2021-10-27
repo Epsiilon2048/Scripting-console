@@ -36,7 +36,6 @@ ARGUMENT INTERPRETATION
 
 static space_sep = " ,=():"
 static iden_sep	 = " ;,=()"
-static tag_sep   = " "
 
 if shave(" ", command) == "" return ""
 

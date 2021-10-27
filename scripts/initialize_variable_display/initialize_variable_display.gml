@@ -117,7 +117,7 @@ DISPLAY = new_console_dock("Display",[
 ])
 with DISPLAY
 {
-	before_func = function(){ association = o_console.object }
+	before_func = function(){ association = instance_exists(o_console.object) ? o_console.object : o_console}
 	allow_element_dragging = true
 }
 

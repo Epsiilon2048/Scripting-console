@@ -17,7 +17,7 @@ var _max = char_pos2
 
 var str_length = string_length(text)
 
-while _max < (str_length+1) and not string_pos(string_char_at(text, _max), o_console.refresh_sep)
+while _max < (str_length) and not string_pos(string_char_at(text, _max), o_console.refresh_sep)
 {
 	_max++
 }
@@ -27,6 +27,7 @@ while _min > 0 and not string_pos(string_char_at(text, _min), o_console.refresh_
 	_min--
 }
 _min++
+_max++
 
 text = string_delete(text, _min, _max-_min)
 text = string_insert(input, text, _min)
@@ -61,4 +62,5 @@ char_mouse = false
 colors = color_method(text)
 blink_step = 0
 keyboard_string = text
+set_boundaries()
 }}

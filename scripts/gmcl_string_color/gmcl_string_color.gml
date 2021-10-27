@@ -5,7 +5,6 @@ static max_length = 700
 static space_sep = " ./;,=()[]:"
 static iden_sep	 = " ;,=()"
 static subj_sep	 = " ,=():"
-static tag_sep   = " "
 static accessors = "@|?#$"
 
 				
@@ -123,12 +122,13 @@ if tag != ""
 		
 		if is_array(color_text.colors)
 		{
-			var len = string_length(color_text.text)
+			var len = string_length(color_text.tag)+2
 			
 			for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 			{
 				color_text.colors[i].pos += len
 			}
+			array_insert(color_text.colors, 0, {col: dt_unknown, pos: len})
 		}
 	}
 	

@@ -135,6 +135,8 @@ show_hidden_args = false
 
 text_outline = 8
 
+tag_sep = " "
+
 autofill_from_float = false
 
 force_body_solid = false
@@ -184,6 +186,8 @@ O4 = ""
 O5 = ""
 
 cs_template = cs_greenbeans
+
+executing = false
 
 command_order = -1
 

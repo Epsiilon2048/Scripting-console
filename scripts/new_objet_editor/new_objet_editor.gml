@@ -95,7 +95,12 @@ var editor = new_console_dock("Object editor", [
 	[movement_dock],
 	[variable_dock],
 ])
-editor.association = object
+
+if is_undefined(object)
+{
+	with editor before_func = function(){association = o_console.object}
+}
+else editor.association = object
 editor.hide_all()
 
 return editor

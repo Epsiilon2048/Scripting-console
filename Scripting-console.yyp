@@ -111,6 +111,7 @@
     {"id":{"name":"Console_color_picker","path":"scripts/Console_color_picker/Console_color_picker.yy",},"order":5,},
     {"id":{"name":"common_variable_utilities","path":"scripts/common_variable_utilities/common_variable_utilities.yy",},"order":4,},
     {"id":{"name":"o_game","path":"objects/o_game/o_game.yy",},"order":3,},
+    {"id":{"name":"Font7","path":"fonts/Font7/Font7.yy",},"order":10,},
     {"id":{"name":"o_dev","path":"objects/o_dev/o_dev.yy",},"order":2,},
     {"id":{"name":"gmcl_compile","path":"scripts/gmcl_compile/gmcl_compile.yy",},"order":4,},
     {"id":{"name":"call_color_box","path":"scripts/call_color_box/call_color_box.yy",},"order":8,},

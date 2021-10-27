@@ -82,6 +82,32 @@ gui_mouse_y = gui_my
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
 
+if executing
+{
+	var _compile = gmcl_compile(console_string)
+	var _output  = gmcl_run(_compile)
+		
+	if is_struct(_compile)
+	{
+		prev_command = console_string
+		prev_compile = _compile
+			
+		if _output != [undefined] output_set_lines(_output)
+			
+		input_log_index = -1
+		ds_list_insert(input_log, 0, console_string)
+		if ds_list_size(input_log) > input_log_limit ds_list_delete(input_log, input_log_limit-1)
+			
+		console_log_input(console_string, _output, false)
+	}
+		
+	BAR.text_box.blink_step = 0
+	keyboard_string = ""
+	console_string = ""
+	BAR.text_box.update_variable()
+	executing = false
+}
+
 ctx_menu_get_input()
 
 COLOR_PICKER.get_input()

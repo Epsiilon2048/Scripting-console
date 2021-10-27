@@ -338,7 +338,8 @@ update_variable = function(){ if not is_undefined(variable) {
 	var old_text = text
 	var _association = is_undefined(association) ? (docked ? dock.association : self) : association
 	
-	with _association var var_info = variable_string_info(other.variable)
+	var var_info = {exists: false}
+	with _association var_info = variable_string_info(other.variable)
 	variable_exists = var_info.exists
 	
 	if variable_exists
@@ -373,7 +374,12 @@ update_variable = function(){ if not is_undefined(variable) {
 	
 	if att.lock_text_length and string_length(text) > att.length_max text = slice(text, 1, att.length_max+1, 1)
 	
-	if old_text != text colors = color_method(text)
+	if old_text != text 
+	{
+		if scoped o_console.AUTOFILL.show = false
+		colors = color_method(text)
+	}
+
 	set_boundaries()
 }}
 
@@ -981,6 +987,11 @@ get_input = function(){
 						o_console.AUTOFILL.show = true
 						o_console.AUTOFILL.x = left
 						o_console.AUTOFILL.y = top - _text_hdist
+					}
+					
+					if string_pos(string_last(char), o_console.refresh_sep) 
+					{
+						o_console.AUTOFILL.show = false
 					}
 					
 					set_boundaries()
