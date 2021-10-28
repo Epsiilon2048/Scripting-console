@@ -66,7 +66,7 @@
     {"id":{"name":"Console_embedded_text","path":"scripts/Console_embedded_text/Console_embedded_text.yy",},"order":14,},
     {"id":{"name":"remove_syntax_errors","path":"scripts/remove_syntax_errors/remove_syntax_errors.yy",},"order":7,},
     {"id":{"name":"Console_checkbox","path":"scripts/Console_checkbox/Console_checkbox.yy",},"order":11,},
-    {"id":{"name":"console_string_width","path":"scripts/console_string_width/console_string_width.yy",},"order":14,},
+    {"id":{"name":"string_width_oneline","path":"scripts/string_width_oneline/string_width_oneline.yy",},"order":14,},
     {"id":{"name":"console_misc_utilities","path":"scripts/console_misc_utilities/console_misc_utilities.yy",},"order":3,},
     {"id":{"name":"console_command_get_tag","path":"scripts/console_command_get_tag/console_command_get_tag.yy",},"order":45,},
     {"id":{"name":"add_console_element","path":"scripts/add_console_element/add_console_element.yy",},"order":42,},
@@ -162,7 +162,7 @@
     {"CopyToMask":0,"filePath":"datafiles","resourceVersion":"1.0","name":"checkmark.fla","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2.3.5.589",
+    "IDEVersion": "2.3.6.595",
   },
   "resourceVersion": "1.4",
   "name": "Scripting-console",

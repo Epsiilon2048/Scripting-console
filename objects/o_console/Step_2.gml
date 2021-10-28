@@ -79,6 +79,8 @@ if not enabled or not can_run exit
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
+if font != prev_font set_font(font)
+
 var old_font = draw_get_font()
 draw_set_font(o_console.font)
 
@@ -134,8 +136,9 @@ if not mouse_check_button(mb_left) element_dragging = noone
 
 console_measurer_inputs()
 
+a=10
+
 event_commands_exec(event_commands.step_end)
 step ++
-
 
 draw_set_font(old_font)

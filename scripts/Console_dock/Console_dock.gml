@@ -118,6 +118,7 @@ initialize = function(){
 	afterscript = []
 	e = {}
 	
+	get_ctx_elements = noscript
 	before_func = noscript
 	after_func = noscript
 }
@@ -213,9 +214,9 @@ set = function(elements){
 	
 	clear()
 	
-	if instanceof(elements) == "element_container" 
+	if instanceof(elements) == "element_container" or instanceof(elements) == "Console_dock"
 	{
-		if not is_undefined(elements.association) association = elements.association
+		if not is_undefined(elements.association) and elements.association != elements association = elements.association
 		elements = elements.elements
 	}
 	if not is_array(elements) elements = [elements]
@@ -312,15 +313,6 @@ after_dock = function(){
 	
 	get_dropdown_input()
 	
-	//if not mouse_on_dropdown and not clicking_on_console and mouse_check_button_pressed(mb_left) and mouse_on_bar
-	//{
-	//	dragging = true
-	//	mouse_xoffset = gui_mx-x
-	//	mouse_yoffset = gui_my-y
-	//	
-	//	o_console.element_dragging = self
-	//}
-	
 	if not docked
 	{
 		if dragging or element_active or (mouse_on and mouse_check_button_pressed(mb_any)) and not mouse_on_dropdown
@@ -348,12 +340,24 @@ after_dock = function(){
 
 generate_ctx_menu = function(){
 
-return [
+var m
+
+if get_ctx_elements != noscript
+{
+	m = get_ctx_elements()
+	if not is_array(m) m = [m, new_separator()]
+	else array_push(m, new_separator())
+}
+else m = []
+
+array_push(m,
 	new_ctx_text("Get printout", function(){clipboard_set_text(get_printout())}),
 	new_separator(),
 	new_ctx_text("Collapse all", hide_all),
 	new_ctx_text("Hide", function(){enabled = false}),
-]
+)
+//if allow_element_dragging array_push(m, new_ctx_text("Destroy", destroy))
+return m
 }
 
 

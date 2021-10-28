@@ -35,11 +35,17 @@ while font_exists(asset)
 	asset = asset_get_index(stitch("fnt_debug",++i,"x"))
 }
 
-scale = function(size){ with o_console {
-	
-	font = fonts[ clamp(size-1, 0, array_length(fonts)-1) ]
+scale = function(size){
+	set_font(fonts[ clamp(size-1, 0, array_length(fonts)-1) ])
+}
+
+set_font = function(font) {
+	self.font = font
+	prev_font = font
 	consistent_spacing = font_has_consistent_kerning(font)
-}}
+}
+
+prev_font = -1
 
 run_in_embed = false
 char_pos_arg = {}
@@ -129,6 +135,7 @@ tags = {} with tags {
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
 
+variables = {}
 console_key = vk_tilde
 
 commands = -1

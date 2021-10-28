@@ -1,7 +1,7 @@
 
 function initialize_console_graphics(scale){ with o_console {
 
-if is_undefined(scale)
+if not font_exists(prev_font) and is_undefined(scale)
 {
 	var display_width = display_get_width()/display_get_dpi_x()
 	

@@ -311,7 +311,7 @@ set_boundaries = function(){
 		if not left_el.draw_name left = left_el.right + (att.draw_box ? 1 : cw)
 	}
 	
-	box_left = left + (draw_name ? (string_width_oneline + _text_wdist*2*att.draw_box) : 0)
+	box_left = left + (draw_name ? (string_width_oneline(name) + _text_wdist*2*att.draw_box) : 0)
 	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and draw_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	

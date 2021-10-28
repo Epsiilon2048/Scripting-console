@@ -68,6 +68,8 @@ var accessor = ""
 var can_have_accessor = false
 var possible_accessors = ""
 
+var association = is_struct(object or instance_exists(object)) ? object : {}
+
 var tag = ""
 var tag_pos = 0
 var com_start = 1
@@ -324,12 +326,13 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					else if _macro_type == -1 or _macro_type == dt_variable or _macro_type == dt_method
 					{
 						var _varstring = string_add_scope(segment, _prev_iden == -1) 
-							
-						if variable_string_exists(_varstring) and _macro_type != dt_method and not (prev_char == "." and instscope == "")
+						with association var var_info = variable_string_info(_varstring)
+						
+						if var_info.exists and _macro_type != dt_method and not (prev_char == "." and instscope == "")
 						{
-							var value = variable_string_get(_varstring)
+							var value = var_info.value
 							
-							if _macro_type == dt_variable	_col = dt_builtinvar
+							if _macro_type == dt_variable and _prev_iden != dt_variable	_col = dt_builtinvar
 							else if is_struct(value)		_col = dt_instance
 							else if is_method(value)		_col = dt_method
 							else							_col = dt_variable
@@ -349,10 +352,11 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					instscope += "."+segment
 						
 					var _varstring = string_add_scope(instscope, _prev_iden == -1)
-						
-					if variable_string_exists(_varstring)
+					with association var var_info = variable_string_info(_varstring)
+					
+					if var_info.exists
 					{
-						var value = variable_string_get(_varstring)
+						var value = var_info.value
 						
 						if is_struct(value)			_col = dt_instance
 						else if is_method(value)	_col = dt_method

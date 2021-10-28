@@ -164,19 +164,21 @@ return stitch("Set position (",x,", ",y,") in ds grid to ",value)
 
 function create_variable(name, value){
 
-var _name = string_add_scope(name, true)
+if not is_string(name) return "Variable name must be string!"
+if string_is_int(string_char_at(name, 1)) return "Invalid variable name - can't start with number!"
 
-if not is_undefined(_name)
+for(var i = 1; i <= string_length(name); i++)
 {
-	var _existed = variable_string_exists(_name)
-	
-	variable_string_set(_name, value)
-	
-	if _existed return "Set "+name+" to "+string(value)
-	
-	else return "Declared "+name+" as "+string(value)
+	var char = string_char_at(name, i)
+	if not (char == "_" or string_lettersdigits(char) == char)
+	{
+		return "Invalid variable name - can't use special characters!"
+	}
 }
-else return "Missing variable scope"
+
+console_macro_add(name, dt_variable, "o_console.variables."+name)
+o_console.variables[$ name] = value
+return o_console.variables[$ name]
 }
 
 

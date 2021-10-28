@@ -27,9 +27,7 @@ static method_exec = function(ind, args){
 			output = script_execute_ext_builtin(ind, args)
 		}
 				
-		if is_undefined(output)		return ""
-		else if is_numeric(output)	return string_format_float(output, undefined)
-		else						return output
+		return output
 	}
 	catch(_exception)
 	{
@@ -126,11 +124,11 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					output_string[i] = method_exec(_value, args)
 				}
 				else if array_length(com[i].args) < 1
-				{					
+				{			
 					var string_value
 					if is_numeric(_value)
 					{
-						string_value = string_format_float(_value)
+						string_value = string_format_float(_value, undefined)
 						
 						var ds_scope = string_scope_to_id(subject.value, true)
 						if ds_map_exists(ds_types, ds_scope)

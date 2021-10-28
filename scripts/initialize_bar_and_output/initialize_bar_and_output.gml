@@ -83,6 +83,15 @@ with OUTPUT {
 	
 	get_input = console_output_inputs
 	draw = draw_console_output
+	
+	dock.get_ctx_elements = function(){
+		return [
+			new_ctx_text("Forward to new window", function(){
+				add_console_element(new_console_dock("Dock", dock))
+				output_set("Forwarded output to new window")
+			})
+		]
+	}
 }
 
 var bar_dock = new Console_dock() with bar_dock
