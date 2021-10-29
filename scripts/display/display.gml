@@ -42,7 +42,11 @@ add_console_element(t)
 function add_scrubber(name, variable, step, px_per_step){
 
 // WOW this is bad lolll
-if is_numeric(variable) 
+if is_undefined(variable)
+{
+	variable = name
+}
+else if is_numeric(variable) 
 {
 	variable = name
 	step = variable
