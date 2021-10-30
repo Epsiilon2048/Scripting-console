@@ -11,7 +11,6 @@ return -1
 
 
 
-
 function array_struct_get(array, name){
 
 var _array = array_create(array_length(array), undefined)
@@ -24,8 +23,7 @@ for(var i = 0; i <= array_length(array)-1; i++)
 return _array
 }
 	
-	
-	
+
 	
 function array_to_string(array, separator){
 
@@ -44,7 +42,6 @@ return string_copy(str, string_length(separator)+1, string_length(str)-1)
 }
 	
 	
-
 	
 function ds_list_to_array(ds_list){
 

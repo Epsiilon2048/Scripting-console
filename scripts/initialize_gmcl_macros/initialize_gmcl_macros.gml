@@ -73,6 +73,12 @@ am("fps_real",			dt_variable, "global.fps_real")
 										
 am("gui_mx",			dt_variable, "o_console.gui_mouse_x")
 am("gui_my",			dt_variable, "o_console.gui_mouse_y")
+
+am("dock",				dt_method, new_console_dock)
+am("textbox",			dt_method, new_text_box)
+am("scrubber",			dt_method, new_scrubber)
+am("displaybox",		dt_method, new_display_box)
+am("colorbox",			dt_method, new_color_box)
 #endregion
 										
 #region Console datatypes				

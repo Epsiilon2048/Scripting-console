@@ -27,14 +27,15 @@ static method_exec = function(ind, args){
 			output = script_execute_ext_builtin(ind, args)
 		}
 				
+		run_in_console = false
 		return output
 	}
 	catch(_exception)
 	{
-		return {__embedded__: true, o: [{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message]}
+		run_in_console = false
 		prev_exception = _exception
+		return format_output([{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message], true, -1, "Runner error")
 	}
-	run_in_console = false
 }
 
 with o_console { try {
@@ -185,7 +186,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 			#region Color
 			case dt_color:
-				output_string[i] = color_get(subject.value)
+				output_string[i] = new_color_dock("", false, true, true, true, true)
 			break
 			#endregion
 	
@@ -206,8 +207,6 @@ catch(_exception)
 {
 	
 //damn tho wouldnt this suck
-//i do know this happens when you put a variable left of a string without a separator, but no one's going
-//to do that so i'm not going to debug it
 prev_exception = _exception
 return [format_output([{str: "[CONSOLE ERROR]", scr: error_report, output: true}," Awfully sorry about this! It seems the console encountered a runtime error."], true, -1)]
 

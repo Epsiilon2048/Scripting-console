@@ -16,7 +16,6 @@ return new_struct
 
 
 
-
 function struct_clear(struct){
 
 var names = variable_struct_get_names(struct)
@@ -30,7 +29,6 @@ for(var i = 0; i <= name_count-1; i++)
 
 
 
-
 function struct_add(dest, src){
 	
 var names = variable_struct_get_names(src)
@@ -41,6 +39,7 @@ for(var i = 0; i <= name_count-1; i++)
 	dest[$ names[@ i]] = src[$ names[@ i]]
 }
 }
+
 
 
 function struct_replace(dest, src){
@@ -57,6 +56,7 @@ for(var i = 0; i <= name_count-1; i++)
 	else dest[$ names[@ i]] = src[$ names[@ i]]
 }
 }
+
 
 
 function ds_map_to_struct(ds_map){

@@ -5,7 +5,6 @@ return -(sign(bool) == 0) + sign(bool)
 	
 	
 	
-	
 function color_add_hue(col, add){ //returns a color with added hue
 
 return make_color_hsv(
@@ -30,6 +29,7 @@ return make_color_hsv(
 )
 }
 	
+
 
 function color_set_hsv(col, hue, saturation, value){ //returns a color with added hue
 
@@ -74,7 +74,6 @@ return hex;
 
 
 
-
 function hex_to_dec(hex){ //converts base16 to base10
 /// GMLscripts.com/license
 
@@ -91,7 +90,6 @@ for (var p = 1; p <= string_length(_hex); p++)
 }
 return dec
 }
-
 
 
 
@@ -144,7 +142,6 @@ else if is_numeric(hex) _hex = dec_to_hex(hex, 6)
 
 return hex_to_dec( string_copy(_hex, 5, 2)+string_copy(_hex, 3, 2)+string_copy(_hex, 1, 2), 6 )
 }
-
 
 
 	

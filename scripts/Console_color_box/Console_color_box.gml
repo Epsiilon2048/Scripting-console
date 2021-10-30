@@ -390,7 +390,7 @@ draw = function(){
 	var ch = string_height("W")
 	var asp = ch/tb.char_height
 	
-	var _outline_width = tb.outline_width*asp
+	var _outline_width = round(tb.outline_width*asp)
 	
 	if not (docked and not dock.is_front)
 	{
@@ -411,8 +411,8 @@ draw = function(){
 		draw_set_color(o_console.colors.body_real)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width*2)
 		
-		if not copy and scoped and att.allow_input	draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
-		else							draw_set_color(o_console.colors.body_accent)
+		if not copy and scoped and att.allow_input draw_set_color(is_real(att.scoped_color) ? att.scoped_color : o_console.colors[$ att.scoped_color])
+		else draw_set_color(o_console.colors.body_accent)
 		draw_hollowrect(box_left, top, right, bottom, _outline_width)
 	}
 	

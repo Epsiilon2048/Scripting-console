@@ -81,9 +81,9 @@ else
 	else dock.set(string(output))
 }
 
-dock.enabled = not (is_undefined(output) or output == "" or output == [] or output == [""])
+dock.enabled = not is_undefined(output)
+if dock.enabled move_to_front(self)
 }}
-
 
 
 function output_set_lines(output){

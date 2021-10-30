@@ -172,7 +172,7 @@ for(; i <= 10000; i++)
 		var _t = get_timer()
 		
 		var ms = (_t-t)/10000
-		var lag = (ms/(room_speed/100))
+		var lag = (ms/(game_get_speed(gamespeed_fps)/100))
 			
 		if lag >= .3
 		{

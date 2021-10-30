@@ -42,24 +42,28 @@ else
 	
 function error_report(){ with o_console {
 
-var list = [
-	{str: "stacktrace\n", col: o_console.colors.variable}
-]
+var list
 
-for(var i = 0; i <= array_length(prev_exception.stacktrace)-1; i++)
+if variable_struct_exists(prev_exception, "stacktrace")
 {
-	array_push(list,
-	string_replace_all(prev_exception.stacktrace[i], "	", "")+"\n"
-	)
-}
+	list = array_create(array_length(prev_exception.stacktrace)+1)
+	list[0] = {str: "Stacktrace\n", col: o_console.colors.variable}
 
-array_push(list, 
+	for(var i = 0; i <= array_length(prev_exception.stacktrace)-1; i++)
+	{
+		list[i+1] = string_replace_all(prev_exception.stacktrace[i], "	", "")+"\n"
+	}
+}
+else list = []
+
+if variable_struct_exists(prev_exception, "Long message") array_push(list, 
 	"\n",
 	{str: "longMessage", col: o_console.colors.variable},"\n"+
 	prev_exception.longMessage
 )
 
-return format_output(list, true, error_report)
+//return format_output(list, true, error_report)
+return prev_exception
 }}
 	
 	

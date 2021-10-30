@@ -6,7 +6,7 @@
     "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
-  "name": "window_commands",
+  "name": "move_to_front",
   "tags": [],
   "resourceType": "GMScript",
 }

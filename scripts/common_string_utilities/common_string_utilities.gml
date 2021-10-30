@@ -37,7 +37,6 @@ return slice(str, in, out+1, 1)
 
 
 
-
 function stitch(){ //combines args into a string
 	
 var str = ""
@@ -51,7 +50,6 @@ return str
 }
 	
 	
-
 	
 function string_split(substr, str){ //splits a string into an array by a separator
 
@@ -80,7 +78,6 @@ return ds_list_to_array(split)
 }
 
 
-
 	
 function string_is_int(str){ //returns true if a string is a base10 or base16 integer
 
@@ -101,7 +98,6 @@ return string_digits(_str) == _str
 
 
 
-
 function string_is_float(str){ //returns true if a string is a base10 or base16 float
 
 if string_pos(".-", str) == 1 return false
@@ -116,7 +112,6 @@ if string_pos(".", str) != 0
 
 return string_is_int(_str)
 }
-
 
 
 
@@ -147,7 +142,6 @@ return float_string
 
 
 
-
 function string_pos_index(substr, str, index){ //returns the nth instance of the substr in the str
 
 var pos = string_pos(substr, str)
@@ -163,12 +157,10 @@ return pos
 }
 
 
-
 	
 function string_last(str){ //returns the last character of a string
 return string_char_at(str, string_length(str))
 }
-
 
 
 
@@ -180,7 +172,6 @@ if char == "-" char = string_char_at(str, 2)
 
 return ( string_digits(char) == char )
 }
-	
 	
 	
 	

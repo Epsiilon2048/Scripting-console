@@ -62,7 +62,6 @@ return "Set struct values"
 
 	
 	
-	
 function dealwith_ds_map(ds_map){
 
 if is_undefined(ds_map) return "Must provide ds_map! (if you're looking for the help command, type \"help\"!)"
@@ -97,7 +96,6 @@ return "Set ds map values"
 
 	
 	
-	
 function dealwith_ds_list(ds_list, index, value){
 
 if is_undefined(ds_list) return "Must provide ds list!"
@@ -127,6 +125,7 @@ if is_undefined(value)
 ds_list[| index] = value
 return stitch("Set item ",value," in ds list to ",value)
 }
+
 
 
 function dealwith_ds_grid(ds_grid, x, y, value){
@@ -160,6 +159,7 @@ if is_undefined(value)
 ds_grid[# x, y] = value
 return stitch("Set position (",x,", ",y,") in ds grid to ",value)
 }
+
 
 
 function create_variable(name, value){
@@ -214,7 +214,6 @@ variable_string_set(_variable, value)
 
 return stitch("Added ",amount," to "+variable+" (",value,")")
 }
-
 
 
 
@@ -280,7 +279,6 @@ return stitch("Multiplied ",variable," by ",amount," (",value,")")
 
 
 
-
 function togglevar(variable){
 	
 if not is_string(variable) return "Must provide variable name as string"
@@ -296,6 +294,7 @@ variable_string_set(_variable, toggle)
 
 return stitch("Toggled "+variable+" (",toggle ? "true" : "false",")")
 }
+
 
 
 function roomobj(){ with o_console {
@@ -318,8 +317,8 @@ for (var i = 0; i <= instance_count-1; i++)
 	if longest_index < indlen	longest_object = indlen+2
 }
 
-var obj_spaces = string_repeat(" ", longest_object - string_length( obj_collumn ))
-var ind_spaces = string_repeat(" ", longest_index - string_length( ind_collumn ))
+//var obj_spaces = string_repeat(" ", longest_object - string_length( obj_collumn ))
+//var ind_spaces = string_repeat(" ", longest_index - string_length( ind_collumn ))
 
 var instances = []
 
@@ -371,8 +370,8 @@ for (var i = 0; i <= instance_count-1; i++)
 	if longest_index < indlen	longest_object = indlen+2
 }
 
-var obj_spaces = string_repeat(" ", longest_object - string_length( obj_collumn ))
-var ind_spaces = string_repeat(" ", longest_index - string_length( ind_collumn ))
+//var obj_spaces = string_repeat(" ", longest_object - string_length( obj_collumn ))
+//var ind_spaces = string_repeat(" ", longest_index - string_length( ind_collumn ))
 
 var instances = array_create(instance_count)
 
@@ -399,62 +398,6 @@ return format_output(text, true, roomobj, "Instances in room")
 
 
 
-function objvar(obj){ with o_console {
-
-if is_undefined(obj) obj = object
-
-var _obj
-var struct
-if is_string(obj)
-{
-	var varscope = string_add_scope(obj, true)
-	if is_undefined(varscope) return "Missing scope"
-	if not variable_string_exists(varscope) return obj+" does not exist"
-	
-	_obj = variable_string_get(varscope)
-	if not is_struct(_obj) return "Must provide struct or instance"
-	
-	struct = true
-}
-else if is_numeric(obj) or is_struct(obj)
-{
-	struct = is_struct(obj)
-	
-	if not struct and not instance_exists(obj) return "Must profide struct or instance"
-	
-	_obj = obj
-}
-else return "Must profide struct or instance"
-
-var list = struct ? variable_struct_get_names(_obj) : variable_instance_get_names(_obj)
-array_sort(list, true)
-
-if not (struct and not is_string(obj)) 
-{
-	for(var i = 0; i <= array_length(list)-1; i++)
-	{
-		list[i] = {str: list[i]+"\n", scr: value_box, arg: string(obj)+"."+list[i]}
-	}
-	
-	array_push(list, "\nClick on a variable to create a value box")
-}
-	
-return format_output(list, not (struct and not is_string(obj)), -1, "Variables in "+(struct ? "struct" : "instance "+string(_obj)))
-}}
-
-
-
-
-function select_obj(){
-
-inst_select = true
-display("o_console.inst_selecting_name", true)
-return "Select object instance with cursor"
-}
-
-
-
-
 function reset_obj(obj){
 	
 if is_undefined(obj) obj = object
@@ -466,30 +409,3 @@ instance_destroy(obj)
 instance_create_layer(_x, _y, _layer, obj)
 return "Object reset!"
 }
-
-
-
-
-function color_get(_col){
-
-return format_output([
-	//{str: "[color]\n", col: _col},
-	"Color ",{str: "  \n", hl: _col},
-	{str: "GML       ", col: "embed_hover"},string(_col)+"\n",
-	{str: "RBG       ", col: "embed_hover"},stitch(color_get_red(_col),", ",color_get_green(_col),", ",color_get_blue(_col),"\n"),
-	{str: "HSV (255) ", col: "embed_hover"},stitch(color_get_hue(_col),", ",color_get_saturation(_col),", ",color_get_value(_col),"\n"),
-	{str: "HSV (100) ", col: "embed_hover"},stitch(color_get_hue(_col)/2.55,", ",color_get_saturation(_col)/2.55,", ",color_get_value(_col)/2.55,"\n"),
-	{str: "HEX       ", col: "embed_hover"},color_to_hex(_col)
-], true, -1, "Color properties of "+string(_col))
-}
-
-function color_get_condensed(name, col)
-{
-var hex = string(color_to_hex(col))
-	
-return format_output([
-	{str:"[color]", col: col}," | ",{str: hex, scr: input_set, args: ["c/"+hex, true]}," | \""+name+"\""
-], true)
-}
-
-//color_get_condensed s/local c/0xd0cbf8; color_get_condensed s/sublocal c/0xFF99F8; color_get_condensed s/field c/0xb0c8ff; color_get_condensed s/localfield c/0xB2B1FF; color_get_condensed s/globalfield c/0xf7c8e6; color_get_condensed s/keyword c/0xffffcc; color_get_condensed s/macro c/0xadfce9; color_get_condensed s/macroname c/0xadfce9; color_get_condensed s/preproc c/0x8c7195; color_get_condensed s/curly.ace_paren c/0xac647d; color_get_condensed s/constant c/0xb8dcc1; color_get_condensed s/numeric c/0xf2e2a2; color_get_condensed s/string c/0xadfcad; color_get_condensed s/momenttime c/0xf2e2a2; color_get_condensed s/comment c/0x3a435f; color_get_condensed s/eventtext c/0x3a435f; color_get_condensed s/extmacro c/0xff6251; color_get_condensed s/enum c/0xf1a3d3; color_get_condensed s/enumfield c/0xb8dcc1; color_get_condensed s/variable c/0xa48cae; color_get_condensed s/globalvar c/0xf1a3d3; color_get_condensed s/function c/0xf7c6a8; color_get_condensed s/extfunction c/0xff6251; color_get_condensed s/asset.ace_script c/0xff6251; color_get_condensed s/asset c/0xff9f9f; color_get_condensed s/namespace c/0xadfce9; color_get_condensed s/type c/0xff6251; color_get_condensed s/background c/0x232334; color_get_condensed s/active-line c/0x313142; color_get_condensed s/selection c/0x37528f; color_get_condensed s/gutter c/0x424864; color_get_condensed s/gutter c/0x28283c; color_get_condensed s/gutter-active-line c/0x33334d; color_get_condensed s/error c/0xff0000

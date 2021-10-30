@@ -44,7 +44,7 @@ return text_box
 
 function new_value_box(name, variable, is_scrubber, scrubber_step, length_min, length_max, value_min, value_max, allow_float, float_places){
 var s = new_scrubber(name, variable, scrubber_step)
-s.att.text_color = "plain"
+s.att.text_color = "real"
 s.att.scrubber = is_scrubber
 s.att.value_min = value_min
 s.att.value_max = value_max
@@ -351,15 +351,10 @@ update_variable = function(){ if not is_undefined(variable) {
 		var places = undefined
 		if is_numeric(value) places = is_undefined(att.float_places) ? float_count_places(value, max(3, added_float_places)) : att.float_places+added_float_places
 	
-		if not att.allow_alpha
+		if not att.allow_alpha and (not is_numeric(value) or is_nan(value))
 		{
-			if not is_numeric(value) or is_nan(value)
-			{
-				text = "NaN"
-				value = NaN
-			}
-			else 
-			text = string_format_float(value, places)
+			text = "NaN"
+			value = NaN
 		}
 		else 
 		{
@@ -591,7 +586,7 @@ get_input = function(){
 				char_pos1 = 0
 				char_pos2 = 0
 			}
-			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*(room_speed/60)) or (not scoped and (error or att.select_all_on_click))
+			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*(game_get_speed(gamespeed_fps)/60)) or (not scoped and (error or att.select_all_on_click))
 			{
 				char_selection = true
 				typing = true
@@ -662,8 +657,8 @@ get_input = function(){
 		
 		if not error and att.allow_input
 		{	
-			var rt = tb.repeat_time*(room_speed/60)
-			var r = tb.repeat_step mod ((room_speed/60)*2) == 0
+			var rt = tb.repeat_time*(game_get_speed(gamespeed_fps)/60)
+			var r = tb.repeat_step mod ((game_get_speed(gamespeed_fps)/60)*2) == 0
 			tb.repeat_step ++
 		
 			_key_left				= keyboard_check(vk_left)
@@ -1048,6 +1043,8 @@ draw = function(){
 	var cw = string_width("W")
 	var ch = string_height("W")
 	
+	var text_col = att.text_color
+	
 	if att.draw_box
 	{
 		var asp = ch/tb.char_height
@@ -1093,6 +1090,8 @@ draw = function(){
 				draw_rectangle(box_right-_outline_width, bottom, box_right, bottom-_outline_width*2-1, false)
 			}
 			else draw_rectangle(_left, bottom, box_right, bottom-_outline_width*2-1, false)
+			
+			text_col = (att.text_color == "real") ? "plain" : att.text_color
 		}
 	}
 	else
@@ -1118,7 +1117,7 @@ draw = function(){
 		if color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
 		else
 		{
-			var col = error ? att.error_color : att.text_color
+			var col = error ? att.error_color : text_col
 			
 			draw_set_color(is_numeric(col) ? col : o_console.colors[$ col])
 			draw_text(text_x, text_y, text)
@@ -1145,7 +1144,7 @@ draw = function(){
 		}
 	}
 	if shader_current() != -1 shader_reset()
-	if scoped and typing and not error and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*(room_speed/60))) mod 2) draw_line(x1, y1-1, x1, y2)
+	if scoped and typing and not error and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*(game_get_speed(gamespeed_fps)/60))) mod 2) draw_line(x1, y1-1, x1, y2)
 
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)

@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Utilities",
-    "path": "folders/Console/Unsorted/IDE components/Utilities.yy",
+    "name": "Unsorted",
+    "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
   "name": "console_misc_utilities",

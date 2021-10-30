@@ -196,7 +196,6 @@ O4 = ""
 O5 = ""
 
 cs_template = cs_greenbeans
-
 executing = false
 
 command_order = -1

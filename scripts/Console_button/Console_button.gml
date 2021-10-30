@@ -131,7 +131,7 @@ get_input = function(){
 		}
 		else
 		{
-			if subimg_timer >= room_speed
+			if subimg_timer >= game_get_speed(gamespeed_fps)
 			{
 				subimg ++
 				subimg_timer = 0

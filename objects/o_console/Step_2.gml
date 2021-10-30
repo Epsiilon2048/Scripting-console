@@ -50,7 +50,7 @@ if not initialized and startup > -1
 		var _t = get_timer()
 		
 		var ms = (_t-t)/10000
-		var lag = (ms/(room_speed/100))
+		var lag = (ms/(game_get_speed(gamespeed_fps)/100))
 		show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
 		
 		if stay or lag >= .5
@@ -102,6 +102,8 @@ if executing
 			
 		console_log_input(console_string, _output, false)
 	}
+		
+	if console_string == "" OUTPUT.dock.enabled = false
 		
 	BAR.text_box.blink_step = 0
 	keyboard_string = ""

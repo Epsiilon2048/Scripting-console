@@ -30,6 +30,8 @@ else
 }
 }}
 
+
+
 function add_textbox(name, variable){
 
 if is_undefined(variable) variable = name
@@ -38,6 +40,8 @@ var t = new_text_box(name, variable)
 t.instant_update = true
 add_console_element(t)
 }
+
+
 
 function add_scrubber(name, variable, step, px_per_step){
 
@@ -58,6 +62,8 @@ t.instant_update = true
 if not is_undefined(px_per_step) t.att.scrubber_pixels_per_step = px_per_step
 add_console_element(t)
 }
+
+
 
 function add_colorbox(name, variable){
 

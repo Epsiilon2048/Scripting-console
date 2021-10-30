@@ -71,7 +71,6 @@ com_add("unbind", {args: ["bind index"], hiddenargs: ["return bindings menu?"], 
 com_add("bindings", {desc: "Returns the list of bindings"})
 
 com_add_category("Colors", false)
-com_add("color_get", {args: ["color value"], desc: "Returns the properties of a color value"})
 com_add("create_color_scheme4", {hidden: true, args: ["main", "body", "plaintext", "specialtext"], desc: "Builds a color scheme from 4 colors"})
 com_add("create_color_scheme7", {hidden: true, args: ["main", "body", "body_accent", "plaintext", "exposedtext", "specialtext", "method"], desc: "Builds a color scheme from 7 colors"})
 com_add("create_color_scheme10", {hidden: true, args: ["main", "body", "body_accent", "plaintext", "exposedtext", "specialtext", "variable", "method", "asset", "string"], desc: "Builds a color scheme from 10 colors"})

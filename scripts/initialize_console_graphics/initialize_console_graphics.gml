@@ -181,7 +181,7 @@ with COLOR_PICKER {
 	svsquare = nosprite
 	hstrip = nosprite
 	
-	outline = 1.7
+	outline = 1.4
 	
 	dist = 9
 	sep = 9
