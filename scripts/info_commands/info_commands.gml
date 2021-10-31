@@ -23,7 +23,6 @@ return format_output([
 
 
 
-
 function command_help(_command){ with o_console {
 	
 var text = []
@@ -97,7 +96,6 @@ return format_output(text, true, command_help, "Command list")
 
 
 
-
 function syntax_help(){ with o_console {
 	
 return format_output([
@@ -118,7 +116,6 @@ return format_output([
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", scr: tag_help, output: true}
 ], true, syntax_help, "GMCL syntax documentation")
 }}
-
 
 
 
@@ -145,7 +142,6 @@ return format_output([
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", col: "embed_hover"}," / ",{str: "Event tags", scr: tag_help, output: true}
 ], true, adv_syntax_help, "Advanced GMCL syntax documentation")
 }
-
 
 
 
@@ -220,7 +216,6 @@ return format_output([
 ], true, console_settings, "IDE settings")
 }}
 	
-
 	
 	
 function color_scheme_settings(){ with o_console {
@@ -275,7 +270,6 @@ return format_output(text, true, color_scheme_settings)
 
 
 
-
 function Epsiilon(){
 
 return format_output([
@@ -295,7 +289,6 @@ return format_output([
 	
 	
 	
-	
 function console_videos(){ with o_console {
 
 return format_output([
@@ -308,7 +301,6 @@ return format_output([
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}
 ], true, console_videos)
 }}
-
 
 
 

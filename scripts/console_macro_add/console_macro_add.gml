@@ -27,7 +27,11 @@ function console_macro_add_ext(name, type, value, sort){ with o_console {
 
 console_macros[$ name] = {type: type, value: value}
 
-if sort and ds_list_find_index(macro_list, name) == -1 ds_list_file(macro_list, name)
+if ds_list_find_index(macro_list, name) == -1 
+{ 
+	if sort ds_list_file(macro_list, name)
+	else ds_list_add(macro_list, name)
+}
 }}
 
 

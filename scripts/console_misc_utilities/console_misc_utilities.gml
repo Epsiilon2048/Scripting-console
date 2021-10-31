@@ -1,5 +1,4 @@
 
-
 function string_to_instance(str, add_macro){ with o_console {
 
 if str == "" return -1
@@ -53,7 +52,6 @@ var inst_id = (inst == global) ? global : inst.id
 
 return string(inst_id) + string_delete(str, 1, string_pos(".", str)-1)
 }}
-
 
 
 

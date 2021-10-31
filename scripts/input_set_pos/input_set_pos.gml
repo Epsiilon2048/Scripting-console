@@ -1,3 +1,4 @@
+
 function input_set_pos(input){ with o_console.keyboard_scope {
 
 var old_font = draw_get_font()

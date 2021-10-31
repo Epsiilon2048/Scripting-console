@@ -586,7 +586,7 @@ get_input = function(){
 				char_pos1 = 0
 				char_pos2 = 0
 			}
-			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*(game_get_speed(gamespeed_fps)/60)) or (not scoped and (error or att.select_all_on_click))
+			else if (scoped and not char_selection and dclick_step <= tb.dclick_time*max(1, round(game_get_speed(gamespeed_fps)/60))) or (not scoped and (error or att.select_all_on_click))
 			{
 				char_selection = true
 				typing = true
@@ -657,8 +657,8 @@ get_input = function(){
 		
 		if not error and att.allow_input
 		{	
-			var rt = tb.repeat_time*(game_get_speed(gamespeed_fps)/60)
-			var r = tb.repeat_step mod ((game_get_speed(gamespeed_fps)/60)*2) == 0
+			var rt = tb.repeat_time*max(1, round(game_get_speed(gamespeed_fps)/60))
+			var r = tb.repeat_step mod round(game_get_speed(gamespeed_fps)/60*2) == 0
 			tb.repeat_step ++
 		
 			_key_left				= keyboard_check(vk_left)
@@ -795,7 +795,10 @@ get_input = function(){
 					if paste char = clipboard_get_text()
 					char += slice(keyboard_string, string_length(text)+1, -1, 1)
 			
-					if char_selection newtext = string_delete(newtext, char_pos_min+1, char_pos_max-char_pos_min)
+					if char_selection 
+					{
+						newtext = string_delete(newtext, char_pos_min+1, char_pos_max-char_pos_min)
+					}
 				
 					for(var i = 1; i <= string_length(char); i++)
 					{
@@ -894,7 +897,7 @@ get_input = function(){
 						char_pos2 = char_pos1
 						text_changed = true
 						
-						if string_pos(string_last(char), o_console.refresh_sep) 
+						if string_pos(string_last(char), " ;,()")
 						{
 							o_console.AUTOFILL.show = false
 						}
@@ -1144,7 +1147,7 @@ draw = function(){
 		}
 	}
 	if shader_current() != -1 shader_reset()
-	if scoped and typing and not error and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*(game_get_speed(gamespeed_fps)/60))) mod 2) draw_line(x1, y1-1, x1, y2)
+	if scoped and typing and not error and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*max(1, game_get_speed(gamespeed_fps)/60)))) mod 2 draw_line(x1, y1-1, x1, y2)
 
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)

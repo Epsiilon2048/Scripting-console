@@ -15,3 +15,9 @@ ds_destroy(ds_type_list, elements)
 ds_destroy(ds_type_map, commands)
 
 ds_map_destroy(ds_types)
+
+if variable_struct_names_count(COLOR_PICKER) with COLOR_PICKER
+{
+	if surface_exists(svsquare) surface_free(svsquare)
+	if surface_exists(hstrip) surface_free(hstrip)
+}

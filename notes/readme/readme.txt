@@ -16,10 +16,7 @@ you can type "object.variable" to access variables within objects outside of you
  - Real time syntax errors
  - Enumerate support
  - Manual resizing of windows
- - Text icons
- - Menu constructors
  - The ability to access embeds by typing
  - Level editing tools
  - Console settings save file
- - (proper) array and DS support
- - (unlikely) support for scripts being run within scripts
+ - Support for scripts being run within scripts

@@ -3,7 +3,6 @@ function noscript(){} //method placeholder
 
 
 
-
 function script_execute_ext_builtin(ind, array){
 
 //So, the reason I do this weird thing instead of using script_execute_ext is because for
@@ -49,12 +48,10 @@ case 25: return f(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],
 	
 	
 	
-	
 function value_byte_size(struct){
 
 return string_byte_length( json_stringify(struct) )
 }
-	
 	
 	
 
@@ -65,11 +62,11 @@ return 0 <= ind and ind <= 0xfffffffb and script_get_name(ind) != "<unknown>" an
 
 
 
-
 function better_instance_exists(obj){
 
 return obj < 0xfffffffb and instance_exists(obj)
 }
+	
 	
 	
 function better_object_get_name(obj){
