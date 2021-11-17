@@ -55,36 +55,13 @@ com_add("objvar", {optargs: ["instance"], desc: "Returns all the variables in th
 com_add("select_obj", {desc: "After running, click on an instance to set the console's scope"})
 com_add("reset_obj", {optargs: ["instance"], desc: "Destroys and recreates the specified/scoped instance"})
 
-com_add_category("Window commands", false)
-com_add("window", {optargs: ["text"], desc: "Sets the Window text; if left blank, toggles the Window"})
-com_add("window_reset_pos", {desc: "Resets the position of the Window"})
-
-com_add_category("Display commands", false)
-com_add("display", {optargs: ["variable"], hiddenargs: ["enable?"], desc: "Puts a specified variable on the Display; if left blank, toggles the Display"})
-com_add("display_all", {optargs: ["object"], hiddenargs: ["enable all?"], desc: "Puts all variables in the specified/scoped instance on the Display"})
-com_add("display_clear", {desc: "Removes all variables from the Display"})
-com_add("display_reset_pos", {desc: "Resets the position of the Display"})
-
 com_add_category("Console key binds", false)
 com_add("bind", {args: ["key", "command"], desc: "Binds a key to a command"})
 com_add("unbind", {args: ["bind index"], hiddenargs: ["return bindings menu?"], desc: "Removes the binding in the specified index"})
 com_add("bindings", {desc: "Returns the list of bindings"})
 
-com_add_category("Colors", false)
-com_add("create_color_scheme4", {hidden: true, args: ["main", "body", "plaintext", "specialtext"], desc: "Builds a color scheme from 4 colors"})
-com_add("create_color_scheme7", {hidden: true, args: ["main", "body", "body_accent", "plaintext", "exposedtext", "specialtext", "method"], desc: "Builds a color scheme from 7 colors"})
-com_add("create_color_scheme10", {hidden: true, args: ["main", "body", "body_accent", "plaintext", "exposedtext", "specialtext", "variable", "method", "asset", "string"], desc: "Builds a color scheme from 10 colors"})
-com_add("create_color_scheme_full", {args: ["body", "body_accent", "body_bm", "body_alpha", "output", "ex_output", "embed", "embed_hover", "plaintext", "real", "string", "variable", "method", "asset", "tag", "deprecated"], desc: "Builds a color scheme from 16 colors"})
-
 com_add_category("Draw functions", false)
 com_add("clip_rect_cutout", {args: ["x1", "y1", "x2", "y2"], desc: "Initializes a retangular clip mask shader"})
-
-command_doc_add("var", commands[? "create_variable"])
-command_doc_add("@", commands[? "dealwith_array"])
-command_doc_add("|", commands[? "dealwith_ds_list"])
-command_doc_add("$", commands[? "dealwith_struct"])
-command_doc_add("?", commands[? "dealwith_ds_map"])
-command_doc_add("#", commands[? "dealwith_ds_grid"])
 
 command_doc_add("instance_create_layer", {args: ["x", "y", "layer_id_or_name", "obj"], desc: ""})
 command_doc_add("instance_create_depth", {args: ["x", "y", "depth", "obj"], desc: ""})
@@ -108,17 +85,6 @@ command_doc_add("is_string", {args: ["val"], desc: ""})
 command_doc_add("is_numeric", {args: ["val"], desc: ""})
 
 command_doc_add("shader_set_uniform_f", {args: ["uniform_id", "val"], moreargs: true, desc: ""})
-
-command_doc_add("draw_line", {args: ["x1", "y1", "x2", "y2"], desc: ""})
-command_doc_add("draw_line_width", {args: ["x1", "y1", "x2", "y2"], desc: ""})
-command_doc_add("draw_point", {args: ["x", "y"], desc: ""})
-command_doc_add("draw_rectangle", {args: ["x1", "y1", "x2", "y2", "outline"], desc: ""})
-command_doc_add("draw_circle", {args: ["x", "y", "r", "outline"], desc: ""})
-command_doc_add("draw_sprite", {args: ["sprite", "subimg", "x", "y"], desc: ""})
-command_doc_add("draw_sprite_ext", {args: ["sprite", "subimg", "x", "y", "xscale", "yscale", "rot", "col", "alpha"], desc: ""})
-command_doc_add("draw_sprite_pos", {args: ["sprite", "subimg", "x1", "y1", "x2", "y2", "x3", "y3", "x4", "y4", "alpha"], desc: ""})
-command_doc_add("draw_sprite_general", {args: ["sprite", "subimg", "left", "top", "width", "height", "x", "y", "xscale", "yscale", "rot", "c1", "c2", "c3", "c4", "alpha"], desc: ""})
-command_doc_add("draw_text", {args: ["x", "y", "string"], desc: ""})
 
 deprecated_commands = ds_map_create()
 var o = deprecated_commands

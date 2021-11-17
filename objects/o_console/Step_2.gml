@@ -51,7 +51,7 @@ if not initialized and startup > -1
 		
 		var ms = (_t-t)/10000
 		var lag = (ms/(game_get_speed(gamespeed_fps)/100))
-		show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
+		//show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
 		
 		if stay or lag >= .5
 		{

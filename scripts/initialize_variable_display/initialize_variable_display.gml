@@ -35,7 +35,7 @@ var var_text_box = new Console_text_box() with var_text_box
 		return gmcl_autofill_old(command, char_pos, {instance: true, assets: true, scope: true})
 	}
 	
-	enter_func = function(){
+	on_enter = function(){
 		if text == "" return undefined
 		__variable_add_var__ = ""
 		var v = button.released_script()

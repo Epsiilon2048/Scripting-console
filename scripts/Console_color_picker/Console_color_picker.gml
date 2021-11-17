@@ -57,10 +57,28 @@ initialize = function(variable){
 	
 	color = make_color_hsv(hue, sat, val)
 	
-	update_variable()
-	
 	size = 1
 	set_variable_on_input = true
+	
+	update_variable()
+}
+
+
+
+update_dropper_positions = function(){
+
+	draw_set_font(o_console.font)
+		
+	var co = o_console.COLOR_PICKER
+	var ch = string_height("W")
+	var asp = ch/co.char_height
+	var size_asp = asp*size
+	var _outline = round(co.outline*asp)
+	var _svsquare_length = round(co.svsquare_length*size_asp)
+		
+	dropper_x = _outline + clamp(sat/255, 0, 1)*_svsquare_length
+	dropper_y = _outline + clamp(1-val/255, 0, 1)*_svsquare_length
+	hue_y = _outline + clamp(hue/255, 0, 1)*_svsquare_length
 }
 
 

@@ -157,7 +157,10 @@ initialize = function(variable){
 	
 	added_float_places = 0
 	
-	enter_func = noscript
+	on_enter = noscript
+	on_input = noscript
+	on_textchange = noscript
+	
 	char_filter = noscript
 	color_method = noscript // The script used to color the string
 	value_conversion = string // How the value is converted from the text
@@ -365,7 +368,7 @@ update_variable = function(){ if not is_undefined(variable) {
 	{
 		value = undefined
 		error = true
-		text = "!"
+		text = "?"
 	}
 	
 	if att.lock_text_length and string_length(text) > att.length_max text = slice(text, 1, att.length_max+1, 1)
@@ -526,7 +529,7 @@ get_input = function(){
 	var key_escape_pressed = keyboard_check_pressed(vk_escape)
 	var key_enter_pressed = keyboard_check_pressed(vk_enter)
 	
-	if key_enter_pressed and scoped enter_func()
+	if key_enter_pressed and scoped on_enter()
 	if not (mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)) and clicking and not mouse_left
 	{
 		clicking = false
@@ -629,7 +632,7 @@ get_input = function(){
 			if not att.allow_alpha and att.allow_float
 			{
 				var pos = string_pos(".", text)
-				var step_places = float_count_places(att.scrubber_step, 10)
+				var step_places = float_count_places(scrubber_step, 10)
 			}
 			
 			if att.allow_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
@@ -725,20 +728,27 @@ get_input = function(){
 		
 		if not typing and not att.allow_alpha and (key_left or key_right)
 		{
-			if value mod att.incrementor_step != 0
+			var n = power(10, att.float_places+added_float_places)
+			var _value = round(value*n)/n
+			
+			if (_value mod att.incrementor_step) != 0
 			{
-				if key_left value -= value mod att.incrementor_step
-				else value += att.incrementor_step - (value mod att.incrementor_step)
+				if key_left _value -= _value mod att.incrementor_step
+				else _value += att.incrementor_step - (_value mod att.incrementor_step)
 				
+				string_format_float(show_debug_message(value), 8)
 			}
-			else value = clamp(value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
-			text = string_format_float(value, att.float_places)
-			added_float_places = 0
+			else _value = clamp(_value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
+			text = string_format_float(_value, att.float_places+added_float_places)
+			
+			value = _value
 			
 			if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
+			on_input()
+			set_boundaries()
 		}
 		
-		if typing and not error and att.allow_input
+		if typing and not error and att.allow_input 
 		{
 			blink_step ++
 
@@ -812,7 +822,7 @@ get_input = function(){
 						{
 							newtext = infinity*signbool(string_char_at(newtext, 1) != "-")
 						}
-						if (sign(att.value_min) == -1 or sign(value) == -1) and string_pos("-", char)
+						if (sign(att.value_min) == -1 or (is_numeric(value) and sign(value) == -1)) and string_pos("-", char)
 						{
 							char_pos1 = char_pos_min
 							
@@ -885,13 +895,14 @@ get_input = function(){
 						char_pos1 = char_pos_min
 						char_selection = false
 						
-						if not att.allow_alpha and char != "" and (newtext == "0" or newtext == "-0")
-						{
-							newtext = (newtext == "-0") ? "-" : ""
-							char_pos1 --
-						}
+						//if not att.allow_alpha and char != "" and (newtext == "0" or newtext == "-0")
+						//{
+						//	newtext = (newtext == "-0") ? "-" : ""
+						//	char_pos1 --
+						//}
 						
-						if is_infinity(newtext) text = string(newtext)
+						if newtext == infinity text = "inf"
+						else if newtext == -infinity text = "-inf"
 						else text = string_insert(char, newtext, char_pos1+1)
 						char_pos1 += string_length(string(char))
 						char_pos2 = char_pos1
@@ -951,11 +962,12 @@ get_input = function(){
 						}
 						else if not string_is_float(text)
 						{
-							text = "0"
-							char_pos1 = 1
-							char_pos2 = char_pos1
-							char_selection = false
-							_value = text
+							//_value = "0"
+							//text = "0"
+							//char_pos1 = 1
+							//char_pos2 = char_pos1
+							//char_selection = false
+							//_value = text
 						}
 						else
 						{
@@ -963,9 +975,16 @@ get_input = function(){
 							if string_char_at(text, 1) == "." remove = 1
 							else if (slice(text, 1, 3, 1) == "-.") remove = 2
 							
-							added_float_places = max(0, float_count_places(real(text), 8) - (is_undefined(att.float_places) ? 0 : att.float_places))
+							var dot_pos = string_pos(".", text)
+							var dot_end = (string_last(text) == ".") ? "." : ""
+							var places = dot_pos ? (string_length(text)-dot_pos) : 0
 							
-							text = string_delete(string_format_float(clamp(real(text), att.value_min, att.value_max), float_count_places(real(text), 8)) + (string_last(text) == "." ? "." : ""), remove, 1)
+							added_float_places = max(0, places - (is_undefined(att.float_places) ? 0 : att.float_places))
+							
+							text = clamp(real(text), att.value_min, att.value_max)
+							text = string_format_float(text, places)
+							text += dot_end
+							text = string_delete(text, remove, 1)
 							_value = text
 						}
 					}
@@ -994,6 +1013,7 @@ get_input = function(){
 					}
 					
 					set_boundaries()
+					on_input()
 				}
 			}
 		}
@@ -1001,7 +1021,7 @@ get_input = function(){
 		{
 			if not is_numeric(value) or is_nan(value) value = 0
 				
-			value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step, att.value_min, att.value_max)
+			value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*scrubber_step, att.value_min, att.value_max)
 			mouse_previous = gui_mx
 			scrubbed = true
 				
@@ -1015,6 +1035,7 @@ get_input = function(){
 			text_changed = true
 			
 			set_boundaries()
+			on_input()
 		}
 	}
 	
@@ -1023,6 +1044,8 @@ get_input = function(){
 	
 	char_pos_max = max(char_pos1, char_pos2)
 	char_pos_min = min(char_pos1, char_pos2)
+	
+	if text_changed on_textchange()
 	#endregion
 	
 	xprevious = x

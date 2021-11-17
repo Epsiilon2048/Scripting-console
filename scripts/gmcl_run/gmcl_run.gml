@@ -62,7 +62,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	}
 	else
 	{
-		if not is_undefined(com[i].error) output_string[i] = com[i].error
+		if not is_undefined(com[i].error) output_string[i] = format_output(com[i].error)
 		else
 		{
 			var args = array_struct_get(com[i].args, "value")
@@ -82,7 +82,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				}
 				else
 				{
-					output_string[i] = exceptionVariableNotExists
+					output_string[i] = format_output(exceptionVariableNotExists)
 					continue
 				}
 			}
@@ -107,9 +107,9 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				instance_variables = variable_instance_get_names(object)
 				array_sort(instance_variables, true)
 			
-				if subject.value == noone output_string[i] = "Reset console scope"
-				else output_string[i] = (
-						"Scope set to "+stitch(object_get_name(subject.value.object_index)," ",subject.value)
+				if subject.value == noone output_string[i] = format_output("Reset console scope")
+				else output_string[i] = format_output(
+						"Scope set to "+stitch(object_get_name(subject.value.object_index)," (",subject.value.id,")")
 					)
 			
 			break
@@ -146,7 +146,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					}
 					else string_value = _value
 				
-					output_string[i] = string_value
+					output_string[i] = format_output(string_value)
 				}
 				else
 				{
@@ -155,7 +155,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					variable_string_set(subject.value, _value)
 					
 					var string_value = string_format_float(_value)
-					output_string[i] = "Set "+subject.plain+" to "+string_value
+					output_string[i] = format_output("Set "+subject.plain+" to "+string_value)
 				}
 	
 			break
@@ -186,7 +186,8 @@ for(var i = 0; i <= array_length(com)-1; i++)
 	
 			#region Color
 			case dt_color:
-				output_string[i] = new_color_dock("", false, true, true, true, true)
+				_col = subject.value
+				output_string[i] = new_color_dock("o_console._col", false, true, true, true, true)
 			break
 			#endregion
 	

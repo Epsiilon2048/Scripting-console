@@ -65,6 +65,7 @@ refresh_sep = " ./;,=()[]:@?#$|"
 
 bird_mode = false
 
+_col = 0
 
 mouse_char_pos = false
 

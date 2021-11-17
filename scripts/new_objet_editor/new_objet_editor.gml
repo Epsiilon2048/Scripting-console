@@ -38,7 +38,7 @@ with var_name_text_box
 		return {text: text, colors: [{pos: string_length(text)+1, col: (exists ? dt_variable : "plain")}]}
 	}
 	
-	enter_func = function(){
+	on_enter = function(){
 		button.released_script()
 	}
 }
