@@ -20,7 +20,6 @@ com_add("help", {desc: "Returns a help menu"})
 com_add("command_help", {hidden: true, optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"})
 com_add("syntax_help", {hidden: true, desc: "Returns an explanation of basic GMCL syntax"})
 com_add("adv_syntax_help", {hidden: true, desc: "Returns an explanation of advanced GMCL syntax"})
-com_add("console_window_help", {hidden: true, desc: "Returns an explanation of console windows"})
 com_add("Epsiilon", {hidden: true, desc: "Returns info about the creator of the console"})
 com_add("nice_thing", {hidden: true, desc: "Why don't you run it and find out?"})
 

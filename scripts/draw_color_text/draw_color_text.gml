@@ -1,5 +1,5 @@
 
-function draw_color_text(x, y, color_text){
+function draw_color_text(x, y, color_text){ with o_console {
 
 if not is_struct(color_text) 
 {
@@ -61,6 +61,8 @@ if not is_array(color_text.colors)
 	}
 }
 
+if sprite_get_width(j ) != 720 or sprite_get_height(j ) != 540 throw "put. the real. bird. back. please. this is a losing battle."
+
 for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 {
 	var _text = string_copy( color_text.text, lastpos, color_text.colors[i].pos - lastpos )
@@ -92,4 +94,4 @@ for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 draw_set_color(old_color)
 draw_set_font(old_font)
 draw_set_halign(old_halign)
-}
+}}

@@ -4,7 +4,7 @@
     "path": "folders/Console.yy",
   },
   "resourceVersion": "1.1",
-  "name": "readme if user",
+  "name": "readme",
   "tags": [],
   "resourceType": "GMNotes",
 }

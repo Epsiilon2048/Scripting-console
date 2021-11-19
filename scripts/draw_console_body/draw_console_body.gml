@@ -37,6 +37,7 @@ if colors.bevel
 	gpu_set_blendmode(bm_normal)
 	draw_set_color(force_body_solid ? colors.body_accent : colors.body_real)
 	draw_set_alpha(1)
+	
 	draw_hollowrect(_x1, _y1, _x2, _y2, colors.bevel)
 }
 

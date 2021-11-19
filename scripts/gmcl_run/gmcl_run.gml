@@ -211,7 +211,7 @@ catch(_exception)
 	
 //damn tho wouldnt this suck
 prev_exception = _exception
-return [format_output([{str: "[CONSOLE ERROR]", scr: error_report, output: true}," Awfully sorry about this! It seems the console encountered a runtime error."], true, -1)]
+return [format_output([{str: "[CONSOLE ERROR]", scr: error_report, output: true}," "+exceptionUnknown], true, -1)]
 
 }
 }}

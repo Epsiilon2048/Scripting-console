@@ -10,10 +10,10 @@
 #macro vk_super global.__super_key
 #macro vk_tilde global.__tilde_key
 
-vk_super = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
-vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
+var apple = (os_type == os_macosx or os_type == os_ios)
 
-#macro script_exists better_script_exists  // Was causing crashes for values it probably shouldn't've
+vk_super = apple ? vk_lcommand : vk_control
+vk_tilde = apple ? 50 : 192
 
 // Were for embedded text but mostly unused now
 #macro cbox_true  "[x]"
@@ -71,7 +71,8 @@ vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 
 
 #region GMCL exceptions
-#macro exceptionUnknown "Whoops! We're not sure what went wrong."
+#macro exceptionUnknown "Awfully sorry about this! The console encountered a runtime error with an unknown cause."
+
 #macro exceptionNoValue "No value for arg"
 #macro exceptionNoIndex "No value for index"
 
@@ -83,7 +84,7 @@ vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 #macro exceptionScriptNotExists "Script does not exist"
 #macro exceptionDsNotExists "Intended ds at index does not exist"
 
-#macro exceptionExpectingNumeric "Expecting numeric"
+#macro exceptionExpectingNumeric "Expecting numeric value"
 #macro exceptionExpectingDsIndex "Expecting ds index (numeric)"
 #macro exceptionExpectingString "Expecting string"
 #macro exceptionExpectingStruct "Expecting struct"
@@ -95,6 +96,7 @@ vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 #macro exceptionIndexExceedsBounds "Index out of range"
 #macro exceptionUnrecognized "Unrecognized term"
 #macro exceptionHurtFeelings "User has hurt feelings of console"
+#macro exceptionMissingBird "put the bird back please"
 
 #macro exceptionBadScope "Unsupported datatype for scope"
 #macro exceptionBadIndex "Unsupported datatype for index"
@@ -103,11 +105,11 @@ vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 #macro exceptionBadAccessor "Variable cannot be accessed in this way"
 #macro exceptionGridExpectingComma "ds grids require x and y indexes for access"
 
-#macro exceptionBotchedString "Botched string"
-#macro exceptionBotchedInstance "Botched instance"
-#macro exceptionBotchedAsset "Botched asset"
-#macro exceptionBotchedMethod "Botched method"
-#macro exceptionBotchedReal "Botched real"
-#macro exceptionBotchedVariable "Botched variable"
-#macro exceptionBotchedColor "Botched color"
+#macro exceptionBotchedString "Invalid string syntax"
+#macro exceptionBotchedInstance "Invalid instance syntax"
+#macro exceptionBotchedAsset "Invalid asset syntax"
+#macro exceptionBotchedMethod "Invalid method syntax"
+#macro exceptionBotchedReal "Invalid real syntax"
+#macro exceptionBotchedVariable "Invalid variable syntax"
+#macro exceptionBotchedColor "Invalid color syntax syntax"
 #endregion

@@ -70,7 +70,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Unsorted",
-    "path": "folders/Console/Unsorted.yy",
+    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Unsorted.yy",
   },
   "resourceVersion": "1.0",
   "name": "nosprite",

@@ -10,7 +10,7 @@ with BAR {
 	outline_width = 1.4
 	docked_width = 1000
 	
-	x = undefined		// These are for placing the bar somewhere else
+	x = undefined	// These are for placing the bar somewhere else
 	y = undefined
 	width = undefined	
 
@@ -119,5 +119,5 @@ var greetings = [
 	"yooooooo sup",
 ]
 
-output_set( greetings[ round( current_time mod array_length(greetings) ) ] )
+output_set(format_output( greetings[ round( current_time mod array_length(greetings) ) ] ))
 }}

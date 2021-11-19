@@ -6,6 +6,14 @@ var _y1 = min(y1, y2)
 var _x2 = max(x1, x2)
 var _y2 = max(y1, y2)
 
+if os_type == os_macosx
+{
+	_x1 --
+	_y1 --
+	_x2 ++
+	_y2 ++
+}
+
 w = max(round(w), 1) - 1
 
 if _x1+w >= _x2 or _y1+w >= _y2 draw_rectangle(_x1, _y1, _x2, _y2, false)

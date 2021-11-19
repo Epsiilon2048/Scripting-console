@@ -128,7 +128,7 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
-    "path": "folders/Console/Unsorted/IDE components/Fonts.yy",
+    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Fonts.yy",
   },
   "resourceVersion": "1.0",
   "name": "fnt_debug5x",

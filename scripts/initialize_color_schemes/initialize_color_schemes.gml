@@ -182,3 +182,5 @@ bird_mode = false
 color_scheme(cs_index)
 return "Regenerated color schemes"
 }}
+
+if not sprite_exists( asset_get_index("bird_mode_") )  throw exceptionMissingBird

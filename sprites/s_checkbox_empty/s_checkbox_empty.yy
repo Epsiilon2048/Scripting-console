@@ -70,7 +70,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Sprites",
-    "path": "folders/Console/Unsorted/IDE components/Sprites.yy",
+    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "s_checkbox_empty",

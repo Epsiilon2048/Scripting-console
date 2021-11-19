@@ -280,7 +280,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						_col = dt_instance
 						instscope = segment
 					}
-					else if _prev_iden == dt_method and script_exists(_asset) and (is_int or _asset_type == asset_script) and (_macro_type == -1 or _macro_type == dt_method)
+					else if _prev_iden == dt_method and better_script_exists(_asset) and (is_int or _asset_type == asset_script) and (_macro_type == -1 or _macro_type == dt_method)
 					{
 						_col = dt_method
 					}

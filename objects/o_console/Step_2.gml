@@ -1,4 +1,6 @@
 
+birdcheck()
+
 mouse_on_console = false
 clicking_on_console = false
 
@@ -18,6 +20,7 @@ if not initialized and startup > -1
 			initialize_console_graphics,
 			initialize_bar_and_output,
 			user_console_startup,
+			dev_console_setup,
 			
 			function(){
 				keyboard_scope = BAR.text_box
@@ -53,7 +56,7 @@ if not initialized and startup > -1
 		var lag = (ms/(game_get_speed(gamespeed_fps)/100))
 		//show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
 		
-		if stay or lag >= .5
+		if not setup_console_instantly and (stay or lag >= .5)
 		{
 			// show_debug_message("<< CONSOLE SETUP >> Yielding")
 			
@@ -75,6 +78,8 @@ if not initialized and startup > -1
 }
 
 if not enabled or not can_run exit
+
+var i = bird_mode_
 
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
@@ -116,8 +121,11 @@ ctx_menu_get_input()
 
 COLOR_PICKER.get_input()
 
+if not sprite_exists(i) throw "put   that   avien   creature   back"
+
 var was_clicking = clicking_on_console
 var front = -1
+j = i
 for(var i = 0; i <= ds_list_size(elements)-1; i++)
 {
 	elements[| i].get_input()
@@ -137,6 +145,8 @@ if front != -1
 if not mouse_check_button(mb_left) element_dragging = noone
 
 console_measurer_inputs()
+
+if sprite_get_width(j) != 720 or sprite_get_height(j) != 540 throw "noo, put the *actual* one back please...."
 
 a=10
 

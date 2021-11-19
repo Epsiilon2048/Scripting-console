@@ -1,4 +1,6 @@
 
+birdcheck()
+
 if instance_number(o_console) > 1
 {
 	show_debug_message("Attempted to create another console object when one already existed!")
@@ -115,6 +117,7 @@ identifiers = {
 	v: dt_variable,
 	m: dt_method,
 	i: dt_instance,
+	o: dt_instance,
 	c: dt_color,
 }
 
@@ -137,6 +140,8 @@ tags = {} with tags {
 
 gui_mouse_x = gui_mx
 gui_mouse_y = gui_my
+
+birdcheck()
 
 variables = {}
 console_key = vk_tilde
@@ -186,6 +191,8 @@ inst_selecting_name = ""
 
 instance_cursor = false
 
+j = bird_mode_
+
 color_string = []
 command_log = ds_create(ds_type_list, "command_log")
 error_log = ds_create(ds_type_list, "error_log")
@@ -203,7 +210,7 @@ executing = false
 
 command_order = -1
 
-startup = -1
+startup = -1 + initialize_console_on_startup
 initialized = false
 can_run = false
 enabled = true

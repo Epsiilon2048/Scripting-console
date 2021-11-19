@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "bird_mode_",
-    "path": "sprites/bird_mode_/bird_mode_.yy",
+    "name": "bird_mode__",
+    "path": "sprites/bird_mode__/bird_mode__.yy",
   },
   "solid": false,
   "visible": true,

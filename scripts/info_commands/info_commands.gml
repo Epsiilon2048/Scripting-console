@@ -47,10 +47,7 @@ if is_undefined(_command)
 		}
 	}
 	array_push(text,
-		"\n",
-		{cbox: "o_console.show_hidden_commands", scr: command_help, output: true}," Show hidden commands\n\n",
-		
-		{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
+		"\n",{str: "Help menu", scr: help, output: true}," / ",{str: "Commands", col: "embed_hover"}
 	)
 }
 else
@@ -100,17 +97,21 @@ function syntax_help(){ with o_console {
 return format_output([
 	"Basic GMCL syntax\n\n"+
 	
+	"To access variables without specifying their scope each time, you can set the console scope to\n"+
+	"an instance, and variables will default to this scope.\n\n"+
+	
 	"Setting scope:     ",{str:"instance",col: dt_instance},"\n"+
 	"Getting variables: ",{str:"instance",col: dt_instance},{str:".",col: dt_unknown},{str:"variable",col: dt_variable},"\n"+
 	"Setting variables: ",{str:"instance",col: dt_instance},{str:".",col: dt_unknown},{str:"variable",col: dt_variable},{str:" value",col: dt_unknown},"\n"+
 	"Running methods:   ",{str:"method",col: dt_method},{str:" argument0",col: dt_unknown},{str:" argument1 (...)",col: dt_unknown},"\n\n"+ 
 	
-	"Notes\n"+
-	"- Multiple commands can be run in a single line when separated by semi-colons (;)\n"+
-	"- The scope of the console only changes after every line has been run\n"+
-	"- Characters such as parenthesis and commas are treated the same as spaces. This means\n"+
-	"  GML code is often compatible with GMCL.\n"+
-	"- If a method asks for a variable as an argument, it's likely intended to be a string\n\n",
+	"The separator character for arguments is space ( ), but characters such as parentheses (())\n"+	
+	"and commas (,) are handled the same. This means GML code is often compatible with GMCL.\n\n"+
+	
+	"Multiple commands can be run in a single line when separated by semi-colons (;)\n\n"+
+	
+	"If a console command asks for a variable as an argument, it's asking for a string of the\n"+
+	"variable name.\n\n",
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", col: "embed_hover"}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", scr: tag_help, output: true}
 ], true, syntax_help, "GMCL syntax documentation")
@@ -129,14 +130,14 @@ return format_output([
 	"Supported identifiers: (",{s:"r",col: dt_real},")eal - (",{s:"s",col: dt_string},")tring - (",{s:"a",col: dt_asset},")sset - (",{s:"v",col: dt_variable},")ariable - (",{s:"m",col: dt_method},")ethod - (",{s:"i",col: dt_instance},")nstance - (",{s:"c",col: dt_color},")olor\n\n"+
 	
 	"(just a couple) use cases:\n"+
-	"- Writing a variable as a string, but retaining the text colors to make sure it's correct\n"+
-	"  ",{s:"s/",col: dt_string},{s:"instance",col: dt_instance},{s:".",col: dt_string},{s:"variable",col: dt_variable}," -> ",{s:"\"instance.variable\"\n\n",col: dt_string},
+	"Writing a variable as a string, but retaining the text colors to make sure it's correct\n",
+	{s:"s/",col: dt_string},{s:"instance",col: dt_instance},{s:".",col: dt_string},{s:"variable",col: dt_variable}," -> ",{s:"\"instance.variable\"\n\n",col: dt_string},
 	
-	"- Checking if an instance of an object or ID exists\n"+
-	"  ",{s:"i/",col: dt_instance},{s:"object_with_no_instance",col: dt_unknown}," - ",{s:"i/object_with_instance\n\n",col: dt_instance},
+	"Checking if an instance of an object or ID exists\n",
+	{s:"i/",col: dt_instance},{s:"object_with_no_instance",col: dt_unknown}," - ",{s:"i/object_with_instance\n\n",col: dt_instance},
 	
-	"- Avoiding a naming conflict between a console macro and instance variable\n"+
-	"  ",{s:"console_macro",col: dt_instance}," - ",{s:"v/console_macro\n\n",col: dt_variable},
+	"Avoiding a naming conflict between a console macro and instance variable\n",
+	{s:"console_macro",col: dt_instance}," - ",{s:"v/console_macro\n\n",col: dt_variable},
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", col: "embed_hover"}," / ",{str: "Event tags", scr: tag_help, output: true}
 ], true, adv_syntax_help, "Advanced GMCL syntax documentation")
@@ -147,47 +148,17 @@ return format_output([
 function tag_help(){
 
 return format_output([
-	"Compiler instructions inform the compiler where to send the command. Currently, these are\n"+
-	"only used for event tags.\n\n"+
+	"Compiler instructions inform the compiler where to send the command.\n\n"+
 	
 	"Event tags are used to run console commands during events, rather than when it's run.\n\n"+
 	
 	"An example:\n",
 	{s:"#draw ",col: dt_tag},{s:"draw_line ",col: dt_method},{s:"0 0 ",col: dt_real},{s:"mouse_x mouse_y\n\n",col: dt_variable},
 	
-	"This command would be run in every draw event, drawing a line to the mouse position.\n"+
-	"Note you can run multiple commands in these events by using semi-colons (;).\n"+
-	
-	"Supported events are step, step_end, draw, and draw_gui.\n\n",
+	"This command would be run in every draw event, drawing a line to the mouse position.\n\n"+
 	
 	{str:"Help menu", scr: help, output: true}," / ",{str: "Basic syntax", scr: syntax_help, output: true}," / ",{str: "Advanced syntax", scr: adv_syntax_help, output: true}," / ",{str: "Event tags", col: "embed_hover"}
 ], true, tag_help, "Compiler instructions documentation")
-}
-
-
-
-function console_window_help(){
-
-return format_output([
-	"The Window\n"+
-	"- Shows static strings.\n"+
-	"- If it's enabled in settings, you can click on the output to quickly set the window to it.\n"+
-	"- Can be very helpful for keeping notes or navigating menus.\n"+
-	"Syntax: ",{str:"window ",col: dt_method},{str:"value",col: dt_unknown},"\n"+
-	"Commands: ",{str:"window",col: dt_method},", ",{str:"window_reset_pos",col: dt_method},"\n\n"+
-
-	"The Display\n"+
-	"- Displays variables and their values.\n"+
-	"- Remember, though the argument references a variable, make sure the variable name is a string.\n"+
-	"Syntax: ",{str:"display ",col: dt_method},{str:"\"object.variable\"",col: dt_string},"\n"+
-	"Commands: ",{str:"display",col: dt_method},", ",{str:"display_clear",col: dt_method},", ",{str:"display_reset_pos",col: dt_method},", ",{str:"display_all",col: dt_method},"\n\n"+
-	
-	"You can drag windows from their sidebar, and collapse them by clicking it.\n\n"+
-	
-	"Click to show ",{str: "Window", scr: window, arg: "This is the Window!"}, " - ",{str: "Display\n\n", scr: display, arg: "o_console.is_this_the_display"},
-	
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Windows", col: "embed_hover"}
-], true, console_window_help, "IDE window documentation")
 }
 
 
@@ -197,17 +168,6 @@ function console_settings(){ with o_console {
 static sc = scale
 	
 return format_output([
-	"UI scale: ",{str: "1x", scr: sc, arg: 1}," ",{str: "2x", scr: sc, arg: 2}," ",{str: "3x", scr: sc, arg: 3}," ",{str: "4x", scr: sc, arg: 4}," ",{str: "5x", scr: sc, arg: 5},
-	"\n\n",
-	
-	{cbox: "o_console.collapse_windows"}, " Collapse windows by clicking sidebar\n\n",
-	{cbox: "o_console.output_as_window", scr: o_console.OUTPUT.win.reset_pos}, " Output as window\n\n",
-	
-	{cbox: "o_console.force_body_solid"}," Force solid background\n",
-	{cbox: "o_console.force_output"}, " Always show output\n",
-	{cbox: "o_console.force_output_body"}, " Always show output background\n",
-	{cbox: "o_console.force_output_embed_body"}, " Show output background when it displays embedded text\n\n",
-
 	{str: "Reset console\n", scr: reset_obj, arg: o_console},
 	{str: "Destroy console\n\n", scr: destroy_console},
 	
