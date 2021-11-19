@@ -5,7 +5,6 @@ return format_output([
 	"Help & info\n",
 	{str: "Command list\n", scr: command_help, output: true},
 	{str: "GMCL syntax\n", scr: syntax_help, output: true},
-	{str: "Console windows\n", scr: console_window_help, output: true},
 	{str: "Videos\n\n", scr: console_videos, output: true},
 	
 	"Options\n",

@@ -661,7 +661,7 @@ get_input = function(){
 		if not error and att.allow_input
 		{	
 			var rt = tb.repeat_time*max(1, round(game_get_speed(gamespeed_fps)/60))
-			var r = tb.repeat_step mod round(game_get_speed(gamespeed_fps)/60*2) == 0
+			var r = (tb.repeat_step mod round(game_get_speed(gamespeed_fps)/60*2)) == 0
 			tb.repeat_step ++
 		
 			_key_left				= keyboard_check(vk_left)
@@ -1144,7 +1144,7 @@ draw = function(){
 		else
 		{
 			var col = error ? att.error_color : text_col
-			
+				
 			draw_set_color(is_numeric(col) ? col : o_console.colors[$ col])
 			draw_text(text_x, text_y, text)
 		}
@@ -1170,7 +1170,7 @@ draw = function(){
 		}
 	}
 	if shader_current() != -1 shader_reset()
-	if scoped and typing and not error and att.allow_input and x1 < right+1 and not floor((blink_step/(tb.blink_time*max(1, game_get_speed(gamespeed_fps)/60)))) mod 2 draw_line(x1, y1-1, x1, y2)
+	if scoped and typing and not error and att.allow_input and x1 < right+1 and not (floor((blink_step/(tb.blink_time*max(1, game_get_speed(gamespeed_fps)/60)))) mod 2) draw_line(x1, y1-1, x1, y2)
 
 	draw_set_color(old_color)
 	draw_set_alpha(old_alpha)

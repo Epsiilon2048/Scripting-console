@@ -1,9 +1,10 @@
 function draw_autofill_list(){ with o_console {
 
-var at = o_console.AUTOFILL
+var at = AUTOFILL
+var dc = DOC_STRIP
 
-if instanceof(o_console.keyboard_scope) != "Console_text_box" at.show = false
-if not at.show return undefined 
+if instanceof(keyboard_scope) != "Console_text_box" at.show = false
+if not at.show return undefined
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -24,8 +25,23 @@ var entries = (
 	((autofill.scope == -1) ? 0 : (autofill.scope.max - autofill.scope.min+1))  
 )-1
 
+with o_console.keyboard_scope
+{
+	var doc = undefined
+	if is_struct(colors) and variable_struct_exists(colors, "subject_interpret") doc = colors.subject_interpret
+
+	var doc_asp = ch/dc.char_height
+	var _doc_hdist = round(dc.hdist*doc_asp)
+
+	var doc_height = _doc_hdist*2+ch
+	
+	at.x = is_undefined(cbox_left) ? left : cbox_left
+	at.y = is_undefined(cbox_top) ? top : cbox_top
+}
+
 if entries <= -1 
 {
+	draw_doc_strip(at.x, at.y-doc_height, doc, undefined)
 	at.mouse_on = false
 	return -1
 }
@@ -39,15 +55,9 @@ var _height = ceil( min(entries_height+1, at.height*asp) )
 var _border_w = round(at.border_w*asp)
 var _border_h = round(at.border_h*asp)
 
-with o_console.keyboard_scope
-{
-	at.x = is_undefined(cbox_left) ? left : cbox_left
-	at.y = is_undefined(cbox_top) ? top : cbox_top
-}
-
 var x1 = at.x
-var y1 = at.y
 var x2 = x1 + _width + _border_w*2
+var y1 = at.y - draw_doc_strip(x1, at.y-doc_height, doc, x2)*doc_height
 var y2 = y1 - _height - _border_h*2 - 1
 
 at.mouse_on = gui_mouse_between(x1, y1, x2, y2)
@@ -325,6 +335,8 @@ draw_list(autofill.instance, instance_variables, variable_color)
 draw_list(autofill.assets, asset_list, asset_color)
 draw_list(autofill.methods, method_list, method_color)
 draw_list(autofill.macros, macro_list, macro_color)
+
+if at.index+1 > global.scrvar.item_index at.index = 0
 
 shader_reset()
 

@@ -278,7 +278,7 @@ draw = function(){
 
 	if right == x and bottom == y return undefined
 
-	static u_position = shader_get_uniform(shd_hue, "u_Position")
+	static u_position = shader_get_uniform(shd_svsquare, "u_Position")
 
 	var old_color = draw_get_color()
 	var old_font = draw_get_font()
@@ -306,7 +306,7 @@ draw = function(){
 	var _svsquare_bottom = svsquare_bottom-_outline
 	var _hstrip_left = hstrip_left+_outline
 
-	shader_set(shd_hue)
+	shader_set(shd_svsquare)
 	shader_set_uniform_f(u_position, hue/255)
 	draw_surface_stretched(co.svsquare, _in_left, _in_top, _svsquare_right-_in_left+1, _svsquare_bottom-_in_top+1)
 	shader_reset()

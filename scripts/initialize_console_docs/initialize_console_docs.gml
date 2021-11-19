@@ -16,7 +16,7 @@ commands = ds_create(ds_type_map, "commands")
 command_order = ds_create(ds_type_list, "command_order")
 
 com_add_category("Help & info", false)
-com_add("help", {desc: "Returns console help and info. But surely you already know this command if you're viewing it?"})
+com_add("help", {desc: "Returns a help menu"})
 com_add("command_help", {hidden: true, optargs: ["command"], desc: "Returns the usage of a command; if left blank, returns the list of commands"})
 com_add("syntax_help", {hidden: true, desc: "Returns an explanation of basic GMCL syntax"})
 com_add("adv_syntax_help", {hidden: true, desc: "Returns an explanation of advanced GMCL syntax"})
@@ -53,42 +53,33 @@ com_add("bindings", {desc: "Returns the list of bindings"})
 
 command_doc_add("instance_create_layer", {args: ["x", "y", "layer_id_or_name", "obj"], desc: ""})
 command_doc_add("instance_create_depth", {args: ["x", "y", "depth", "obj"], desc: ""})
-command_doc_add("instance_destroy", {optargs: ["id"], desc: ""})
-
-command_doc_add("power", {args: ["x", "n"], desc: ""})
-
-command_doc_add("array_length",{args: ["array"], desc: ""})
-
-command_doc_add("instanceof",{args: ["struct"], desc: ""})
 
 command_doc_add("array_delete", {args: ["array", "index", "number"], desc: ""})
 command_doc_add("array_insert", {args: ["array", "index", "value"], desc: ""})
 command_doc_add("array_push", {args: ["array", "value"], moreargs: true, desc: ""})
 
-command_doc_add("asset_get_type", {args: ["name"], desc: ""})
-
-command_doc_add("real", {args: ["val"], desc: ""})
-
-command_doc_add("is_string", {args: ["val"], desc: ""})
-command_doc_add("is_numeric", {args: ["val"], desc: ""})
-
 command_doc_add("shader_set_uniform_f", {args: ["uniform_id", "val"], moreargs: true, desc: ""})
 
-deprecated_commands = ds_map_create()
+deprecated_commands = ds_create(ds_type_map, "deprecated_commands")
 var o = deprecated_commands
 
-o[? "ar"]						= {newname: "@",							ver: "Release 1.2"}
 o[? "obj_reset"]				= {newname: "reset_obj",					ver: "Early 1.2"}
 o[? "window_toggle"]			= {newname: "window",						ver: "Early 1.2"}
 o[? "display_all_variables"]	= {newname: "display_all",					ver: "Early 1.2"}
 o[? "objects_in_room"]			= {newname: "roomobj",						ver: "Unreleased 1.0"}
 o[? "variables_in_object"]		= {newname: "objvar",						ver: "Unreleased 1.0"}
 
-o[? "vtv"]						= {note: "Became obsolete with event tags", ver: "Release 1.2"}
-o[? "vt_mx"]					= {note: "Became obsolete with event tags", ver: "Release 1.2"}
-o[? "vt_my"]					= {note: "Became obsolete with event tags", ver: "Release 1.2"}
-o[? "var_to_mouse_x"]			= {note: "Became obsolete with event tags", ver: "Unreleased 1.0"}
-o[? "var_to_mouse_y"]			= {note: "Became obsolete with event tags", ver: "Unreleased 1.0"}
-o[? "var_to_var"]				= {note: "Became obsolete with event tags", ver: "Unreleased 1.0"}
-o[? "create_camera_point"]		= {note: "Was project specific",			ver: "Unreleased 1.0"}
+o[? "ar"]						= {note: "Became obsolete with proper array support",	ver: "Release 1.2"}
+o[? "vtv"]						= {note: "Became obsolete with event tags",				ver: "Release 1.2"}
+o[? "vt_mx"]					= {note: "Became obsolete with event tags",				ver: "Release 1.2"}
+o[? "vt_my"]					= {note: "Became obsolete with event tags",				ver: "Release 1.2"}
+o[? "var_to_mouse_x"]			= {note: "Became obsolete with event tags",				ver: "Unreleased 1.0"}
+o[? "var_to_mouse_y"]			= {note: "Became obsolete with event tags",				ver: "Unreleased 1.0"}
+o[? "var_to_var"]				= {note: "Became obsolete with event tags",				ver: "Unreleased 1.0"}
+o[? "create_camera_point"]		= {note: "Was project specific",						ver: "Unreleased 1.0"}
+o[? "@"]						= {note: "Became obsolete with proper array support",	ver: "Release 2.0"}
+o[? "?"]						= {note: "Became obsolete with proper map support",		ver: "Release 2.0"}
+o[? "|"]						= {note: "Became obsolete with proper list support",	ver: "Release 2.0"}
+o[? "$"]						= {note: "Became obsolete with proper struct support",	ver: "Release 2.0"}
+o[? "#"]						= {note: "Became obsolete with proper grid support",	ver: "Release 2.0"}
 }

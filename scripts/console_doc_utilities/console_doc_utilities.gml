@@ -33,15 +33,33 @@ if ds_map_exists(commands, command)
 else if ds_map_exists(deprecated_commands, command)
 {
 	var dep = deprecated_commands[? command]
-	var str = "Deprecated command"
 	
-	if variable_struct_exists(dep, "newname")	str += " - it has been replaced with "+dep.newname
+	var str = ""
+	if variable_struct_exists(dep, "ver")		str += dep.ver+"  "
+	
+	str += "Deprecated command"
+	
+	if variable_struct_exists(dep, "newname")	str += " - replaced with "+dep.newname
 	if variable_struct_exists(dep, "note")		str += " - "+dep.note
-	if variable_struct_exists(dep, "ver")		str += " - removed in "+dep.ver
 	
 	return str
 }
-else
+}}
+
+
+
+function command_doc_desc(command){ with o_console {
+if ds_map_exists(commands, command)
+{
+	var doc = command_doc(command)
+	
+	if not variable_struct_exists(commands[? command], "desc") return doc
+	return doc+" - "+commands[? command].desc
+}
+else if ds_map_exists(deprecated_commands, command)
+{
+	return command_doc(command)
+}
 
 return undefined
 }}

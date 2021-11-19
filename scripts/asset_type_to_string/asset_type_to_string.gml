@@ -1,6 +1,6 @@
 function asset_type_to_string(type){
 
-switch asset_get_type(type)
+switch type
 {
 default:					return "unknown"
 case asset_object:			return "object"

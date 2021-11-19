@@ -5,7 +5,7 @@
     "path": "folders/Console/Unsorted/IDE components/Shaders.yy",
   },
   "resourceVersion": "1.0",
-  "name": "shd_hue",
+  "name": "shd_svsquare",
   "tags": [],
   "resourceType": "GMShader",
 }

@@ -51,6 +51,7 @@ run_in_embed = false
 char_pos_arg = {}
 
 include_builtin_functions = true
+include_console_functions = false
 
 ds_types = ds_map_create() // if this is indexed, it has to be done after, using the already existing ind
 ds_names = {}

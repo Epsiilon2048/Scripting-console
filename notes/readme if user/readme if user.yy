@@ -1,10 +1,10 @@
 {
   "parent": {
-    "name": "Unsorted",
-    "path": "folders/Console/Unsorted.yy",
+    "name": "Console",
+    "path": "folders/Console.yy",
   },
   "resourceVersion": "1.1",
-  "name": "readme",
+  "name": "readme if user",
   "tags": [],
   "resourceType": "GMNotes",
 }

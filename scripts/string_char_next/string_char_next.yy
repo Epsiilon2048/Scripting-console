@@ -6,7 +6,7 @@
     "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Script72",
+  "name": "string_char_next",
   "tags": [],
   "resourceType": "GMScript",
 }
