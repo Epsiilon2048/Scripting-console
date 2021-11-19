@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Graphical elements",
-    "path": "folders/Console/Graphical elements.yy",
+    "name": "Unsorted",
+    "path": "folders/Console/Unsorted.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Console_doc_strip",
+  "name": "asset_type_to_string",
   "tags": [],
   "resourceType": "GMScript",
 }

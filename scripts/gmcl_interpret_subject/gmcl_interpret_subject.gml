@@ -46,15 +46,17 @@ else
 	var is_float = string_is_float(_arg)
 	var is_int = is_float and string_is_int(_arg)
 	
-	if is_float and iden_type != dt_string
+	if is_float and iden_type != dt_string  // Is numeric
 	{
 		var arg_real = real(_arg)
 			
-		if iden_type != "" switch iden_type
+		if iden_type != "" switch iden_type  // Has identifier and is numeric
 		{
 			case dt_real:
 				type = dt_real
 				value = arg_real
+				
+				if slice(_arg, 1, 3, 1) == "0x" description = value
 			break
 			case dt_asset:
 				if is_int and arg_real >= 0 and arg_real <= 0xfffffffffffffb and object_exists(arg_real)
@@ -78,7 +80,7 @@ else
 					value = arg_real
 					type = dt_method
 					
-					description = script_get_name(value)+"(..."
+					description = script_get_name(value)+"("
 				}
 				else
 				{
@@ -106,12 +108,12 @@ else
 				
 				description = stitch("RGB ",color_get_red(value)," ",color_get_green(value)," ",color_get_blue(value))
 		}
-		else if macro_type != ""
+		else if macro_type != ""  // Has macro
 		{
 			type = macro_type
 			value = arg_real
 		}
-		else if better_instance_exists(arg_real)
+		else if better_instance_exists(arg_real)  // Has instance
 		{
 			type = dt_instance
 			value = arg_real
@@ -123,7 +125,7 @@ else
 			error = exceptionInstanceNotExists
 		}
 	}
-	else if iden_type != ""
+	else if iden_type != ""  // Has identifier and isn't numeric
 	{
 		switch iden_type
 		{
@@ -145,7 +147,7 @@ else
 					value = asset
 					type = dt_asset
 					
-					if ds_map_exists(commands, asset) description = commands[? asset]
+					description = "Asset "+string(asset)
 				}
 			break
 			case dt_variable:
@@ -217,53 +219,24 @@ else
 			switch asset_get_type(_arg)
 			{
 				default:
-					description = "Asset "+string(asset)
+					description = string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset "+string(asset)
 				break
 				case asset_object:
 					if instance_exists(asset)
 					{
 						type = dt_instance
-						description = "Instance "+string(asset.id)+" / object "+string(asset)
+						var count = instance_number(asset)
+						description = stitch("Object asset ",asset," (",count,((count == 1) ? " instance":" instances")+"; implicit ID ",asset.id,")")
 					}
 					else
 					{
-						description = "Object index "+string(asset)+" (no instance)"
+						description = "Object index "+string(asset)+" (no instances)"
 					}
 				break
 				case asset_script: 
 					type = dt_method
 					description = command_doc(_arg)
 					if is_undefined(description) description = script_get_name(asset)+"("
-				break
-				case asset_animationcurve:
-					description = "Animcurve "+string(asset)
-				break
-				case asset_font:
-					description = "Font "+string(asset)
-				break
-				case asset_path:
-					description = "Path "+string(asset)
-				break
-				case asset_room:
-					description = "Room "+string(asset)
-				break
-				case asset_sequence:
-					description = "Sequence "+string(asset)
-				break
-				case asset_shader:
-					description = "Shader "+string(asset)
-				break
-				case asset_sound:
-					description = "Sound "+string(asset)
-				break
-				case asset_sprite:
-					description = "Sprite "+string(asset)
-				break
-				case asset_tiles:
-					description = "Tiles "+string(asset)
-				break
-				case asset_timeline:
-					description = "Timeline "+string(asset)
 			}
 		}
 		else
