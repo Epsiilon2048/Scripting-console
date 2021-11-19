@@ -73,7 +73,9 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				var varstring = args[com[i].variables[j]]
 				
 				run_in_console = true
-				var value = variable_string_info(varstring)
+				var value 
+				if instance_exists(object) with object value = variable_string_info(varstring)
+				else value = variable_string_info(varstring)
 				run_in_console = false
 				
 				if is_struct(value) and value.exists

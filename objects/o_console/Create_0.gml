@@ -99,6 +99,7 @@ SLIDER = {}
 SEPARATOR = {}
 CD_BUTTON = {}
 MEASURER = {}
+DOC_STRIP = {}
 
 keyboard_scope = noone
 

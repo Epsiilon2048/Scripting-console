@@ -42,7 +42,6 @@ else if ds_map_exists(deprecated_commands, command)
 	return str
 }
 else
-{
-	return "Command "+command+" does not exist"
-}
+
+return undefined
 }}

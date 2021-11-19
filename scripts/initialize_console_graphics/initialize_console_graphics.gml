@@ -135,7 +135,6 @@ with CHECKBOX {
 	mouse_on_value_add = 11
 }
 
-
 with SLIDER {
 	
 	height			 = 39
@@ -168,7 +167,6 @@ with SEPARATOR {
 	
 	wdist = other.DOCK.element_wdist/2
 }
-
 
 with COLOR_PICKER {
 	
@@ -289,7 +287,6 @@ with COLOR_PICKER {
 	}
 }
 
-
 with CTX_MENU
 {
 	char_height = 23
@@ -330,7 +327,6 @@ with CTX_MENU
 	elements = []
 }
 
-
 with MEASURER {
 	
 	enabled = false
@@ -345,5 +341,14 @@ with MEASURER {
 	length = 0
 	width = 0
 	height = 0
+}
+
+with DOC_STRIP
+{
+	char_height = 23
+	
+	wdist = 10
+	hdist = 0
+	outline = 1.4
 }
 }}

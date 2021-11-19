@@ -3,7 +3,7 @@ function draw_color_text(x, y, color_text){
 
 if not is_struct(color_text) 
 {
-	draw_color_text(x, y, color_text)
+	draw_text(x, y, color_text)
 	return undefined
 }
 

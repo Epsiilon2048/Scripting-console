@@ -10,7 +10,7 @@ var macro = undefined
 var iden_type = ""
 var macro_type = ""
 var error = undefined
-var description = undefined
+var description = ""
 
 var arg_first = string_char_at(_arg, 1)
 var arg_last = (string_length(_arg) <= 1) ? "" : string_last(_arg)
@@ -61,6 +61,8 @@ else
 				{
 					value = arg_real
 					type = dt_asset
+					
+					description = "Object "+object_get_name(value)
 				}
 				else
 				{
@@ -75,6 +77,8 @@ else
 				{
 					value = arg_real
 					type = dt_method
+					
+					description = script_get_name(value)+"(..."
 				}
 				else
 				{
@@ -86,6 +90,8 @@ else
 				{
 					value = arg_real
 					type = dt_instance
+					
+					description = object_get_name(value.object_index)+" ("+string(value.id)+")"
 				}
 				else
 				{
@@ -97,16 +103,20 @@ else
 				else value = real(_arg)
 			
 				type = dt_color
+				
+				description = stitch("RGB ",color_get_red(value)," ",color_get_green(value)," ",color_get_blue(value))
 		}
 		else if macro_type != ""
 		{
 			type = macro_type
 			value = arg_real
 		}
-		else if instance_exists(arg_real)
+		else if better_instance_exists(arg_real)
 		{
 			type = dt_instance
 			value = arg_real
+			
+			description = object_get_name(arg_real.object_index)+" ("+string(arg_real.id)+")"
 		}
 		else
 		{
@@ -134,6 +144,8 @@ else
 				{
 					value = asset
 					type = dt_asset
+					
+					if ds_map_exists(commands, asset) description = commands[? asset]
 				}
 			break
 			case dt_variable:
@@ -154,6 +166,9 @@ else
 				{
 					value = asset
 					type = dt_method
+					
+					description = command_doc(_arg_plain)
+					if is_undefined(description) description = script_get_name(asset)+"("
 				}
 				else if not is_undefined(macro) and macro.type == dt_method and better_script_exists(macro.value)
 				{
@@ -188,42 +203,88 @@ else
 	}
 	else if arg_first == "\""
 	{
-		if arg_last != "\""
-		{
-			error = exceptionBotchedString
-		}
-		else
-		{
-			type = dt_string
-			value = (arg_first == "\"") ? slice(_arg, 2, -2, 1) : _arg
-		}
+		type = dt_string
+		value = slice(_arg, 2, -1-(arg_last == "\""), 1)
 	}
 	else
 	{
 		var asset = asset_get_index(_arg)
 		if asset != -1
 		{
-			type = dt_asset
 			value = asset
+			type = dt_asset
 			
 			switch asset_get_type(_arg)
 			{
-				case asset_object: type = dt_instance
+				default:
+					description = "Asset "+string(asset)
 				break
-				case asset_script: type = dt_method
+				case asset_object:
+					if instance_exists(asset)
+					{
+						type = dt_instance
+						description = "Instance "+string(asset.id)+" / object "+string(asset)
+					}
+					else
+					{
+						description = "Object index "+string(asset)+" (no instance)"
+					}
+				break
+				case asset_script: 
+					type = dt_method
+					description = command_doc(_arg)
+					if is_undefined(description) description = script_get_name(asset)+"("
+				break
+				case asset_animationcurve:
+					description = "Animcurve "+string(asset)
+				break
+				case asset_font:
+					description = "Font "+string(asset)
+				break
+				case asset_path:
+					description = "Path "+string(asset)
+				break
+				case asset_room:
+					description = "Room "+string(asset)
+				break
+				case asset_sequence:
+					description = "Sequence "+string(asset)
+				break
+				case asset_shader:
+					description = "Shader "+string(asset)
+				break
+				case asset_sound:
+					description = "Sound "+string(asset)
+				break
+				case asset_sprite:
+					description = "Sprite "+string(asset)
+				break
+				case asset_tiles:
+					description = "Tiles "+string(asset)
+				break
+				case asset_timeline:
+					description = "Timeline "+string(asset)
 			}
 		}
 		else
 		{
 			variable = variable_string_info(_arg)
-			error = variable.error
+			if variable.error == exceptionVariableNotExists error = exceptionUnrecognized
+			else error = variable.error
+			
 			if variable.exists
-			{
+			{			
 				type = dt_variable
-				value = string_add_scope(_arg, true)
+				value = _arg//string_add_scope(_arg, true)
 			}
 		}
 	}
+}
+
+if not is_undefined(error) description = error
+else if is_undefined(description)
+{
+	description = command_doc(string(arg))
 }
 
 return {

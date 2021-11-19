@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Console",
-    "path": "folders/Console.yy",
+    "name": "Scripting-console",
+    "path": "Scripting-console.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "initialize_console_docs",
+  "name": "Console_doc_strip",
   "tags": [],
   "resourceType": "GMScript",
 }
