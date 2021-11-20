@@ -9,7 +9,7 @@ surface_set_target(c)
 draw_point(1, 1)
 
 surface_reset_target()
-COLOR_PICKER.svsquare = c
+o_console.COLOR_PICKER.svsquare = c
 }
 
 
@@ -32,5 +32,5 @@ for(var yy = 0; yy <= 255; yy++)
 }
 draw_set_color(old_color)
 surface_reset_target()
-COLOR_PICKER.hstrip = c
+o_console.COLOR_PICKER.hstrip = c
 }

@@ -10,6 +10,16 @@ return t
 
 
 
+function new_cd_colortext(text){
+
+var t = new Cd_text()
+t.initialize(text.text)
+t.color_text = text
+return t
+}
+
+
+
 function new_cd_var(variable){
 var v = new Cd_text()
 v.set()

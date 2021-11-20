@@ -36,6 +36,10 @@ color_schemes[$ cs_greenbeans][$ dt_instance] = pink
 color_schemes[$ cs_greenbeans].builtin = true
 color_schemes[$ cs_greenbeans].author = "Epsiilon"
 
+color_schemes[$ cs_greenbeans].red = make_color_rgb(240, 47, 56)
+color_schemes[$ cs_greenbeans].green = make_color_rgb(104, 207, 88)
+color_schemes[$ cs_greenbeans].blue = make_color_rgb(96, 176, 255)
+
 
 
 var dark_pink   = make_color_rgb(55,  34, 66)

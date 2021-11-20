@@ -253,7 +253,7 @@ get_input = function(){
 	
 	if scoped and o_console.keyboard_scope != noone 
 	{
-		o_console.COLOR_PICKER.global_color_picker = false
+		o_console.COLOR_PICKER.global_color_picker.enabled = false
 		using_color_picker = false
 		scoped = false
 	}

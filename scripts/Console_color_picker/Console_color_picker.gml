@@ -306,6 +306,9 @@ draw = function(){
 	var _svsquare_bottom = svsquare_bottom-_outline
 	var _hstrip_left = hstrip_left+_outline
 
+	if not surface_exists(co.svsquare)	generate_satval_square()
+	if not surface_exists(co.hstrip)	generate_hue_strip()
+
 	shader_set(shd_svsquare)
 	shader_set_uniform_f(u_position, hue/255)
 	draw_surface_stretched(co.svsquare, _in_left, _in_top, _svsquare_right-_in_left+1, _svsquare_bottom-_in_top+1)

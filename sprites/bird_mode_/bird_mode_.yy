@@ -24,12 +24,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","path":"sprites/bird_mode__/bird_mode__.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","path":"sprites/bird_mode__/bird_mode__.yy",},"LayerId":{"name":"0572c1cc-53d8-419d-9453-b912411975ab","path":"sprites/bird_mode__/bird_mode__.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"bird_mode__","path":"sprites/bird_mode__/bird_mode__.yy",},"resourceVersion":"1.0","name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","path":"sprites/bird_mode_/bird_mode_.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","path":"sprites/bird_mode_/bird_mode_.yy",},"LayerId":{"name":"0572c1cc-53d8-419d-9453-b912411975ab","path":"sprites/bird_mode_/bird_mode_.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"bird_mode_","path":"sprites/bird_mode_/bird_mode_.yy",},"resourceVersion":"1.0","name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
-    "spriteId": {"name":"bird_mode__","path":"sprites/bird_mode__/bird_mode__.yy",},
+    "spriteId": {"name":"bird_mode_","path":"sprites/bird_mode_/bird_mode_.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -41,7 +41,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"28067901-0536-44bd-b423-3afef79d887d","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","path":"sprites/bird_mode__/bird_mode__.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"28067901-0536-44bd-b423-3afef79d887d","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"f3c4066a-6652-4b1c-8332-9c0e15a45374","path":"sprites/bird_mode_/bird_mode_.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -58,9 +58,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"bird_mode__","path":"sprites/bird_mode__/bird_mode__.yy",},
+    "parent": {"name":"bird_mode_","path":"sprites/bird_mode_/bird_mode_.yy",},
     "resourceVersion": "1.3",
-    "name": "bird_mode__",
+    "name": "bird_mode_",
     "tags": [],
     "resourceType": "GMSequence",
   },
@@ -73,7 +73,7 @@
     "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Sprites.yy",
   },
   "resourceVersion": "1.0",
-  "name": "bird_mode__",
+  "name": "bird_mode_",
   "tags": [],
   "resourceType": "GMSprite",
 }

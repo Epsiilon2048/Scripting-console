@@ -104,7 +104,7 @@
     {"id":{"name":"console_log_functions","path":"scripts/console_log_functions/console_log_functions.yy",},"order":9,},
     {"id":{"name":"get_update_turn","path":"scripts/get_update_turn/get_update_turn.yy",},"order":39,},
     {"id":{"name":"draw_console_body","path":"scripts/draw_console_body/draw_console_body.yy",},"order":7,},
-    {"id":{"name":"bird_mode__","path":"sprites/bird_mode__/bird_mode__.yy",},"order":0,},
+    {"id":{"name":"bird_mode_","path":"sprites/bird_mode_/bird_mode_.yy",},"order":0,},
     {"id":{"name":"string_char_next","path":"scripts/string_char_next/string_char_next.yy",},"order":37,},
     {"id":{"name":"common_math_utilities","path":"scripts/common_math_utilities/common_math_utilities.yy",},"order":28,},
     {"id":{"name":"Console_doc_strip","path":"scripts/Console_doc_strip/Console_doc_strip.yy",},"order":17,},
@@ -169,7 +169,7 @@
     {"CopyToMask":0,"filePath":"datafiles","resourceVersion":"1.0","name":"checkmark.fla","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2.3.5.589",
+    "IDEVersion": "2.3.6.595",
   },
   "resourceVersion": "1.4",
   "name": "Scripting-console",
