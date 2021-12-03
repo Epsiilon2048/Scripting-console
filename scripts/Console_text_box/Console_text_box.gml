@@ -716,13 +716,27 @@ get_input = function(){
 			{
 				typing = true
 				scrubbing = false
-				char_pos1 = string_length(text)
-				if digits or key_backspace or key_delete
+				
+				if att.allow_float and string_pos(".", char) 
 				{
-					char_pos2 = 0
+					var p = string_pos(".", text)
+					if p char_pos1 = p
+					else char_pos1 = string_length(text)
+					
+					char_pos2 = string_length(text)
 					char_selection = true
 				}
-				else char_pos2 = char_pos1
+				else
+				{
+					char_pos1 = string_length(text)
+				
+					if digits or key_backspace or key_delete
+					{
+						char_pos2 = 0
+						char_selection = true
+					}
+					else char_pos2 = char_pos1
+				}
 			}
 		}
 		
