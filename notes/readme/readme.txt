@@ -1,7 +1,7 @@
 // Integration //
  - If you want to start the game displaying a variable or doing anything else with the console, put it in
    the console_startup script. It's automatically run at the end of the console's create event.
-   
+
 // Console help //
 By default, the console key is tab. You can change this by changing the console_key variable.
 You can also press shift+tab to quickely pull up the help menu.
