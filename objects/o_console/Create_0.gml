@@ -210,7 +210,7 @@ executing = false
 
 command_order = -1
 
-startup = -1 + initialize_console_on_startup
+startup = -1 + gmcl_initialize_on_startup
 initialized = false
 can_run = false
 enabled = true

@@ -1,5 +1,14 @@
 
-#macro initialize_console_on_startup true
-#macro setup_console_instantly true			// If false, makes indexing slightly slower but much smoother
+// Ease of use
+#macro gmcl_autmatic_gui_resize		false	// If enabled, automatically resizes the gui layer to the window
 
-#macro console_in_debug_mode true			// Runs the dev_console_setup script on console startup
+// User sandbox
+#macro gmcl_sb_allow_change			true	// Whether or not the user can change the sandbox settings
+
+// Compatibility
+#macro gmcl_work_with_imgui			true	// Whether or not the console works with the extension imGUI
+
+// Debugging
+#macro gmcl_in_debug_mode			true	// Runs the dev_console_setup script on console startup
+#macro gmcl_initialize_on_startup	true	// Normally it's not initialized immediately
+#macro gmcl_instant_setup			true	// If false, makes startup slightly slower but much smoother

@@ -56,7 +56,7 @@ if not initialized and startup > -1
 		var lag = (ms/(game_get_speed(gamespeed_fps)/100))
 		//show_debug_message(stitch("<< CONSOLE SETUP >> ",lag," steps: "+script_get_name(init_list[startup])))
 		
-		if not setup_console_instantly and (stay or lag >= .5)
+		if not gmcl_instant_setup and (stay or lag >= .5)
 		{
 			// show_debug_message("<< CONSOLE SETUP >> Yielding")
 			

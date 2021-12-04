@@ -140,31 +140,38 @@ else
 					description = "Constant with value of \""+string(value)+"\""
 				break
 				case dt_variable:
-					description = "Shortcut for "+value
-				
-					var info
-					if not instance_exists(object) info = variable_string_info(value)
-					else with object info = variable_string_info(value)
-					
-					if info.exists
+					if is_string(value)
 					{
-						if is_struct(info.value)		description += " (holds struct)"
-						else if is_array(info.value)	description += " (holds array)"
-						else if is_ptr(info.value)		description += " (holds pointer)"
-						else if is_method(info.value)	description += " (holds method)"
-						else if is_bool(info.value)		description += " ("+(info.value ? "true" : "false")+")"
-						else if is_string(info.value)
+						description = "Shortcut for "+value
+				
+						var info
+						if not instance_exists(object) info = variable_string_info(value)
+						else with object info = variable_string_info(value)
+						
+						if info.exists
 						{
-							if string_length(info.value) > 300 or (string_height(info.value)/string_height("W")) > 1 description += " (holds string)"
-							else description += " (\""+info.value+"\")"
+							if is_struct(info.value)		description += " (holds struct)"
+							else if is_array(info.value)	description += " (holds array)"
+							else if is_ptr(info.value)		description += " (holds pointer)"
+							else if is_method(info.value)	description += " (holds method)"
+							else if is_bool(info.value)		description += " ("+(info.value ? "true" : "false")+")"
+							else if is_string(info.value)
+							{
+								if string_length(info.value) > 300 or (string_height(info.value)/string_height("W")) > 1 description += " (holds string)"
+								else description += " (\""+info.value+"\")"
+							}
+							else if is_numeric(info.value) and ds_map_exists(ds_types, _arg)
+							{
+								description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+"; index "+string(variable.value)+")"
+							}
+							else description += " ("+string(info.value)+")"
 						}
-						else if is_numeric(info.value) and ds_map_exists(ds_types, _arg)
-						{
-							description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+"; index "+string(variable.value)+")"
-						}
-						else description += " ("+string(info.value)+")"
+						else description += " (does not exist?)"
 					}
-					else description += " (does not exist?)"
+					else if is_real(value) and better_script_exists(value)
+					{
+						description = "Shortcut for "+script_get_name(value)+"()"
+					}
 			}
 		}
 		else if better_instance_exists(arg_real)  // Has instance

@@ -105,6 +105,9 @@ initialize = function(variable){
 	char_selection = false
 	char_mouse = false
 	
+	char_x1 = 0
+	char_x2 = 0
+	
 	text_changed = false
 	copy = false
 	paste = false
@@ -261,12 +264,38 @@ set_att = function(att){
 
 mouse_get_char_pos = function(){
 	
-	var old_font = draw_get_font()
-	draw_set_font(o_console.font)
-	var cw = string_width("W")
-	draw_set_font(old_font)
+	var _start = 1
+	var _end = string_length(text)
+	var ch = string_height("W")
+	var has_newline = false//ch != height
+	var nl_index = 0
+
+	if has_newline
+	{
+		nl_index = floor( (gui_my-text_y) / ch )
+		if nl_index == 0 _start = 1
+		else 
+		{
+			_start = string_pos_index("\n", text, nl_index)+1
+		}
+		
+		_end = string_pos_index("\n", text, nl_index+1)
+		if _end == 0 _end = string_length(text)
+	}
+
 	
-	return clamp( floor((gui_mx-text_x+3) / cw), 0, string_length(text)+1 )
+	var on = false
+	for(index = _start; index <= _end; index++)
+	{
+		windex1 = windex2
+		windex2 += string_width(string_char_at(text, index))
+		
+		if text_x+windex2 > gui_mx 
+		{
+			on = true
+			break
+		}
+	}
 }
 
 
