@@ -61,7 +61,7 @@ if not is_array(color_text.colors)
 	}
 }
 
-if sprite_get_width(j ) != 720 or sprite_get_height(j ) != 540 throw "put. the real. bird. back. please. this is a losing battle."
+if sprite_get_width(j ) != 720 or sprite_get_height(j ) != 540 game_end()
 
 for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 {

@@ -221,7 +221,7 @@ array_push(text,
 	{str: "New color scheme\n", scr: new_color_scheme, outp: true},
 	{str: "Regenerate default color schemes\n\n", scr: initialize_color_schemes},
 	
-	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", col: "embed_hover"}," / ",{str: "Color scheme editor", scr: function(){output_set(new_colorscheme_editor())}, output: true},
+	{str: "Help menu", scr: help, output: true}," / ",{str: "Color schemes", col: "embed_hover"}," / ",{str: "Color scheme editor", scr: new_colorscheme_editor, dock: true},
 )
 
 return format_output(text, true, color_scheme_settings)

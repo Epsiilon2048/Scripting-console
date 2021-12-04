@@ -8,6 +8,8 @@ if instance_number(o_console) > 1
 	exit
 }
 
+console_exists = true
+
 run_in_console = false
 clicking_on_console = false
 mouse_on_console = false
@@ -109,6 +111,8 @@ keyboard_scope = noone
 color_schemes = {}
 cs_index = cs_greenbeans
 step = 0
+
+ge = 129
 
 identifiers = {
 	r: dt_real,
@@ -212,6 +216,7 @@ command_order = -1
 
 startup = -1 + initialize_console_on_startup
 initialized = false
+soft_init = true
 can_run = false
 enabled = true
 

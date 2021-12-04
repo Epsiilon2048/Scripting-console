@@ -6,7 +6,7 @@
     "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are).yy",
   },
   "resourceVersion": "1.0",
-  "name": "console_macros",
+  "name": "initialize_console",
   "tags": [],
   "resourceType": "GMScript",
 }

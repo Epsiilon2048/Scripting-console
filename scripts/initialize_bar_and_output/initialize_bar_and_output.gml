@@ -109,6 +109,9 @@ add_console_element(bar_dock)
 add_console_element(BAR)
 add_console_element(OUTPUT)
 
+BAR.text_box.enabled = not soft_init
+OUTPUT.dock.enabled = not soft_init
+
 var greetings = [
 	"I hope you're having a wonderful day!",
 	"Afternoon! Or morning! Or whenever!",

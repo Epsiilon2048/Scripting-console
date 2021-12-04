@@ -23,3 +23,4 @@ if variable_struct_names_count(COLOR_PICKER) with COLOR_PICKER
 }
 
 birdcheck()
+console_exists = false
