@@ -58,16 +58,17 @@ else
 				if slice(_arg, 1, 3, 1) == "0x" description = value
 			break
 			case dt_asset:
-				if is_int and arg_real >= 0 and arg_real <= 0xfffffffffffffb and object_exists(arg_real)
+				value = arg_real
+				type = dt_real
+				
+				if macro_type == dt_method
 				{
-					value = arg_real
-					type = dt_asset
-					
-					description = "Object "+object_get_name(value)
+					description = "Script asset "+string(value)
 				}
-				else
+				else if macro_type == dt_instance
 				{
-					error = exceptionObjectNotExists
+					if object_exists(arg_real) description = "Object "+object_get_name(value)
+					else if instance_exists(arg_real)  description = "Instance of "+object_get_name(value.object_index)
 				}
 			break
 			case dt_variable:

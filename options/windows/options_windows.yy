@@ -1,5 +1,5 @@
 {
-  "option_windows_display_name": "Scripting console",
+  "option_windows_display_name": "friend",
   "option_windows_executable_name": "${project_name}.exe",
   "option_windows_version": "1.0.0.0",
   "option_windows_company_info": "Epsiilon",

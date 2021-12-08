@@ -77,9 +77,14 @@ initialize = function(variable){
 	box_left = 0
 	box_right = 0
 	
-	variable_exists = variable_string_exists(variable)
+	text = ""
+	
 	self.variable = variable
+	variable_exists = variable_string_exists(variable)
 	scoped = false
+	
+	ghost_text = ""
+	
 	mouse_on = false
 	mouse_on_box = false
 	clicking = false
@@ -146,6 +151,7 @@ initialize = function(variable){
 	
 	// General settings
 	initial_ghost_text = ""
+	fill_ghost_text = ""
 	cbox_left = undefined
 	cbox_top = undefined
 	cbox_right = undefined
@@ -341,7 +347,7 @@ set_boundaries = function(){
 	#endregion
 	
 	#region Defining boundries
-	text_width = clamp(string_width_oneline(text), att.length_min*cw, att.length_max*cw)
+	text_width = clamp(max(string_width_oneline(text), string_width_oneline(ghost_text)), att.length_min*cw, att.length_max*cw)
 	
 	left = x
 	top = y
@@ -364,6 +370,27 @@ set_boundaries = function(){
 	if not att.scrubber or (not docked or (docked and (att.allow_dragging and dock.allow_element_dragging))) box_right = right
 	else box_right = min(right, text_x+max(cw, string_width_oneline(text))+_text_wdist/2)
 	#endregion
+}
+
+
+update_ghost_text = function(){
+	if text == "" ghost_text = initial_ghost_text
+	else
+	{
+		ghost_text = ""
+		var inc = 1
+		for(var i = 1; i <= string_length(text); i++){
+			if string_char_at(text, i) == " "
+			{
+				ghost_text += string_char_at(fill_ghost_text, inc++)
+				if inc > string_length(fill_ghost_text) break
+			}
+			else
+			{
+				ghost_text += " "
+			}
+		}
+	}	
 }
 
 
@@ -415,6 +442,9 @@ update_variable = function(){ if not is_undefined(variable) {
 	{
 		if scoped o_console.AUTOFILL.show = false
 		colors = color_method(text)
+		
+		update_ghost_text()
+		on_textchange()
 	}
 
 	set_boundaries()
@@ -1066,6 +1096,7 @@ get_input = function(){
 					
 					set_boundaries()
 					on_input()
+					update_ghost_text()
 				}
 			}
 		}
@@ -1188,7 +1219,7 @@ draw = function(){
 		draw_text(name_text_x, text_y, name)
 	}
 	
-	if ((text == "") ? (string_length(initial_ghost_text) > att.length_min) : (string_length(text) > att.length_max)) clip_rect_cutout(box_left, top, right, bottom)
+	if max(string_length(ghost_text), string_length(text)) > att.length_max clip_rect_cutout(box_left, top, right, bottom)
 	
 	if text != ""
 	{
@@ -1201,7 +1232,8 @@ draw = function(){
 			draw_text(text_x, text_y, text)
 		}
 	}
-	else if initial_ghost_text != ""
+	
+	if ghost_text != ""
 	{
 		draw_set_color(o_console.colors.body_accent)
 		draw_text(text_x, text_y, initial_ghost_text)

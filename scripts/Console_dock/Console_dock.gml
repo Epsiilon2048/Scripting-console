@@ -118,6 +118,8 @@ initialize = function(){
 	afterscript = []
 	e = {}
 	
+	to_set = undefined
+	
 	get_ctx_elements = noscript
 	before_func = noscript
 	after_func = noscript
@@ -212,6 +214,7 @@ insert_vertical = function(y, element){
 
 set = function(elements){
 	
+	to_set = undefined
 	clear()
 	
 	if instanceof(elements) == "element_container" or instanceof(elements) == "Console_dock"
@@ -411,6 +414,8 @@ get_dropdown_input = function(){
 
 
 get_input = function(){
+
+	if not is_undefined(to_set) set(to_set)
 
 	before_func()
 

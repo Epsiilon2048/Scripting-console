@@ -11,11 +11,7 @@ format_console_element()
 	
 set = function(text){
 
-	//if not variable_struct_exists(self, "formatted_for_dock") 
-	//{
-	//	format_for_dock(undefined)
 	dock_valign = fa_top
-	//}
 
 	static _colors_list			= ds_list_create()
 	static _clickable_list		= ds_list_create()
@@ -85,6 +81,7 @@ set = function(text){
 			s.arg	= variable_struct_exists_get(_text[i], "arg",	undefined	)
 			s.args	= variable_struct_exists_get(_text[i], "args",	[s.arg]		)
 			s.outp	= variable_struct_exists_get(_text[i], "outp",	false		)
+			s.dock	= variable_struct_exists_get(_text[i], "dock",	false	)
 			
 			//original names, kept for backwards compatability
 			if s.cbox == ""			s.cbox	= variable_struct_exists_get(_text[i], "checkbox",	"")
@@ -350,6 +347,9 @@ if not is_undefined(executing)
 			
 	//Set output
 	if executing.outp text.set(_output)
+	
+	//Set dock
+	if executing.dock and docked dock.to_set = _output
 }
 
 if text.click_index != -1 clicking_on_console = true
