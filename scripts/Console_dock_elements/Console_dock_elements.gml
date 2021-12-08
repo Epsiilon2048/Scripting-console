@@ -169,9 +169,11 @@ draw = function(){
 	draw_set_halign(old_halign)	draw_set_valign(old_valign)
 }
 }
+#endregion
 	
 	
 	
+#region Dock checkbox
 function new_cd_checkbox(text, variable){
 var c = new Cd_checkbox()
 c.initialize(text, variable)
@@ -196,6 +198,9 @@ initialize = function(text, variable){
 	right = 0
 	bottom = 0
 	
+	checkbox_x = 0
+	checkbox_y = 0
+	
 	on = false
 	
 	self.text = text
@@ -204,9 +209,10 @@ initialize = function(text, variable){
 	text_color = "output"
 	on_color = "plain"
 	off_color = "plain"
-	error_color = "plain"
+	error_color = dt_deprecated
 	
 	mouse_on = false
+	mouse_on_checkbox = false
 	clicking = false
 	
 	error = false
@@ -233,27 +239,39 @@ get_input = function(){
 	}
 	
 	var cb = o_console.CHECKBOX
+	var tb = o_console.TEXT_BOX
 	var ch = string_height("W")
 	var asp = ch/cb.char_height
+	var tb_asp = ch/tb.char_height
+	
 	var _width = round(cb.width*asp)
+	var height = round(tb.text_hdist*tb_asp)*2 + ch
 	
 	left = x
 	right = left+_width
 	top = y
-	bottom = top+_width
+	bottom = top+height
+	
+	checkbox_x = x
+	checkbox_y = y + floor(height/2) - ceil(_width/2)
 	
 	if not mouse_on_console and not clicking_on_console and gui_mouse_between(left, top, right, bottom)
 	{
 		mouse_on = true
 		mouse_on_console = true
 		
-		if mouse_check_button_pressed(mb_left)
+		if gui_mouse_between(checkbox_x, checkbox_y, checkbox_x+_width, checkbox_y+_width)
 		{
-			clicking = true
-			clicking_on_console = true
-			on = not on
-			func()
-			with dock.association variable_string_set(other.variable, other.on)
+			mouse_on_checkbox = true
+			
+			if mouse_check_button_pressed(mb_left)
+			{
+				clicking = true
+				clicking_on_console = true
+				on = not on
+				func()
+				with dock.association variable_string_set(other.variable, other.on)
+			}
 		}
 	}
 	else
@@ -282,7 +300,7 @@ draw = function(){
 	
 	if right == x and top == y return undefined
 	
-	draw_checkbox(x, y, on, mouse_on or clicking)
+	draw_checkbox(checkbox_x, checkbox_y, on, mouse_on or clicking)
 }
 }
 #endregion

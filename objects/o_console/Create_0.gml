@@ -40,6 +40,20 @@ while font_exists(asset)
 }
 
 scale = function(size){
+
+	if is_undefined(size)
+	{
+		var display_width = display_get_width()/display_get_dpi_x()
+		size = 2 + (display_width >= 14) + (display_width >= 23) + (display_width >= 28) + (display_width >= 31)
+	
+		// Scales based on display size:
+		// 14in		2x
+		// 23in		3x
+		// 28in		4x
+		// 31in		5x
+		// Above	6x
+	}
+
 	set_font(fonts[ clamp(size-1, 0, array_length(fonts)-1) ])
 }
 
@@ -220,4 +234,7 @@ soft_init = true
 can_run = false
 enabled = true
 
+scale()
 DISPLAY = {}
+
+if gmcl_initialize_on_startup event_perform(ev_step, ev_step_end)

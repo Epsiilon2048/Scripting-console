@@ -29,16 +29,16 @@ self.build = function(author){
 	self.outline_layers		= 0
 	self.bevel				= undefined
 								  
-	self[$ dt_real]			= 0
-	self[$ dt_string]		= 0
-	self[$ dt_asset]		= 0
-	self[$ dt_variable]		= 0
-	self[$ dt_method]		= 0
-	self[$ dt_instance]		= 0
-	self[$ dt_builtinvar]	= 0
-	self[$ dt_color]		= 0
-	self[$ dt_tag]			= 0
-	self[$ dt_deprecated]	= 0
+	self.real		= 0
+	self.string		= 0
+	self.asset		= 0
+	self.variable	= 0
+	self.method		= 0
+	self.instance	= 0
+	self.builtinvar	= 0
+	self.color		= 0
+	self.tag		= 0
+	self.deprecated	= 0
 }
 }
 
@@ -67,14 +67,14 @@ color_scheme.sprite_alpha	= 0
 }
 
 function color_scheme_set_dt(color_scheme, real, string, asset, variable, method, instance, color, tag, deprecated, builtinvar){
-color_scheme[$ dt_real]			= real
-color_scheme[$ dt_string]		= string
-color_scheme[$ dt_asset]		= asset
-color_scheme[$ dt_variable]		= variable
-color_scheme[$ dt_method]		= method
-color_scheme[$ dt_instance]		= instance
-color_scheme[$ dt_builtinvar]	= builtinvar
-color_scheme[$ dt_color]		= color
-color_scheme[$ dt_tag]			= tag
-color_scheme[$ dt_deprecated]	= deprecated
+color_scheme.real		= real
+color_scheme.string		= string
+color_scheme.asset		= asset
+color_scheme.variable	= variable
+color_scheme.method		= method
+color_scheme.instance	= instance
+color_scheme.builtinvar	= builtinvar
+color_scheme.color		= color
+color_scheme.tag		= tag
+color_scheme.deprecated	= deprecated
 }

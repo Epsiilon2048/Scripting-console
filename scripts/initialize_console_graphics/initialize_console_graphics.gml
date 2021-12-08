@@ -1,22 +1,7 @@
 
 function initialize_console_graphics(scale){ with o_console {
 
-if not font_exists(prev_font) and is_undefined(scale)
-{
-	var display_width = display_get_width()/display_get_dpi_x()
-	
-	scale = 2 + (display_width >= 14) + (display_width >= 23) + (display_width >= 28) + (display_width >= 31)
-	show_debug_message("Console IDE automatically scaled to "+string(scale)+" based on display size")
-	
-	// Scales based on display size:
-	// 14in		2x
-	// 23in		3x
-	// 28in		4x
-	// 31in		5x
-	// Above	6x
-}
-
-self.scale(scale)
+if not font_exists(prev_font) self.scale(scale)
 
 draw_set_font(font)
 draw_enable_swf_aa(true)
@@ -78,8 +63,8 @@ with SCROLLBAR {
 	char_height = 23
 	
 	outline_width = 1.4
-	bar_width = 50
-	bar_width_condensed = 20
+	bar_width = 15
+	bar_width_condensed = 10
 	
 	mouse_offset = 0
 }

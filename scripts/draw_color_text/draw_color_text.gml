@@ -43,7 +43,7 @@ draw_outline_text(x, y, tag+color_text.text, undefined)
 
 if tag != ""
 {
-	draw_set_color(o_console.colors[$ dt_tag])
+	draw_set_color(o_console.colors.tag)
 	draw_text(x, y, tag)
 	
 	x += string_width_oneline(tag)

@@ -140,17 +140,17 @@ colors.red				= c_red
 colors.green			= c_green
 colors.blue				= c_blue
 
-colors[$ dt_real]		= real
-colors[$ dt_string]		= string
-colors[$ dt_asset]		= asset
-colors[$ dt_variable]	= variable
-colors[$ dt_method]		= method
-colors[$ dt_instance]	= asset
-colors[$ dt_builtinvar] = output
-colors[$ dt_color]		= real
-colors[$ dt_tag]		= tag
-colors[$ dt_unknown]	= plaintext
-colors[$ dt_deprecated] = deprecated
+colors.real			= real
+colors.string		= string
+colors.asset		= asset
+colors.variable		= variable
+colors.method		= method
+colors.instance		= asset
+colors.builtinvar	= output
+colors.color		= real
+colors.tag			= tag
+colors.unknown		= plaintext
+colors.deprecated	= deprecated
 
 return colors	
 }

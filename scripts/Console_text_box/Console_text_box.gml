@@ -62,90 +62,102 @@ format_console_element()
 
 initialize = function(variable){
 	
-	docked = false
-	
-	name = is_undefined(variable) ? "Text box" : string(variable)
+	// Mandatory
 	enabled = true
-	
-	draw_name = true
+	name = is_undefined(variable) ? "Text box" : string(variable)
+	error = false
+	value = ""
 	
 	x = 0
 	y = 0
-	xprevious = 0
-	yprevious = 0
-	moved = true
+	left = 0
+	top = 0
+	right = 0
+	bottom = 0
+	box_left = 0
+	box_right = 0
 	
 	text = ""
 	
 	self.variable = variable
 	variable_exists = variable_string_exists(variable)
-	value = ""
 	scoped = false
 	
 	ghost_text = ""
-	initial_ghost_text = ""
-	fill_ghost_text = ""
 	
 	mouse_on = false
-	mouse_on_name = false
 	mouse_on_box = false
 	clicking = false
+	text_changed = false
+	association = undefined
+	instant_update = false
+
+	
+	// Draggable settings
 	dragging = false
+
+
+	// ???
+	moved = true
+
+	// Name settings
+	draw_name = true
+	name_text_x = 0
+	mouse_on_name = false
+
 	
-	mouse_xoffset = 0
-	mouse_yoffset = 0
+	// Input settings
+	copy = false
+	paste = false
 	
-	typing = true
-	scrubbing = false
-	
-	mouse_previous = 0
-	
+	// Text settings
+	colors = undefined
+	text = ""
+	text_x = 0
+	text_y = 0
+	text_width = 0
+
+	// Text selection settings
 	scroll = 0
-	
-	dclick_step = 0
-	
 	char_pos1 = 0
 	char_pos2 = 0
 	char_selection = false
 	char_mouse = false
-	
 	char_x1 = 0
 	char_x2 = 0
-	
-	text_changed = false
-	copy = false
-	paste = false
-	
+	dclick_step = 0
 	char_pos_max = 0
-	char_pos_min = 0
-	
-	text_width = 0
+	char_pos_min = 0	
+
+	// Text input settings
+	typing = true
 	blink_step = 0
+
+	// Numeric settings
+	added_float_places = 0
+
+	// Scrubber settings
+	scrubbing = false
+	scrubbed = false
 	
-	left = 0
-	top = 0
-	right = 0
-	bottom = 0
+	// Dock settings
+	docked = false
+	xprevious = 0
+	yprevious = 0
+	mouse_xoffset = 0
+	mouse_yoffset = 0
+	mouse_previous = 0
+	allow_printing = true
 	
-	box_left = 0
-	box_right = 0
-	
+	// General settings
+	initial_ghost_text = ""
+	fill_ghost_text = ""
 	cbox_left = undefined
 	cbox_top = undefined
 	cbox_right = undefined
 	cbox_bottom = undefined
 	
-	text_x = 0
-	text_y = 0
 	
-	name_text_x = 0
-	
-	colors = undefined
-	
-	allow_printing = true
-	instant_update = false
-	
-	scrubbed = false
 	
 	update_id = o_console.TEXT_BOX.update_id++
 	
@@ -157,12 +169,6 @@ initialize = function(variable){
 			self.value = undefined
 		}
 	}
-	
-	error = false
-	
-	association = undefined
-	
-	added_float_places = 0
 	
 	on_enter = noscript
 	on_input = noscript
@@ -287,9 +293,12 @@ mouse_get_char_pos = function(){
 		if _end == 0 _end = string_length(text)
 	}
 
-	
+	var windex1
+	var windex2 = 0
 	var on = false
-	for(index = _start; index <= _end; index++)
+	
+	if text_x > gui_mx index = 0
+	else for(var index = _start; index <= _end; index++)
 	{
 		windex1 = windex2
 		windex2 += string_width(string_char_at(text, index))
@@ -300,6 +309,8 @@ mouse_get_char_pos = function(){
 			break
 		}
 	}
+	
+	return index
 }
 
 
