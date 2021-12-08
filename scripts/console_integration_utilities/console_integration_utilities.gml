@@ -76,7 +76,7 @@ if is_struct(output)
 }
 else 
 {
-	if is_string(output) and not string_pos("\n", output) dock.set(datatype_string(output))
+	if is_string(output) and not string_pos("\n", output) dock.set(quotes_if_string(output))
 	else if is_numeric(output) dock.set(string_format_float(output, float_count_places(output, 4)))
 	else dock.set(string(output))
 }

@@ -9,4 +9,4 @@ color_schemes[$ name+string(i)] = struct_copy( color_schemes[$ cs_template] )
 color_schemes[$ name+string(i)].builtin = false
 
 return color_scheme_settings()
-}} 
+}}

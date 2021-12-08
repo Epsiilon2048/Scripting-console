@@ -34,7 +34,7 @@ else
 	{
 		macro_type = macro.type
 		
-		if macro.type == dt_string	_arg = datatype_string(macro.value)
+		if macro.type == dt_string	_arg = quotes_if_string(macro.value)
 		else						_arg = string_format_float(macro.value, undefined)
 		
 		arg_first = string_char_at(_arg, 1)

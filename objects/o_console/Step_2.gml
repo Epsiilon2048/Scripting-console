@@ -34,7 +34,7 @@ if not initialized and startup > -1
 					keyboard_string = ""
 				}
 				can_run = true
-				if not setup_console_instantly show_debug_message("<< CONSOLE SETUP >> Mandatory initialization complete; can run")
+				if not gmcl_instant_setup show_debug_message("<< CONSOLE SETUP >> Mandatory initialization complete; can run")
 			},
 			
 			generate_satval_square,
