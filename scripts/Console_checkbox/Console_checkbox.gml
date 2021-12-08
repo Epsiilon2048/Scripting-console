@@ -1,5 +1,5 @@
 
-function draw_checkbox(x, y, enabled, mouse_on){ with o_console.CHECKBOX {
+function draw_checkbox(x, y, state, mouse_on){ with o_console.CHECKBOX {
 
 var old_font = draw_get_font()
 var old_swf_aa = draw_get_swf_aa_level()
@@ -12,7 +12,7 @@ var asp = ch/char_height
 var _width = round(width*asp)
 if is_undefined(mouse_on) mouse_on = false
 
-if enabled
+if state == true
 {
 	var col1 = mouse_on ? color_add_hsv(o_console.colors.output, 0, mouse_on_saturation_add, mouse_on_value_add) : o_console.colors.output
 	var col2 = mouse_on ? color_add_hsv(o_console.colors.body_real, 0, mouse_on_saturation_add, mouse_on_value_add) : o_console.colors.body_real
@@ -29,7 +29,7 @@ if enabled
 		col2, 1
 	)
 }
-else
+else if state == false
 {
 	var col1 = o_console.colors.plain
 	var col2 = o_console.colors.body_real
@@ -45,6 +45,10 @@ else
 		x, y, _width, _width, 
 		col1, 1
 	)
+}
+else
+{
+	
 }
 
 draw_set_font(old_font)
