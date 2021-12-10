@@ -59,10 +59,10 @@ set_page_boundaries = function(page_width, page_height){
 	wbar_length = floor(clamp((page_right-page_left-1)/self.page_width, 0, self.page_width)*(page_right-page_left))
 	hbar_length = floor(clamp((page_bottom-page_top-1)/self.page_height, 0, self.page_height)*(page_bottom-page_top))
 	
-	wbar_min = floor(page_left+hbar_length/2)
+	wbar_min = floor(page_left+hbar_length/2)+1
 	wbar_max = floor(page_right-hbar_length/2)
 	
-	hbar_min = floor(page_top+wbar_length/2)
+	hbar_min = floor(page_top+wbar_length/2)+1
 	hbar_max = floor(page_bottom-wbar_length/2)
 	
 	set_scroll(scroll_x, scroll_y)
@@ -191,9 +191,9 @@ draw = function(){
 	
 	
 	if wbar_enabled and hbar_enabled draw_console_body(page_left, page_bottom, hbar_right, wbar_bottom)
-	else if wbar_enabled draw_console_body(page_left, page_bottom, page_right, wbar_bottom)
+	else if wbar_enabled draw_console_body(page_left, page_bottom, page_right-1, wbar_bottom)
 	
-	if hbar_enabled draw_console_body(page_right, page_top, hbar_right, page_bottom)
+	if hbar_enabled draw_console_body(page_right, page_top, hbar_right, page_bottom-1)
 	
 	draw_set_color(o_console.colors.output)
 	if wbar_enabled draw_rectangle(wbar_x1, page_bottom, wbar_x2, wbar_bottom, false)
