@@ -12,7 +12,15 @@ var asp = ch/char_height
 var _width = round(width*asp)
 if is_undefined(mouse_on) mouse_on = false
 
-if state == true
+if not is_numeric(state)
+{
+	draw_sprite_stretched_ext(
+		s_checkbox_empty, 0,
+		x, y, _width, _width, 
+		o_console.colors.deprecated, 1
+	)
+}
+else if state
 {
 	var col1 = mouse_on ? color_add_hsv(o_console.colors.output, 0, mouse_on_saturation_add, mouse_on_value_add) : o_console.colors.output
 	var col2 = mouse_on ? color_add_hsv(o_console.colors.body_real, 0, mouse_on_saturation_add, mouse_on_value_add) : o_console.colors.body_real
@@ -29,7 +37,7 @@ if state == true
 		col2, 1
 	)
 }
-else if state == false
+else
 {
 	var col1 = o_console.colors.plain
 	var col2 = o_console.colors.body_real
@@ -45,10 +53,6 @@ else if state == false
 		x, y, _width, _width, 
 		col1, 1
 	)
-}
-else
-{
-	
 }
 
 draw_set_font(old_font)

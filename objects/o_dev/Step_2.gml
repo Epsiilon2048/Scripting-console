@@ -1,2 +1,2 @@
-
+/*
 sc.get_input()

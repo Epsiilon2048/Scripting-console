@@ -1,4 +1,7 @@
 
+//This is a library of functions which work independently from the console.
+
+
 /// @description Capitalizes a string
 /// @param {string} str
 function string_capitalize(str){

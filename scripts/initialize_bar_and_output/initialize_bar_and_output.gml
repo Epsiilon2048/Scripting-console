@@ -62,6 +62,7 @@ with BAR {
 with OUTPUT {
 	
 	docked = false
+	run_in_dock = false
 	
 	text = new Embedded_text()
 	text.set()
@@ -92,6 +93,13 @@ with OUTPUT {
 			})
 		]
 	}
+	
+	dock.before_func = function(){
+		docked = o_console.BAR.dock.enabled
+		dock.docked = docked
+		dock.draw_name = not docked
+		dock.run_in_dock = docked
+	}
 }
 
 var bar_dock = new Console_dock() with bar_dock
@@ -99,15 +107,19 @@ var bar_dock = new Console_dock() with bar_dock
 	initialize()
 	name = "Command line"
 	allow_element_dragging = false
+	draw_name_bar = false
 	set([
-		other.BAR
+		other.OUTPUT.dock,
+		other.BAR,
 	])
 }
 bar_dock.enabled = false
 
+
 add_console_element(bar_dock)
 add_console_element(BAR)
-add_console_element(OUTPUT)
+add_console_element(OUTPUT.dock)
+
 
 BAR.text_box.enabled = not soft_init
 OUTPUT.dock.enabled = not soft_init
