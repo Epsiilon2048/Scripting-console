@@ -145,9 +145,11 @@ else
 					{
 						description = "Shortcut for "+value
 				
+						var _value = string_add_scope(value, true)
+						if not is_undefined(_value) value = _value
+						
 						var info
-						if not instance_exists(object) info = variable_string_info(value)
-						else with object info = variable_string_info(value)
+						info = variable_string_info(value)
 						
 						if info.exists
 						{

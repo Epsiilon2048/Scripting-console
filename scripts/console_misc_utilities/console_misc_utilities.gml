@@ -40,12 +40,12 @@ else
 
 
 
+
 function string_scope_to_id(str, add_macro){ with o_console {
 
 if is_undefined(add_macro) add_macro = true
 
-var inst = string_to_instance(string_copy(str, 1, string_pos(".", str)-1), true)
-
+var inst = string_to_instance(string_copy(str, 1, string_pos(".", str)-1), add_macro)
 if inst == -1 return undefined
 
 var inst_id = (inst == global) ? global : inst.id
@@ -55,89 +55,70 @@ return string(inst_id) + string_delete(str, 1, string_pos(".", str)-1)
 
 
 
+
 function string_add_scope(str, add_macro){ with o_console {
 
 if is_undefined(add_macro) add_macro = true
 
+var dot_pos
+var bracket_pos
+
 if string_char_at(str, 1) == "."
 {
-	if not instance_exists(object) return undefined
-	else return string(object)+str
+	str = string_delete(str, 1, 1)
+	dot_pos = 0
+	bracket_pos = 0
 }
-
-var dot_pos = string_pos(".", str)
-var bracket_pos = string_pos("[", str)
+else
+{
+	dot_pos = string_pos(".", str)
+	bracket_pos = string_pos("[", str)
+}
 
 var segment
 
 if not dot_pos and not bracket_pos
 {
-	if not instance_exists(object) return undefined
-	else return string(object)+"."+str
+	
+	if is_struct(object)			return str
+	else if object_exists(object)	return object_get_name(object)+"."+str
+	else if instance_exists(object)	return string(object)+"."+str
+	else							return undefined
 }
-if bracket_pos and (not dot_pos or bracket_pos < dot_pos)
+else if bracket_pos and (not dot_pos or bracket_pos < dot_pos)
 {
 	segment = slice(str, 1, bracket_pos, 1)
 	
-	if string_is_int(segment) return str
-	else if not instance_exists(object) return undefined
-	else return string(object)+"."+str
+	if string_is_int(segment) or is_struct(object)	return str
+	else if object_exists(object)					return object_get_name(object)+"."+str
+	else if instance_exists(object)					return string(object)+"."+str
+	else											return undefined
 }
 else
 {
 	segment = slice(str, 1, dot_pos, 1)
 	
 	if string_is_int(segment) return str
-	else var macro = add_macro ? console_macros[$ segment] : undefined
+	
+	var macro = add_macro ? console_macros[$ segment] : undefined
 	
 	if not is_undefined(macro) and (macro.type == dt_instance or macro.type == dt_variable)
 	{
-		return string(macro.value)+"."+slice(str, dot_pos+1, -1, 1)
+		var following = slice(str, dot_pos+1, -1, 1)
+		
+		if is_struct(macro.value)			return following
+		else if is_string(macro.value)		return string_add_scope(macro.value, false)+"."+following
+		else if object_exists(macro.value)	return object_get_name(macro.value)+"."+following
+		else								return string(macro.value)+"."+following
 	}
 	
 	var asset = asset_get_index(segment)
 	var type = asset_get_type(segment)
 	
-	if (asset == -1 or type != asset_object or not instance_exists(asset))
-	{
-		if not instance_exists(object) return undefined
-		else return string(object)+"."+str
-	}
-	else
-	{
-		return str
-	}
+	if not (asset == -1 or type != asset_object or not instance_exists(asset)) return str
+	else if is_struct(object)		return str
+	else if object_exists(object)	return object_get_name(object)+"."+str
+	else if instance_exists(object)	return string(object)+"."+str
+	else							return undefined
 }
-/*
-if is_undefined(add_macro) add_macro = true
-
-var _str = is_undefined(str) ? "" : string(str)
-
-if string_char_at(_str, 1) == "." _str = string_delete(_str, 1, 1)
-
-var split = string_split(".", _str)
-
-if array_length(split) == 0 return undefined
-
-var _macro = add_macro ? console_macros[$ split[0]] : undefined
-
-if array_length(split) < 2 or (
-   split[0] != "global" and split[0] != "-5" and
-   not string_is_int(split[0]) and
-   asset_get_index(split[0]) == -1 and
-   is_undefined(_macro)
-   )
-{
-	if instance_exists(object) return string(object)+"."+_str
-	else return undefined
-}
-
-if not is_undefined(_macro) and (_macro.type == dt_instance or _macro.type == dt_variable)
-{
-	split[0] = _macro.value
-	
-	return array_to_string(split, ".")
-}
-
-return _str*/
 }}

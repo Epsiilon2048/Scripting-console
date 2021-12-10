@@ -93,7 +93,7 @@
     {"id":{"name":"Console_text_box","path":"scripts/Console_text_box/Console_text_box.yy",},"order":2,},
     {"id":{"name":"Console elements","path":"notes/Console elements/Console elements.yy",},"order":39,},
     {"id":{"name":"Console_autofill","path":"scripts/Console_autofill/Console_autofill.yy",},"order":11,},
-    {"id":{"name":"console_macros","path":"scripts/console_macros/console_macros.yy",},"order":0,},
+    {"id":{"name":"greenbean_macros","path":"scripts/greenbean_macros/greenbean_macros.yy",},"order":0,},
     {"id":{"name":"s_checkbox_empty","path":"sprites/s_checkbox_empty/s_checkbox_empty.yy",},"order":2,},
     {"id":{"name":"s_checkbox_check","path":"sprites/s_checkbox_check/s_checkbox_check.yy",},"order":3,},
     {"id":{"name":"console_macro_add","path":"scripts/console_macro_add/console_macro_add.yy",},"order":9,},
@@ -178,7 +178,7 @@
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"sprite_add_test.png","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2.3.7.603",
+    "IDEVersion": "2.3.5.589",
   },
   "resourceVersion": "1.4",
   "name": "Scripting-console",

@@ -203,11 +203,14 @@ else
 		}
 		else
 		{
+			var __arg = string_add_scope(_arg)
+			if not is_undefined(__arg) _arg = __arg
+			
 			error = variable_string_info(_arg).error
 			if is_undefined(error)
 			{
 				type = dt_variable
-				value = string_add_scope(_arg, true)
+				value = _arg
 			}
 		}
 	}
