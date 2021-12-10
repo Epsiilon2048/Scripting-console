@@ -285,9 +285,10 @@ get_input = function(){
 	}
 	else clicking = false
 	
-	error = false
 	if not clicking and (dock.is_front or get_update_turn(update_id))
 	{
+		error = false
+		
 		with dock.association var info = variable_string_info(other.variable)
 		
 		if not info.exists or not is_numeric(info.value) error = true
@@ -300,7 +301,7 @@ draw = function(){
 	
 	if right == x and top == y return undefined
 	
-	draw_checkbox(checkbox_x, checkbox_y, on, mouse_on or clicking)
+	draw_checkbox(checkbox_x, checkbox_y, error ? undefined : on, mouse_on or clicking)
 }
 }
 #endregion

@@ -151,7 +151,7 @@ else
 						
 						if info.exists
 						{
-							if is_struct(info.value)		description += " (holds struct)"
+							if is_struct(info.value)		description += " (holds "+instanceof(info.value)+")"
 							else if is_array(info.value)	description += " (holds array)"
 							else if is_ptr(info.value)		description += " (holds pointer)"
 							else if is_method(info.value)	description += " (holds method)"
@@ -313,7 +313,7 @@ else
 				
 				description = value
 				
-				if is_struct(variable.value)		description += " (holds struct)"
+				if is_struct(variable.value)		description += " (holds "+instanceof(variable.value)+")"
 				else if is_array(variable.value)	description += " (holds array)"
 				else if is_ptr(variable.value)		description += " (holds pointer)"
 				else if is_method(variable.value)	description += " (holds method)"

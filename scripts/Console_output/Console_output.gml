@@ -1,21 +1,15 @@
 
-function console_output_inputs(){ with o_console {
+function console_output_inputs(){ with o_console.OUTPUT {
 
-var ot = OUTPUT
-	
-if ot.docked and not ot.run_in_dock return undefined
+docked = o_console.BAR.dock.enabled
+if docked and not run_in_dock return undefined
 
-ot.dock.draw_name = true
+dock.get_input()
 
-ot.dock.get_input()
-
-with OUTPUT
-{
-	left = ot.dock.left
-	top = ot.dock.top
-	right = ot.dock.right
-	bottom = ot.dock.bottom
-}
+left = dock.left
+top = dock.top
+right = dock.right
+bottom = dock.bottom
 }}
 	
 	
