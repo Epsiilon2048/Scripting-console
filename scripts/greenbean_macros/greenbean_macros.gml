@@ -74,7 +74,7 @@ vk_tilde = apple ? 50 : 192
 #macro dt_method		"method"
 #macro dt_instance		"instance"
 #macro dt_color			"color"			// Only used for identifiers
-#macro dt_builtinvar	"builtinvar"
+#macro dt_builtinvar	"builtinvar"	// Only used for colors
 #macro dt_tag			"tag"
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"

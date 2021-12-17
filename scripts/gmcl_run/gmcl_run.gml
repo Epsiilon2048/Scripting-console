@@ -71,11 +71,24 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			for(var j = 0; j <= array_length(com[i].variables)-1; j++)
 			{
 				var varstring = args[com[i].variables[j]]
+				var value
 				
 				run_in_console = true
-				var value 
-				if instance_exists(object) with object value = variable_string_info(varstring)
-				else value = variable_string_info(varstring)
+				
+				if is_string(varstring)
+				{
+					if is_struct(object) or instance_exists(object) with object value = variable_string_info(varstring)
+					else value = variable_string_info(varstring)
+				}
+				else if is_numeric(varstring)
+				{
+					value = { value: method_exec(varstring), exists: true }
+				}
+				else if is_method(varstring)
+				{
+					value = { value: method_exec(varstring), exists: true }
+				}
+				
 				run_in_console = false
 				
 				if is_struct(value) and value.exists
@@ -122,11 +135,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 
 				var _value = variable_string_get(subject.value)
 
-				if is_method(_value)
-				{
-					output_string[i] = method_exec(_value, args)
-				}
-				else if array_length(com[i].args) < 1
+				if array_length(com[i].args) == 0
 				{			
 					var string_value
 					if is_numeric(_value)

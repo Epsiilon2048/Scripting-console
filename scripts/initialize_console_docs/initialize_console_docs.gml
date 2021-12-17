@@ -39,6 +39,15 @@ com_add("multvar", {args: ["variable", "value"], desc: "Divides the specified va
 com_add("divvar", {args: ["variable", "value"], desc: "Multiplies the specified variable by a value"})
 com_add("togglevar", {args: ["variable"], desc: "Toggles a boolean variable"})
 
+com_add_category("UI elements", false)
+com_add("display", {desc: "Adds a display element from a variable; if left blank, toggles the display dock", optargs: ["variable"]})
+com_add("dock", {desc: "Returns a dock element", optargs: ["name", "elements"]})
+com_add("textbox", {desc: "Returns a text box element", optargs: ["name", "variable"]})
+com_add("scrubber", {desc: "Returns a scrubber box element", optargs: ["name", "variable", "step"]})
+com_add("colorbox", {desc: "Returns a color box element", optargs: []})
+com_add("displaybox", {desc: "Returns a display box element", optargs: ["name", "variable"], hiddenargs: ["draw box?"]})
+com_add("new_value_box", {hidden: true, desc: "Returns a value box element", args: ["name", "variable"], optargs: ["is scrubber","scrubber step","length min","length max","value min","value max","allow float?","float places"]})
+
 com_add_category("Objects", false)
 com_add("roomobj", {desc: "Returns all the instances in the room"})
 com_add("objvar", {optargs: ["instance"], desc: "Returns all the variables in the specified/scoped instance"})

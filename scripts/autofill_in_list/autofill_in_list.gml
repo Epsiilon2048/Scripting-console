@@ -1,22 +1,24 @@
 
-function autofill_in_list(array_or_ds_list, criteria, range){ with global.scrvar {
-criteria = string(criteria)
+function autofill_in_list(array_or_ds_list, criteria, range){ with global._scrvar_ {
 
-if first_is_digit(criteria) return -1
+// The range used in the script works as the max being 
+// the last item in the list within the range. However,
+// when returning the value, the max is converted to be
+// the first item outside of the range, as is how range
+// works in most stuff. So, just keep that in mind.
+
+criteria = string(criteria)
+list = array_or_ds_list
+
+if first_is_digit(criteria) or (not is_array(list) and (not is_numeric(list) or not ds_exists(list, ds_type_list))) return -1//{min: -1, max: -1}
 
 i = 1
-list = array_or_ds_list
-access_func = is_array(list) ? array_get : ds_list_find_value
-
-access = function(index) {
-	return access_func(list, index)
-}
-
+access = is_array(list) ? array_get : ds_list_find_value
 
 var list_size = ( is_array(list) ? array_length(list) : ds_list_size(list) )
 var c_len = string_length(criteria)
 
-if list_size == 0 or c_len == 0 return -1
+if list_size == 0 or c_len == 0 return -1//{min: -1, max: -1}
 
 var _min = is_struct(range) ? range.min : 0
 var _max = is_struct(range) ? range.max : (list_size-1)
@@ -29,7 +31,7 @@ var index = ceil(_max/2)
 
 static get_ord = function(index){
 
-	return ord( string_char_at(access(index), i) )
+	return ord( string_char_at(access(list, index), i) )
 }
 
 for(i = 1; i <= c_len; i++)
@@ -54,10 +56,10 @@ for(i = 1; i <= c_len; i++)
 			
 			if _max-_min <= 1
 			{
-				var max_is = (string_pos(criteria, access(_max)) == 1)
-				var min_is = (string_pos(criteria, access(_min)) == 1)
+				var max_is = (string_pos(criteria, access(list, _max)) == 1)
+				var min_is = (string_pos(criteria, access(list, _min)) == 1)
 				
-				if not (max_is or min_is) return -1
+				if not (max_is or min_is) return -1//{min: -1, max: -1}
 				break
 			}
 			
@@ -95,5 +97,5 @@ for(i = 1; i <= c_len; i++)
 
 	index = _min + ceil((_max-_min)/2)
 }
-return {min: _min, max: _max}
+return {min: _min, max: _max+1}
 }}

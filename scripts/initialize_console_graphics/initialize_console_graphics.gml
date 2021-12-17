@@ -333,7 +333,7 @@ with DOC_STRIP
 	char_height = 23
 	
 	wdist = 10
-	hdist = 0
+	hdist = 2
 	outline = 1.4
 }
 }}

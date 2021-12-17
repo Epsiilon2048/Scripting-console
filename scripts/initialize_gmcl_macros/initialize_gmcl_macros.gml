@@ -65,14 +65,18 @@ am("O3",				dt_variable, "o_console.O3")
 am("O4",				dt_variable, "o_console.O4")
 am("O5",				dt_variable, "o_console.O5")
 
-am("mouse_x",			dt_variable, "global.mouse_x")
-am("mouse_y",			dt_variable, "global.mouse_y")
+am("mouse_x",			dt_variable, function(){ return mouse_x })
+am("mouse_y",			dt_variable, function(){ return mouse_y })
 										
-am("fps",				dt_variable, "global.fps")
-am("fps_real",			dt_variable, "global.fps_real")
+am("fps",				dt_variable, function(){ return fps })
+am("fps_real",			dt_variable, function(){ return fps_real })
+
+am("room",				dt_variable, function(index){if is_numeric(index) room_goto(index) return room })
 										
-am("gui_mx",			dt_variable, "o_console.gui_mouse_x")
-am("gui_my",			dt_variable, "o_console.gui_mouse_y")
+am("gui_mx",			dt_variable, function(){ return gui_mx })
+am("gui_my",			dt_variable, function(){ return gui_my })
+am("gui_mouse_x",		dt_variable, function(){ return gui_mx })
+am("gui_mouse_y",		dt_variable, function(){ return gui_my })
 
 am("dock",				dt_method, new_console_dock)
 am("textbox",			dt_method, new_text_box)

@@ -33,7 +33,7 @@ with o_console.keyboard_scope
 	var doc_asp = ch/dc.char_height
 	var _doc_hdist = round(dc.hdist*doc_asp)
 
-	var doc_height = _doc_hdist*2+ch
+	var doc_height = _doc_hdist*2+ch + 2
 	
 	at.x = is_undefined(cbox_left) ? left : cbox_left
 	at.y = is_undefined(cbox_top) ? top : cbox_top
@@ -57,7 +57,10 @@ var _border_h = round(at.border_h*asp)
 
 var x1 = at.x
 var x2 = x1 + _width + _border_w*2
-var y1 = at.y - draw_doc_strip(x1, at.y-doc_height, doc, x2)*doc_height
+
+var dc_drawn = draw_doc_strip(x1, at.y-doc_height, doc, x2)
+
+var y1 = at.y - dc_drawn*doc_height - dc_drawn
 var y2 = y1 - _height - _border_h*2 - 1
 
 at.mouse_on = gui_mouse_between(x1, y1, x2, y2)
@@ -116,7 +119,7 @@ clip_rect_cutout(x1+1, y2+_border_h+1, x2-_border_w*2, y1-_border_h)
 var tab = keyboard_check_pressed(vk_tab)
 at.index += tab
 
-with global.scrvar
+with global._scrvar_
 {
 	self.tab = tab
 	self.asp = asp
@@ -136,7 +139,7 @@ with global.scrvar
 	self.item_index = 0
 }
 
-static draw_list = function(range, list, color_method){ with global.scrvar {
+static draw_list = function(range, list, color_method){ with global._scrvar_ {
 
 if range == -1 return undefined
 var access = is_array(list) ? array_get : ds_list_find_value
@@ -336,7 +339,7 @@ draw_list(autofill.assets, asset_list, asset_color)
 draw_list(autofill.methods, method_list, method_color)
 draw_list(autofill.macros, macro_list, macro_color)
 
-if at.index+1 > global.scrvar.item_index at.index = 0
+if at.index+1 > global._scrvar_.item_index at.index = 0
 
 shader_reset()
 

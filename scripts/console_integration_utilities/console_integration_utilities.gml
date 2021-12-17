@@ -25,6 +25,7 @@ function input_set(str, add){ with o_console.BAR {
 
 
 
+
 function output_set(output){ with o_console.OUTPUT {
 
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
@@ -61,12 +62,23 @@ if is_struct(output)
 	else
 	{
 		var names = variable_struct_get_names(output)
-		for(var i = 0; i <= array_length(names)-1; i++)
+		
+		if array_length(names) == 0
+		{
+			names = "{}"
+		}
+		else for(var i = 0; i <= array_length(names)-1; i++)
 		{
 			if is_array(output[$ names[i]]) names[i] = [names[i]+":", "[array]"]
 			else if is_struct(output[$ names[i]]) names[i] = [names[i]+":","{"+instanceof(output[$ names[i]])+"}"]
 			else names[i] = [names[i]+":", new_display_box(undefined, names[i], false)]
 		}
+		
+		if array_length(names) == 1
+		{
+			names = [["{",names[0],"}"]]
+		}
+		
 		array_insert(names, 0, "{")
 		array_push(names, "}")
 

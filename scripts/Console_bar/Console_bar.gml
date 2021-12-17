@@ -127,6 +127,8 @@ BAR.top		= _y
 BAR.right	= _x+_width
 BAR.bottom	= _y+ch+_height
 
+BAR._sidebar_width = _sidebar_width
+
 BAR.bar_right = BAR.right-sidetext_width-_text_dist*2-_sep-1
 BAR.sidetext_left = BAR.right-sidetext_width-_text_dist*2-1
 
@@ -187,8 +189,7 @@ draw_set_font(old_font)
 
 function draw_console_bar(){ with o_console {
 
-if not BAR.enabled return undefined
-if BAR.docked and not BAR.run_in_dock and BAR.dock.enabled return undefined
+if not BAR.enabled or (BAR.docked and not BAR.run_in_dock and BAR.dock.enabled) return undefined
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -231,65 +232,9 @@ if BAR.docked
 
 var length = BAR.bottom - BAR.top+1
 
-if keyboard_check_pressed(vk_space)
-{
-	BAR.sidebar_circle = not BAR.sidebar_circle
-}
-
 draw_set_color(o_console.colors.output)
 
-var cx = BAR.left+_sidebar_width/2-2
-var cy = BAR.top + length/2-1
-
-/*
-if BAR.sidebar_circle and BAR.sidebar_animation != 1
-{
-	var width = max(3, length*BAR.sidebar_animation)
-	var height = length-max(0, width-length)*BAR.sidebar_height_dampner
-	
-	draw_ellipse(cx-width/2, cy-height/2, cx+width/2, cy+height/2, false)
-	if BAR.sidebar_overshot 
-	{
-		BAR.sidebar_animation = lerp(BAR.sidebar_animation, 1, BAR.sidebar_overshoot_lerp)
-		
-		if BAR.sidebar_animation-1 < .001
-		{
-			BAR.sidebar_overshot = false
-			BAR.sidebar_animation = 1
-		}
-	}
-	else
-	{
-		BAR.sidebar_animation = lerp(BAR.sidebar_animation, 1+BAR.sidebar_overshoot_mult, BAR.sidebar_lerp)
-		
-		if ((1+BAR.sidebar_overshoot_mult)-BAR.sidebar_animation) < .001
-		{
-			BAR.sidebar_overshot = true
-			BAR.sidebar_animation = 1+BAR.sidebar_overshoot_mult
-		}
-	}
-	
-}
-else if not BAR.sidebar_circle and BAR.sidebar_animation != 0
-{
-	var width = max(2, length*BAR.sidebar_animation)
-	draw_roundrect_ext(cx-width/2, BAR.top, cx+width/2, BAR.bottom, width, width, false)
-	BAR.sidebar_animation = lerp(BAR.sidebar_animation, 0, BAR.sidebar_lerp)
-	
-	if width == _sidebar_width BAR.sidebar_animation = 0
-}
-else if BAR.sidebar_animation > 0
-{
-	draw_circle(cx, cy, length/2, false)
-}
-
-if not BAR.sidebar_circle and BAR.sidebar_animation == 0
-*/
-{
-	draw_rectangle(BAR.left, BAR.top, BAR.left+_sidebar_width, BAR.bottom, false)
-}
-
-
+draw_rectangle(BAR.left, BAR.top, BAR.left+_sidebar_width, BAR.bottom, false)
 
 BAR.text_box.draw()
 

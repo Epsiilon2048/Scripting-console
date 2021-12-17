@@ -1,6 +1,4 @@
 
-birdcheck()
-
 mouse_on_console = false
 clicking_on_console = false
 
@@ -20,6 +18,7 @@ if not initialized and startup > -1
 		steps_taken = 1
 		
 		init_list = [
+			birdcheck,
 			initialize_color_schemes,
 			initialize_console_graphics,
 			initialize_bar_and_output,

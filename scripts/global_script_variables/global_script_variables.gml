@@ -1,2 +1,2 @@
 
-global.scrvar = {}
+global._scrvar_ = {}

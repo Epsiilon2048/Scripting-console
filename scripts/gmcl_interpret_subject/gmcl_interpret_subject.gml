@@ -35,8 +35,9 @@ else
 	{
 		macro_type = macro.type
 		
-		if macro.type == dt_string	_arg = "\""+string(macro.value)+"\""
-		else						_arg = string_format_float(macro.value, undefined)
+		if macro.type == dt_variable	_arg = macro.value
+		else if macro.type == dt_string	_arg = "\""+string(macro.value)+"\""
+		else							_arg = string_format_float(macro.value, undefined)
 		
 		arg_first = string_char_at(_arg, 1)
 		arg_last = (string_length(_arg) <= 1) ? "" : string_last(_arg)
@@ -141,40 +142,39 @@ else
 					description = "Constant with value of \""+string(value)+"\""
 				break
 				case dt_variable:
-					if is_string(value)
+					if is_numeric(value)
 					{
-						description = "Shortcut for "+value
-				
-						var _value = string_add_scope(value, true)
-						if not is_undefined(_value) value = _value
+						if better_script_exists(value) description = "Shortcut for "+script_get_name(value)
+						else description = "<unknown function>"
+					}
+					else if is_string(value)	description = "Shortcut for "+value
+					else if is_method(value)	description = "Shortcut for method"
+
+					var _value = string_add_scope(value, true)
+					if not is_undefined(_value) value = _value
 						
-						var info
-						info = variable_string_info(value)
+					var info
+					info = variable_string_info(value)
 						
-						if info.exists
+					if info.exists
+					{
+						if is_struct(info.value)		description += " (holds "+instanceof(info.value)+")"
+						else if is_array(info.value)	description += " (holds array)"
+						else if is_ptr(info.value)		description += " (holds pointer)"
+						else if is_method(info.value)	description += " (holds method)"
+						else if is_bool(info.value)		description += " ("+(info.value ? "true" : "false")+")"
+						else if is_string(info.value)
 						{
-							if is_struct(info.value)		description += " (holds "+instanceof(info.value)+")"
-							else if is_array(info.value)	description += " (holds array)"
-							else if is_ptr(info.value)		description += " (holds pointer)"
-							else if is_method(info.value)	description += " (holds method)"
-							else if is_bool(info.value)		description += " ("+(info.value ? "true" : "false")+")"
-							else if is_string(info.value)
-							{
-								if string_length(info.value) > 300 or (string_height(info.value)/string_height("W")) > 1 description += " (holds string)"
-								else description += " (\""+info.value+"\")"
-							}
-							else if is_numeric(info.value) and ds_map_exists(ds_types, _arg)
-							{
-								description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+"; index "+string(variable.value)+")"
-							}
-							else description += " ("+string(info.value)+")"
+							if string_length(info.value) > 300 or (string_height(info.value)/string_height("W")) > 1 description += " (holds string)"
+							else description += " (\""+info.value+"\")"
 						}
-						else description += " (does not exist?)"
+						else if is_numeric(info.value) and ds_map_exists(ds_types, _arg)
+						{
+							description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+"; index "+string(variable.value)+")"
+						}
+						else description += " ("+string(info.value)+")"
 					}
-					else if is_real(value) and better_script_exists(value)
-					{
-						description = "Shortcut for "+script_get_name(value)+"()"
-					}
+					else description += " (does not exist?)"
 			}
 		}
 		else if better_instance_exists(arg_real)  // Has instance
@@ -282,7 +282,6 @@ else
 			switch asset_get_type(_arg)
 			{
 				default:
-					show_debug_message(asset_get_type(_arg))
 					description = string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset "+string(asset)
 				break
 				case asset_object:
@@ -304,16 +303,29 @@ else
 		}
 		else
 		{
+			if is_string(_arg)
+			{
+				var _value = string_add_scope(_arg, true)
+				if not is_undefined(_value) _arg = _value
+			}
+			
 			variable = variable_string_info(_arg)
 			if variable.error == exceptionVariableNotExists error = exceptionUnrecognized
 			else error = variable.error
 			
+			if is_numeric(_arg)
+			{
+				if better_script_exists(_arg) description = "Shortcut for "+script_get_name(_arg)
+				else description = "<unknown function>"
+			}
+			else if is_method(_arg)	description = _arg_plain
+			else if is_string(_arg)	description = "Shortcut for "+_arg
+			
+			value = _arg
+			
 			if variable.exists
-			{			
+			{	
 				type = dt_variable
-				value = string_add_scope(_arg, true)
-				
-				description = value
 				
 				if is_struct(variable.value)		description += " (holds "+instanceof(variable.value)+")"
 				else if is_array(variable.value)	description += " (holds array)"
@@ -334,6 +346,7 @@ else
 					description += " ("+string(variable.value)+")"
 				}
 			}
+			else description += " (does not exist?)"
 		}
 	}
 }

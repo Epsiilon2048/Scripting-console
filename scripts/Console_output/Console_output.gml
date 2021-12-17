@@ -12,7 +12,7 @@ right = dock.right
 bottom = dock.bottom
 }}
 	
-	
+
 	
 function draw_console_output(){ with o_console {
 

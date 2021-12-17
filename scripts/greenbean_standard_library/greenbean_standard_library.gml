@@ -93,7 +93,7 @@ return i
 	
 /// @description Executes a script, method, or builtin function with an array
 /// @param {(real|method)} ind
-/// @peram {array} [array=[]]
+/// @param {array} [array=[]]
 function script_execute_ext_builtin(ind, array){
 
 //So, the reason I do this weird thing instead of using script_execute_ext is because for
@@ -342,6 +342,8 @@ for(var i = 0; i <= name_count-1; i++)
 	if is_struct(value) dest[$ names[@ i]] = struct_copy( src[$ names[@ i]] )
 	else dest[$ names[@ i]] = src[$ names[@ i]]
 }
+
+return dest
 }
 
 
@@ -612,6 +614,8 @@ return ds_list_to_array(split)
 	
 function string_is_int(str){ //returns true if a string is a base10 or base16 integer
 
+if not is_string(str) return false
+
 var _str = str
 if string_pos("-", _str) == 1 _str = string_delete(_str, 1, 1)
 
@@ -632,7 +636,7 @@ return string_digits(_str) == _str
 
 function string_is_float(str){ //returns true if a string is a base10 or base16 float
 
-if string_pos(".-", str) == 1 return false
+if not is_string(str) or string_pos(".-", str) == 1 return false
 
 var _str = str
 if string_pos(".", str) != 0 

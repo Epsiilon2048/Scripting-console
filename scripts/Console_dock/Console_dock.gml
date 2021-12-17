@@ -52,7 +52,7 @@ function new_console_dock(name, elements){
 
 var d = new Console_dock()
 d.initialize()
-d.name = name
+d.name = is_undefined(name) ? "Dock" : name
 d.set(elements)
 return d
 }

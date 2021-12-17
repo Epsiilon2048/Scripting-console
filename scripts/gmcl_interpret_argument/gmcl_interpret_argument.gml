@@ -34,8 +34,9 @@ else
 	{
 		macro_type = macro.type
 		
-		if macro.type == dt_string	_arg = quotes_if_string(macro.value)
-		else						_arg = string_format_float(macro.value, undefined)
+		if macro.type == dt_variable		_arg = macro.value
+		else if macro.type == dt_string		_arg = quotes_if_string(macro.value)
+		else								_arg = string_format_float(macro.value, undefined)
 		
 		arg_first = string_char_at(_arg, 1)
 		arg_last = (string_length(_arg) <= 1) ? "" : string_last(_arg)
@@ -193,7 +194,7 @@ else
 			value = (arg_first == "\"") ? slice(_arg, 2, -2, 1) : _arg
 		}
 	}
-	else
+	else if is_string(arg)
 	{
 		var asset = asset_get_index(_arg)
 		if asset != -1
