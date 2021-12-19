@@ -1,6 +1,8 @@
 
 function Autofill_sublist() constructor {
 
+enabled = true
+
 list = undefined
 self.min = 0
 self.max = infinity
@@ -17,7 +19,10 @@ sort = function(){
 }
 
 get_range = function(term){
-	var minmax = autofill_in_list(list, term, undefined)
+	
+	var minmax
+	if enabled minmax = autofill_in_list(list, term, undefined)
+	else minmax = -1//{min: -1, max: -1}
 	
 	if minmax == -1
 	{
@@ -75,6 +80,7 @@ initialize = function(){
 
 
 sort = noscript
+before_get = noscript
 
 
 clear = function(){
@@ -169,6 +175,7 @@ set_multiple = function(lists){
 get = function(term){
 	
 	ds_list_clear(list)
+	before_get()
 	
 	for(var i = 0; i <= ds_list_size(lists)-1; i++)
 	{
