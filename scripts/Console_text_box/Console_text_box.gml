@@ -1223,7 +1223,10 @@ draw = function(){
 	
 	if text != ""
 	{
-		if color_method != noscript and is_struct(colors) draw_color_text(text_x, text_y, colors)
+		if is_struct(colors) 
+		{
+			draw_color_text(text_x, text_y, colors)
+		}
 		else
 		{
 			var col = error ? att.error_color : text_col

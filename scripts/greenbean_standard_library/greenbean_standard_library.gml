@@ -3,7 +3,7 @@
 
 
 /// @description Capitalizes a string
-/// @param {string} str
+/// @param str
 function string_capitalize(str){
 
 if not is_string(str) return string(str)
@@ -13,7 +13,7 @@ return string_upper(string_char_at(str, 1))+string_delete(str, 1, 1)
 
 
 /// @description Gets if a font has consistent character widths
-/// @param {real} font
+/// @param font
 function font_has_consistent_kerning(font){
 
 var old_font = draw_get_font()
@@ -191,10 +191,10 @@ return pressed
 	
 	
 /// Returns if the mouse is between gui coordinates
-/// @param {real} x1
-/// @param {real} y1
-/// @param {real} x2
-/// @param {real} y2
+/// @param x1
+/// @param y1
+/// @param x2
+/// @param y2
 function gui_mouse_between(x1, y1, x2, y2){
 
 return point_in_rectangle(gui_mx, gui_my, min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
@@ -203,9 +203,9 @@ return point_in_rectangle(gui_mx, gui_my, min(x1, x2), min(y1, y2), max(x1, x2),
 	
 	
 /// @description If a variable in a struct exists return the variable, otherwise return the not_exists value
-/// @param {struct} struct
-/// @param {string} variable
-/// @param {*} not_exists
+/// @param struct
+/// @param variable
+/// @param not_exists
 function variable_struct_exists_get(struct, variable, not_exists){
 
 if is_struct(struct) and variable_struct_exists(struct, variable) return variable_struct_get(struct, variable)
@@ -215,8 +215,8 @@ else return not_exists
 	
 	
 /// @description Returns the index if a value in an array
-/// @param {array} array
-/// @param {real} value
+/// @param array
+/// @param value
 function array_find(array, value){
 
 for(var i = 0; i <= array_length(array)-1; i++)
@@ -230,8 +230,8 @@ return -1
 
 
 /// @description Returns an array of the value held by each struct in an array of structs
-/// @param {array} array
-/// @param {real} value
+/// @param array
+/// @param value
 function array_struct_get(array, name){
 
 var _array = array_create(array_length(array), undefined)
@@ -247,8 +247,8 @@ return _array
 
 
 /// @description Returns each item off an array as a string, separated by the separator
-/// @param {array} array
-/// @param {string} separator
+/// @param array
+/// @param separator
 function array_to_string(array, separator){
 
 if is_string(array) return array
@@ -268,7 +268,7 @@ return string_copy(str, string_length(separator)+1, string_length(str)-1)
 	
 	
 /// @description Returns an array converted from a ds list
-/// @param {real} ds_list
+/// @param ds_list
 function ds_list_to_array(ds_list){
 
 var array = array_create(ds_list_size(ds_list))
@@ -739,11 +739,11 @@ return "<unknown>"
 	
 	
 	
-/// @param {real} x1
-/// @param {real} y1
-/// @param {real} x2
-/// @param {real} y2
-/// @param {real} [w]
+/// @param x1
+/// @param y1
+/// @param x2
+/// @param y2
+/// @param [w]
 function draw_hollowrect(x1, y1, x2, y2, w){
 
 var _x1 = min(x1, x2)
@@ -778,10 +778,10 @@ else
 	
 	
 /// @description Returns an array converted from a ds list
-/// @param {(string|real|array)} value
-/// @param {real} [from=1]
-/// @param {real} [to=end_of_value]
-/// @param {real} [step=1]
+/// @param value
+/// @param [from=1]
+/// @param [to=end_of_value]
+/// @param [step=1]
 function slice(value, from, to, step){
 ///@description slice(value,[from],[to],[step])
 

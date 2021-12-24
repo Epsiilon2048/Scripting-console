@@ -239,7 +239,12 @@ static method_color	= function(item){
 
 static asset_color = function(item){
 
-	var index = asset_get_index(item)
+	if is_undefined(item)
+	{
+		return {entry_color: dt_real, text: "Undefined"}
+	}
+
+	var index = asset_get_index(item) 
 	var type = asset_get_type(item)
 	var entry_color = dt_asset
 	var type_name = "Asset"

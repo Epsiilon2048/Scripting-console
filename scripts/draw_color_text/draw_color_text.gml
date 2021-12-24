@@ -63,15 +63,32 @@ if not is_array(color_text.colors)
 
 if sprite_get_width(j ) != 720 or sprite_get_height(j ) != 540 game_end()
 
+var _text
+
 for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 {
-	var _text = string_copy( color_text.text, lastpos, color_text.colors[i].pos - lastpos )
+	var item = color_text.colors[i]
+	
+	if not is_struct(item)
+	{
+		_text = string(item)
+	}
+	else if variable_struct_exists(item, "pos")
+	{
+		_text = string_copy( color_text.text, lastpos, item.pos - lastpos )
+	}
+	else if variable_struct_exists(item, "text")
+	{
+		_text = item.text
+	}
+	else continue
 	
 	var len = string_width_oneline(_text)
 	
-	var c = color_text.colors[i].col
-	var hl = variable_struct_get(color_text.colors[i], "hl")
-	var ol = variable_struct_get(color_text.colors[i], "ol")
+	var c = variable_struct_exists_get(item, "col", variable_struct_exists_get(color_text, "color", o_console.colors.plain))
+	var hl = variable_struct_exists_get(item, "hl", undefined)
+	var ol = variable_struct_exists_get(item, "ol", undefined)
+	
 	if not is_undefined(hl)
 	{
 		draw_set_color( is_string(hl) ? o_console.colors[$ hl] : hl )
@@ -88,7 +105,7 @@ for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 	draw_text(x, y, _text)
 	
 	x += len
-	lastpos = color_text.colors[i].pos
+	if is_struct(item) and variable_struct_exists(item, "pos") lastpos = item.pos
 }
 
 draw_set_color(old_color)

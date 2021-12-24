@@ -16,6 +16,50 @@ add_console_element(new_console_dock("Scroll", [
 	[new_scrubber("hbar_min","o_dev.sc.hbar_min",1),new_scrubber("hbar_max","o_dev.sc.hbar_max",1),],
 ]))
 
+
+var t = new_text_box("Text", "text") with t {
+att.length_min = 70
+att.exit_with_enter = false
+__command = false
+color_method = function(){
+	
+	var i = 1
+	while string_char_at(text, i) == " " i++
+	
+	if string_char_at(text, i) == "/"
+	{
+		var f = gmcl_string_color(slice(text, i+1))
+		array_insert(f.colors, 0, {col: "body_accent", text: slice(text,,i+1)})
+		
+		__command = i+1
+		return f
+	}
+	else 
+	{
+		__command = false
+		return undefined
+	}
+}
+
+on_enter = function(){
+	
+	if __command
+	{
+		gmcl_exec(slice(text, __command))
+	}
+	else
+	{
+		show_debug_message(text)
+	}
+	
+	text = ""
+	keyboard_string = ""
+	update_variable()
+}
+}
+
+add_console_element(t)
+
 // These are just my preferred settigs; you can put anything in here really
 autofill_from_float = true
 }}

@@ -1,4 +1,6 @@
 
+///@peram command
+///@peram [char_pos]
 function gmcl_string_color(command, char_pos){ with o_console {
 
 static max_length = 700
@@ -114,28 +116,22 @@ for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); 
 
 if tag != ""
 {
-	_command = slice(_command, com_start, -1, 1)
+	var sep = string_char_at(_command, com_start)
+	show_debug_message("\""+sep+"\"")
+	_command = slice(_command, com_start+1, -1, 1)
 	var color_text = tags[$ tag].color(_command)
 	if is_undefined(color_text) color_text = {text: _command, colors: "plain"}
 	
-	if variable_struct_exists(color_text, "tag") and color_text.tag != ""
+	if variable_struct_exists_get(color_text, "tag", "") != ""
 	{
-		color_text.text = "#"+color_text.tag+color_text.text
-		
-		if is_array(color_text.colors)
-		{
-			var len = string_length(color_text.tag)+1
-			
-			for(var i = 0; i <= array_length(color_text.colors)-1; i++)
-			{
-				color_text.colors[i].pos += len
-			}
-			array_insert(color_text.colors, 0, {col: dt_unknown, pos: len})
-		}
+		array_insert(color_text.colors, 0, {col: dt_unknown, text: "#"+color_text.tag+sep})
 	}
+	else array_insert(color_text.colors, 0, sep)
+
 	
 	color_text.tag = tag
 	
+	show_debug_message(color_text)
 	return color_text
 }
 
