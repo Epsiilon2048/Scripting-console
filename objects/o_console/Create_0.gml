@@ -16,7 +16,7 @@ mouse_on_console = false
 
 rainbowify = function(list){
 	for(var i = 0; i <= array_length(list)-1; i++){
-		colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow) 
+		colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow)
 	}
 }
 

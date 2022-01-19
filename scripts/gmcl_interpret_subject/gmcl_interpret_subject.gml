@@ -276,6 +276,7 @@ else
 		var asset = asset_get_index(_arg)
 		if asset != -1
 		{
+			//show_message(asset)
 			value = asset
 			type = dt_asset
 			

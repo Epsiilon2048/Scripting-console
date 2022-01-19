@@ -845,7 +845,7 @@ get_input = function(){
 
 			if key_left
 			{	
-				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, -1) : (char_pos1-1)
+				char_pos1 = key_super ? string_char_next(tb.word_sep, text, char_pos1, -1)-1 : (char_pos1-1)
 				char_selection = key_shift
 				char_mouse = false
 				blink_step = 0
@@ -1011,7 +1011,7 @@ get_input = function(){
 					{
 						var prev = max(1, string_char_next(tb.word_sep, text, char_pos1, -1))
 						text = string_delete(text, prev, char_pos1-prev+1+(prev == 0))
-						char_pos1 = prev+1-(char_pos1 != 1)*2
+						char_pos1 = prev+2-(char_pos1 != 1)*2
 					}
 					else 
 					{

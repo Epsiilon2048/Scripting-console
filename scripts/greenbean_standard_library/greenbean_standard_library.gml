@@ -69,7 +69,7 @@ case asset_timeline:		return "timeline"
 }
 }
 	
-	
+
 
 /// @description Retruns the next instance in a string of any of the chars, starting from the pos, in the direction of dir
 /// @param {string} chars
@@ -80,10 +80,15 @@ function string_char_next(chars, str, pos, dir){
 
 var i = pos+dir
 var len = string_length(str)
-while 1 <= i and i <= len and not string_pos(string_char_at(str, i), chars)
+
+var inv = string_pos(string_char_at(str, i), chars) 
+
+while 1 <= i and i <= len and (inv xor not string_pos(string_char_at(str, i), chars))
 {
 	i += dir
 }
+
+i -= dir
 
 //if i > len return 0
 return i

@@ -107,6 +107,7 @@
     {"id":{"name":"console_log_functions","path":"scripts/console_log_functions/console_log_functions.yy",},"order":8,},
     {"id":{"name":"get_update_turn","path":"scripts/get_update_turn/get_update_turn.yy",},"order":23,},
     {"id":{"name":"draw_console_body","path":"scripts/draw_console_body/draw_console_body.yy",},"order":6,},
+    {"id":{"name":"another_script","path":"scripts/another_script/another_script.yy",},"order":12,},
     {"id":{"name":"bird_mode_","path":"sprites/bird_mode_/bird_mode_.yy",},"order":0,},
     {"id":{"name":"imguigml_defines","path":"scripts/imguigml_defines/imguigml_defines.yy",},"order":2,},
     {"id":{"name":"Console_doc_strip","path":"scripts/Console_doc_strip/Console_doc_strip.yy",},"order":17,},
@@ -138,7 +139,6 @@
   ],
   "isDnDProject": false,
   "isEcma": false,
-  "tutorialPath": "",
   "configs": {
     "name": "Default",
     "children": [],
@@ -178,7 +178,7 @@
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"sprite_add_test.png","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2.3.7.606",
+    "IDEVersion": "2022.1.0.464",
   },
   "resourceVersion": "1.4",
   "name": "Scripting-console",

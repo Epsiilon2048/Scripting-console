@@ -7,7 +7,11 @@ initialize = function(){
 	
 	wbar_enabled = true
 	hbar_enabled = true
-	
+
+	condensed = false
+	wresize = false
+	hresize = false
+
 	page_left = 0
 	page_top = 0
 	page_right = 0
@@ -21,10 +25,6 @@ initialize = function(){
 	
 	scroll_x = 0
 	scroll_y = 0
-	
-	condensed = false
-	wresize = false
-	hresize = false
 	
 	wbar_length = 0
 	hbar_length = 0
@@ -82,15 +82,30 @@ set_boundaries = function(page_width, page_height, page_left, page_top, page_rig
 
 
 
-set_scroll = function(scroll_x, scroll_y)
-{
+set_scroll_x = function(scroll_x){
+	
 	var scroll_x_max = page_width-(page_right-page_left)
-	var scroll_y_max = page_height-(page_bottom-page_top)
 	
 	self.scroll_x = clamp(scroll_x, 0, scroll_x_max)
-	self.scroll_y = clamp(scroll_y, 0, scroll_y_max)
 	wbar_center = wbar_min + (wbar_max-wbar_min)*(self.scroll_x/scroll_x_max)
+}
+
+
+
+set_scroll_y = function(scroll_x){
+	
+	var scroll_y_max = page_height-(page_bottom-page_top)
+	
+	self.scroll_y = clamp(scroll_y, 0, scroll_y_max)
 	hbar_center = hbar_min + (hbar_max-hbar_min)*(self.scroll_y/scroll_y_max)
+}
+
+
+
+set_scroll = function(scroll_x, scroll_y){
+	
+	set_scroll_x(scroll_x)
+	set_scroll_y(scroll_y)
 }
 
 

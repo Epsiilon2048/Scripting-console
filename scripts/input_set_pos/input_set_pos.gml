@@ -13,19 +13,23 @@ input = string(input)
 
 if string_pos(string_char_at(text, char_pos2), o_console.refresh_sep) char_pos2--
 
-var _min = char_pos2
+var _min = char_pos2+1
 var _max = char_pos2
 
 var str_length = string_length(text)
+var char = string_char_at(text, _max)
 
-while _max < (str_length) and not string_pos(string_char_at(text, _max), o_console.refresh_sep)
+while _max < (str_length) and not (char != "" and string_pos(char, o_console.refresh_sep))
 {
 	_max++
+	char = string_char_at(text, _max)
 }
 
-while _min > 0 and not string_pos(string_char_at(text, _min), o_console.refresh_sep)
+var char = string_char_at(text, _min)
+while _min > 0 and not (char != "" and string_pos(char, o_console.refresh_sep))
 {
 	_min--
+	char = string_char_at(text, _min)
 }
 _min++
 _max++
