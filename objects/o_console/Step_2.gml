@@ -5,7 +5,7 @@ clicking_on_console = false
 run_in_console = false
 run_in_embed   = false
 
-if enabled and not initialized and startup == -1 and keyboard_check_pressed(console_key)
+if enabled and not initialized and startup == -1 and console_key_pressed()
 {
 	soft_init = false
 	startup = 0

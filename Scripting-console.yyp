@@ -76,6 +76,7 @@
     {"id":{"name":"new_colorscheme_editor","path":"scripts/new_colorscheme_editor/new_colorscheme_editor.yy",},"order":3,},
     {"id":{"name":"console_include_color","path":"scripts/console_include_color/console_include_color.yy",},"order":25,},
     {"id":{"name":"Console_slider","path":"scripts/Console_slider/Console_slider.yy",},"order":12,},
+    {"id":{"name":"console_key_pressed","path":"scripts/console_key_pressed/console_key_pressed.yy",},"order":42,},
     {"id":{"name":"initialize_gmcl_macros","path":"scripts/initialize_gmcl_macros/initialize_gmcl_macros.yy",},"order":3,},
     {"id":{"name":"initialize_console_docs","path":"scripts/initialize_console_docs/initialize_console_docs.yy",},"order":4,},
     {"id":{"name":"shd_svsquare","path":"shaders/shd_svsquare/shd_svsquare.yy",},"order":2,},
@@ -179,7 +180,7 @@
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"sprite_add_test.png","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2.3.7.603",
+    "IDEVersion": "2.3.5.589",
   },
   "resourceVersion": "1.4",
   "name": "Scripting-console",
