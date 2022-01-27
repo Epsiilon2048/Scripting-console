@@ -88,6 +88,8 @@ initialize = function(){
 	width = undefined
 	height = undefined
 	
+	last_drawn = -1
+	
 	_width = 0
 	
 	mouse_on = false
@@ -238,6 +240,7 @@ set = function(elements){
 	
 	get_input()
 }
+
 
 
 
@@ -635,7 +638,9 @@ get_input = function(){
 
 draw = function(){
 	
-	if right == x and bottom == y return undefined
+	if last_drawn == o_console.step or right == x and bottom == y return undefined
+	
+	last_drawn = o_console.step
 	
 	var dc = o_console.DOCK
 	

@@ -4,7 +4,7 @@ birdcheck()
 if instance_number(o_console) > 1
 {
 	show_debug_message("Attempted to create another console object when one already existed!")
-	instance_destroy()
+	instance_destroy(id, false)
 	exit
 }
 
