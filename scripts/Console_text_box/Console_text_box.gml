@@ -665,8 +665,8 @@ get_input = function(){
 				if att.allow_alpha
 				{
 					char_pos1 = string_char_next(tb.word_sep, text, char_pos1, 1)
-					char_pos2 = string_char_next(tb.word_sep, text, char_pos1, -1)
-					char_pos1 -= string_pos(string_char_at(text, char_pos1), tb.word_sep) != 0
+					char_pos2 = string_char_next(tb.word_sep, text, char_pos1, -1)-1
+					//char_pos1 -= string_pos(string_char_at(text, char_pos1), tb.word_sep) != 0
 				}
 				else
 				{
@@ -729,7 +729,7 @@ get_input = function(){
 		if not error and att.allow_input
 		{	
 			var rt = tb.repeat_time*max(1, round(game_get_speed(gamespeed_fps)/60))
-			var r = (tb.repeat_step mod round(game_get_speed(gamespeed_fps)/60*2)) == 0
+			var r = (tb.repeat_step mod (round(game_get_speed(gamespeed_fps)/60*2))+.001) == 0
 			tb.repeat_step ++
 		
 			_key_left				= keyboard_check(vk_left)
@@ -1011,7 +1011,7 @@ get_input = function(){
 					{
 						var prev = max(1, string_char_next(tb.word_sep, text, char_pos1, -1))
 						text = string_delete(text, prev, char_pos1-prev+1+(prev == 0))
-						char_pos1 = prev+2-(char_pos1 != 1)*2
+						char_pos1 = prev+1
 					}
 					else 
 					{
