@@ -41,7 +41,7 @@ else _width = is_undefined(BAR.width) ? (gui_width - _x - _win_dist) : BAR.width
 if BAR.docked BAR.enabled = BAR.dock.show
 else
 {
-	if keyboard_check_pressed(console_key) and keyboard_scope == noone
+	if console_key_pressed() and keyboard_scope == noone
 	{
 		BAR.enabled = not BAR.enabled
 	
@@ -165,7 +165,7 @@ with BAR
 	}
 }
 
-if BAR.docked and keyboard_check_pressed(console_key) and keyboard_scope == noone
+if BAR.docked and console_key_pressed() and keyboard_scope == noone
 {
 	BAR.dock.show = true
 	BAR.dock.is_front = true

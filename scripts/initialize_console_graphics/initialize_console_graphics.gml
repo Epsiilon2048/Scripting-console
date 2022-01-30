@@ -233,6 +233,8 @@ with COLOR_PICKER {
 		
 		value_min = 0
 		value_max = 255
+		
+		scrubber_pixels_per_step = 2
 	}
 	
 	with rgb_att
@@ -248,6 +250,8 @@ with COLOR_PICKER {
 		
 		value_min = 0
 		value_max = 255
+		
+		scrubber_pixels_per_step = 2
 	}
 	
 	ignore_input = true

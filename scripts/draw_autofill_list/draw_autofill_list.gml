@@ -142,7 +142,14 @@ with global._scrvar_
 static draw_list = function(range, list, color_method){ with global._scrvar_ {
 
 if range == -1 return undefined
-var access = is_array(list) ? array_get : ds_list_find_value
+var access = function(list, index){
+	if is_array(list) 
+	{
+		if array_length(list) > index return list[index]
+		else return ""
+	}
+	else return list[| index]
+}
 
 for(var i = range.min; i <= range.max; i++)
 {	

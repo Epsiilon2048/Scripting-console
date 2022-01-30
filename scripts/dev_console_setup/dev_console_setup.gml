@@ -29,7 +29,7 @@ color_method = function(){
 	if string_char_at(text, i) == "/"
 	{
 		var f = gmcl_string_color(slice(text, i+1))
-		array_insert(f.colors, 0, {col: "body_accent", text: slice(text,,i+1)})
+		array_insert(f.colors, 0, {col: "body_accent", text: slice(text,undefined,i+1)})
 		
 		__command = i+1
 		return f

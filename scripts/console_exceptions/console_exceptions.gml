@@ -39,4 +39,4 @@
 #macro exceptionBotchedMethod "Invalid method syntax"
 #macro exceptionBotchedReal "Invalid real syntax"
 #macro exceptionBotchedVariable "Invalid variable syntax"
-#macro exceptionBotchedColor "Invalid color syntax syntax"
+#macro exceptionBotchedColor "Invalid color syntax"
