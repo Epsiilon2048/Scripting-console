@@ -34,7 +34,6 @@
     {"id":{"name":"gmcl_interpret_subject","path":"scripts/gmcl_interpret_subject/gmcl_interpret_subject.yy",},"order":1,},
     {"id":{"name":"imguigml_read_me","path":"scripts/imguigml_read_me/imguigml_read_me.yy",},"order":3,},
     {"id":{"name":"o_bg","path":"objects/o_bg/o_bg.yy",},"order":4,},
-    {"id":{"name":"GMCL_Console","path":"extensions/GMCL_Console/GMCL_Console.yy",},"order":0,},
     {"id":{"name":"Sprite7","path":"sprites/Sprite7/Sprite7.yy",},"order":7,},
     {"id":{"name":"fnt_debug6x","path":"fonts/fnt_debug6x/fnt_debug6x.yy",},"order":5,},
     {"id":{"name":"autofill_in_list","path":"scripts/autofill_in_list/autofill_in_list.yy",},"order":11,},
