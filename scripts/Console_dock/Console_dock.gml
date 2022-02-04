@@ -125,6 +125,7 @@ initialize = function(){
 	get_ctx_elements = noscript
 	before_func = noscript
 	after_func = noscript
+	should_draw = noscript
 }
 
 
@@ -314,8 +315,8 @@ after_dock = function(){
 	
 	if not is_undefined(height) bottom = max(top, top+height)
 	
-	mouse_on = not was_clicking_on_console and gui_mouse_between(left, top, right, bottom)
-	mouse_on_bar = mouse_on and draw_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
+	mouse_on_bar = not was_clicking_on_console and draw_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
+	mouse_on = mouse_on_bar or (not was_clicking_on_console and (show and gui_mouse_between(left, top, right, bottom)))
 	
 	get_dropdown_input()
 	
@@ -637,6 +638,8 @@ get_input = function(){
 
 
 draw = function(){
+	
+	if should_draw != noscript and not should_draw() return undefined
 	
 	if last_drawn == o_console.step or right == x and bottom == y return undefined
 	

@@ -785,26 +785,14 @@ get_input = function(){
 				typing = true
 				scrubbing = false
 				
-				if att.allow_float and string_pos(".", char) 
+				char_pos1 = string_length(text)
+				
+				if digits or key_backspace or key_delete or string_pos(".", char) 
 				{
-					var p = string_pos(".", text)
-					if p char_pos1 = p
-					else char_pos1 = string_length(text)
-					
-					char_pos2 = string_length(text)
+					char_pos2 = 0
 					char_selection = true
 				}
-				else
-				{
-					char_pos1 = string_length(text)
-				
-					if digits or key_backspace or key_delete
-					{
-						char_pos2 = 0
-						char_selection = true
-					}
-					else char_pos2 = char_pos1
-				}
+				else char_pos2 = char_pos1
 			}
 		}
 		
@@ -976,12 +964,6 @@ get_input = function(){
 					{
 						char_pos1 = char_pos_min
 						char_selection = false
-						
-						//if not att.allow_alpha and char != "" and (newtext == "0" or newtext == "-0")
-						//{
-						//	newtext = (newtext == "-0") ? "-" : ""
-						//	char_pos1 --
-						//}
 						
 						if newtext == infinity text = "inf"
 						else if newtext == -infinity text = "-inf"

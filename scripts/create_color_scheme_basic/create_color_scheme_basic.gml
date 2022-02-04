@@ -132,7 +132,7 @@ colors.sprite_alpha		= 1
 
 colors.bevel			= true
 
-colors.body_real_alpha	= .1
+colors.body_real_alpha	= .5
 
 colors.black			= c_black
 colors.white			= c_white

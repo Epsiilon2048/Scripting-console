@@ -89,9 +89,16 @@ with OUTPUT {
 	
 	dock.before_func = function(){
 		docked = o_console.BAR.dock.enabled
+		dock.dock = o_console.BAR.dock 
 		dock.docked = docked
 		dock.draw_name = not docked
-		dock.run_in_dock = docked
+		//dock.run_in_dock = docked
+	}
+	
+	dock.should_draw = function(){
+		show_debug_message(dock.docked)
+		show_debug_message(dock.run_in_dock)
+		return not (dock.docked and not dock.run_in_dock)
 	}
 }
 
