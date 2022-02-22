@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"nosprite","path":"sprites/nosprite/nosprite.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "nosprite",
     "tags": [],
     "resourceType": "GMSequence",

@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"bird_mode_","path":"sprites/bird_mode_/bird_mode_.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "bird_mode_",
     "tags": [],
     "resourceType": "GMSequence",
