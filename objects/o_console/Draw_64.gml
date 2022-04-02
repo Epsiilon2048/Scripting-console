@@ -13,7 +13,7 @@ var old_shader = shader_current()
 for(var i = ds_list_size(elements)-1; i >= 0; i--)
 {
 	var el = elements[| i]
-	if element_dragging != el el.draw()
+	if is_struct(el) and element_dragging != el el.draw()
 }
 
 if element_dragging != noone element_dragging.draw()

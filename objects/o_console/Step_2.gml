@@ -134,11 +134,19 @@ var front = -1
 j = i
 for(var i = 0; i <= ds_list_size(elements)-1; i++)
 {
-	elements[| i].get_input()
-	if not was_clicking and clicking_on_console 
+	if not is_struct(elements[| i]) or not variable_struct_exists(elements[| i], "get_input")
 	{
-		front = i
-		was_clicking = true
+		ds_list_delete(elements, i)
+		i--
+	}
+	else
+	{
+		elements[| i].get_input()
+		if not was_clicking and clicking_on_console 
+		{
+			front = i
+			was_clicking = true
+		}
 	}
 }
 if front != -1
