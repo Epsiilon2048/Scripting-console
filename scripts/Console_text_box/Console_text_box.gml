@@ -104,6 +104,7 @@ initialize = function(variable){
 	draw_name = true
 	name_text_x = 0
 	mouse_on_name = false
+	clean_scrubber = false
 
 	
 	// Input settings
@@ -156,6 +157,8 @@ initialize = function(variable){
 	cbox_top = undefined
 	cbox_right = undefined
 	cbox_bottom = undefined
+	
+	last_input = -1
 	
 	
 	
@@ -215,7 +218,7 @@ initialize = function(variable){
 	
 		scrubber = false // The mouse scrubbing the value
 		scrubber_step = 1
-		scrubber_pixels_per_step = 10
+		scrubber_pixels_per_step = 4
 	}
 	
 	update_variable()
@@ -362,13 +365,20 @@ set_boundaries = function(){
 	right = box_left + text_width + _text_wdist*2*att.draw_box + cw*(not att.draw_box and draw_name)
 	bottom = top + ch + _text_hdist*2*att.draw_box
 	
-	name_text_x = left + _text_wdist*att.draw_box
-	
-	text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and draw_name)
 	text_y = top+1 + _text_hdist*att.draw_box
 	
-	if not att.scrubber or (not docked or (docked and (att.allow_dragging and dock.allow_element_dragging))) box_right = right
-	else box_right = min(right, text_x+max(cw, string_width_oneline(text))+_text_wdist/2)
+	if not clean_scrubber
+	{
+		text_x = box_left + _text_wdist*att.draw_box + cw*(not att.draw_box and draw_name)
+		name_text_x = left + _text_wdist*att.draw_box
+		box_right = right
+	}
+	else
+	{
+		text_x = box_left + cw*(not att.draw_box and draw_name)
+		name_text_x = left
+		box_right = min(right, text_x+max(cw, string_width_oneline(text))+_text_wdist/2)
+	}
 	#endregion
 }
 
@@ -480,6 +490,8 @@ return m
 
 get_input = function(){
 	
+	if last_input == o_console.step exit
+	
 	copy = false
 	paste = false
 	
@@ -507,6 +519,9 @@ get_input = function(){
 			if att.scrubber typing = false
 			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
 		}
+		
+		last_input = o_console.step
+		
 		return undefined
 	}
 	#endregion
@@ -524,6 +539,7 @@ get_input = function(){
 	#endregion
 	
 	moved = xprevious != x or yprevious != y
+	clean_scrubber = not (not att.scrubber or (not docked or (docked and (att.allow_dragging and dock.allow_element_dragging))))
 	if dragging or moved or right == x set_boundaries()
 	
 	#region Mouse inputs
@@ -650,6 +666,7 @@ get_input = function(){
 		
 			if not error and not scoped and att.scrubber and not error
 			{
+				//show_debug_message(o_console.step)
 				scrubbing = true
 				mouse_previous = gui_mx
 				typing = false
@@ -661,6 +678,7 @@ get_input = function(){
 			{
 				char_selection = true
 				typing = true
+				scrubbing = false
 				
 				if att.allow_alpha
 				{
@@ -1115,6 +1133,8 @@ get_input = function(){
 	
 	xprevious = x
 	yprevious = y
+	
+	last_input = o_console.step
 }
 
 
@@ -1144,7 +1164,7 @@ draw = function(){
 		var _text_hdist = floor(tb.text_hdist*asp)
 		var _outline_width = tb.outline_width*asp
 	
-		if not att.scrubber or (not docked or (docked and (att.allow_dragging and dock.allow_element_dragging)))
+		if not clean_scrubber
 		{
 			if not (docked and not dock.is_front)
 			{

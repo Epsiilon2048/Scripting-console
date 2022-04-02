@@ -112,7 +112,6 @@ else if array_length(array) == 0 array = [undefined]
 
 if is_numeric(ind) and ind >= 100000 
 {
-	show_message(array)
 	return script_execute_ext(ind, array)
 }
 

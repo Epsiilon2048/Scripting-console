@@ -129,31 +129,34 @@ COLOR_PICKER.get_input()
 
 if not sprite_exists(i) game_end()
 
-var was_clicking = clicking_on_console
-var front = -1
-j = i
-for(var i = 0; i <= ds_list_size(elements)-1; i++)
+if window_has_focus()
 {
-	if not is_struct(elements[| i]) or not variable_struct_exists(elements[| i], "get_input")
+	var was_clicking = clicking_on_console
+	var front = -1
+	j = i
+	for(var i = 0; i <= ds_list_size(elements)-1; i++)
 	{
-		ds_list_delete(elements, i)
-		i--
-	}
-	else
-	{
-		elements[| i].get_input()
-		if not was_clicking and clicking_on_console 
+		if not is_struct(elements[| i]) or not variable_struct_exists(elements[| i], "get_input")
 		{
-			front = i
-			was_clicking = true
+			ds_list_delete(elements, i)
+			i--
+		}
+		else
+		{
+			elements[| i].get_input()
+			if not was_clicking and clicking_on_console 
+			{
+				front = i
+				was_clicking = true
+			}
 		}
 	}
-}
-if front != -1
-{
-	var el = elements[| front]
-	ds_list_delete(elements, front)
-	ds_list_insert(elements, 0, el)
+	if front != -1
+	{
+		var el = elements[| front]
+		ds_list_delete(elements, front)
+		ds_list_insert(elements, 0, el)
+	}
 }
 
 if not mouse_check_button(mb_left) element_dragging = noone

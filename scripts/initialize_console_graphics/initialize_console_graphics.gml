@@ -15,13 +15,13 @@ with DOCK {
 	
 	name_outline_width = 1.4
 	name_wdist = 9
-	name_hdist = 1
+	name_hdist = 4
 	
 	element_wdist = 17
-	element_hdist = 18
+	element_hdist = 15
 	
 	element_wsep = 12
-	element_hsep = 12
+	element_hsep = 13
 	
 	dropdown_hypotenuse = 9
 	dropdown_base = 17
@@ -141,7 +141,7 @@ with CD_BUTTON {
 	char_height = 23
 	
 	wdist = 10
-	hdist = 5
+	hdist = 2
 }
 	
 with SEPARATOR {
