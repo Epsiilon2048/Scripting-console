@@ -96,8 +96,8 @@ with OUTPUT {
 	}
 	
 	dock.should_draw = function(){
-		show_debug_message(dock.docked)
-		show_debug_message(dock.run_in_dock)
+		//show_debug_message(dock.docked)
+		//show_debug_message(dock.run_in_dock)
 		return not (dock.docked and not dock.run_in_dock)
 	}
 }

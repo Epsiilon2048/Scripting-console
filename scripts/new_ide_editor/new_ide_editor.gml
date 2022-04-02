@@ -31,6 +31,7 @@ var editor = new_console_dock("Element adjusting", [
 		"Color strip",
 		new_scrubber("Strip height", "con.COLOR_PICKER.colorbar_height", 1),
 	]),
+	
 	new_cd_button("Reset all", initialize_console_graphics)
 ])
 editor.hide_all()

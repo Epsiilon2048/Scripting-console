@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"s_checkbox_empty","path":"sprites/s_checkbox_empty/s_checkbox_empty.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "s_checkbox_empty",
     "tags": [],
     "resourceType": "GMSequence",

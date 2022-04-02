@@ -248,7 +248,7 @@ get = function(term){
 			if minmax == -1 li = []
 			else
 			{
-				show_debug_message(minmax.max - minmax.min)
+				//show_debug_message(minmax.max - minmax.min)
 				var newli = array_create(minmax.max - minmax.min)
 			
 				if is_numeric(li) li = ds_list_to_array(li)

@@ -117,7 +117,7 @@ for(var i = 1; i <= max(string_pos("#", _command), string_pos("\\", _command)); 
 if tag != ""
 {
 	var sep = string_char_at(_command, com_start)
-	show_debug_message("\""+sep+"\"")
+	//show_debug_message("\""+sep+"\"")
 	_command = slice(_command, com_start+1, -1, 1)
 	var color_text = tags[$ tag].color(_command)
 	if is_undefined(color_text) color_text = {text: _command, colors: "plain"}
@@ -131,7 +131,7 @@ if tag != ""
 	
 	color_text.tag = tag
 	
-	show_debug_message(color_text)
+	//show_debug_message(color_text)
 	return color_text
 }
 

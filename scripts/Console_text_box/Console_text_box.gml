@@ -806,7 +806,7 @@ get_input = function(){
 				if key_left _value -= _value mod att.incrementor_step
 				else _value += att.incrementor_step - (_value mod att.incrementor_step)
 				
-				string_format_float(show_debug_message(value), 8)
+				//string_format_float(show_debug_message(value), 8)
 			}
 			else _value = clamp(_value + att.incrementor_step*(key_right-key_left), att.value_min, att.value_max)
 			text = string_format_float(_value, att.float_places+added_float_places)

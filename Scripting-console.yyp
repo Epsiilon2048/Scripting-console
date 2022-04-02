@@ -178,9 +178,9 @@
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"sprite_add_test.png","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2022.1.0.609",
+    "IDEVersion": "2022.2.0.614",
   },
-  "resourceVersion": "1.4",
+  "resourceVersion": "1.5",
   "name": "Scripting-console",
   "tags": [],
   "resourceType": "GMProject",

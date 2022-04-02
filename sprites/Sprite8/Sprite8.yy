@@ -71,7 +71,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"Sprite8","path":"sprites/Sprite8/Sprite8.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "Sprite8",
     "tags": [],
     "resourceType": "GMSequence",

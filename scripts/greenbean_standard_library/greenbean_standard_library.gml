@@ -106,9 +106,15 @@ function script_execute_ext_builtin(ind, array){
 //scripts?? like, normally it would pass the script an argument for each item in the array,
 //but with built ins it just passes the array as a single argument... wtf...
 
-if is_undefined(array) array = []
+//if is_undefined(array) array = []
+if not is_array(array) array = [array]
+else if array_length(array) == 0 array = [undefined]
 
-if is_numeric(ind) and ind >= 100000 return script_execute_ext(ind, array)
+if is_numeric(ind) and ind >= 100000 
+{
+	show_message(array)
+	return script_execute_ext(ind, array)
+}
 
 var f = ind
 var a = array
@@ -127,7 +133,7 @@ case 8:  return                                                  f(a[0],a[1],a[2
 case 6:  return                                                        f(a[0],a[1],a[2],a[3],a[4],a[5])															;break
 case 4:  return                                                              f(a[0],a[1],a[2],a[3])																;break
 case 2:  return                                                                  f(a[0],a[1])																	;break
-case 0:  return	                                                                     f()																		;break
+case 0:  return	                                                                     f([])																		;break
 case 1:  return                                                                    f(a[0])																		;break
 case 3:  return                                                                f(a[0],a[1],a[2])																;break
 case 5:  return                                                            f(a[0],a[1],a[2],a[3],a[4])															;break

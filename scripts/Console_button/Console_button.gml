@@ -216,7 +216,7 @@ draw = function(){
 	var _image_scale = image_scale
 	if scale_from_global _image_scale *= asp
 	
-	var is_front = not (docked and not dock.is_front)
+	var is_front = true//not (docked and not dock.is_front)
 	
 	if draw_box
 	{

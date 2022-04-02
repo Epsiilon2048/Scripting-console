@@ -669,7 +669,7 @@ draw = function(){
 
 	if docked and not dragging
 	{
-		if is_front and draw_name and draw_name_bar
+		if draw_name and draw_name_bar
 		{
 			draw_set_color(o_console.colors.body_real)
 			draw_rectangle(left, top, right, top + bar_height, false)
@@ -678,7 +678,7 @@ draw = function(){
 		draw_set_color(o_console.colors.body_accent)
 		if draw_outline draw_hollowrect(left, top, right, bottom, _outline_width)
 		
-		if is_front draw_set_color(o_console.colors.output)
+		draw_set_color(o_console.colors.output)
 	}
 	else
 	{
@@ -692,7 +692,7 @@ draw = function(){
 	}
 	if draw_name 
 	{
-		draw_set_color((is_front and draw_name_bar) ? o_console.colors.plain : o_console.colors.body_accent)
+		draw_set_color(draw_name_bar ? o_console.colors.plain : o_console.colors.body_accent)
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(o_console.colors.body_accent)
