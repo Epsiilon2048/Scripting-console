@@ -78,6 +78,25 @@ if not is_string(name)
 }
 if name == ""			return get_fail_return(scr, exceptionNoValue)
 
+if string_char_at(name, 1) == "$" and asset_get_index("ChatterboxVariableGet") != -1
+{
+	name = slice(name, 2)
+	if ds_map_exists(global.chatterboxVariablesMap, name)
+	{
+		switch scr
+		{
+			case variable_string_exists: return true
+			case variable_string_get: return ChatterboxVariableGet(name)
+			case variable_string_set: return ChatterboxVariableSet(name, value)
+			case variable_string_info: return {value: ChatterboxVariableGet(name), scope: undefined, exists: true, error: undefined, plain: name, simple: true}
+		}
+	}
+	else
+	{
+		return get_fail_return(scr, exceptionBotchedVariable)
+	}
+}
+
 if string_last(name) == "." name = string_delete(name, string_length(name), 1)
 if string_char_at(name, 1) == "." name = is_struct(self) ? string_delete(name, 1, 1) : (string(id)+name)
 
