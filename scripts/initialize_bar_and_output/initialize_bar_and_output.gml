@@ -50,6 +50,8 @@ with BAR {
 	
 	get_input = console_bar_inputs
 	draw = draw_console_bar
+	
+	disable_next = false
 }
 
 with OUTPUT {

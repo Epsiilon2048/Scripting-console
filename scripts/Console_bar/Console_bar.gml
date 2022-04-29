@@ -1,6 +1,14 @@
 
 function console_bar_inputs(){ with o_console {
 
+if BAR.disable_next
+{
+	BAR.enabled = false
+	o_console.keyboard_scope = noone
+	BAR.disable_next = false
+	exit
+}
+
 if BAR.docked and not BAR.run_in_dock
 {
 	if BAR.dock.enabled return undefined
@@ -55,11 +63,11 @@ else
 	}
 
 	if keyboard_check_pressed(vk_escape) 
-	{
-		BAR.enabled = false
+	{	
 		BAR.text_box.scoped = false
-		o_console.keyboard_scope = noone
 		OUTPUT.dock.enabled = false
+		
+		BAR.disable_next = true
 	}
 }
 
