@@ -8,6 +8,7 @@ identifier = dt_unknown	// Specified datatype
 value = undefined		// Interpreted value
 description = ""		// For intellisense
 scope = noone			// For variable and methdos
+argument_max = 0		// The amount of arguments it takes if it's a subject
 
 internal_term = undefined  // For code in strings
 
@@ -152,6 +153,7 @@ if identifier != dt_unknown
 	case dt_variable: #region Variable
 	
 		simple = false
+		argument_max = 1
 		
 		var info = variable_string_info(condensed)
 		if info.exists
@@ -162,7 +164,7 @@ if identifier != dt_unknown
 		
 	break #endregion
 	case dt_method: #region Method
-	
+		
 		if not sandbox.scripts
 		{
 			error = exceptionUnrecognized
@@ -174,16 +176,19 @@ if identifier != dt_unknown
 				if better_script_exists(real(condensed))
 				{
 					value = real(condensed)
+					argument_max = infinity
 				}
 				else error = exceptionScriptNotExists
 			}
 			else if asset_get_type(condensed) == asset_script
 			{
 				value = asset_get_index(condensed)
+				argument_max = infinity
 			}
 			else
 			{
 				simple = false
+				argument_max = infinity
 				
 				var info = variable_string_info(condensed)
 				if info.exists
@@ -300,9 +305,10 @@ case asset_font:
 break
 case asset_object:
 	
-	description += object_get_name(value)+": Object with "+string(instance_number(value))+" instances"
+	var number = string(instance_number(value))
+	description += object_get_name(value)+": Object with "+number+" instance"+((number == "1") ? "" : "s")
 	
-	if object_get_parent(value) != noone
+	if instance_exists(object_get_parent(value))
 	{
 		description += ", child of "+object_get_name(object_get_parent(value))
 	}
@@ -315,58 +321,55 @@ case asset_path:
 break
 case asset_room:
 
-	description += room_get_name(value)+": "
-	
-	if room == value description += "Current room"
-	else description += "Room"
+	description += room_get_name(value)+": room"
 
 break
 case asset_script:
 
-	
+	description += script_get_name(value)+": "
 
 break
 case asset_sequence:
+
+	var sequence = sequence_get(value)
+	description += sequence.name+": "
+	
+	if sequence.loopmode == seqplay_pingpong description += "Ping-pong sequence"
+	else if sequence.loopmode == seqplay_loop description += "Looping sequence"
+	else description += "Sequence"
+	
 break
 case asset_shader:
+
+	description += shader_get_name(value)+": "
+	
+	if shader_is_compiled(value) description += "Shader"
+	if shader_is_compiled(value) description += "Uncompiled shader"
+
 break
 case asset_sound:
+
+	description += audio_get_name(value)+": Sound"
+	
 break
 case asset_sprite:
+
+	description += stitch(sprite_get_name(value)+": ",sprite_get_width(value),"x",sprite_get_height(value)," sprite")
+
 break
 case asset_tiles:
+
+	description += tileset_get_name(value)+": Tileset"
+
 break
 case asset_timeline:
+
+	description += audio_get_name(value)+": Timeline"
+
 break
 }
 
 
 if error != "" compiles = false
-}
-
-
-
-function GBL_interpret(command){
-
-static term_sep = " ,\""
-
-var args = []
-
-var marker = 1
-var index = 1
-
-while index <= string_length(command)
-{
-	
-	
-	index ++
-}
-}
-
-
-function GBL_Compile() constructor{
-
-compile = function(){
-
-}
+if description == "" description = error
 }

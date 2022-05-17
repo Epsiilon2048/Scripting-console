@@ -1,5 +1,5 @@
 
-function display(variable, step){ with o_console {
+function display(variable){ with o_console {
 
 if is_undefined(variable)
 {	

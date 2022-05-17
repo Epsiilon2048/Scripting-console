@@ -56,7 +56,7 @@ else
 				type = dt_real
 				value = arg_real
 				
-				if slice(_arg, 1, 3, 1) == "0x" description = value
+				if slice(_arg, , 3) == "0x" description = value
 			break
 			case dt_asset:
 				value = arg_real
@@ -64,7 +64,7 @@ else
 				
 				if macro_type == dt_method
 				{
-					description = "Script asset "+string(value)
+					description = "Script"
 				}
 				else if macro_type == dt_instance
 				{
@@ -91,8 +91,9 @@ else
 				{
 					value = arg_real
 					type = dt_instance
-					
-					description = object_get_name(value.object_index)+" ("+string(value.id)+")"
+				
+					if object_exists(arg_real) description = object_get_name(value.object_index)
+					else description = "Instance of "+object_get_name(value.object_index)
 				}
 				else
 				{
@@ -121,12 +122,12 @@ else
 			{
 				case dt_instance:
 					var count = instance_number(value.object_index)
-					if value.object_index == value description = stitch("Object "+object_get_name(value.object_index)," (object index ",value.object_index,"; ",count,((count == 1) ? " instance":" instances")+"; implicit ID ",value.id,")")
-					else description = stitch("Instance ",value.id," (object "+object_get_name(value.object_index)+"; object index ",value.object_index,"; ",count,((count == 1) ? " instance":" instances")+")")
+					if value.object_index == value description = stitch("Object "+object_get_name(value.object_index)," (",count,((count == 1) ? " instance":" instances")+")")
+					else description = stitch("Instance of "+object_get_name(value.object_index)+" (",count,((count == 1) ? " instance":" instances")+")")
 				break
 				case dt_asset:
-					if macro_type == dt_instance description = "Object "+object_get_name(value)+" (object index "+string(value)+"; no instances)"
-					else description = "Unknown asset with index "+string(value)
+					if macro_type == dt_instance description = "Object "+object_get_name(value)+" (no instances)"
+					else description = "Unknown asset"
 				break
 				case dt_color:
 					description = stitch("RGB ",color_get_red(value)," ",color_get_green(value)," ",color_get_blue(value))
@@ -170,7 +171,7 @@ else
 						}
 						else if is_numeric(info.value) and ds_map_exists(ds_types, _arg)
 						{
-							description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+"; index "+string(variable.value)+")"
+							description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+")"
 						}
 						else description += " ("+string(info.value)+")"
 					}
@@ -211,7 +212,7 @@ else
 					value = asset
 					type = dt_asset
 					
-					description = string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset "+string(asset)
+					description = string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset"
 				}
 			break
 			case dt_variable:
@@ -276,7 +277,6 @@ else
 		var asset = asset_get_index(_arg)
 		if asset != -1
 		{
-			//show_message(asset)
 			value = asset
 			type = dt_asset
 			
@@ -290,11 +290,11 @@ else
 					{
 						type = dt_instance
 						var count = instance_number(asset)
-						description = stitch("Object asset ",asset," (",count,((count == 1) ? " instance":" instances")+"; implicit ID ",asset.id,")")
+						description = stitch("Object (",count,((count == 1) ? " instance":" instances")+")")
 					}
 					else
 					{
-						description = "Object index "+string(asset)+" (no instances)"
+						description = "Object"+_arg+" (no instances)"
 					}
 				break
 				case asset_script: 
@@ -320,7 +320,7 @@ else
 				else description = "<unknown function>"
 			}
 			else if is_method(_arg)	description = _arg_plain
-			else if is_string(_arg)	description = "Shortcut for "+_arg
+			else if is_string(_arg) description = _arg
 			
 			value = _arg
 			
@@ -340,7 +340,7 @@ else
 				}
 				else if is_numeric(variable.value) and ds_map_exists(ds_types, _arg)
 				{
-					description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+"; index "+string(variable.value)+")"
+					description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+")"
 				}
 				else
 				{

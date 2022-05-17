@@ -6,7 +6,7 @@
     "path": "folders/NewGBL.yy",
   },
   "resourceVersion": "1.0",
-  "name": "NewGBL",
+  "name": "GBL_compilation",
   "tags": [],
   "resourceType": "GMScript",
 }

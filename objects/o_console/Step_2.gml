@@ -172,3 +172,6 @@ event_commands_exec(event_commands.step_end)
 step ++
 
 draw_set_font(old_font)
+
+
+newparse = GBL_parse(BAR.text_box.text)

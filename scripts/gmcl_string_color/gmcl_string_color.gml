@@ -377,6 +377,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				if _char_pos <= i 
 				{
 					subject_interpret = gmcl_interpret_subject( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment) )
+					//subject_interpret = new GBL_term( _iden_name + (string_pos(".", instscope) ? instscope : plain_segment) ).description
 				}
 					
 				subject = false
