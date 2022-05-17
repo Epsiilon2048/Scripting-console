@@ -9,10 +9,12 @@ value = undefined		// Interpreted value
 description = ""		// For intellisense
 scope = noone			// For variable and methdos
 
+internal_term = undefined  // For code in strings
+
 self.is_subject = is_subject
 self.has_parentheses = has_parentheses
 
-simple = true			// If the value is a constant
+simple = true  // If the value is a constant
 
 compiles = true
 error = ""
@@ -24,9 +26,14 @@ var asset_type = asset_unknown
 
 // Check if numeric
 if string_is_float(raw)
-{
+{	
 	value = real(raw)
 	type = dt_real
+	
+	if slice(raw, , 3) == "0x"
+	{
+		description += string(value)
+	}
 }
 
 
@@ -66,7 +73,10 @@ if identifier != dt_unknown
 	{
 	case dt_string: #region string
 	
+		simple = false
 		value = condensed
+		internal_term = new GBL_term(value, false, false)
+		description = internal_term.description
 		
 	break #endregion
 	case dt_asset: #region Assets
@@ -117,7 +127,7 @@ if identifier != dt_unknown
 		}
 		else if asset_get_index(condensed) != asset_unknown
 		{
-			value = asset_get_index(condensed)
+			value = asset_get_index(condensed) 
 		}
 		else
 		{
@@ -277,16 +287,44 @@ if type == dt_unknown
 switch asset_type
 {
 case asset_animationcurve:
+	
+	var curve = animcurve_get(value)
+	description += curve.name+": Animcurve with "+string(array_length(curve.channels))+" channels"
+
 break
 case asset_font:
+	
+	var font = font_get_info(value)
+	description += font_get_name(value)+": Contains font "+font.name+", size "+string(font.size)
+	
 break
 case asset_object:
+	
+	description += object_get_name(value)+": Object with "+string(instance_number(value))+" instances"
+	
+	if object_get_parent(value) != noone
+	{
+		description += ", child of "+object_get_name(object_get_parent(value))
+	}
+	
 break
 case asset_path:
+
+	description += path_get_name(value)+": Path with "+string(path_get_number(value))+" nodes"
+	
 break
 case asset_room:
+
+	description += room_get_name(value)+": "
+	
+	if room == value description += "Current room"
+	else description += "Room"
+
 break
 case asset_script:
+
+	
+
 break
 case asset_sequence:
 break
