@@ -1,5 +1,5 @@
 
-function GBL_term(term) constructor{
+function GBL_term(term, is_subject=false, has_parentheses=false) constructor{
 
 raw = string(term)		// Original term
 condensed = raw			// Term without identifier
@@ -9,14 +9,29 @@ value = undefined		// Interpreted value
 description = ""		// For intellisense
 scope = noone			// For variable and methdos
 
+self.is_subject = is_subject
+self.has_parentheses = has_parentheses
+
 simple = true			// If the value is a constant
 
 compiles = true
 error = ""
 
 
+var asset = asset_unknown
+var asset_type = asset_unknown
+
+
+// Check if numeric
+if string_is_float(raw)
+{
+	value = real(raw)
+	type = dt_real
+}
+
+
 // Check if string
-if string_char_at(raw, 1) == "\"" or string_char_at(raw, 1) == "'"
+else if string_char_at(raw, 1) == "\"" or string_char_at(raw, 1) == "'"
 {
 	if string_last(raw) != "\"" and string_last(raw) != "'"
 	{
@@ -34,13 +49,14 @@ else if string_char_at(raw, 2) == "/"
 	identifier = o_console.identifiers[$ string_char_at(raw, 1)]
 	condensed = slice(raw, 3)
 	
-	if is_undefined(identifier)  // Throw unknown identifier
+	if is_undefined(identifier) or (has_parentheses and identifier != dt_method) // Throw unknown identifier
 	{
 		error = exceptionBadIdentifier
 		identifier = dt_unknown
 	}
 	else type = identifier
 }
+
 
 
 // Interpret if has identifier
@@ -55,21 +71,25 @@ if identifier != dt_unknown
 	break #endregion
 	case dt_asset: #region Assets
 	
-		if not o_console.sandbox.nonscript_assets
+		asset = asset_get_index(condensed)
+		asset_type = asset_get_type(condensed)
+	
+		if not o_console.sandbox.other_assets
 		{
 			error = exceptionUnrecognized
 		}
-		else if asset_get_index(condensed) == asset_unknown and condensed != "asset_unknown"  // Throw unknown asset
+		else if asset_type == asset_unknown and condensed != "asset_unknown"  // Throw unknown asset
 		{
 			error = exceptionAssetNotExists
 		}
 		else
 		{
-			if not o_console.sandbox.scripts and asset_get_type(condensed) == asset_script
+			if	(not o_console.sandbox.scripts and asset_type == asset_script) or
+				(not o_console.sandbox.scripts and asset_type == asset_object)
 			{
 				error = exceptionUnrecognized
 			}
-			else value = asset_get_index(condensed)
+			else value = asset
 		}
 		
 	break #endregion
@@ -135,18 +155,152 @@ if identifier != dt_unknown
 	
 		if not sandbox.scripts
 		{
-			
+			error = exceptionUnrecognized
+		}
+		else
+		{
+			if string_is_int(condensed)
+			{
+				if better_script_exists(real(condensed))
+				{
+					value = real(condensed)
+				}
+				else error = exceptionScriptNotExists
+			}
+			else if asset_get_type(condensed) == asset_script
+			{
+				value = asset_get_index(condensed)
+			}
+			else
+			{
+				simple = false
+				
+				var info = variable_string_info(condensed)
+				if info.exists
+				{
+					if is_numeric(info.value)
+					{
+						if better_script_exists(info.value)
+						{
+							value = info.value
+						}
+						else error = exceptionScriptNotExists
+					}
+					else if is_method(info.value) or asset_get_type(info.value) == asset_script
+					{
+						value = info.value
+					}
+				}
+				else error = exceptionVariableNotExists
+			}
 		}
 	
 	break #endregion
 	case dt_instance: #region Instance
+	
+		if not sandbox.instances
+		{
+			error = exceptionUnrecognized
+		}
+		else
+		{
+			simple = false
+			
+			if string_is_int(condensed)
+			{
+				if better_instance_exists(real(condensed))
+				{
+					value = real(condensed)
+				}
+				else if object_exists(real(condensed))
+				{
+					error = exceptionInstanceNotExists
+				}
+				else
+				{
+					error = exceptionInstanceNotExists
+				}
+			}
+			else if asset_get_type(condensed) == asset_object
+			{
+				var asset = asset_get_index(condensed)
+				if better_instance_exists(asset)
+				{
+					value = asset
+				}
+				else
+				{
+					error = exceptionInstanceNotExists
+				}
+			}
+			else
+			{
+				var info = variable_string_info(condensed)
+				if info.exists
+				{
+					if is_numeric(info.value)
+					{
+						if better_instance_exists(info.value)
+						{
+							value = info.value
+						}
+						else error = exceptionScriptNotExists
+					}
+					else if is_method(info.value) or asset_get_type(info.value) == asset_script
+					{
+						value = info.value
+					}
+				}
+				else error = exceptionVariableNotExists
+			}
+		}
+		
 	break #endregion
 	}
 }
 
 
+// Interpret without identifier
+if type == dt_unknown
+{
+	var asset_type = asset_get_type(condensed)
+	
+	if asset_type != asset_unknown
+	{
+		type = dt_asset
+		value = asset_get_index(condensed)
+	}
+}
 
 
+
+switch asset_type
+{
+case asset_animationcurve:
+break
+case asset_font:
+break
+case asset_object:
+break
+case asset_path:
+break
+case asset_room:
+break
+case asset_script:
+break
+case asset_sequence:
+break
+case asset_shader:
+break
+case asset_sound:
+break
+case asset_sprite:
+break
+case asset_tiles:
+break
+case asset_timeline:
+break
+}
 
 
 if error != "" compiles = false
