@@ -110,7 +110,7 @@ initialize = function(){
 	bottom = 0
 	
 	width = 500
-	height = 400
+	height = 150
 	
 	entries_width = 0
 	entries_height = 0
@@ -127,7 +127,7 @@ initialize = function(){
 	}
 	
 	mouse_on = false
-	clicking = false
+	clicking = false	
 }
 
 
@@ -273,17 +273,17 @@ destroy = function(){
 	
 if ds_exists(ds_type_list, list) ds_list_destroy(list)
 if ds_exists(ds_type_list, lists) ds_list_destroy(lists)
-}
+}	
 	
 
 get_input = function(){
 	
 	var tb = o_console.TEXT_BOX
 	
+	var cw = string_width("W")
 	var ch = string_height("W")
-	var cw = string_length("W")
 	var asp = ch/tb.char_height
-	var _text_wdist = round(tb.text_wdist*asp)
+	//var _text_wdist = round(tb.text_wdist*asp)
 	
 	entries_width = entries_length*cw
 	entries_height = ds_list_size(list)*ch
@@ -295,31 +295,84 @@ get_input = function(){
 	
 	scrollbar.set_boundaries(entries_width, entries_height, left, top, right, bottom)
 	scrollbar.get_input()
+		
+	
+	var mouse_was_on = mouse_on
+	mouse_on = gui_mouse_between(left, top, right, bottom)
+	var clicking = mouse_check_button(mb_left)
+	
+	if /*not mouse_on_console and */gui_mouse_between(left, top, right, bottom)
+	{
+		if not mouse_check_button(mb_left)
+		{
+			//mouse_on_console = true
+			mouse_on = true
+		
+			mouse_index = floor((gui_my-top + scrollbar.scroll_y)/ch)
+		}
+	}
+	else if mouse_on and not mouse_check_button(mb_left)
+	{
+		mouse_on = false
+		mouse_index = -1
+		mouse_was_on = false
+	}
 }
 }
 
 
 function draw_autofill_list_new(x, y, list){ with o_console.TEXT_BOX {
 
+var at = o_console.AUTOFILL
+
 list.x = x
 list.y = y
-list.get_input()
-
 
 var ch = string_height("W")
 var asp = ch/char_height
 var _text_wdist = round(text_wdist*asp)
 
-draw_console_body(x, y, x+700, y+ch*ds_list_size(list.list))
+var xx
+var yy
 
-for(var i = 0; i <= ds_list_size(list.list)-1; i++)
-{
-	if not is_undefined(list.list[| i].color) draw_set_color(list.list[| i].color)
-	draw_rectangle(x, y+ch*i, x+2, y+ch*i+ch, false)
+draw_console_body(list.left, list.top, list.right, list.bottom)
+
+var imin = floor(list.scrollbar.scroll_y/ch)
+var imax = min(floor((list.scrollbar.scroll_y+list.height)/ch), ds_list_size(list.list)-1)  // experience it in IMAX
+
+clip_rect_cutout(list.left, list.top, list.right, list.bottom)
+for(var i = imin; i <= imax; i++)
+{	
+	var item = list.list[| i]
 	
-	draw_set_color(c_white)
-	draw_text(x+_text_wdist, y+ch*i, list.list[| i].name)
+	xx = list.x-list.scrollbar.scroll_x
+	yy = list.y-list.scrollbar.scroll_y
+	
+	var col = item.color
+	if is_string(col) col = o_console.colors[$ col]
+	else if not is_numeric(col) col = o_console.colors.plain
+	
+	var text_x = xx+_text_wdist
+	var text_y = yy+ch*i
+	
+	if list.include_side_text
+	{
+		text_x = xx+_text_wdist
+		
+		var sidetext_col = color_set_hsv(col, color_get_hue(col)+at.sidetext_hue, at.sidetext_saturation, at.sidetext_value)
+		draw_set_color(sidetext_col) 
+		
+		draw_rectangle(xx, yy+ch*i+2, text_x-_text_wdist, yy+ch*i+ch-1, false)
+		
+		draw_set_color(col)
+		draw_text(xx+_text_wdist, text_y, item.side_text)
+	}
+	else draw_set_color(col)
+	
+	draw_rectangle(xx, yy+ch*i+2, xx+_text_wdist/3, yy+ch*i+ch-1, false)
+	draw_text(text_x, text_y, list.list[| i].name)
 }
+shader_reset()
 
-//list.scrollbar.draw()
+list.scrollbar.draw()
 }}

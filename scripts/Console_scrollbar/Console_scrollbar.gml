@@ -56,14 +56,19 @@ set_page_boundaries = function(page_width, page_height){
 	self.page_width = page_width
 	self.page_height = page_height
 	
-	wbar_length = floor(clamp((page_right-page_left-1)/self.page_width, 0, self.page_width)*(page_right-page_left))
-	hbar_length = floor(clamp((page_bottom-page_top-1)/self.page_height, 0, self.page_height)*(page_bottom-page_top))
+	var w = (page_right-page_left)
+	var h = (page_bottom-page_top)
 	
-	wbar_min = floor(page_left+hbar_length/2)+1
-	wbar_max = floor(page_right-hbar_length/2)
+	wbar_length = min(w, floor(clamp((page_right-page_left-1)/self.page_width, 0, self.page_width)*(page_right-page_left)))
+	hbar_length = min(h, floor(clamp((page_bottom-page_top-1)/self.page_height, 0, self.page_height)*(page_bottom-page_top)))
 	
-	hbar_min = floor(page_top+wbar_length/2)+1
-	hbar_max = floor(page_bottom-wbar_length/2)
+	wbar_min = floor(page_left+wbar_length/2)
+	wbar_max = floor(page_right-wbar_length/2)
+	if wbar_min != wbar_max wbar_max --
+	
+	hbar_min = floor(page_top+hbar_length/2)
+	hbar_max = floor(page_bottom-hbar_length/2)
+	if hbar_min != hbar_max hbar_max --
 	
 	set_scroll(scroll_x, scroll_y)
 }
@@ -84,20 +89,24 @@ set_boundaries = function(page_width, page_height, page_left, page_top, page_rig
 
 set_scroll_x = function(scroll_x){
 	
-	var scroll_x_max = page_width-(page_right-page_left)
-	
+	var scroll_x_max = max(0, page_width-(page_right-page_left))
+		
 	self.scroll_x = clamp(scroll_x, 0, scroll_x_max)
-	wbar_center = wbar_min + (wbar_max-wbar_min)*(self.scroll_x/scroll_x_max)
+	
+	if scroll_x_max == 0 wbar_center = wbar_min
+	else wbar_center = wbar_min + (wbar_max-wbar_min)*(self.scroll_x/scroll_x_max)
 }
 
 
 
-set_scroll_y = function(scroll_x){
+set_scroll_y = function(scroll_y){
 	
-	var scroll_y_max = page_height-(page_bottom-page_top)
+	var scroll_y_max = max(0, page_height-(page_bottom-page_top))
 	
 	self.scroll_y = clamp(scroll_y, 0, scroll_y_max)
-	hbar_center = hbar_min + (hbar_max-hbar_min)*(self.scroll_y/scroll_y_max)
+	
+	if scroll_y_max == 0 hbar_center = hbar_min
+	else hbar_center = hbar_min + (hbar_max-hbar_min)*(self.scroll_y/scroll_y_max)
 }
 
 
@@ -176,19 +185,23 @@ get_input = function(){
 	}
 	else if wscrolling
 	{
-		var scroll_x_max = page_width-(page_right-page_left)
+		var scroll_x_max = max(0, page_width-(page_right-page_left))
 		
 		wbar_center = clamp(gui_mx-sc.mouse_offset, wbar_min, wbar_max)
-		scroll_x = floor(scroll_x_max*((wbar_center-wbar_min)/(wbar_max-wbar_min)))
+		
+		if wbar_max == wbar_min scroll_x = 0
+		else scroll_x = floor(scroll_x_max*((wbar_center-wbar_min)/(wbar_max-wbar_min)))
 		clicking_on_console = true
 		
 	}
 	else if hscrolling
 	{
-		var scroll_y_max = page_height-(page_bottom-page_top)
+		var scroll_y_max = max(0, page_height-(page_bottom-page_top))
 		
 		hbar_center = clamp(gui_my-sc.mouse_offset, hbar_min, hbar_max)
-		scroll_y = floor(scroll_y_max*((hbar_center-hbar_min)/(hbar_max-hbar_min)))
+		
+		if hbar_max == hbar_min scroll_y = 0
+		else scroll_y = floor(scroll_y_max*((hbar_center-hbar_min)/(hbar_max-hbar_min)))
 		clicking_on_console = true
 	}
 }
@@ -211,8 +224,8 @@ draw = function(){
 	if hbar_enabled draw_console_body(page_right, page_top, hbar_right, page_bottom-1)
 	
 	draw_set_color(o_console.colors.output)
-	if wbar_enabled draw_rectangle(wbar_x1, page_bottom, wbar_x2, wbar_bottom, false)
-	if hbar_enabled draw_rectangle(page_right, hbar_y1, hbar_right, hbar_y2, false)
+	if wbar_enabled and wbar_length > 0 draw_rectangle(wbar_x1, page_bottom, wbar_x2, wbar_bottom, false)
+	if hbar_enabled and hbar_length > 0 draw_rectangle(page_right, hbar_y1, hbar_right, hbar_y2, false)
 	
 	draw_set_color(old_color)
 }

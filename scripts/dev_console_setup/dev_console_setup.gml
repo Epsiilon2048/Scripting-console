@@ -10,6 +10,8 @@ add_console_element(new_console_dock("Scroll", [
 	[new_display_box("mouse on wbar","o_dev.sc.mouse_on_wbar",false),new_display_box("mouse on hbar","o_dev.sc.mouse_on_hbar",0),],
 	[new_display_box("mouse offset","o_console.SCROLLBAR.mouse_offset",false),],
 	new_separator(),
+	[new_display_box("wbar length","o_dev.sc.wbar_length",false),new_display_box("hbar length","o_dev.sc.hbar_length",0),],
+	new_separator(),
 	[new_scrubber("wbar_center","o_dev.sc.wbar_center",1),new_scrubber("hbar_center","o_dev.sc.hbar_center",1),],
 	new_separator(),
 	[new_scrubber("wbar_min","o_dev.sc.wbar_min",1),new_scrubber("wbar_max","o_dev.sc.wbar_max",1),],

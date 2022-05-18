@@ -58,6 +58,8 @@ return string(inst_id) + string_delete(str, 1, string_pos(".", str)-1)
 
 function string_add_scope(str, add_macro){ with o_console {
 
+if not is_string(str) return str
+
 if is_undefined(add_macro) add_macro = true
 
 var dot_pos

@@ -76,7 +76,7 @@ if not is_string(name)
 	}
 	else return get_fail_return(scr, exceptionExpectingString)
 }
-if name == ""			return get_fail_return(scr, exceptionNoValue)
+if name == "" return get_fail_return(scr, exceptionNoValue)
 
 if string_char_at(name, 1) == "$" and asset_get_index("ChatterboxVariableGet") != -1
 {
