@@ -146,16 +146,16 @@ input_log = new Autofill_sublist() with input_log
 l = new Console_autofill_list() with l
 {
 	initialize()
-	set_multiple(slice([
-		other.assets,
-		other.methods,
-		other.macros,
-		other.scope_variables,
-		other.lite_suggestions,
-		other.suggestions,
+	set_multiple([
 		other.input_log,
+		other.suggestions,
+		other.lite_suggestions,
+		other.scope_variables,
+		other.macros,
+		other.methods,
+		other.assets,
 		//other.instance_variables,
-	], , , -1))
+	])
 }
 
 sc = l.scrollbar

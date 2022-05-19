@@ -64,7 +64,7 @@ with SCROLLBAR {
 	
 	outline_width = 1.4
 	bar_width = 15
-	bar_width_condensed = 10
+	bar_width_condensed = 7
 	
 	mouse_offset = 0
 }

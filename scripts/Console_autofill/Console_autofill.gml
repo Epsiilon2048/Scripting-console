@@ -128,6 +128,8 @@ initialize = function(){
 	
 	mouse_on = false
 	clicking = false	
+	
+	prev_term = undefined
 }
 
 
@@ -227,7 +229,15 @@ set_multiple = function(lists){
 }
 
 
-get = function(term){
+get = function(term)
+	
+	if term != prev_term
+	{
+		scrollbar.set_scroll(0, 9999999999999)
+		prev_term = term
+		contrace()
+	}
+	else exit
 	
 	ds_list_clear(list)
 	before_get()
@@ -282,7 +292,7 @@ get_input = function(){
 	
 	var cw = string_width("W")
 	var ch = string_height("W")
-	var asp = ch/tb.char_height
+	//var asp = ch/tb.char_height
 	//var _text_wdist = round(tb.text_wdist*asp)
 	
 	entries_width = entries_length*cw
@@ -356,7 +366,7 @@ for(var i = imin; i <= imax; i++)
 	
 	var col = item.color
 	if is_string(col) col = o_console.colors[$ col]
-	else if not is_numeric(col) col = o_console.colors.plain
+	if not is_numeric(col) col = o_console.colors.plain
 	
 	text_x = xx+_text_wdist
 	text_y = yy+ch*i
