@@ -64,15 +64,15 @@ get_range = function(term){
 
 function format_autofill_item(item){
 
-if not is_struct(item) item = new Autofill_item(item, item, undefined, undefined)
-else if instanceof(item) != "Autofill_item" item = struct_replace(new Autofill_item("", "", undefined, undefined), item)
-
+if not is_struct(item) item = new Autofill_item(item, item)
+else if instanceof(item) != "Autofill_item" item = struct_replace(new Autofill_item(), item)
+ 
 return item
 }
 
 
 
-function Autofill_item(name, value, side_text, color) constructor {
+function Autofill_item(name="", value="", side_text=undefined, color=undefined) constructor {
 
 if is_numeric(name) self.name = string_format_float(name, float_count_places(name, 3))
 else self.name = string(name)
@@ -297,13 +297,11 @@ get_input = function(){
 	scrollbar.get_input()
 		
 	
-	var mouse_was_on = mouse_on
-	mouse_on = gui_mouse_between(left, top, right, bottom)
-	var clicking = mouse_check_button(mb_left)
+	clicking = mouse_check_button(mb_left) and (clicking or mouse_on)
 	
 	if /*not mouse_on_console and */gui_mouse_between(left, top, right, bottom)
 	{
-		if not mouse_check_button(mb_left)
+		if not clicking
 		{
 			//mouse_on_console = true
 			mouse_on = true
@@ -311,11 +309,14 @@ get_input = function(){
 			mouse_index = floor((gui_my-top + scrollbar.scroll_y)/ch)
 		}
 	}
-	else if mouse_on and not mouse_check_button(mb_left)
+	else if mouse_on and not clicking
 	{
 		mouse_on = false
 		mouse_index = -1
-		mouse_was_on = false
+	}
+	else if not clicking
+	{
+		mouse_index = -1
 	}
 }
 }
@@ -328,12 +329,17 @@ var at = o_console.AUTOFILL
 list.x = x
 list.y = y
 
+var cw = string_width("W")
 var ch = string_height("W")
 var asp = ch/char_height
 var _text_wdist = round(text_wdist*asp)
 
 var xx
 var yy
+var text_x
+var text_y
+var y1
+var y2
 
 draw_console_body(list.left, list.top, list.right, list.bottom)
 
@@ -352,25 +358,52 @@ for(var i = imin; i <= imax; i++)
 	if is_string(col) col = o_console.colors[$ col]
 	else if not is_numeric(col) col = o_console.colors.plain
 	
-	var text_x = xx+_text_wdist
-	var text_y = yy+ch*i
+	text_x = xx+_text_wdist
+	text_y = yy+ch*i
+	
+	y1 = yy+ch*i+1
+	y2 = yy+ch*i+ch-2
+	
+	var selected = list.mouse_index == i
+	
+	if selected or list.include_side_text
+	{	
+		var sidetext_col = color_set_hsv(col, color_get_hue(col)+at.sidetext_hue, at.sidetext_saturation, at.sidetext_value)
+		draw_set_color(sidetext_col)
+	}
 	
 	if list.include_side_text
 	{
-		text_x = xx+_text_wdist
+		text_x = xx+_text_wdist + cw*15  // Side bar length based on characters
 		
-		var sidetext_col = color_set_hsv(col, color_get_hue(col)+at.sidetext_hue, at.sidetext_saturation, at.sidetext_value)
-		draw_set_color(sidetext_col) 
+		// Side text bar
+		draw_rectangle(xx, y1, text_x-_text_wdist, y2, false)
 		
-		draw_rectangle(xx, yy+ch*i+2, text_x-_text_wdist, yy+ch*i+ch-1, false)
-		
+		// Side text
 		draw_set_color(col)
 		draw_text(xx+_text_wdist, text_y, item.side_text)
 	}
-	else draw_set_color(col)
+	else
+	{
+		draw_set_color(col)
+	}
 	
-	draw_rectangle(xx, yy+ch*i+2, xx+_text_wdist/3, yy+ch*i+ch-1, false)
+	var sidebar_right = xx+_text_wdist/3
+	
+	// Side bar
+	draw_rectangle(xx, y1, sidebar_right, y2, false)
+	
+	// Text
 	draw_text(text_x, text_y, list.list[| i].name)
+	
+	if selected
+	{
+		gpu_set_blendmode(bm_add)
+		draw_set_alpha(.1)
+		draw_rectangle(xx, y1, list.right, y2, false)
+		draw_set_alpha(1)
+		gpu_set_blendmode(bm_normal)
+	}
 }
 shader_reset()
 
