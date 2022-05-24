@@ -10,7 +10,7 @@ function autofill_in_list(array_or_ds_list, criteria, range){ with global._scrva
 criteria = string(criteria)
 list = array_or_ds_list
 
-if first_is_digit(criteria) or (not is_array(list) and (not is_numeric(list) or not ds_exists(list, ds_type_list))) return -1//{min: -1, max: -1}
+if not is_array(list) and (not is_numeric(list) or not ds_exists(list, ds_type_list)) return -1//{min: -1, max: -1}
 
 i = 1
 access = is_array(list) ? array_get : ds_list_find_value

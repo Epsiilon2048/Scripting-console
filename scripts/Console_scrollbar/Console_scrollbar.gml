@@ -225,7 +225,7 @@ draw = function(){
 	
 	draw_set_color(o_console.colors.output)
 	if wbar_enabled and wbar_length > 0 draw_rectangle(wbar_x1, page_bottom, wbar_x2, wbar_bottom, false)
-	if hbar_enabled and hbar_length > 0 draw_rectangle(page_right, hbar_y1, hbar_right, hbar_y2, false)
+	if hbar_enabled and hbar_length > 0 draw_rectangle(page_right, hbar_y1+1, hbar_right, hbar_y2+1, false)
 	
 	draw_set_color(old_color)
 }

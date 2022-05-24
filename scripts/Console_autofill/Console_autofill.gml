@@ -3,6 +3,8 @@ function Autofill_sublist() constructor {
 
 enabled = true
 
+list = []
+
 show_all_if_blank = false
 show_all_always = false
 
@@ -98,6 +100,7 @@ initialize = function(){
 	list = ds_list_create()
 	lists = ds_list_create()
 	include_side_text = false
+	side_text_override = undefined
 	
 	mouse_index = -1
 	key_index = -1
@@ -109,8 +112,10 @@ initialize = function(){
 	right = 0
 	bottom = 0
 	
-	width = 500
+	width = 400
 	height = 150
+	
+	sidetext_bar_length = 15
 	
 	entries_width = 0
 	entries_height = 0
@@ -128,8 +133,6 @@ initialize = function(){
 	
 	mouse_on = false
 	clicking = false	
-	
-	prev_term = undefined
 }
 
 
@@ -194,6 +197,8 @@ add = function(list){
 		
 		entries_length = max(entries_length, string_length(self.list[| i].name))
 	}
+	
+	if not is_undefined(side_text_override) include_side_text = side_text_override
 }
 
 
@@ -229,17 +234,10 @@ set_multiple = function(lists){
 }
 
 
-get = function(term)
-	
-	if term != prev_term
-	{
-		scrollbar.set_scroll(0, 9999999999999)
-		prev_term = term
-		contrace()
-	}
-	else exit
+get = function(term){
 	
 	ds_list_clear(list)
+	entries_length = 0
 	before_get()
 	
 	for(var i = 0; i <= ds_list_size(lists)-1; i++)
@@ -247,7 +245,7 @@ get = function(term)
 		var li = lists[| i]
 		if is_struct(li) and instanceof(li) == "Autofill_sublist" with li
 		{
-			get()
+			get(term)
 			sort()
 			get_range(term)
 		}
@@ -271,6 +269,11 @@ get = function(term)
 		
 		add(li)
 	}
+	
+	key_index = ds_list_size(list)
+	
+	scrollbar_get_boundaries()
+	scrollbar.set_scroll_y(9999999999999)
 }
 
 
@@ -285,40 +288,85 @@ if ds_exists(ds_type_list, list) ds_list_destroy(list)
 if ds_exists(ds_type_list, lists) ds_list_destroy(lists)
 }	
 	
+	
+scrollbar_get_boundaries = function(){
+
+	var cw = string_width("W")
+	var ch = string_height("W")
+	
+	var _sidetext_bar_length = sidetext_bar_length*include_side_text*cw
+	
+	entries_width = cw*(entries_length+3) + _sidetext_bar_length
+	entries_height = ch*ds_list_size(list)+1
+	
+	var _width = width + _sidetext_bar_length
+	var _height = min(height, entries_height+1)
+	
+	if not include_side_text
+	{
+		_width = min(_width, entries_width + cw*3)
+	}
+	
+	left = x
+	top = y + (height-_height)
+	right = left+_width-1
+	bottom = top+_height-1
+	
+	scrollbar.wbar_enabled = _width < entries_width
+	scrollbar.hbar_enabled = height < (entries_height+1)
+	
+	scrollbar.set_boundaries(entries_width, entries_height, left, top, right, bottom)
+}
+
 
 get_input = function(){
+	
+	if ds_list_size(list) == 0 exit
 	
 	var tb = o_console.TEXT_BOX
 	
 	var cw = string_width("W")
 	var ch = string_height("W")
-	//var asp = ch/tb.char_height
-	//var _text_wdist = round(tb.text_wdist*asp)
-	
-	entries_width = entries_length*cw
-	entries_height = ds_list_size(list)*ch
-	
-	left = x
-	top = y
-	right = left+width-1
-	bottom = top+height-1
-	
-	scrollbar.set_boundaries(entries_width, entries_height, left, top, right, bottom)
+
+	scrollbar_get_boundaries()
 	scrollbar.get_input()
-		
+	
+	var tab = keyboard_check_pressed(vk_f1)
+	if tab
+	{
+		key_index --
+		if key_index < 0
+		{
+			key_index = ds_list_size(list)-1
+			scrollbar.set_scroll_y(999999)
+		}
+		else
+		{
+			scrollbar.set_scroll_y(
+				min(scrollbar.scroll_y, (key_index-1.5)*ch)
+				// Could be better but ehh
+			)
+		}
+	}
 	
 	clicking = mouse_check_button(mb_left) and (clicking or mouse_on)
 	
 	if /*not mouse_on_console and */gui_mouse_between(left, top, right, bottom)
 	{
-		if not clicking
+		if not clicking and not (not mouse_on and mouse_check_button(mb_left))
 		{
 			//mouse_on_console = true
 			mouse_on = true
-		
+			
+			var prev_index = mouse_index
 			mouse_index = floor((gui_my-top + scrollbar.scroll_y)/ch)
+			
+			if prev_index != mouse_index
+			{
+				scrollbar.set_scroll_y(min(scrollbar.scroll_y, mouse_index*ch))
+			}
 		}
-	}
+	}	
 	else if mouse_on and not clicking
 	{
 		mouse_on = false
@@ -332,7 +380,9 @@ get_input = function(){
 }
 
 
-function draw_autofill_list_new(x, y, list){ with o_console.TEXT_BOX {
+function draw_autofill_list_new(x=o_console.autofill.x, y=o_console.autofill.y, list=o_console.autofill){ with o_console.TEXT_BOX {
+
+if ds_list_size(list.list) == 0 exit
 
 var at = o_console.AUTOFILL
 
@@ -351,30 +401,31 @@ var text_y
 var y1
 var y2
 
-draw_console_body(list.left, list.top, list.right, list.bottom)
+draw_console_body(list.left, list.top, list.right-1, list.bottom-1)
 
 var imin = floor(list.scrollbar.scroll_y/ch)
 var imax = min(floor((list.scrollbar.scroll_y+list.height)/ch), ds_list_size(list.list)-1)  // experience it in IMAX
 
-clip_rect_cutout(list.left, list.top, list.right, list.bottom)
+clip_rect_cutout(list.left+1, list.top+1, list.right-1, list.bottom-1)
 for(var i = imin; i <= imax; i++)
 {	
 	var item = list.list[| i]
 	
-	xx = list.x-list.scrollbar.scroll_x
-	yy = list.y-list.scrollbar.scroll_y
+	xx = list.left-list.scrollbar.scroll_x
+	yy = list.top-list.scrollbar.scroll_y
 	
 	var col = item.color
 	if is_string(col) col = o_console.colors[$ col]
 	if not is_numeric(col) col = o_console.colors.plain
 	
 	text_x = xx+_text_wdist
-	text_y = yy+ch*i
+	text_y = yy+ch*i+1
 	
 	y1 = yy+ch*i+1
-	y2 = yy+ch*i+ch-2
+	y2 = yy+ch*i+ch-1
 	
 	var selected = list.mouse_index == i
+	var key_selected = list.key_index == i
 	
 	if selected or list.include_side_text
 	{	
@@ -384,35 +435,42 @@ for(var i = imin; i <= imax; i++)
 	
 	if list.include_side_text
 	{
-		text_x = xx+_text_wdist + cw*15  // Side bar length based on characters
+		text_x = xx+_text_wdist + cw*list.sidetext_bar_length  // Side bar length based on characters
 		
-		// Side text bar
-		draw_rectangle(xx, y1, text_x-_text_wdist, y2, false)
+		// Longer side bar
+		if key_selected draw_rectangle(xx, y1, list.right, y2, false)
+		else draw_rectangle(xx, y1, text_x-_text_wdist, y2, false)
 		
 		// Side text
 		draw_set_color(col)
 		draw_text(xx+_text_wdist, text_y, item.side_text)
+		
+		var sidebar_right = xx+_text_wdist/3
+	
+		// Side bar
+		draw_rectangle(xx, y1, sidebar_right, y2, false)
 	}
 	else
 	{
 		draw_set_color(col)
 	}
 	
-	var sidebar_right = xx+_text_wdist/3
-	
-	// Side bar
-	draw_rectangle(xx, y1, sidebar_right, y2, false)
-	
 	// Text
 	draw_text(text_x, text_y, list.list[| i].name)
 	
-	if selected
+	if selected	
 	{
 		gpu_set_blendmode(bm_add)
-		draw_set_alpha(.1)
+		if list.clicking draw_set_alpha(.2)
+		else draw_set_alpha(.1)
 		draw_rectangle(xx, y1, list.right, y2, false)
 		draw_set_alpha(1)
 		gpu_set_blendmode(bm_normal)
+	}
+	
+	if key_selected
+	{
+		draw_hollowrect(xx+1, y1, list.right-2, y2, 1)
 	}
 }
 shader_reset()

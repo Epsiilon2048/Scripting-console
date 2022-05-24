@@ -88,6 +88,6 @@ o[? "create_camera_point"]		= {note: "Was project specific",						ver: "Unreleas
 o[? "@"]						= {note: "Became obsolete with proper array support",	ver: "Release 2.0"}
 o[? "?"]						= {note: "Became obsolete with proper map support",		ver: "Release 2.0"}
 o[? "|"]						= {note: "Became obsolete with proper list support",	ver: "Release 2.0"}
-o[? "$"]						= {note: "Became obsolete with proper struct support",	ver: "Release 2.0"}
-o[? "#"]						= {note: "Became obsolete with proper grid support",	ver: "Release 2.0"}
+//o[? "$"]						= {note: "Became obsolete with proper struct support",	ver: "Release 2.0"}
+//o[? "#"]						= {note: "Became obsolete with proper grid support",	ver: "Release 2.0"}
 }

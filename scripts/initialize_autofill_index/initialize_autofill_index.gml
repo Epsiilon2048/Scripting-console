@@ -64,6 +64,8 @@ scope_variables = []
 lite_suggestions = ds_create(ds_type_list, "lite_suggestions", "", 0, 0)
 suggestions = ds_create(ds_type_list, "suggestions", "", 0, 0)
 
+ds_list_add(suggestions, "help", "display")
+
 autofill = {}; with autofill {
 	macros = -1
 	methods = -1

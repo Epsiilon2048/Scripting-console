@@ -138,7 +138,7 @@ if window_has_focus()
 	{
 		if not is_struct(elements[| i]) or not variable_struct_exists(elements[| i], "get_input")
 		{
-			ds_list_delete(elements, i)
+			remove_console_element(i)
 			i--
 		}
 		else
@@ -174,4 +174,4 @@ step ++
 draw_set_font(old_font)
 
 
-newparse = GBL_parse(BAR.text_box.text)
+//newparse = GBL_parse(BAR.text_box.text)

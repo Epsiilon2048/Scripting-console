@@ -40,3 +40,7 @@
 #macro exceptionBotchedReal "Invalid real syntax"
 #macro exceptionBotchedVariable "Invalid variable syntax"
 #macro exceptionBotchedColor "Invalid color syntax"
+
+#macro exceptionNoChatterbox "This feature is exclusive to chatterbox, which doesn't exist in this project!"
+#macro exceptionChatterboxNotReady "Chatterbox has not initialized variable map!"
+#macro exceptionChatterboxVariableNotExists "Chatterbox variable does not exist"

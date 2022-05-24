@@ -52,6 +52,8 @@ with BAR {
 	draw = draw_console_bar
 	
 	disable_next = false
+	
+	id = "Command_line"
 }
 
 with OUTPUT {
@@ -66,6 +68,7 @@ with OUTPUT {
 	dock.initialize()
 	dock.set(text)
 	dock.name = "Console output"
+	dock.id = "Output"
 	dock.draw_name_bar = false
 
 	fade_time = 6 //seconds
@@ -98,8 +101,6 @@ with OUTPUT {
 	}
 	
 	dock.should_draw = function(){
-		//show_debug_message(dock.docked)
-		//show_debug_message(dock.run_in_dock)
 		return not (dock.docked and not dock.run_in_dock)
 	}
 }
@@ -108,6 +109,7 @@ var bar_dock = new Console_dock() with bar_dock
 {
 	initialize()
 	name = "Command line"
+	id = "Command_line_dock"
 	allow_element_dragging = false
 	draw_name_bar = false
 	set([
@@ -131,9 +133,13 @@ var greetings = [
 	"Remember to take breaks from time to time!",
 	"yooooooo sup",
 ]
+var greeting = greetings[ round( current_time mod array_length(greetings) ) ] 
 
-output_set(format_output( greetings[ round( current_time mod array_length(greetings) ) ] ))
+output_set(format_output(["~~ Greenbean Console ~~\n",{str: greeting, col: dt_tag}], true))
 
 BAR.enabled = not soft_init
 OUTPUT.dock.enabled = not soft_init
+
+element_dock = new_console_dock("Elements", [])
+add_console_element(element_dock)
 }}

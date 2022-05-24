@@ -3,7 +3,6 @@
 
 
 /// @description Capitalizes a string
-/// @param str
 function string_capitalize(str){
 
 if not is_string(str) return string(str)
@@ -13,8 +12,7 @@ return string_upper(string_char_at(str, 1))+string_delete(str, 1, 1)
 
 
 /// @description Gets if a font has consistent character widths
-/// @param font
-function font_has_consistent_kerning(font){
+function font_is_monospace(font){
 
 var old_font = draw_get_font()
 draw_set_font(font)
@@ -38,7 +36,6 @@ return same
 
 	
 /// @description Returns value as a string; if the value was a string, adds quotes
-/// @param {*} value
 function quotes_if_string(value){
 
 if is_string(value) return "\""+value+"\""
@@ -48,7 +45,6 @@ return string(value)
 
 
 /// @description Returns a stringified asset type
-/// @param {real} type
 function asset_type_to_string(type){
 
 switch type
@@ -72,11 +68,7 @@ case asset_timeline:		return "timeline"
 
 
 /// @description Retruns the next instance in a string of any of the chars, starting from the pos, in the direction of dir
-/// @param {string} chars
-/// @param {string} str
-/// @param {real} pos
-/// @param {real} dir - 1 for forward and -1 for backward
-function string_char_next(chars, str, pos, dir){
+function string_char_next(chars, str, pos, dir=1){
 
 var i = pos+dir
 var len = string_length(str)
@@ -97,9 +89,7 @@ return i
 	
 	
 /// @description Executes a script, method, or builtin function with an array
-/// @param {(real|method)} ind
-/// @param {array} [array=[]]
-function script_execute_ext_builtin(ind, array){
+function script_execute_ext_builtin(ind, array=[]){
 
 //So, the reason I do this weird thing instead of using script_execute_ext is because for
 //reasons beyond human comprehension, gms... doesn't allow you to use arrays with built in
@@ -152,7 +142,6 @@ case 25: return f(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],
 	
 	
 /// @description Returns if a script exists
-/// @param {real} ind
 function better_script_exists(ind){
 
 return 0 <= ind and ind <= 0xfffffffb and script_get_name(ind) != "<unknown>" and script_get_name(ind) != "<undefined>"
@@ -161,7 +150,6 @@ return 0 <= ind and ind <= 0xfffffffb and script_get_name(ind) != "<unknown>" an
 
 
 /// @description Returns if an instance exists
-/// @param {real} inst
 function better_instance_exists(inst){
 
 return inst < 0xfffffffb and instance_exists(inst)
@@ -170,7 +158,6 @@ return inst < 0xfffffffb and instance_exists(inst)
 	
 	
 /// @description Returns if an object exists
-/// @param {real} obj
 function better_object_get_name(obj){
 return (obj == global) ? "global" : object_get_name(obj)
 }
@@ -201,10 +188,6 @@ return pressed
 	
 	
 /// Returns if the mouse is between gui coordinates
-/// @param x1
-/// @param y1
-/// @param x2
-/// @param y2
 function gui_mouse_between(x1, y1, x2, y2){
 
 return point_in_rectangle(gui_mx, gui_my, min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
@@ -213,9 +196,6 @@ return point_in_rectangle(gui_mx, gui_my, min(x1, x2), min(y1, y2), max(x1, x2),
 	
 	
 /// @description If a variable in a struct exists return the variable, otherwise return the not_exists value
-/// @param struct
-/// @param variable
-/// @param not_exists
 function variable_struct_exists_get(struct, variable, not_exists){
 
 if is_struct(struct) and variable_struct_exists(struct, variable) return variable_struct_get(struct, variable)
@@ -225,8 +205,6 @@ else return not_exists
 	
 	
 /// @description Returns the index if a value in an array
-/// @param array
-/// @param value
 function array_find(array, value){
 
 for(var i = 0; i <= array_length(array)-1; i++)
@@ -240,8 +218,6 @@ return -1
 
 
 /// @description Returns an array of the value held by each struct in an array of structs
-/// @param array
-/// @param value
 function array_struct_get(array, name){
 
 var _array = array_create(array_length(array), undefined)
@@ -257,8 +233,6 @@ return _array
 
 
 /// @description Returns each item off an array as a string, separated by the separator
-/// @param array
-/// @param separator
 function array_to_string(array, separator){
 
 if is_string(array) return array
@@ -278,7 +252,6 @@ return string_copy(str, string_length(separator)+1, string_length(str)-1)
 	
 	
 /// @description Returns an array converted from a ds list
-/// @param ds_list
 function ds_list_to_array(ds_list){
 
 var array = array_create(ds_list_size(ds_list))
@@ -460,10 +433,10 @@ function hex_to_dec(hex){ //converts base16 to base10
 // Slightly modified for compatibility with GM 2.3 as well as formatting consistency
 // https://www.gmlscripts.com/script/hex_to_dec
 
+static h = "0123456789ABCDEF"
 
 var _hex = string_upper(hex)
 var dec = 0
-h = "0123456789ABCDEF"
 for (var p = 1; p <= string_length(_hex); p++)
 {
     dec = dec << 4 | (string_pos( string_char_at(_hex, p), h ) - 1)
@@ -793,7 +766,6 @@ else
 /// @param [to=end_of_value]
 /// @param [step=1]
 function slice(value, from, to, step){
-///@description slice(value,[from],[to],[step])
 
 static string_concat  = function(string, value)	 { return string+value }
 static ds_list_concat = function(ds_list, value) { ds_list_add(ds_list, value); return ds_list }

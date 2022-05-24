@@ -14,6 +14,8 @@ run_in_console = false
 clicking_on_console = false
 mouse_on_console = false
 
+element_dock = {set: noscript}
+
 rainbowify = function(list){
 	for(var i = 0; i <= array_length(list)-1; i++){
 		colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow)
@@ -60,7 +62,7 @@ scale = function(size){
 set_font = function(font) {
 	self.font = font
 	prev_font = font
-	consistent_spacing = font_has_consistent_kerning(font)
+	consistent_spacing = font_is_monospace(font)
 }
 
 prev_font = -1
@@ -236,5 +238,7 @@ enabled = true
 
 scale()
 DISPLAY = {}
+
+selected_term = ""
 
 if gmcl_initialize_on_startup event_perform(ev_step, ev_step_end)

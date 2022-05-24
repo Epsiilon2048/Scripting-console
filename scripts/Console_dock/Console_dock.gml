@@ -555,7 +555,7 @@ get_input = function(){
 				_xx = floor(_xx)
 				_yy = floor(_yy)
 
-				if not allow_element_dragging or not el.dragging or not dragging_radius_met
+				if is_struct(el) and (not allow_element_dragging or not el.dragging or not dragging_radius_met)
 				{
 					var was_dragging = el.dragging
 					

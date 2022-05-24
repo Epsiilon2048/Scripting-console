@@ -199,7 +199,22 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 			var _hl = undefined
 			var _ol = 0
 				
-			if char == "/" and not is_undefined(identifiers[$ segment])
+			if string_char_at(segment, 1) == "$"
+			{
+				if chatterbox_is_ready
+				{
+					if ds_map_exists(global.chatterboxVariablesMap, slice(segment, 2))
+					{
+						_col = dt_variable
+					}
+					else _col = dt_unknown
+				}
+				else
+				{
+					_col = dt_deprecated
+				}
+			}
+			else if char == "/" and not is_undefined(identifiers[$ segment])
 			{
 				_col  = identifiers[$ segment]
 				_iden = _col
