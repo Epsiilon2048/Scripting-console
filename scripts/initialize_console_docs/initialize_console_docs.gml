@@ -35,8 +35,8 @@ com_add("error_report", {desc: "Returns the exception of the previous error thro
 
 com_add_category("Variable operations", false)
 com_add("addvar", {args: ["variable"], optargs: ["value"], desc: "Adds a value to the specified variable; value defaults to 1"})
-com_add("multvar", {args: ["variable", "value"], desc: "Divides the specified variable by a value"})
-com_add("divvar", {args: ["variable", "value"], desc: "Multiplies the specified variable by a value"})
+com_add("multvar", {args: ["variable", "value"], desc: "Multiplies the specified variable by a value"})
+com_add("divvar", {args: ["variable", "value"], desc: "Divides the specified variable by a value"})
 com_add("togglevar", {args: ["variable"], desc: "Toggles a boolean variable"})
 
 com_add_category("UI elements", false)
@@ -59,14 +59,14 @@ com_add("bind", {args: ["key", "command"], desc: "Binds a key to a command"})
 com_add("unbind", {args: ["bind index"], hiddenargs: ["return bindings menu?"], desc: "Removes the binding in the specified index"})
 com_add("bindings", {desc: "Returns the list of bindings"})
 
-command_doc_add("instance_create_layer", {args: ["x", "y", "layer_id_or_name", "obj"], desc: ""})
-command_doc_add("instance_create_depth", {args: ["x", "y", "depth", "obj"], desc: ""})
+command_doc_add("instance_create_layer", {args: ["x", "y", "layer_id_or_name", "obj"]})
+command_doc_add("instance_create_depth", {args: ["x", "y", "depth", "obj"]})
 
-command_doc_add("array_delete", {args: ["array", "index", "number"], desc: ""})
-command_doc_add("array_insert", {args: ["array", "index", "value"], desc: ""})
-command_doc_add("array_push", {args: ["array", "value"], moreargs: true, desc: ""})
+command_doc_add("array_delete", {args: ["array", "index", "number"]})
+command_doc_add("array_insert", {args: ["array", "index", "value"]})
+command_doc_add("array_push", {args: ["array", "value"], moreargs: true})
 
-command_doc_add("shader_set_uniform_f", {args: ["uniform_id", "val"], moreargs: true, desc: ""})
+command_doc_add("shader_set_uniform_f", {args: ["uniform_id", "val"], moreargs: true})
 
 deprecated_commands = ds_create(ds_type_map, "deprecated_commands")
 var o = deprecated_commands
@@ -88,6 +88,4 @@ o[? "create_camera_point"]		= {note: "Was project specific",						ver: "Unreleas
 o[? "@"]						= {note: "Became obsolete with proper array support",	ver: "Release 2.0"}
 o[? "?"]						= {note: "Became obsolete with proper map support",		ver: "Release 2.0"}
 o[? "|"]						= {note: "Became obsolete with proper list support",	ver: "Release 2.0"}
-//o[? "$"]						= {note: "Became obsolete with proper struct support",	ver: "Release 2.0"}
-//o[? "#"]						= {note: "Became obsolete with proper grid support",	ver: "Release 2.0"}
 }

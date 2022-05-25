@@ -10,7 +10,7 @@ var macro = undefined
 var iden_type = ""
 var macro_type = ""
 var error = undefined
-var description = ""
+var description = []
 
 var arg_first = string_char_at(_arg, 1)
 var arg_last = (string_length(_arg) <= 1) ? "" : string_last(_arg)
@@ -56,7 +56,7 @@ else
 				type = dt_real
 				value = arg_real
 				
-				if slice(_arg, , 3) == "0x" description = value
+				if slice(_arg, , 3) == "0x" description = [{str: value, col: dt_real}]
 			break
 			case dt_asset:
 				value = arg_real
@@ -64,12 +64,12 @@ else
 				
 				if macro_type == dt_method
 				{
-					description = "Script"
+					description = ["Method"]
 				}
 				else if macro_type == dt_instance
 				{
-					if object_exists(arg_real) description = "Object "+object_get_name(value)
-					else if instance_exists(arg_real)  description = "Instance of "+object_get_name(value.object_index)
+					if object_exists(arg_real) description = ["Object ",{str: object_get_name(value), col: dt_asset}]
+					else if instance_exists(arg_real)  description = ["Instance of ",{str: object_get_name(value.object_index), col: dt_instance}]
 				}
 			break
 			case dt_variable:
@@ -92,8 +92,8 @@ else
 					value = arg_real
 					type = dt_instance
 				
-					if object_exists(arg_real) description = object_get_name(value.object_index)
-					else description = "Instance of "+object_get_name(value.object_index)
+					if object_exists(arg_real) description = [{str: object_get_name(value.object_index), col: dt_instance}]
+					else description = ["Instance of ",{str: object_get_name(value.object_index), col: dt_instance}]
 				}
 				else
 				{
@@ -106,7 +106,7 @@ else
 			
 				type = dt_color
 				
-				description = stitch("RGB ",color_get_red(value)," ",color_get_green(value)," ",color_get_blue(value))
+				description = ["RGB ",{str: color_get_red(value), col: "red"}," ",{str: color_get_green(value), col: "green"}," ",{str: color_get_blue(value), col: "blue"}]
 		}
 		else if macro_type != ""  // Has macro
 		{
@@ -122,12 +122,12 @@ else
 			{
 				case dt_instance:
 					var count = instance_number(value.object_index)
-					if value.object_index == value description = stitch("Object "+object_get_name(value.object_index)," (",count,((count == 1) ? " instance":" instances")+")")
-					else description = stitch("Instance of "+object_get_name(value.object_index)+" (",count,((count == 1) ? " instance":" instances")+")")
+					if value.object_index == value description = ["Object ",{str: object_get_name(value.object_index), col: dt_asset}," (",{str: count, col: dt_instance},((count == 1) ? " instance":" instances")+")"]
+					else description = ["Instance of ",{str: object_get_name(value.object_index), col: dt_asset}," (",{str: count, col: dt_instance},((count == 1) ? " instance":" instances")+")"]
 				break
 				case dt_asset:
-					if macro_type == dt_instance description = "Object "+object_get_name(value)+" (no instances)"
-					else description = "Unknown asset"
+					if macro_type == dt_instance description = ["Object ",{str: object_get_name(value), col: dt_asset}," (",{str: "0", col: dt_instance}," instances)"]
+					else description = ["Unknown asset"]
 				break
 				case dt_color:
 					description = stitch("RGB ",color_get_red(value)," ",color_get_green(value)," ",color_get_blue(value))
@@ -137,19 +137,25 @@ else
 					if is_undefined(description) description = command_doc_desc(script_get_name(value))
 				break
 				case dt_real:
-					description = "Constant with value of "+string(value)
+					description = ["Constant with value of ",{str: value, col: dt_real}]
 				break
 				case dt_string:
-					description = "Constant with value of \""+string(value)+"\""
+					description = ["Constant with value of ",{str: "\""+string(value)+"\"", col: dt_string}]
 				break
 				case dt_variable:
 					if is_numeric(value)
 					{
-						if better_script_exists(value) description = "Shortcut for "+script_get_name(value)
-						else description = "<unknown function>"
+						if better_script_exists(value) description = ["Shortcut for ",{str: script_get_name(value), col: dt_method}]
+						else description = [{str: "<unknown function>", col: dt_real}]
 					}
-					else if is_string(value)	description = "Shortcut for "+value
-					else if is_method(value)	description = "Shortcut for method"
+					else if is_string(value)
+					{
+						description = ["Shortcut for ",{str: value, col: dt_variable}]
+					}
+					else if is_method(value)
+					{
+						description = ["Shortcut for method"]
+					}
 
 					var _value = string_add_scope(value, true)
 					if not is_undefined(_value) value = _value
@@ -159,23 +165,47 @@ else
 						
 					if info.exists
 					{
-						if is_struct(info.value)		description += " (holds "+instanceof(info.value)+")"
-						else if is_array(info.value)	description += " (holds array)"
-						else if is_ptr(info.value)		description += " (holds pointer)"
-						else if is_method(info.value)	description += " (holds method)"
-						else if is_bool(info.value)		description += " ("+(info.value ? "true" : "false")+")"
+						if is_struct(info.value)		array_push(description, " (holds ",{str: instanceof(info.value), col: dt_method},")")
+						else if is_array(info.value)	array_push(description, " (holds array)")
+						else if is_ptr(info.value)		array_push(description, " (holds pointer)")
+						else if is_method(info.value)	array_push(description, " (holds method)")
+						else if is_bool(info.value)		array_push(description, " (",{str: (info.value ? "true" : "false"), col: dt_real},")")
 						else if is_string(info.value)
 						{
-							if string_length(info.value) > 300 or (string_height(info.value)/string_height("W")) > 1 description += " (holds string)"
-							else description += " (\""+info.value+"\")"
+							if string_length(info.value) > 300 or (string_height(info.value)/string_height("W")) > 1 array_push(description, " (holds string)")
+							else array_push(description, " (",{str: "\""+info.value+"\"", col: dt_string},")")
 						}
 						else if is_numeric(info.value) and ds_map_exists(ds_types, _arg)
 						{
-							description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+")"
+							description = "holds ds_"+ds_type_to_string(ds_types[? _arg])+" "
+							
+							switch ds_types[? _arg]
+							{
+							case ds_type_grid:
+								description = stitch("holds ",ds_grid_width(info.value),"x",ds_grid_height(info.value)," ds_map")
+							break
+							case ds_type_list:
+								description += "with "+string(ds_list_size(info.value))+" items"
+							break
+							case ds_type_map:
+								description += "with "+string(ds_map_size(info.value))+" items"
+							break
+							case ds_type_priority:
+								description += "with "+string(ds_priority_size(info.value))+" items in queue"
+							break
+							case ds_type_queue:
+								description += "with "+string(ds_queue_size(info.value))+" items in queue"
+							break
+							case ds_type_stack:
+								description += "with "+string(ds_stack_size(info.value))+" items"
+							break
+							}
+							
+							description = [description]
 						}
-						else description += " ("+string(info.value)+")"
+						else array_push(description, " ("+string(info.value)+")")
 					}
-					else description += " (does not exist?)"
+					else array_push(description, " (does not exist?)")
 			}
 		}
 		else if better_instance_exists(arg_real)  // Has instance
@@ -183,7 +213,7 @@ else
 			type = dt_instance
 			value = arg_real
 			
-			description = object_get_name(arg_real.object_index)+" ("+string(arg_real.id)+")"
+			description = [{str: object_get_name(arg_real.object_index), col: dt_asset}]
 		}
 		else
 		{
@@ -212,7 +242,7 @@ else
 					value = asset
 					type = dt_asset
 					
-					description = string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset"
+					description = [string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset"]
 				}
 			break
 			case dt_variable:
@@ -283,18 +313,18 @@ else
 			switch asset_get_type(_arg)
 			{
 				default:
-					description = string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset "+string(asset)
+					description = [string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset"]
 				break
 				case asset_object:
 					if instance_exists(asset)
 					{
 						type = dt_instance
 						var count = instance_number(asset)
-						description = stitch("Object (",count,((count == 1) ? " instance":" instances")+")")
+						description = ["Object (",{str: count, col: dt_instance},((count == 1) ? " instance":" instances")+")"]
 					}
 					else
 					{
-						description = "Object"+_arg+" (no instances)"
+						description = ["Object (",{str: "0", col: dt_instance}," instances)"]
 					}
 				break
 				case asset_script: 
@@ -316,43 +346,67 @@ else
 			
 			if is_numeric(_arg)
 			{
-				if better_script_exists(_arg) description = "Shortcut for "+script_get_name(_arg)
-				else description = "<unknown function>"
+				if better_script_exists(_arg) description = ["Shortcut for ",{str: script_get_name(_arg), col: dt_method}]
+				else description = ["<unknown function>"]
 			}
-			else if is_method(_arg)	description = _arg_plain
-			else if is_string(_arg) description = _arg
+			else if is_method(_arg)	description = [_arg_plain]
+			else if is_string(_arg) description = [_arg]
 			
 			value = _arg
-			
+			contrace()
 			if variable.exists
 			{	
 				type = dt_variable
 				
-				if is_struct(variable.value)		description += " (holds "+instanceof(variable.value)+")"
-				else if is_array(variable.value)	description += " (holds array)"
-				else if is_ptr(variable.value)		description += " (holds pointer)"
-				else if is_method(variable.value)	description += " (holds method)"
-				else if is_bool(variable.value)		description += " ("+(variable.value ? "true" : "false")+")"
+				if is_struct(variable.value)		array_push(description, " (holds ",{str: instanceof(variable.value), col: dt_method},")")
+				else if is_array(variable.value)	array_push(description, " (holds array)")
+				else if is_ptr(variable.value)		array_push(description, " (holds pointer)")
+				else if is_method(variable.value)	array_push(description, " (holds method)")
+				else if is_bool(variable.value)		array_push(description, " (",{str: (variable.value ? "true" : "false"), col: dt_real},")")
 				else if is_string(variable.value)
 				{
-					if string_length(variable.value) > 300 or (string_height(variable.value)/string_height("W")) > 1 description += " (holds string)"
-					else description += " (\""+variable.value+"\")"
+					if string_length(variable.value) > 300 or (string_height(variable.value)/string_height("W")) > 1 array_push(description, " (holds string)")
+					else array_push(description, " (",{str: "\""+variable.value+"\"", col: dt_string},")")
 				}
 				else if is_numeric(variable.value) and ds_map_exists(ds_types, _arg)
 				{
-					description = "(holds ds_"+ds_type_to_string(ds_types[? _arg])+")"
+					description = "holds ds_"+ds_type_to_string(ds_types[? _arg])+" "
+							
+					switch ds_types[? _arg]
+					{
+					case ds_type_grid:
+						description = stitch("holds ",ds_grid_width(info.value),"x",ds_grid_height(info.value)," ds_map")
+					break
+					case ds_type_list:
+						description += "with "+string(ds_list_size(info.value))+" items"
+					break
+					case ds_type_map:
+						description += "with "+string(ds_map_size(info.value))+" items"
+					break
+					case ds_type_priority:
+						description += "with "+string(ds_priority_size(info.value))+" items in queue"
+					break
+					case ds_type_queue:
+						description += "with "+string(ds_queue_size(info.value))+" items in queue"
+					break
+					case ds_type_stack:
+						description += "with "+string(ds_stack_size(info.value))+" items"
+					break
+					}
+							
+					description = [description]
 				}
 				else
 				{
-					description += " ("+string(variable.value)+")"
+					array_push(description, " ("+string(variable.value)+")")
 				}
 			}
-			else description += " (does not exist?)"
+			else array_push(description, " (does not exist?)")
 		}
 	}
 }
 
-if not is_undefined(error) and error != exceptionUnrecognized description = error
+if not is_undefined(error) and error != exceptionUnrecognized description = [{str: error, col: dt_real}]
 else if error == exceptionUnrecognized
 {
 	description = command_doc_desc(string(arg))

@@ -102,6 +102,8 @@ initialize = function(){
 	include_side_text = false
 	side_text_override = undefined
 	
+	items = {}
+	
 	mouse_index = -1
 	key_index = -1
 	
@@ -112,8 +114,8 @@ initialize = function(){
 	right = 0
 	bottom = 0
 	
-	width = 400
-	height = 150
+	width = 40
+	height = 10
 	
 	sidetext_bar_length = 15
 	
@@ -144,6 +146,7 @@ clear = function(){
 	entries_length = 0
 	ds_list_clear(self.list)
 	ds_list_clear(self.lists)
+	items = {}
 }
 
 
@@ -179,16 +182,28 @@ add = function(list){
 	// Convert to ds list
 	if is_array(list) for(var i = _min; i <= _max-1; i++)
 	{
+		if variable_struct_exists(items, list[i])
+		{
+			ds_list_delete(self.list, items[$ list[@ i]])
+			items[$ list[@ i]] = ds_list_size(self.list)
+		}
+		
 		ds_list_add(self.list, list[i])
 	}
 	else if is_numeric(list) for(var i = _min; i <= _max-1; i++)
 	{
+		if variable_struct_exists(items, list[| i])
+		{
+			ds_list_delete(self.list, items[$ list[| i]])
+			items[$ list[| i]] = ds_list_size(self.list)
+		}
+		
 		ds_list_add(self.list, list[| i])
 	}
 	
 	// Convert items to Autofill item objects
 	for(var i = size; i <= ds_list_size(self.list)-1; i++)
-	{	
+	{			
 		self.list[| i] = format(self.list[| i])
 		
 		if is_undefined(self.list[| i].color) self.list[| i].color = color
@@ -211,6 +226,7 @@ set = function(list){
 	
 	ds_list_clear(self.list)
 	ds_list_clear(self.lists)
+	items = {}
 	
 	include_side_text = false
 	add(list)
@@ -237,6 +253,7 @@ set_multiple = function(lists){
 get = function(term){
 	
 	ds_list_clear(list)
+	items = {}
 	entries_length = 0
 	before_get()
 	
@@ -299,8 +316,8 @@ scrollbar_get_boundaries = function(){
 	entries_width = cw*(entries_length+3) + _sidetext_bar_length
 	entries_height = ch*ds_list_size(list)+1
 	
-	var _width = width + _sidetext_bar_length
-	var _height = min(height, entries_height+1)
+	var _width = width*cw + _sidetext_bar_length
+	var _height = min(height*ch+2, entries_height+1)
 	
 	if not include_side_text
 	{
@@ -308,12 +325,12 @@ scrollbar_get_boundaries = function(){
 	}
 	
 	left = x
-	top = y + (height-_height)
+	top = y + (height*ch+2-_height)
 	right = left+_width-1
 	bottom = top+_height-1
 	
 	scrollbar.wbar_enabled = _width < entries_width
-	scrollbar.hbar_enabled = height < (entries_height+1)
+	scrollbar.hbar_enabled = (height*ch+2) < (entries_height+1)
 	
 	scrollbar.set_boundaries(entries_width, entries_height, left, top, right, bottom)
 }
@@ -343,7 +360,7 @@ get_input = function(){
 		else
 		{
 			scrollbar.set_scroll_y(
-				min(scrollbar.scroll_y, (key_index-1.5)*ch)
+				min(scrollbar.scroll_y, (key_index-1)*ch)
 				// Could be better but ehh
 			)
 		}
@@ -363,6 +380,7 @@ get_input = function(){
 			
 			if prev_index != mouse_index
 			{
+				key_index = -1
 				scrollbar.set_scroll_y(min(scrollbar.scroll_y, mouse_index*ch))
 			}
 		}
@@ -404,7 +422,7 @@ var y2
 draw_console_body(list.left, list.top, list.right-1, list.bottom-1)
 
 var imin = floor(list.scrollbar.scroll_y/ch)
-var imax = min(floor((list.scrollbar.scroll_y+list.height)/ch), ds_list_size(list.list)-1)  // experience it in IMAX
+var imax = min(floor(list.scrollbar.scroll_y/ch+list.height), ds_list_size(list.list)-1)  // experience it in IMAX
 
 clip_rect_cutout(list.left+1, list.top+1, list.right-1, list.bottom-1)
 for(var i = imin; i <= imax; i++)

@@ -67,6 +67,8 @@ with SCROLLBAR {
 	bar_width_condensed = 7
 	
 	mouse_offset = 0
+	
+	scrollwheel_lines = 3
 }
 
 with AUTOFILL {

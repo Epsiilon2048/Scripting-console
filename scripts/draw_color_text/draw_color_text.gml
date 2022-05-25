@@ -1,7 +1,8 @@
 
 function draw_color_text(x, y, color_text){ with o_console {
 
-if not is_struct(color_text) 
+if is_array(color_text) color_text = {colors: color_text}
+else if not is_struct(color_text)
 {
 	draw_text(x, y, color_text)
 	return undefined
@@ -77,17 +78,19 @@ for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 	{
 		_text = string_copy( color_text.text, lastpos, item.pos - lastpos )
 	}
-	else if variable_struct_exists(item, "text")
+	else
 	{
-		_text = item.text
+		_text = variable_struct_exists_get(item, "text", variable_struct_exists_get(item, "str", variable_struct_exists_get(item, "s", undefined)))
+		
+		if is_undefined(_text) continue
 	}
-	else continue
 	
 	var len = string_width_oneline(_text)
 	
 	var c = variable_struct_exists_get(item, "col", variable_struct_exists_get(color_text, "color", o_console.colors.plain))
 	var hl = variable_struct_exists_get(item, "hl", undefined)
 	var ol = variable_struct_exists_get(item, "ol", undefined)
+	var ul = variable_struct_exists_get(item, "ul", undefined)
 	
 	if not is_undefined(hl)
 	{
@@ -95,10 +98,16 @@ for(var i = 0; i <= array_length(color_text.colors)-1; i++)
 		draw_rectangle(x, y1, x+len-1, y2-2, false)
 	}
 
-	if ol
+	if not is_undefined(ol)
 	{
-		draw_set_color(o_console.colors.plain)
-		draw_outline_text(x, y, _text, ol)
+		draw_set_color( is_string(ol) ? o_console.colors[$ ol] : ol )
+		draw_outline_text(x, y, _text, 8)
+	}
+
+	if not is_undefined(ul)
+	{
+		draw_set_color( is_string(ul) ? o_console.colors[$ ul] : ul )
+		draw_line(x, y2-2, x+len-1, y2-2)
 	}
 	
 	draw_set_color( is_string(c) ? o_console.colors[$ c] : c )

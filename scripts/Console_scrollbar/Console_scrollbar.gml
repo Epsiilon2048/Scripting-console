@@ -124,6 +124,7 @@ get_input = function(){
 	var sc = o_console.SCROLLBAR
 	
 	draw_set_font(o_console.font)
+	var cw = string_width("W")
 	var ch = string_height("W")
 	var asp = ch/sc.char_height
 	var _bar_width = round((condensed ? sc.bar_width_condensed : sc.bar_width)*asp)
@@ -138,10 +139,24 @@ get_input = function(){
 	{
 		if not mouse_on_console and not clicking_on_console
 		{
+			mouse_on = gui_mouse_between(page_left, page_top, hbar_right, wbar_bottom)
 			mouse_on_wbar = gui_mouse_between(page_right, page_bottom, page_left, wbar_bottom)
 			mouse_on_wbutton = false
 			mouse_on_hbar = not mouse_on_wbar and gui_mouse_between(page_right, page_top, hbar_right, page_bottom)
 			mouse_on_hbutton = false
+			
+			var scrollwheel = mouse_wheel_down()-mouse_wheel_up()
+			if mouse_on and scrollwheel != 0
+			{
+				if hbar_enabled
+				{
+					set_scroll_y(scroll_y + scrollwheel*sc.scrollwheel_lines*ch)
+				}
+				else if wbar_enabled
+				{
+					set_scroll_x(scroll_x - scrollwheel*sc.scrollwheel_lines*cw*2)
+				}
+			}
 			
 			if mouse_on_wbar
 			{

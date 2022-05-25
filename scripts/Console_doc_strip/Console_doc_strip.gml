@@ -26,17 +26,43 @@ var asp = ch/char_height
 var _wdist = round(wdist*asp)
 var _hdist = round(hdist*asp)
 
-var width = string_width(text)
-var height = max(ch, string_height(text))
+if is_array(text)
+{
+	var width = 0
+	var height = ch
+	var plaintext = ""
+	
+	// Doesn't support multiple lines properly
+	
+	for(var i = 0; i <= array_length(text)-1; i++)
+	{
+		var str = string(variable_struct_exists_get(text[i], "str", variable_struct_exists_get(text[i], "s", text[i])))
+		
+		plaintext += str
+		
+		width += string_width(str)
+		
+		var nl = string_count("\n", str)
+		height += ch*nl
+	}
+	
+	text = {colors: text, text: plaintext}
+}
+else
+{
+	var plaintext = text
+	var width = string_width(text)
+	var height = max(ch, string_height(text))
+}
 
-if is_undefined(x2) and text == "" return false
+if is_undefined(x2) and plaintext == "" return false
 
 x2 = max(is_undefined(x2) ? 0 : x2, x+_wdist*2+width)
 var y2 = y+_hdist*2+height
 
 draw_console_body(x, y, x2, y2)
 
-if text != "" 
+if plaintext != "" 
 {
 	draw_set_color(color)
 	draw_set_halign(fa_left)

@@ -37,7 +37,7 @@ var autofill_string = gmcl_string
 if first == "$"
 {
 	chatterbox.enabled = true
-	autofill.get(gmcl_string)
+	autofill.get(autofill_string)
 	exit
 }
 

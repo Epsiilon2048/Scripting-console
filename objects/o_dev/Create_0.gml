@@ -169,11 +169,26 @@ instances = new Autofill_sublist() with instances
 		{
 			list[i] = string(instance_id[i])
 		}
+		
+		var i = 0; while object_exists(i)
+		{
+			if better_instance_exists(i) 
+			{
+				array_push(list, object_get_name(i))
+			}
+			i++
+		}
 	}
 	format = function(item){
-		var name = object_get_name(real(item).object_index)
-		
-		return new Autofill_item(item+" ("+name+")", item, "Instance")
+		if string_is_int(item)
+		{
+			var name = object_get_name(real(item).object_index)
+			return new Autofill_item(item+" ("+name+")", item, "Instance")
+		}
+		else
+		{
+			return new Autofill_item(item, item, "Object")
+		}
 	}
 	get()
 }
@@ -194,10 +209,17 @@ chatterbox = new Autofill_sublist() with chatterbox
 {
 	color = dt_variable
 	get = function(){
-		if chatterbox_is_ready list = global.chatterboxVariablesList
+		if chatterbox_is_ready 
+		{
+			list = ds_list_to_array(global.chatterboxVariablesList)
+			for(var i = 0; i <= array_length(list)-1; i++)
+			{
+				list[i] = "$"+list[i]
+			}
+		}
 	}
 	format = function(item){
-		return new Autofill_item(item, "$"+item, "ChatterBox var")
+		return new Autofill_item(slice(item, 2), item, "Yarn variable")
 	}
 	get()
 }

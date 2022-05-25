@@ -10,19 +10,20 @@ static subj_sep	 = " ,=():"
 static accessors = "@|?#$"
 
 				
-static push_combine = function(list, pos, col, hl, ol){
+static push_combine = function(list, pos, col, hl, ol, ul){
 	
 	if pos <= 0 return undefined
 	
 	var list_len = array_length(list)
-					
-	if list_len > 0 and list[list_len-1].col == col and list[list_len-1].hl == hl and list[list_len-1].ol == ol
+	if list_len > 0 var prev = list[list_len-1]
+	
+	if list_len > 0 and prev.col == col and prev.hl == hl and prev.ol == ol and prev.ul == ul
 	{
-		list[list_len-1].pos = pos
+		prev.pos = pos
 	}
 	else if not (list_len > 0 and list[list_len-1].pos == pos)
 	{
-		array_push(list, {pos: pos, col: col, hl: hl, ol: ol})
+		array_push(list, {pos: pos, col: col, hl: hl, ol: ol, ul: ul})
 	}
 }
 
@@ -64,7 +65,7 @@ var _iden_name = ""
 var instscope = ""
 var _col = dt_unknown
 var _ul = undefined
-var _ol = 0
+var _ol = undefined
 var in_brackets = 0
 var accessor = ""
 var can_have_accessor = false
@@ -197,7 +198,8 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 				
 			var _col = dt_unknown
 			var _hl = undefined
-			var _ol = 0
+			var _ol = undefined
+			var _ul = undefined
 				
 			if string_char_at(segment, 1) == "$"
 			{
@@ -207,7 +209,10 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					{
 						_col = dt_variable
 					}
-					else _col = dt_unknown
+					else 
+					{
+						_col = dt_unknown
+					}
 				}
 				else
 				{
@@ -376,10 +381,10 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 						possible_accessors = get_possible_accessors(value)
 					}
 				}
-			} 
-				
+			}
+			
 			if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
-			if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col, _hl, _ol)
+			if segment != ""					push_combine(color_list, i+string_onset+(_iden != -1), _col, _hl, _ol, _ul)
 				
 			if not in_brackets and string_pos(char, iden_sep)
 			{
