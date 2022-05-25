@@ -40,10 +40,11 @@ with scope
 
 
 
-function element_container(elements, association) constructor{
+function element_container(elements, association=noone, name=undefined) constructor{
 	
 self.elements = elements
 self.association = association
+self.name = name
 }
 
 
@@ -220,9 +221,11 @@ set = function(elements){
 	to_set = undefined
 	clear()
 	
-	if instanceof(elements) == "element_container" or instanceof(elements) == "Console_dock"
+	var io = instanceof(elements)
+	if io == "element_container" or io == "Console_dock"
 	{
 		if not is_undefined(elements.association) and elements.association != elements association = elements.association
+		if not is_undefined(elements.name) name = elements.name
 		elements = elements.elements
 	}
 	if not is_array(elements) elements = [elements]

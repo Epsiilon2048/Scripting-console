@@ -21,9 +21,11 @@ var iden = dt_unknown
 var first = string_char_at(gmcl_string, 1)
 var dots = string_count(".", gmcl_string)
 var has_bracket = string_pos("[", gmcl_string) != 0
+var is_number = string_is_float(gmcl_string)
 
 for(var i = 0; i <= ds_list_size(autofill.lists)-1; i++)
 {
+	if not is_struct(autofill.lists[| i]) continue
 	autofill.lists[| i].enabled = false
 }
 
@@ -33,6 +35,18 @@ methods.show_all_if_blank = false
 instances.show_all_if_blank = false
 
 var autofill_string = gmcl_string
+
+
+
+// It'sa number!!
+if is_number
+{
+	instances.enabled = true
+	input_log.enabled = true
+	autofill.get(autofill_string)
+	exit
+}
+
 
 if first == "$"
 {
@@ -87,8 +101,10 @@ if dots == 0 and not has_bracket
 {
 	for(var i = 0; i <= ds_list_size(autofill.lists)-1; i++)
 	{
+		if not is_struct(autofill.lists[| i]) continue
 		autofill.lists[| i].enabled = true
 	}
+	instances.enabled = false
 	
 	autofill.get(autofill_string)
 	exit

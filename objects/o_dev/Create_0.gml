@@ -152,25 +152,30 @@ tags = new Autofill_sublist() with tags
 		list[i] = "#"+list[i]
 	}
 	
+	get = function(term){
+		show_all_always = string_char_at(term, 1) == "#" 
+	}
+	
 	color = dt_tag
 	
 	format = function(item){
 		return new Autofill_item(item, item, "Instruction")
 	}
-	get()
+	get("")
 }
 
 instances = new Autofill_sublist() with instances
 {
+	show_all_always = true
 	color = dt_instance
-	get = function(){
+	get = function(term){
 		list = array_create(instance_count)
 		for (var i = 0; i <= instance_count-1; i++)
 		{
 			list[i] = string(instance_id[i])
 		}
 		
-		var i = 0; while object_exists(i)
+		if not string_is_float(term) var i = 0; while object_exists(i)
 		{
 			if better_instance_exists(i) 
 			{

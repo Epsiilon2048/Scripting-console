@@ -1,7 +1,5 @@
 
-function format_output(output, embedded, tag, name){
-
-if is_undefined(embedded) embedded = false
+function format_output(output, embedded=false){
 
 if o_console.run_in_embed return output
 

@@ -26,13 +26,15 @@ else if not is_struct(element)
 }
 
 
-if element == BAR or element == BAR.dock or element == OUTPUT or element == OUTPUT.dock
+if element == BAR or element == OUTPUT or (initialized and (element == BAR.dock or element == OUTPUT.dock))
 {
 	show_debug_message("Attempted to remove crucial console element! Don't do that maybe!!")
 	exit
 }
 
 ds_list_delete(elements, ds_list_find_index(elements, element))
-variable_struct_remove(e, element.id)
+
+if variable_struct_exists(element, "id") variable_struct_remove(e, element.id)
+
 element_dock_update()
 }}

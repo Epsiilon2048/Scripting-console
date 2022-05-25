@@ -30,6 +30,182 @@ function output_set(output){ with o_console.OUTPUT {
 
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
 
+dock.enabled = not is_undefined(output)
+
+
+if is_string(output)
+{
+	dock.set(output)
+	move_to_front(self)
+	exit
+}
+
+
+if is_bool(output)
+{
+	dock.set(output ? "true" : "false")
+	move_to_front(self)
+	exit
+}
+
+
+if real(output)
+{
+	dock.set(string_format_float(output, 3))
+	move_to_front(self)
+	exit
+}
+
+
+if is_ptr(output)
+{
+	dock.set("pointer")
+	move_to_front(self)
+	exit
+}
+
+
+if not is_struct(output) and not is_array(output)
+{
+	dock.set(string(output))
+	exit
+}
+
+
+var str = ""
+var sep = ",\n"
+
+if is_struct(output)
+{
+	var io = instanceof(output)
+	
+	if io == "Console_dock"
+	{
+		if not variable_struct_exists(output, "name")
+		{
+			add_console_element(output)
+		}
+		exit
+	}
+	
+	if io == "element_container" or variable_struct_exists_get(output, "is_console_element", false)
+	{
+		dock.set(output)
+		move_to_front(self)
+		exit
+	}
+	
+	if variable_struct_names_count(output) == 0
+	{
+		dock.set("Empty struct")
+		move_to_front(self)
+		exit
+	}
+	
+	var list = variable_struct_get_names(output)
+	var str = "{\n"
+	var after = "}"
+}
+
+
+if is_array(output)
+{
+	if array_length(output) == 0
+	{
+		dock.set("Empty array")
+		move_to_front(self)
+		exit
+	}
+	
+	var list = output
+	var str = "[\n"
+	var after = "]"
+}
+
+
+static max_items = 20
+
+for(var i = 0; i <= min(max_items, array_length(list)-1); i++)
+{	
+	var item = list[i]
+	var value
+		
+	if is_struct(output)
+	{
+		value = output[$ list[@ i]]
+		str += item+": "
+	}
+	else value = list[i]
+		
+	if is_string(value)
+	{
+		if string_length(value) < 300 and not string_pos("\n", value)
+		{
+			str = "\""+value+"\""
+		}
+		else
+		{
+			str = "string"
+		}
+		str += sep
+		continue
+	}
+		
+	if is_bool(value)
+	{
+		str += (value ? "true" : "false")+sep
+		continue
+	}
+		
+	if is_numeric(value)
+	{
+		str += string_format_float(value, 3)+sep
+		continue
+	}
+		
+	if is_struct(value)
+	{
+		str += instanceof(value)+sep
+		continue
+	}
+		
+	if is_array(value)
+	{
+		var len = array_length(value)
+		str += "array with "+string(len)+" item"+((len == 1) ? "" : "s")+sep
+		continue
+	}
+		
+	if is_ptr(value)
+	{
+		str += "pointer"+sep
+		continue	
+	}
+		
+	if is_method(value)
+	{
+		str += "method"+sep
+		continue
+	}
+		
+	str += string(value)+sep
+}
+
+
+if i >= max_items
+{
+	str += "(...)"
+	dock.set(str)
+	exit
+}
+
+
+str += after
+dock.set(str)
+
+/*
+if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
+
 dock.association = dock
 o_console.O1 = output
 		
@@ -52,8 +228,7 @@ if is_struct(output)
 		
 	if io == "Console_dock"
 	{
-		dock.set(output.elements)
-		dock.association = is_undefined(output.association) ? dock : output.association
+		add_console_element(output)
 	}
 	else if io == "element_container" or variable_struct_exists_get(output, "is_console_element", false)
 	{
@@ -95,6 +270,7 @@ else
 
 dock.enabled = not is_undefined(output)
 if dock.enabled move_to_front(self)
+*/
 }}
 
 

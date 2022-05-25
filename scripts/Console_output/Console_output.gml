@@ -4,6 +4,7 @@ function console_output_inputs(){ with o_console.OUTPUT {
 docked = o_console.BAR.dock.enabled
 if docked and not run_in_dock return undefined
 
+dock.is_front = is_front
 dock.get_input()
 
 left = dock.left

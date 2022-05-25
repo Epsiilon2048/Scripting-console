@@ -353,7 +353,6 @@ else
 			else if is_string(_arg) description = [_arg]
 			
 			value = _arg
-			contrace()
 			if variable.exists
 			{	
 				type = dt_variable

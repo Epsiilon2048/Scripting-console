@@ -154,8 +154,9 @@ if window_has_focus()
 	if front != -1
 	{
 		var el = elements[| front]
-		ds_list_delete(elements, front)
-		ds_list_insert(elements, 0, el)
+		move_to_front(el)
+		//ds_list_delete(elements, front)
+		//ds_list_insert(elements, 0, el)
 	}
 }
 

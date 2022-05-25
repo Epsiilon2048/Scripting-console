@@ -59,6 +59,7 @@ with BAR {
 with OUTPUT {
 	
 	docked = false
+	is_front = false
 	run_in_dock = false
 	
 	text = new Embedded_text()
@@ -97,6 +98,7 @@ with OUTPUT {
 		dock.dock = o_console.BAR.dock 
 		dock.docked = docked
 		dock.draw_name = not docked
+		dock.is_front = is_front
 		//dock.run_in_dock = docked
 	}
 	

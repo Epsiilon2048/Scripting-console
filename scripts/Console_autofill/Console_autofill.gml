@@ -38,7 +38,7 @@ get_range = function(term){
 	var minmax
 	if enabled
 	{
-		if show_all_always or (show_all_if_blank and term == "")
+		if show_all_if_blank and term == ""
 		{
 			minmax = {min: 0, max: get_size()}
 			if minmax.max == 0 minmax = -1//{min: -1, max: -1}
@@ -124,6 +124,8 @@ initialize = function(){
 	
 	entries_length = 0
 	
+	term = ""
+	
 	scrollbar = new Console_scrollbar() with scrollbar {
 		initialize()
 		wbar_enabled = true
@@ -160,6 +162,7 @@ add = function(list){
 	var list_len
 	var color = undefined
 	var format = format_autofill_item
+	var show_all = false
 	if is_struct(list)
 	{
 		list_len = is_array(list.list) ? array_length(list.list) : ds_list_size(list.list)
@@ -170,6 +173,8 @@ add = function(list){
 		color = list.color
 		format = list.format
 		
+		show_all = list.show_all_always
+		
 		list = list.list
 	}
 	else
@@ -179,38 +184,66 @@ add = function(list){
 		_max = list_len
 	}
 	
+	static add_to_main = function(list_item, size){
+		
+		if variable_struct_exists(items, list_item)
+		{
+			show_debug_message(items[$ list_item])
+			ds_list_delete(self.list, items[$ list_item])
+			size --
+		}
+		
+		items[$ list_item] = ds_list_size(self.list)
+		ds_list_add(self.list, list_item)
+		
+		return size
+	}
+	
 	// Convert to ds list
-	if is_array(list) for(var i = _min; i <= _max-1; i++)
+	var is_ds = is_numeric(list)
+	
+	if show_all
 	{
-		if variable_struct_exists(items, list[i])
-		{
-			ds_list_delete(self.list, items[$ list[@ i]])
-			items[$ list[@ i]] = ds_list_size(self.list)
-		}
+		var list_size = is_ds ? ds_list_size(list) : array_length(list)
 		
-		ds_list_add(self.list, list[i])
+		if _min > 0 for(var i = 0; i <= _min-1; i++)
+		{
+			var list_item = is_ds ? list[| i] : list[@ i]
+			size = add_to_main(list_item, size)
+		}
+		if _max < list_size and _max >= 0 for(var i = _max; i <= list_size-1; i++)
+		{
+			var list_item = is_ds ? list[| i] : list[@ i]
+			size = add_to_main(list_item, size)
+		}
 	}
-	else if is_numeric(list) for(var i = _min; i <= _max-1; i++)
+	
+	if is_ds or is_array(list) for(var i = _min; i <= _max-1; i++)
 	{
-		if variable_struct_exists(items, list[| i])
-		{
-			ds_list_delete(self.list, items[$ list[| i]])
-			items[$ list[| i]] = ds_list_size(self.list)
-		}
-		
-		ds_list_add(self.list, list[| i])
+		var list_item = is_ds ? list[| i] : list[@ i]
+		size = add_to_main(list_item, size)
 	}
+	
 	
 	// Convert items to Autofill item objects
 	for(var i = size; i <= ds_list_size(self.list)-1; i++)
 	{			
 		self.list[| i] = format(self.list[| i])
+		var item = self.list[| i]
 		
-		if is_undefined(self.list[| i].color) self.list[| i].color = color
+		if is_undefined(item)
+		{
+			// I don't know why this happens and when i
+			// remove them from the list it crashes so idfk
+			// it works
+			
+			continue
+		}
 		
-		if not is_undefined(self.list[| i].side_text) and self.list[| i].side_text != "" include_side_text = true
+		if is_undefined(item.color) item.color = color
+		if not is_undefined(item.side_text) and item.side_text != "" include_side_text = true
 		
-		entries_length = max(entries_length, string_length(self.list[| i].name))
+		entries_length = max(entries_length, string_length(item.name))
 	}
 	
 	if not is_undefined(side_text_override) include_side_text = side_text_override
@@ -252,6 +285,8 @@ set_multiple = function(lists){
 
 get = function(term){
 	
+	self.term = term
+	
 	ds_list_clear(list)
 	items = {}
 	entries_length = 0
@@ -265,6 +300,7 @@ get = function(term){
 			get(term)
 			sort()
 			get_range(term)
+			
 		}
 		else
 		{
@@ -273,13 +309,12 @@ get = function(term){
 			if minmax == -1 li = []
 			else
 			{
-				//show_debug_message(minmax.max - minmax.min)
 				var newli = array_create(minmax.max - minmax.min)
 			
 				if is_numeric(li) li = ds_list_to_array(li)
 			
 				if is_array(li)	array_copy(newli, 0, li, minmax.min, minmax.max - minmax.min)
-			
+				
 				li = newli
 			}
 		}
@@ -412,35 +447,41 @@ var ch = string_height("W")
 var asp = ch/char_height
 var _text_wdist = round(text_wdist*asp)
 
-var xx
-var yy
-var text_x
-var text_y
+var xx = list.left-list.scrollbar.scroll_x
+var yy = list.top-list.scrollbar.scroll_y
 var y1
 var y2
+
+var text_x = xx+_text_wdist
+if list.include_side_text
+{
+	text_x += cw*list.sidetext_bar_length
+}
+var text_y
+
 
 draw_console_body(list.left, list.top, list.right-1, list.bottom-1)
 
 var imin = floor(list.scrollbar.scroll_y/ch)
 var imax = min(floor(list.scrollbar.scroll_y/ch+list.height), ds_list_size(list.list)-1)  // experience it in IMAX
 
+draw_set_color(c_white)
+
+var term_length = string_length(list.term)
+
 clip_rect_cutout(list.left+1, list.top+1, list.right-1, list.bottom-1)
 for(var i = imin; i <= imax; i++)
 {	
 	var item = list.list[| i]
 	
-	xx = list.left-list.scrollbar.scroll_x
-	yy = list.top-list.scrollbar.scroll_y
-	
 	var col = item.color
 	if is_string(col) col = o_console.colors[$ col]
 	if not is_numeric(col) col = o_console.colors.plain
 	
-	text_x = xx+_text_wdist
-	text_y = yy+ch*i+1
-	
 	y1 = yy+ch*i+1
-	y2 = yy+ch*i+ch-1
+	y2 = y1-1+ch-1
+	
+	text_y = y1
 	
 	var selected = list.mouse_index == i
 	var key_selected = list.key_index == i
@@ -453,8 +494,6 @@ for(var i = imin; i <= imax; i++)
 	
 	if list.include_side_text
 	{
-		text_x = xx+_text_wdist + cw*list.sidetext_bar_length  // Side bar length based on characters
-		
 		// Longer side bar
 		if key_selected draw_rectangle(xx, y1, list.right, y2, false)
 		else draw_rectangle(xx, y1, text_x-_text_wdist, y2, false)
@@ -468,13 +507,40 @@ for(var i = imin; i <= imax; i++)
 		// Side bar
 		draw_rectangle(xx, y1, sidebar_right, y2, false)
 	}
-	else
+	else if not term_length
 	{
 		draw_set_color(col)
 	}
 	
 	// Text
-	draw_text(text_x, text_y, list.list[| i].name)
+	var name = list.list[| i].name
+	
+	
+	var j = 0
+	if term_length
+	{
+		for(j = 1; j <= min(term_length, string_length(name)); j++)
+		{
+			if string_char_at(list.term, j) != string_char_at(name, j)
+			{
+				break
+			}
+		}
+		
+		var term_text = slice(name, , j)
+		
+		if term_text != ""
+		{
+			draw_set_color(color_set_hsv(col, , 100, 255))
+			draw_set_alpha(.4)
+			draw_hollowrect(text_x-1, y1, text_x+string_length(term_text)*cw, y2, 1)
+			draw_set_alpha(1)
+			draw_text(text_x, text_y, term_text)
+		}
+		
+		draw_set_color(col)
+	}
+	draw_text(text_x+max(0, j-1)*cw, text_y, slice(name, j))
 	
 	if selected	
 	{
