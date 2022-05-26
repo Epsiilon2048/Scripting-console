@@ -15,7 +15,10 @@ else text = string(doc)
 
 if is_undefined(color)
 {
-	if text == "" color = o_console.colors.output
+	if text == "" or (is_array(text) and array_length(text) == 0)
+	{
+		color = o_console.colors.output
+	}
 	else if is_struct(doc) and not is_undefined(doc.error) color = o_console.colors.real
 	else color = o_console.colors.output
 }

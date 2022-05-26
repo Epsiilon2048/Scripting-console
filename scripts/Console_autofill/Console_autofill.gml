@@ -188,7 +188,7 @@ add = function(list){
 		
 		if variable_struct_exists(items, list_item)
 		{
-			show_debug_message(items[$ list_item])
+			//show_debug_message(items[$ list_item])
 			ds_list_delete(self.list, items[$ list_item])
 			size --
 		}

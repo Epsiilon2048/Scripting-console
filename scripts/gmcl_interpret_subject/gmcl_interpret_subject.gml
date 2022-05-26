@@ -343,33 +343,35 @@ else
 			if variable.error == exceptionVariableNotExists error = exceptionUnrecognized
 			else error = variable.error
 			
+			description = []
+			
 			if is_numeric(_arg)
 			{
 				if better_script_exists(_arg) description = ["Shortcut for ",{str: script_get_name(_arg), col: dt_method}]
 				else description = ["<unknown function>"]
 			}
-			else if is_method(_arg)	description = [_arg_plain]
-			else if is_string(_arg) description = [_arg]
 			
 			value = _arg
 			if variable.exists
 			{	
 				type = dt_variable
 				
-				if is_struct(variable.value)		array_push(description, " (holds ",{str: instanceof(variable.value), col: dt_method},")")
-				else if is_array(variable.value)	array_push(description, " (holds array)")
-				else if is_ptr(variable.value)		array_push(description, " (holds pointer)")
-				else if is_method(variable.value)	array_push(description, " (holds method)")
-				else if is_bool(variable.value)		array_push(description, " (",{str: (variable.value ? "true" : "false"), col: dt_real},")")
+				var io = instanceof(variable.value)
+				
+				if is_method(variable.value)		array_push(description, "Holds function")
+				else if is_struct(variable.value)	array_push(description, "Holds ",{str: io, col: (io == "struct") ? dt_unknown : dt_method})
+				else if is_array(variable.value)	array_push(description, "Holds array with "+string(array_length(variable.value))+" item"+((array_length(variable.value) == 1) ? "" : "s"))
+				else if is_ptr(variable.value)		array_push(description, "Holds pointer")
+				else if is_bool(variable.value)		array_push(description, {str: (variable.value ? "true" : "false"), col: dt_real})
 				else if is_string(variable.value)
 				{
-					if string_length(variable.value) > 300 or (string_height(variable.value)/string_height("W")) > 1 array_push(description, " (holds string)")
-					else array_push(description, " (",{str: "\""+variable.value+"\"", col: dt_string},")")
+					if string_length(variable.value) > 300 or (string_height(variable.value)/string_height("W")) > 1 array_push(description, "Holds string")
+					else array_push(description, {str: "\""+variable.value+"\"", col: dt_string})
 				}
 				else if is_numeric(variable.value) and ds_map_exists(ds_types, _arg)
 				{
 					description = "holds ds_"+ds_type_to_string(ds_types[? _arg])+" "
-							
+
 					switch ds_types[? _arg]
 					{
 					case ds_type_grid:
@@ -391,15 +393,18 @@ else
 						description += "with "+string(ds_stack_size(info.value))+" items"
 					break
 					}
-							
+
 					description = [description]
+				}
+				else if is_numeric(variable.value)
+				{
+					array_push(description, {str: string_format_float(variable.value, float_count_places(variable.value, 4)), col: dt_real})
 				}
 				else
 				{
-					array_push(description, " ("+string(variable.value)+")")
+					array_push(description, string(variable.value))
 				}
 			}
-			else array_push(description, " (does not exist?)")
 		}
 	}
 }

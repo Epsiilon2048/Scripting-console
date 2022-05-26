@@ -785,6 +785,8 @@ get_input = function(){
 				char_pos2 = 0
 				char_selection = true
 			}
+			
+			keyboard_string = ""
 		}
 		
 		if (char_selection or not typing) and copy
@@ -901,7 +903,7 @@ get_input = function(){
 					for(var i = 1; i <= string_length(char); i++)
 					{
 						var num = ord(string_char_at(char, i))
-						if 32 > num or num > 126 char = string_delete(char, i, 1)
+						if num != ord("(") and (32 > num or num > 126) char = string_delete(char, i, 1)
 					}
 			
 					if not att.allow_alpha 

@@ -1,19 +1,19 @@
 
 function input_set_pos(input){ with o_console.keyboard_scope {
 
-var old_font = draw_get_font()
-draw_set_font(o_console.font)
-var tb = o_console.TEXT_BOX
-var ch = string_height("W")
-var asp = ch/tb.char_height
-var _text_hdist = floor(tb.text_hdist*asp)
-draw_set_font(old_font)
+//var old_font = draw_get_font()
+//draw_set_font(o_console.font)
+//var tb = o_console.TEXT_BOX
+//var ch = string_height("W")
+//var asp = ch/tb.char_height
+//var _text_hdist = floor(tb.text_hdist*asp)
+//draw_set_font(old_font)
 
 input = string(input)
 
 if string_pos(string_char_at(text, char_pos2), o_console.refresh_sep) char_pos2--
 
-var _min = char_pos2+1
+var _min = char_pos2
 var _max = char_pos2
 
 var str_length = string_length(text)

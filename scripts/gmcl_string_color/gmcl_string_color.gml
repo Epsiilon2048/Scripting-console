@@ -70,6 +70,7 @@ var in_brackets = 0
 var accessor = ""
 var can_have_accessor = false
 var possible_accessors = ""
+var conjunction = ""
 
 var association = is_struct(object or instance_exists(object)) ? object : {}
 
@@ -154,6 +155,26 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 	else
 	{
 		var is_sep = string_pos(char, space_sep) > 0
+		
+		if char == "("
+		{
+			conjunction = char
+		}
+		else
+		{
+			conjunction = ""
+			for(var j = i; j <= string_length(_command)+1; j++)
+			{
+				var jchar = string_char_at(_command, j)
+				
+				if jchar != " "
+				{
+					if jchar != "(" and string_pos(jchar, space_sep) conjunction = jchar
+					break
+				}
+			}
+			contrace("\""+conjunction+"\"")
+		}
 		
 		if char == "\""
 		{
@@ -349,9 +370,27 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 							var value = var_info.value
 							
 							if _macro_type == dt_variable and _prev_iden != dt_variable	_col = dt_builtinvar
-							else if is_struct(value)		_col = dt_instance
-							else if is_method(value)		_col = dt_method
-							else							_col = dt_variable
+							if char == "("
+							{
+								if is_method(value)	or (is_numeric(value) and better_script_exists(value))
+								{
+									_col = dt_method
+								}
+								else
+								{
+									_col = dt_deprecated
+								}
+							}
+							else if char == "="
+							{
+								_col = dt_variable
+							}
+							else
+							{
+								if is_method(value)			_col = dt_variable
+								else if is_struct(value)	_col = dt_instance
+								else						_col = dt_variable
+							}
 						
 							possible_accessors = get_possible_accessors(value)
 								
@@ -374,13 +413,43 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					{
 						var value = var_info.value
 						
-						if is_struct(value)			_col = dt_instance
-						else if is_method(value)	_col = dt_method
-						else						_col = dt_variable
+						if char == "("
+						{
+							if is_method(value)	or (is_numeric(value) and better_script_exists(value))
+							{
+								_col = dt_method
+							}
+							else
+							{
+								_col = dt_deprecated
+							}
+						}
+						else if char == "="
+						{
+							_col = dt_variable
+						}
+						else
+						{
+							if is_method(value)			_col = dt_variable
+							else if is_struct(value)	_col = dt_instance
+							else						_col = dt_variable
+						}
 
 						possible_accessors = get_possible_accessors(value)
 					}
 				}
+			}
+			
+			if subject and _col != dt_unknown switch conjunction
+			{
+			case "(":
+				if _iden != -1 and _iden != dt_method _col = dt_deprecated
+				else if (is_int and _col == dt_real and better_script_exists(real(segment))) _col = dt_method
+				else if _col != dt_method _col = dt_deprecated
+			break
+			case "=":
+				if _col != dt_variable _col = dt_deprecated
+			break
 			}
 			
 			if marker != 0 and prev_char != " "	push_combine(color_list, marker+1, _iden_string ? dt_string : dt_unknown)
