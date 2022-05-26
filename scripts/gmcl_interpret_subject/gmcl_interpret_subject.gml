@@ -92,8 +92,8 @@ else
 					value = arg_real
 					type = dt_instance
 				
-					if object_exists(arg_real) description = [{str: object_get_name(value.object_index), col: dt_instance}]
-					else description = ["Instance of ",{str: object_get_name(value.object_index), col: dt_instance}]
+					if object_exists(arg_real) description = ["Index of object ",{str: object_get_name(value.object_index), col: dt_instance}]
+					else description = ["ID of object ",{str: object_get_name(value.object_index), col: dt_instance}]
 				}
 				else
 				{
@@ -213,7 +213,11 @@ else
 			type = dt_instance
 			value = arg_real
 			
-			description = [{str: object_get_name(arg_real.object_index), col: dt_asset}]
+			if object_exists(arg_real.object_index)
+			{
+				description = ["Index of object ",{str: better_object_get_name(arg_real.object_index), col: dt_instance}]
+			}
+			else description = ["ID of object ",{str: better_object_get_name(arg_real.object_index), col: dt_instance}]
 		}
 		else
 		{
@@ -241,8 +245,6 @@ else
 				{
 					value = asset
 					type = dt_asset
-					
-					description = [string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset"]
 				}
 			break
 			case dt_variable:
@@ -312,19 +314,16 @@ else
 			
 			switch asset_get_type(_arg)
 			{
-				default:
-					description = [string_capitalize(asset_type_to_string(asset_get_type(_arg)))+" asset"]
-				break
 				case asset_object:
 					if instance_exists(asset)
 					{
 						type = dt_instance
 						var count = instance_number(asset)
-						description = ["Object (",{str: count, col: dt_instance},((count == 1) ? " instance":" instances")+")"]
+						description = [{str: count, col: dt_instance},((count == 1) ? " instance":" instances")]
 					}
 					else
 					{
-						description = ["Object (",{str: "0", col: dt_instance}," instances)"]
+						description = [{str: "0", col: dt_instance}," instances)"]
 					}
 				break
 				case asset_script: 

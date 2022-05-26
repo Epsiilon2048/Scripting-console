@@ -8,12 +8,17 @@ var color = undefined
 if is_struct(doc)
 {
 	text = doc.description
-	color = o_console.colors[$ doc.type]
 	if is_undefined(text) text = ""
+	color = o_console.colors[$ doc.type]
 }
 else text = string(doc)
 
-if is_undefined(color) color = (text == "") ? o_console.colors.plain : o_console.colors.output
+if is_undefined(color)
+{
+	if text == "" color = o_console.colors.output
+	else if is_struct(doc) and not is_undefined(doc.error) color = o_console.colors.real
+	else color = o_console.colors.output
+}
 
 var old_color = draw_get_color()
 var old_font = draw_get_font()
@@ -62,14 +67,13 @@ var y2 = y+_hdist*2+height
 
 draw_console_body(x, y, x2, y2)
 
+draw_set_color(color)
+draw_rectangle(x, y, x+o_console.BAR._sidebar_width, y2, false)
+
 if plaintext != "" 
 {
-	draw_set_color(color)
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
-
-	draw_rectangle(x, y, x+o_console.BAR._sidebar_width, y2, false)
-	draw_rectangle(x+1, y+1, x2-1, y2-1, true)
 	
 	draw_set_color(o_console.colors.plain)
 	draw_color_text(x+_wdist, y+_hdist+1, text)
