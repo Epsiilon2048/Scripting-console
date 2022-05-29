@@ -34,7 +34,7 @@ color_schemes.greenbeans = create_color_scheme_full(
 color_schemes.greenbeans.body_real = 2497549
 color_schemes.greenbeans.instance = pink
 color_schemes.greenbeans.builtin = true
-color_schemes.greenbeans.author = "Epsiilon"
+color_schemes.greenbeans.author = "Epsii"
 
 color_schemes.greenbeans.red = make_color_rgb(240, 47, 56)
 color_schemes.greenbeans.green = make_color_rgb(104, 207, 88)
@@ -59,7 +59,7 @@ color_schemes.royal = create_color_scheme7(
 	yellow
 )
 color_schemes.royal.builtin = true
-color_schemes.royal.author = "Epsiilon"
+color_schemes.royal.author = "Epsii"
 
 
 
@@ -80,7 +80,7 @@ color_schemes.drowned = create_color_scheme7(
 	yellow
 )
 color_schemes.drowned.builtin = true
-color_schemes.drowned.author = "Epsiilon"
+color_schemes.drowned.author = "Epsii"
 
 
 
@@ -100,7 +100,7 @@ color_schemes.helios = create_color_scheme7(
 	yellow
 )
 color_schemes.helios.builtin = true
-color_schemes.helios.author = "Epsiilon"
+color_schemes.helios.author = "Epsii"
 
 
 var dark_pink	= make_color_rgb(44, 34, 54)
@@ -129,7 +129,7 @@ color_schemes.humanrights = create_color_scheme_full(
 	white
 )
 color_schemes.humanrights.builtin = true
-color_schemes.humanrights.author = "Epsiilon"
+color_schemes.humanrights.author = "Epsii"
 
 color_schemes.rainbowsoup = { author: "rainlizard", builtinvar : 12704952, selection : 3416867, string : 11402413, sprite_alpha : 1, body_bm : bm_subtract, asset : 10461183, embed_hover : 15334573, deprecated : 9392695, sprite_anchor : 0, tag : 13434879, method : 5334256, builtin : true, body_real : 3416867, embed : 16757170, instance : 16292351, sprite : -1, variable : 16757170, body_real_alpha : 0.50, body : -3416867, output : 10461183, ex_output : 16777215, real : 10674930, plain : 8217772, outline_layers : 0, color : 13434879, bevel : true, body_accent : 9392695, body_alpha : 1 }
 

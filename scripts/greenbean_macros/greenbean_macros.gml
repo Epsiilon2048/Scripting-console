@@ -6,6 +6,7 @@
 #macro mouse_on_console			o_console.mouse_on
 #macro clicking_on_console		o_console.clicking_on
 #macro console_typing			(o_console.keyboard_scope != noone)
+#macro chatterbox_is_ready true//gmcl_work_with_chatterbox and global.__chatterbox_exists and variable_global_exists("chatterboxVariablesMap")
 
 console_object_exists = object_exists(asset_get_index("o_console"))
 
@@ -73,8 +74,8 @@ vk_tilde = apple ? 50 : 192
 #macro dt_variable		"variable"
 #macro dt_method		"method"
 #macro dt_instance		"instance"
-#macro dt_color			"color"			// Only used for identifiers
-#macro dt_builtinvar	"builtinvar"	// Only used for colors
+#macro dt_color			"color"
+#macro dt_builtinvar	"builtinvar"
 #macro dt_tag			"tag"
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"

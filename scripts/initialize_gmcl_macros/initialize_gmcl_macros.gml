@@ -75,14 +75,10 @@ am("room",				dt_variable, function(index){if is_numeric(index) room_goto(index)
 										
 am("gui_mx",			dt_variable, function(){ return gui_mx })
 am("gui_my",			dt_variable, function(){ return gui_my })
-am("gui_mouse_x",		dt_variable, function(){ return gui_mx })
-am("gui_mouse_y",		dt_variable, function(){ return gui_my })
 
-am("dock",				dt_method, new_console_dock)
-am("textbox",			dt_method, new_text_box)
-am("scrubber",			dt_method, new_scrubber)
-am("displaybox",		dt_method, new_display_box)
-am("colorbox",			dt_method, new_color_box)
+am("textbox",			dt_method, function(variable){add_console_element(new_text_box(variable, variable))})
+am("scrubber",			dt_method, function(variable, step){add_console_element(new_scrubber(variable, variable, step))})
+am("colorbox",			dt_method, function(variable){add_console_element(new_color_box(variable, variable))})
 #endregion
 										
 #region Console datatypes				

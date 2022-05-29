@@ -469,7 +469,7 @@ draw_set_color(c_white)
 
 var term_length = string_length(list.term)
 
-clip_rect_cutout(list.left+1, list.top+1, list.right-1, list.bottom-1)
+clip_rect_cutout(list.left, list.top+1, list.right-1, list.bottom-1)
 for(var i = imin; i <= imax; i++)
 {	
 	var item = list.list[| i]

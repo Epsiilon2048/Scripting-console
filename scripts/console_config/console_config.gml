@@ -1,14 +1,16 @@
 
-// Ease of use
-#macro gmcl_automatic_gui_resize	false	// If enabled, automatically resizes the gui layer to the window
+// Automatically resize the gui layer to the window
+// Only use for quick solutions!
+#macro gmcl_automatic_gui_resize	false
 
-// User sandbox
-#macro gmcl_sb_allow_change			true	// Whether or not the user can change the sandbox settings
+// Console works with the ChatterBox extension
+#macro gmcl_work_with_chatterbox	true
 
-// Compatibility
-#macro gmcl_work_with_imgui			false	// Whether or not the console works with the extension imGUI
+// Normally it's not initialized immediately
+#macro gmcl_initialize_on_startup	true
 
-// Debugging
-#macro gmcl_in_debug_mode			true	// Runs the dev_console_setup script on console startup
-#macro gmcl_initialize_on_startup	true	// Normally it's not initialized immediately
-#macro gmcl_instant_setup			true	// If false, makes startup slightly slower but much smoother
+// If false, makes startup slightly slower but much smoother
+#macro gmcl_instant_setup			true
+
+// Runs the dev_console_setup script on console startup
+#macro gmcl_in_debug_mode			true

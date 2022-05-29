@@ -146,7 +146,7 @@ draw = function(){
 	draw_set_halign(fa_left)
 	draw_set_valign(fa_top)
 
-	var dc = o_console.DOCK
+	//var dc = o_console.DOCK
 	
 	if not is_button or not (mouse_on or clicking)
 	{
@@ -174,7 +174,7 @@ draw = function(){
 	
 	
 #region Dock checkbox
-function new_cd_checkbox(text, variable){
+function new_cd_checkbox(text="", variable=""){
 var c = new Cd_checkbox()
 c.initialize(text, variable)
 return c

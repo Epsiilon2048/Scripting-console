@@ -34,7 +34,7 @@ static method_exec = function(ind, args){
 	{
 		run_in_console = false
 		prev_exception = _exception
-		return format_output([{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message], true, -1, "Runner error")
+		return format_output([{str: "[SCRIPT ERROR]", scr: error_report, output: true}," "+_exception.message], true)
 	}
 }
 
@@ -91,7 +91,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 				
 				run_in_console = false
 				
-				if is_struct(value) and value.exists
+				if is_struct(value) and not is_method(value) and value.exists
 				{
 					args[com[i].variables[j]] = value.value
 				}
@@ -220,7 +220,7 @@ catch(_exception)
 	
 //damn tho wouldnt this suck
 prev_exception = _exception
-return [format_output([{str: "[CONSOLE ERROR]", scr: error_report, output: true}," "+exceptionUnknown], true, -1)]
+return [format_output([{str: "[CONSOLE ERROR]", scr: error_report, output: true}," "+exceptionUnknown], true)]
 
 }
 }}

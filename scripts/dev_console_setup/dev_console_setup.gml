@@ -4,6 +4,8 @@ function dev_console_setup(){ with o_console {
 if not gmcl_in_debug_mode return undefined
 
 // These are in-dev operations and should've been removed
+
+/*
 add_console_element(new_console_dock("Scroll", [
 	[new_scrubber("scroll x","o_dev.sc.scroll_x",1),new_scrubber("scroll y","o_dev.sc.scroll_y",1),],
 	new_separator(),
@@ -63,5 +65,5 @@ on_enter = function(){
 add_console_element(t)
 
 // These are just my preferred settigs; you can put anything in here really
-autofill_from_float = true
+autofill_from_float = true*/
 }}

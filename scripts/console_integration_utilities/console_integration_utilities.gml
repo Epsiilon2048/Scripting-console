@@ -35,7 +35,7 @@ dock.enabled = not is_undefined(output)
 
 if is_string(output)
 {
-	dock.set(output)
+	dock.to_set = output
 	move_to_front(self)
 	exit
 }
@@ -43,15 +43,15 @@ if is_string(output)
 
 if is_bool(output)
 {
-	dock.set(output ? "true" : "false")
+	dock.to_set = output ? "true" : "false"
 	move_to_front(self)
 	exit
 }
 
 
-if real(output)
+if is_real(output)
 {
-	dock.set(string_format_float(output, 3))
+	dock.to_set = string_format_float(output, 3)
 	move_to_front(self)
 	exit
 }
@@ -59,7 +59,15 @@ if real(output)
 
 if is_ptr(output)
 {
-	dock.set("pointer")
+	dock.to_set = "pointer"
+	move_to_front(self)
+	exit
+}
+
+if is_method(output)
+{
+	show_message(1)
+	dock.to_set = string(output)
 	move_to_front(self)
 	exit
 }
@@ -67,7 +75,7 @@ if is_ptr(output)
 
 if not is_struct(output) and not is_array(output)
 {
-	dock.set(string(output))
+	dock.to_set = string(output)
 	exit
 }
 
@@ -83,21 +91,24 @@ if is_struct(output)
 	{
 		if not variable_struct_exists(output, "name")
 		{
-			add_console_element(output)
+			output.initialize()
+			output.set()
 		}
+		
+		add_console_element(output)
 		exit
 	}
 	
 	if io == "element_container" or variable_struct_exists_get(output, "is_console_element", false)
 	{
-		dock.set(output)
+		dock.to_set = output
 		move_to_front(self)
 		exit
 	}
 	
 	if variable_struct_names_count(output) == 0
 	{
-		dock.set("Empty struct")
+		dock.to_set = "Empty struct"
 		move_to_front(self)
 		exit
 	}
@@ -112,7 +123,7 @@ if is_array(output)
 {
 	if array_length(output) == 0
 	{
-		dock.set("Empty array")
+		dock.to_set = "Empty array"
 		move_to_front(self)
 		exit
 	}
@@ -195,13 +206,13 @@ for(var i = 0; i <= min(max_items, array_length(list)-1); i++)
 if i >= max_items
 {
 	str += "(...)"
-	dock.set(str)
+	dock.to_set = str
 	exit
 }
 
 
 str += after
-dock.set(str)
+dock.to_set = str
 
 /*
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
@@ -220,7 +231,7 @@ if is_array(output)
 	}
 	text += "]"
 
-	dock.set(text)
+	dock.to_set = text)
 }
 if is_struct(output)
 {
@@ -232,7 +243,7 @@ if is_struct(output)
 	}
 	else if io == "element_container" or variable_struct_exists_get(output, "is_console_element", false)
 	{
-		dock.set(output)
+		dock.to_set = output)
 	}
 	else
 	{
@@ -258,14 +269,14 @@ if is_struct(output)
 		array_push(names, "}")
 
 		dock.association = output		
-		dock.set(names)
+		dock.to_set = names)
 	}
 }
 else 
 {
-	if is_string(output) and not string_pos("\n", output) dock.set(quotes_if_string(output))
-	else if is_numeric(output) dock.set(string_format_float(output, float_count_places(output, 4)))
-	else dock.set(string(output))
+	if is_string(output) and not string_pos("\n", output) dock.to_set = quotes_if_string(output))
+	else if is_numeric(output) dock.to_set = string_format_float(output, float_count_places(output, 4)))
+	else dock.to_set = string(output))
 }
 
 dock.enabled = not is_undefined(output)

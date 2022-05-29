@@ -6,7 +6,7 @@
     "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are).yy",
   },
   "resourceVersion": "1.0",
-  "name": "console_exceptions",
+  "name": "greenbean_exception_macros",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -1,7 +1,8 @@
 
-function new_cd_button(name, func){
+function new_cd_button(name, func, draw_box=true){
 var b = new Cd_button()
 b.initialize(name, func)
+b.draw_box = draw_box
 return b
 }
 

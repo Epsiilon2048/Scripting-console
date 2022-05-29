@@ -105,6 +105,9 @@ with OUTPUT {
 	dock.should_draw = function(){
 		return not (dock.docked and not dock.run_in_dock)
 	}
+	
+	draw_outline = false
+	dock.draw_outline = false
 }
 
 var bar_dock = new Console_dock() with bar_dock

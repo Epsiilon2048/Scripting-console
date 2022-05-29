@@ -1,5 +1,5 @@
 
-function ds_create(ds_type, name, w, h){
+function ds_create(ds_type, name=undefined, w=undefined, h=undefined){
 
 var ind = -1
 

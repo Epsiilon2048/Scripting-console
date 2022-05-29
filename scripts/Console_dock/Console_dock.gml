@@ -40,7 +40,7 @@ with scope
 
 
 
-function element_container(elements, association=noone, name=undefined) constructor{
+function element_container(elements, association=undefined, name=undefined) constructor{
 	
 self.elements = elements
 self.association = association
@@ -147,7 +147,7 @@ update_elements = function(y){
 
 set_element = function(x, y, element){
 	
-	if not is_struct(element) element = new_cd_text(string(element), "output")
+	if not is_struct(element) or is_method(element) element = new_cd_text(string(element), "output")
 
 	if is_undefined(x) elements[y] = element
 	else
@@ -175,7 +175,9 @@ remove_element = function(element){
 	
 	variable_struct_remove(e, element.id)
 	array_delete(elements[yy], xx, 1)
-	array_delete(afterscript, array_find(afterscript, element), 1)
+	
+	var ind = array_find(afterscript, element)
+	if ind >= 0 array_delete(afterscript, ind, 1)
 	
 	if elements[yy] = [] array_delete(elements, yy, 1)
 	
@@ -316,7 +318,7 @@ after_dock = function(){
 		right = (dock.left+dock._width)-_element_wdist
 	}
 	
-	if not is_undefined(height) bottom = max(top, top+height)
+	if not is_undefined(height) bottom = max(bottom, top+height)
 	
 	mouse_on_bar = not was_clicking_on_console and draw_name and gui_mouse_between(left, top, right, top + ch + _name_hdist*2)
 	mouse_on = mouse_on_bar or (not was_clicking_on_console and (show and gui_mouse_between(left, top, right, bottom)))
@@ -558,7 +560,7 @@ get_input = function(){
 				_xx = floor(_xx)
 				_yy = floor(_yy)
 
-				if is_struct(el) and (not allow_element_dragging or not el.dragging or not dragging_radius_met)
+				if is_struct(el) and not is_method(el) and (not allow_element_dragging or not el.dragging or not dragging_radius_met)
 				{
 					var was_dragging = el.dragging
 					
@@ -699,7 +701,7 @@ draw = function(){
 		draw_text(left+_name_wdist, top+_name_hdist+1, name)
 	
 		draw_set_color(o_console.colors.body_accent)
-		if draw_name_bar draw_hollowrect(left, top, right, top + bar_height, _outline_width)
+		if draw_name_bar and draw_outline draw_hollowrect(left, top, right, top + bar_height, _outline_width)
 
 		if show
 		{

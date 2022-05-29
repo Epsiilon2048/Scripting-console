@@ -1,8 +1,8 @@
 
 global.id = global
 global.object_index = global
-global.__chatterbox_exists = asset_get_index("ChatterboxVariableGet") != -1
-#macro chatterbox_is_ready true//global.__chatterbox_exists and variable_global_exists("chatterboxVariablesMap")
+global.__chatterbox_exists = gmcl_work_with_chatterbox and asset_get_index("ChatterboxVariableGet") != -1
+
 global.chatterboxVariablesMap = ds_map_create()
 global.chatterboxVariablesList = ds_list_create()
 ds_list_add(global.chatterboxVariablesList, "hello", "super_cool", "trico_sucks_balls")

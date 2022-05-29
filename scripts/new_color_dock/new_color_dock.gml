@@ -1,13 +1,6 @@
 
-function new_color_dock(variable, use_varbox, use_rgb, use_hsv, use_hex, use_gml){
+function new_color_dock(variable="", use_varbox=true, use_rgb=true, use_hsv=true, use_hex=true, use_gml=true){
 	
-if is_undefined(variable) variable = ""
-if is_undefined(use_varbox) use_varbox = true
-if is_undefined(use_rgb) use_rgb = true
-if is_undefined(use_hsv) use_hsv = true
-if is_undefined(use_hex) use_hex = true
-if is_undefined(use_gml) use_gml = true	
-
 var cb = {} with cb {
 	
 	using_varbox = use_varbox
