@@ -1,5 +1,5 @@
 
-draw_autofill_list_new(x, y, autofill)
+//draw_autofill_list_new(x, y, autofill)
 
 
 //clip_rect_cutout(x, y, x+200, y+200)

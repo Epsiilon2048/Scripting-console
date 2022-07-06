@@ -8,9 +8,9 @@ o_console.run_in_console = false
 {
 	if o_console.console_string != constr
 	{
-		gmcl_autofill_new(o_console.console_string)
+		//gmcl_autofill_new(o_console.console_string)
 		//autofill.get(o_console.console_string)
 		constr = o_console.console_string
 	}
-	autofill.get_input()
+	//autofill.get_input()
 }

@@ -123,6 +123,7 @@ if executing
 	executing = false
 }
 
+autofill_default.get_input()
 ctx_menu_get_input()
 
 COLOR_PICKER.get_input()

@@ -18,7 +18,7 @@ for(var i = ds_list_size(elements)-1; i >= 0; i--)
 
 if element_dragging != noone element_dragging.draw()
 
-draw_autofill_list()
+draw_autofill_list_new()
 COLOR_PICKER.draw()
 draw_ctx_menu()
 draw_console_measurer()

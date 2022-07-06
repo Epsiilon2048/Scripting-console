@@ -6,6 +6,7 @@ with BAR {
 	enabled = false
 	
 	char_height = 23
+	_sidebar_width = 0
 	
 	outline_width = 1.4
 	docked_width = 1000
@@ -42,7 +43,7 @@ with BAR {
 		draw_name = false
 		att.draw_box = false
 		color_method = gmcl_string_color
-		autofill_method = gmcl_autofill_old
+		autofill_method = gmcl_autofill_new
 		att.exit_with_enter = false
 		att.set_variable_on_input = true
 		att.allow_scoped_exinput = true

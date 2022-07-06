@@ -31,7 +31,7 @@ var cb = {} with cb {
 		var_text_box.draw_name = false
 		var_text_box.initial_ghost_text = "Variable"
 		var_text_box.color_method = gmcl_string_color
-		var_text_box.autofill_method = gmcl_autofill_old
+		var_text_box.autofill_method = gmcl_autofill_new
 		
 		array_push(elements, [var_text_box])
 	}

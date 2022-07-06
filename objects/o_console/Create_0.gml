@@ -45,15 +45,8 @@ scale = function(size){
 
 	if is_undefined(size)
 	{
-		var display_width = display_get_width()/display_get_dpi_x()
-		size = 2 + (display_width >= 14) + (display_width >= 23) + (display_width >= 28) + (display_width >= 31)
-	
-		// Scales based on display size:
-		// 14in		2x
-		// 23in		3x
-		// 28in		4x
-		// 31in		5x
-		// Above	6x
+		var width = gui_width
+		size = 1 + (width >= 512) + (width >= 1280) + (width > 1920) + (width > 2560)
 	}
 
 	set_font(fonts[ clamp(size-1, 0, array_length(fonts)-1) ])
@@ -149,13 +142,13 @@ event_commands = {
 }
 
 tags = {} with tags {
-	add			= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){add_console_element(gmcl_exec(command))}}
+	add			= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){add_console_element(gmcl_exec(command))}}
 	include		= {color: /*console_include_tag_color*/gmcl_string_color, autofill: noscript, func: console_include}
 	
-	step		= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("step", command)}}
-	step_end	= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("step_end", command)}}
-	draw		= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("draw", command)}}
-	gui			= {color: gmcl_string_color, autofill: gmcl_autofill_old, func: function(command){event_command_add("gui", command)}}
+	step		= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("step", command)}}
+	step_end	= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("step_end", command)}}
+	draw		= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("draw", command)}}
+	gui			= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("gui", command)}}
 }
 
 gui_mouse_x = gui_mx
@@ -236,9 +229,13 @@ soft_init = true
 can_run = false
 enabled = true
 
-scale()
 DISPLAY = {}
 
 selected_term = ""
+
+auto_scale = true
+prev_gui_size = gui_width*gui_height
+variable_scope_list = []
+variable_scope = noone
 
 if gmcl_initialize_on_startup event_perform(ev_step, ev_step_end)

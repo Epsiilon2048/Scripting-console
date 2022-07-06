@@ -173,7 +173,7 @@ for(var i = com_start; i <= string_length(_command)+1; i++)
 					break
 				}
 			}
-			contrace("\""+conjunction+"\"")
+			//contrace("\""+conjunction+"\"")
 		}
 		
 		if char == "\""

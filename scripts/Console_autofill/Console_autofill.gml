@@ -360,7 +360,7 @@ scrollbar_get_boundaries = function(){
 	}
 	
 	left = x
-	top = y + (height*ch+2-_height)
+	top = y-_height - scrollbar._bar_width*(scrollbar.wbar_enabled and scrollbar.wbar_length > 0)//+ (height*ch+2-_height)
 	right = left+_width-1
 	bottom = top+_height-1
 	
@@ -383,7 +383,7 @@ get_input = function(){
 	scrollbar_get_boundaries()
 	scrollbar.get_input()
 	
-	var tab = keyboard_check_pressed(vk_f1)
+	var tab = keyboard_check_pressed(vk_tab)
 	if tab
 	{
 		key_index --
@@ -399,15 +399,24 @@ get_input = function(){
 				// Could be better but ehh
 			)
 		}
+		
+		input_set_pos(list[| key_index].value)
 	}
 	
+	var was_clicking = clicking
 	clicking = mouse_check_button(mb_left) and (clicking or mouse_on)
 	
-	if /*not mouse_on_console and */gui_mouse_between(left, top, right, bottom)
+	if not mouse_on_console and gui_mouse_between(left, top, right, bottom)
 	{
+		mouse_on_console = true
+		
+		if not clicking and was_clicking
+		{
+			input_set_pos(list[| mouse_index].value)
+		}
+		
 		if not clicking and not (not mouse_on and mouse_check_button(mb_left))
 		{
-			//mouse_on_console = true
 			mouse_on = true
 			
 			var prev_index = mouse_index
@@ -433,9 +442,11 @@ get_input = function(){
 }
 
 
-function draw_autofill_list_new(x=o_console.autofill.x, y=o_console.autofill.y, list=o_console.autofill){ with o_console.TEXT_BOX {
+function draw_autofill_list_new(x=o_console.AUTOFILL.x, y=o_console.AUTOFILL.y, list=o_console.autofill_default){ with o_console.TEXT_BOX {
 
 if ds_list_size(list.list) == 0 exit
+
+draw_set_font(o_console.font)
 
 var at = o_console.AUTOFILL
 
@@ -502,7 +513,7 @@ for(var i = imin; i <= imax; i++)
 		draw_set_color(col)
 		draw_text(xx+_text_wdist, text_y, item.side_text)
 		
-		var sidebar_right = xx+_text_wdist/3
+		var sidebar_right = xx+o_console.BAR._sidebar_width
 	
 		// Side bar
 		draw_rectangle(xx, y1, sidebar_right, y2, false)

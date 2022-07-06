@@ -1,5 +1,5 @@
 
-function gmcl_autofill_new(gmcl_string){
+function gmcl_autofill_new(gmcl_string=undefined, char_pos=0){ with o_console.autofill {
 
 // Is tag
 // Embed tag
@@ -16,17 +16,15 @@ function gmcl_autofill_new(gmcl_string){
 
 // Console scope
 
-var scope = o_console.object
-var iden = dt_unknown
-var first = string_char_at(gmcl_string, 1)
-var dots = string_count(".", gmcl_string)
-var has_bracket = string_pos("[", gmcl_string) != 0
-var is_number = string_is_float(gmcl_string)
+var af = o_console.autofill_default
 
-for(var i = 0; i <= ds_list_size(autofill.lists)-1; i++)
+var reset = gmcl_string == undefined
+if is_undefined(gmcl_string) gmcl_string = ""
+
+for(var i = 0; i <= ds_list_size(af.lists)-1; i++)
 {
-	if not is_struct(autofill.lists[| i]) continue
-	autofill.lists[| i].enabled = false
+	if not is_struct(af.lists[| i]) continue
+	af.lists[| i].enabled = false
 }
 
 scope_variables.show_all_if_blank = false
@@ -34,8 +32,22 @@ assets.show_all_if_blank = false
 methods.show_all_if_blank = false
 instances.show_all_if_blank = false
 
-var autofill_string = gmcl_string
+char_pos_arg = gmcl_get_argument_old(gmcl_string, char_pos)
+var autofill_string = char_pos_arg.arg
 
+var scope = o_console.object
+var iden = dt_unknown
+var first = string_char_at(autofill_string, 1)
+var last = string_last(autofill_string)
+var dots = string_count(".", autofill_string)
+var has_bracket = string_pos("[", autofill_string) != 0
+var is_number = string_is_float(autofill_string)
+
+if reset
+{
+	af.get("")
+	exit
+}
 
 
 // It'sa number!!
@@ -43,7 +55,7 @@ if is_number
 {
 	instances.enabled = true
 	input_log.enabled = true
-	autofill.get(autofill_string)
+	af.get(autofill_string)
 	exit
 }
 
@@ -51,11 +63,11 @@ if is_number
 if first == "$"
 {
 	chatterbox.enabled = true
-	autofill.get(autofill_string)
+	af.get(autofill_string)
 	exit
 }
 
-if string_char_at(gmcl_string, 2) == "/" and variable_struct_exists(o_console.identifiers, first)
+if string_char_at(autofill_string, 2) == "/" and variable_struct_exists(o_console.identifiers, first)
 {
 	iden = o_console.identifiers[$ first]
 	autofill_string = slice(autofill_string, 3)
@@ -91,22 +103,34 @@ if iden != dt_unknown
 	break
 	}
 	
-	autofill.get(autofill_string)
+	af.get(autofill_string)
 	exit
 }
 
+//{scope: instscope, arg: segment, inst: inst, variable: variable, iden: iden}
+if is_struct(char_pos_arg.scope) or (is_numeric(char_pos_arg.scope) and better_instance_exists(char_pos_arg.scope))
+{
+	contrace(char_pos_arg.variable)
+	o_console.variable_scope = char_pos_arg.scope
+	o_console.variable_scope_list = variable_instance_get_names(char_pos_arg.scope)
+	scope_variables.show_all_if_blank = true
+	instance_variables.enabled = true
+	
+	af.get(char_pos_arg.variable)
+	exit
+}
 
 // Only text
 if dots == 0 and not has_bracket
 {
-	for(var i = 0; i <= ds_list_size(autofill.lists)-1; i++)
+	for(var i = 0; i <= ds_list_size(af.lists)-1; i++)
 	{
-		if not is_struct(autofill.lists[| i]) continue
-		autofill.lists[| i].enabled = true
+		if not is_struct(af.lists[| i]) continue
+		af.lists[| i].enabled = true
 	}
 	instances.enabled = false
 	
-	autofill.get(autofill_string)
+	af.get(autofill_string)
 	exit
 }
 
@@ -117,7 +141,7 @@ if dots == 1 and not has_bracket and first == "." and (is_struct(scope) or bette
 	autofill_string = slice(autofill_string, 2)
 	scope_variables.show_all_if_blank = true
 	scope_variables.enabled = true
-	autofill.get(autofill_string)
+	af.get(autofill_string)
 	exit
 }
 
@@ -127,10 +151,10 @@ var scope
 if in_array
 {
 	array.enabled = true
-	autofill.get(autofill_string)
+	af.get(autofill_string)
 	exit
 }
 
 
-autofill.get("")
-}
+af.get("")
+}}

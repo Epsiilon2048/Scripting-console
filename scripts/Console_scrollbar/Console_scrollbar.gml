@@ -47,6 +47,8 @@ initialize = function(){
 	hscrolling = false
 	wresizing = false
 	hresizing = false
+	
+	_bar_width = 0
 }
 
 
@@ -127,7 +129,7 @@ get_input = function(){
 	var cw = string_width("W")
 	var ch = string_height("W")
 	var asp = ch/sc.char_height
-	var _bar_width = round((condensed ? sc.bar_width_condensed : sc.bar_width)*asp)
+	_bar_width = round((condensed ? sc.bar_width_condensed : sc.bar_width)*asp)
 	
 	wbar_bottom = page_bottom+_bar_width
 	hbar_right = page_right+_bar_width
@@ -170,7 +172,7 @@ get_input = function(){
 				var hbar_y2 = floor(hbar_center + hbar_length/2)
 				mouse_on_hbutton = gui_mouse_between(page_right, hbar_y1, hbar_right, hbar_y2)
 			}
-			mouse_on_console = true
+			//mouse_on_console = true
 		}
 	
 		if mouse_left_pressed

@@ -704,15 +704,17 @@ get_input = function(){
 			
 			o_console.keyboard_scope = self
 			scoped = true
+			autofill_method(text, char_pos1)
 			keyboard_string = text
 			keyboard_key = vk_nokey
 			
 			dclick_step = 0
 		}
-		else if scoped
+		else if scoped and not o_console.autofill_default.mouse_on
 		{
 			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
 			scoped = false
+			autofill_method()
 			if att.scrubber typing = false
 			
 			if not att.allow_alpha and att.allow_float
@@ -1092,8 +1094,8 @@ get_input = function(){
 					{
 						autofill_method(text, char_pos1)
 						o_console.AUTOFILL.show = true
-						o_console.AUTOFILL.x = left
-						o_console.AUTOFILL.y = top - _text_hdist
+						o_console.AUTOFILL.x = is_undefined(cbox_left) ? left : cbox_left
+						o_console.AUTOFILL.y = is_undefined(cbox_top) ? (cbox_lefttop-_text_hdist) : (cbox_top+1)
 					}
 					
 					set_boundaries()

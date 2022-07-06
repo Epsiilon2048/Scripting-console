@@ -168,7 +168,7 @@ with BAR
 		}
 		else 
 		{
-			text_box.autofill_method = gmcl_autofill_old
+			text_box.autofill_method = gmcl_autofill_new
 		}
 	}
 }
@@ -211,7 +211,7 @@ var ch = string_height("W")
 var asp = ch/BAR.char_height
 
 var _text_dist		= ceil(BAR.text_dist*asp)
-var _sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
+BAR._sidebar_width	= max(1, floor(BAR.sidebar_width*asp))
 
 var draw_dock_body
 if BAR.docked
@@ -242,7 +242,7 @@ var length = BAR.bottom - BAR.top+1
 
 draw_set_color(o_console.colors.output)
 
-draw_rectangle(BAR.left, BAR.top, BAR.left+_sidebar_width, BAR.bottom, false)
+draw_rectangle(BAR.left, BAR.top, BAR.left+BAR._sidebar_width, BAR.bottom, false)
 
 BAR.text_box.draw()
 

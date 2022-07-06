@@ -32,7 +32,7 @@ var var_text_box = new Console_text_box() with var_text_box
 	}
 	
 	autofill_method = function(command, char_pos){
-		return gmcl_autofill_old(command, char_pos, {instance: true, assets: true, scope: true})
+		return gmcl_autofill_new(command, char_pos, {instance: true, assets: true, scope: true})
 	}
 	
 	on_enter = function(){
