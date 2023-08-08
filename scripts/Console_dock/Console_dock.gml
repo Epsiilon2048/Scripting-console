@@ -363,10 +363,11 @@ if get_ctx_elements != noscript
 else m = []
 
 array_push(m,
-	new_ctx_text("Get printout", function(){clipboard_set_text(get_printout())}),
-	new_separator(),
-	new_ctx_text("Collapse all", hide_all),
 	new_ctx_text("Hide", function(){enabled = false}),
+	new_ctx_text("Collapse all", hide_all),
+	new_ctx_text("Copy", function(){clipboard_set_text(get_printout())}),
+	new_separator(),
+	new_ctx_text("Dock manager", function(){var d = o_console.element_dock; d.enabled = true; move_to_front(d); d.x = gui_mx+2; d.y = gui_my+2})
 )
 //if allow_element_dragging array_push(m, new_ctx_text("Destroy", destroy))
 return m
@@ -498,7 +499,7 @@ get_input = function(){
 	var dragging_radius_met = true
 
 	var el = o_console.element_dragging
-	if allow_element_dragging and dragging_radius_met and el != noone and el.docked and el.dock == self
+	if allow_element_dragging and dragging_radius_met and el != noone and el.docked and el.dock == self and variable_struct_exists(el, "get_input")
 	{
 		dragging_radius_met = _dragging_radius <= point_distance(mouse_xoffset, mouse_yoffset, gui_mx, gui_my)
 		el.get_input()
@@ -560,7 +561,7 @@ get_input = function(){
 				_xx = floor(_xx)
 				_yy = floor(_yy)
 
-				if is_struct(el) and not is_method(el) and (not allow_element_dragging or not el.dragging or not dragging_radius_met)
+				if is_struct(el) and not is_method(el) and variable_struct_exists(el, "get_input") and (not allow_element_dragging or not el.dragging or not dragging_radius_met)
 				{
 					var was_dragging = el.dragging
 					
@@ -641,7 +642,7 @@ get_input = function(){
 }
 
 
-
+draw = noscript
 draw = function(){
 	
 	if should_draw != noscript and not should_draw() return undefined
@@ -732,7 +733,7 @@ draw = function(){
 	
 	if show for(var i = 0; i <= array_length(elements)-1; i++) for(var j = 0; j <= array_length(elements[i])-1; j++)
 	{	
-		with elements[@ i, j] if not dragging
+		with elements[@ i, j] if not dragging and variable_struct_exists(self, "draw")
 		{
 			run_in_dock = true
 			draw()

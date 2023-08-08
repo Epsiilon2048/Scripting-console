@@ -1,7 +1,23 @@
+
+function new_scrollbar(width=400, height=600){
+	var sc = new Console_scrollbar()
+	sc.initialize()
+	sc.set_page_boundaries(width, height)
+	sc.wbar_enabled = false
+	sc.hbar_enabled = true
+	return sc
+}
+
+function new_scrollbar_side(width=400, height=600){
+	var sc = new_scrollbar(width, height)
+	sc.wbar_enabled = true
+	return sc
+}
+
+
 function Console_scrollbar() constructor{
 
 initialize = function(){
-	
 	enabled = true
 	show = true
 	
@@ -9,8 +25,8 @@ initialize = function(){
 	hbar_enabled = true
 
 	condensed = false
-	wresize = false
-	hresize = false
+	//wresize = false
+	//hresize = false
 
 	page_left = 0
 	page_top = 0
@@ -102,7 +118,6 @@ set_scroll_x = function(scroll_x){
 
 
 set_scroll_y = function(scroll_y){
-	
 	var scroll_y_max = max(0, page_height-(page_bottom-page_top))
 	
 	self.scroll_y = clamp(scroll_y, 0, scroll_y_max)
@@ -114,7 +129,6 @@ set_scroll_y = function(scroll_y){
 
 
 set_scroll = function(scroll_x, scroll_y){
-	
 	set_scroll_x(scroll_x)
 	set_scroll_y(scroll_y)
 }

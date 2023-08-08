@@ -561,36 +561,6 @@ return str
 	
 	
 	
-	
-function string_split(substr, str){ //splits a string into an array by a separator
-
-static split = ds_list_create()
-
-var pos = string_pos(substr, str)
-if not pos return [str]
-
-var marker = 1
-var substrlen = string_length(substr)
-
-ds_list_clear(split)
-
-if substrlen while pos
-{	
-	var item = string_copy(str, marker, pos - marker)
-	
-    ds_list_add(split, item)
-	
-    marker = pos + substrlen
-    pos = string_pos_ext(substr, str, marker)
-}
-ds_list_add(split, string_delete(str, 1, marker - 1))
-
-return ds_list_to_array(split)
-}
-
-
-
-	
 function string_is_int(str){ //returns true if a string is a base10 or base16 integer
 
 if not is_string(str) return false

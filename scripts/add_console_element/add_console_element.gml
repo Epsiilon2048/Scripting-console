@@ -110,3 +110,32 @@ for(var i = 0; i <= array_length(element)-1; i++)
 
 element_dock_update()
 }}
+
+
+
+
+function replace_console_element(element){ with o_console {
+
+if not variable_struct_exists(element, "id")
+{
+	if not variable_struct_exists(element, "name")
+	{
+		element.id = instanceof(element)
+		if element.id == "struct" element.id = "Element"
+	}
+	else element.id = element.name
+}
+
+element.id = string_replace_all(element.id, " ", "_")
+
+if variable_struct_exists(e, element.id)
+{
+	var dock = e[$ element.id]
+	var xx = dock.x, yy = dock.y 
+	remove_console_element(element.id)
+	add_console_element(element)
+	element.x = xx
+	element.y = yy
+}
+else add_console_element(element)
+}}

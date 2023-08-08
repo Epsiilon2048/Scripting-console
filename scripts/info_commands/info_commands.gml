@@ -1,4 +1,6 @@
 
+function syntax_help(){}
+
 function help(){
 
 return format_output([
@@ -226,7 +228,6 @@ return format_output([
 	"[links] ",{str: "Twitter",	scr: url_open, arg: "https://twitter.com/pepsiilon"}," - ",{str: "Youtube",	scr: url_open, arg: "https://www.youtube.com/channel/UCA4znMVFR0P0V6ZitJhi2bA"}," - ",{str: "Github",		scr: url_open, arg: "https://github.com/Epsiilon2048"},"\n\n"+
 
 	"With scripts from:\n",
-	{str: "yellowafterlife", scr: url_open, arg: "https://yal.cc/"}," (",{str: "string_split", scr: url_open, arg: "https://yal.cc/gamemaker-split-string/"},")\n",
 	{str: "GMLscripts.com",	scr: url_open, arg: "https://GMLscripts.com/"}," / Schreib & xot (",{str: "dec_to_hex", scr: url_open, arg: "https://www.gmlscripts.com/script/dec_to_hex"},", ",{str: "hex_to_dec", scr: url_open, arg: "https://www.gmlscripts.com/script/hex_to_dec"},", ",{str: "rgb_to_hex", scr: url_open, arg: "https://www.gmlscripts.com/script/rgb_to_hex"},")\n\n",
 	
 	"Thank you so much for your interest and support!\n\n",

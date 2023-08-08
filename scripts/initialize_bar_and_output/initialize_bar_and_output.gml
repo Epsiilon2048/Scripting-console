@@ -148,4 +148,5 @@ OUTPUT.dock.enabled = not soft_init
 
 element_dock = new_console_dock("Elements", [])
 add_console_element(element_dock)
+element_dock.enabled = false
 }}

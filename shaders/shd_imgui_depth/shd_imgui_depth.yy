@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shd_imgui_depth",
   "parent": {
     "name": "Shaders",
     "path": "folders/ImGuiGML/Shaders.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shd_imgui_depth",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }

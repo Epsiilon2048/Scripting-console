@@ -5,10 +5,7 @@ global.__chatterbox_exists = gmcl_work_with_chatterbox and asset_get_index("Chat
 
 global.chatterboxVariablesMap = ds_map_create()
 global.chatterboxVariablesList = ds_list_create()
-ds_list_add(global.chatterboxVariablesList, "hello", "super_cool", "trico_sucks_balls")
-ds_map_add(global.chatterboxVariablesMap, "hello", 1)
-ds_map_add(global.chatterboxVariablesMap, "super_cool", 1)
-ds_map_add(global.chatterboxVariablesMap, "trico_sucks_balls", 1)
+
 function ChatterboxVariableGet(variable){
 	return global.chatterboxVariablesMap[? variable]
 }
@@ -51,9 +48,12 @@ else return __variable_string__(name, variable_string_info, undefined)
 
 function __variable_string__(name, scr, value){
 
+//show_debug_message($"{name}, {scr}")
+
 static accessors = "@|$?#"
 static next_pos = function(str, startpos, has_accessor){
 	
+	startpos += 1
 	var pos1 = string_pos_ext(".", str, startpos)
 	var pos2 = has_accessor ? string_pos_ext("[", str, startpos) : 0
 	
@@ -63,8 +63,8 @@ static next_pos = function(str, startpos, has_accessor){
 	return min(pos1, pos2)
 }
 static get_fail_return = function(scr, exception, segment=undefined, simple=false, scope=undefined, prev_scope=undefined){
-	
 	if not is_undefined(segment) segment = string(segment)
+	//show_debug_message($"Failure: {segment}; {exception}")
 	
 	switch scr
 	{
@@ -118,6 +118,7 @@ if string_last(name) == "." name = string_delete(name, string_length(name), 1)
 if string_char_at(name, 1) == "." name = is_struct(self) ? string_delete(name, 1, 1) : (string(id)+name)
 
 var has_accessor = string_pos("[", name)
+//var pos = next_pos(name, 1, has_accessor)
 var pos = next_pos(name, 1, has_accessor)
 var marker = 0
 
@@ -176,6 +177,7 @@ do
 		else segment = string_copy(name, marker+1, pos-marker-1)
 		plain_segment = segment
 	
+		//show_debug_message($"-----Segment: {segment}, name: {name}, pos {pos}, marker {marker}")
 		if not variable_instance_exists(scope, segment) and not (scope == global and variable_global_exists(segment)) return get_fail_return(scr, exceptionVariableNotExists, segment, simple, scope, prev_scope)
 		
 		returning = not pos and set_var

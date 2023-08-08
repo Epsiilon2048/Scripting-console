@@ -115,7 +115,7 @@ set = function(text){
 				
 				if _newlines
 				{
-					var line_split = string_split("\n", _str)
+					var line_split = string_split(_str, "\n")
 					
 					s.length = string_length(line_split[0]) + cbox_length
 					

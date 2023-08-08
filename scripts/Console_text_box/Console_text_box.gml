@@ -237,7 +237,7 @@ initialize_scrubber = function(variable, step){
 	
 	value_conversion = real
 	att.incrementor_step = scrubber_step
-	att.float_places = ((scrubber_step mod 1) == 0) ? undefined : float_count_places(scrubber_step, 10)
+	att.float_places = ((scrubber_step mod 1) == 0) ? undefined : float_count_places(scrubber_step, 4)
 	att.length_min = 4
 	att.length_max = infinity
 	att.scrubber = true
@@ -245,6 +245,25 @@ initialize_scrubber = function(variable, step){
 	att.allow_alpha = false
 	att.set_variable_on_input = true
 	att.scoped_color = dt_real
+}
+
+
+generate_ctx_menu = function(){
+	var m = [
+	
+	]
+	
+	if not docked {
+		array_push(m,
+			new_ctx_text("Hide", function(){enabled = false}),
+			new_separator(),
+		)
+	}
+	
+	array_push(m,
+		new_ctx_text("Edit text box", function(){replace_console_element(new_textbox_editor(self))}),
+	)
+	return m
 }
 
 
@@ -477,17 +496,6 @@ undock = function(){
 
 
 
-generate_ctx_menu = function(){
-
-var m = [
-	new_ctx_text("Settings", function(){clipboard_set_text(get_printout())}),
-]
-
-return m
-}
-
-
-
 get_input = function(){
 	
 	if last_input == o_console.step exit
@@ -562,8 +570,13 @@ get_input = function(){
 		var _bottom = cbox_bottom
 	}
 	
-	if not mouse_on_console and not clicking_on_console and gui_mouse_between(_left, _top, _right, _bottom)
+	if gui_mouse_between(left, top, right, bottom) and mouse_check_button_released(mb_right)
 	{
+		ctx_menu_set(generate_ctx_menu())
+	}
+	
+	if not mouse_on_console and not clicking_on_console and gui_mouse_between(_left, _top, _right, _bottom)
+	{		
 		mouse_on_console = true
 		
 		if not mouse_on_box
@@ -1091,11 +1104,11 @@ get_input = function(){
 					keyboard_key = vk_nokey
 					
 					if autofill_method != noscript
-					{
+					{						
 						autofill_method(text, char_pos1)
 						o_console.AUTOFILL.show = true
 						o_console.AUTOFILL.x = is_undefined(cbox_left) ? left : cbox_left
-						o_console.AUTOFILL.y = is_undefined(cbox_top) ? (cbox_lefttop-_text_hdist) : (cbox_top+1)
+						o_console.AUTOFILL.y = is_undefined(cbox_top) ? (y-_text_hdist) : (cbox_top+1)
 					}
 					
 					set_boundaries()
@@ -1108,7 +1121,7 @@ get_input = function(){
 		{
 			if not is_numeric(value) or is_nan(value) value = 0
 				
-			value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*scrubber_step, att.value_min, att.value_max)
+			value = clamp(value + floor((gui_mx-mouse_previous)/att.scrubber_pixels_per_step)*att.scrubber_step, att.value_min, att.value_max)
 			mouse_previous = gui_mx
 			scrubbed = true
 				
@@ -1242,7 +1255,7 @@ draw = function(){
 		}
 	}
 	
-	if ghost_text != ""
+	if text == "" and ghost_text != ""
 	{
 		draw_set_color(o_console.colors.body_accent)
 		draw_text(text_x, text_y, initial_ghost_text)

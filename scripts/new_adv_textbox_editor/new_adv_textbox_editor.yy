@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "element_dock_update",
+  "name": "new_adv_textbox_editor",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

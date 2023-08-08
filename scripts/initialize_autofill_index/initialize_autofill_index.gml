@@ -207,7 +207,7 @@ autofill = {}; with autofill {
 
 	input_log = new Autofill_sublist() with input_log
 	{
-		show_all_if_blank = true
+		show_all_if_blank = false//true
 		color = dt_unknown
 		get = function(){
 			list = slice(o_console.input_log, , min(3, ds_list_size(o_console.input_log)))

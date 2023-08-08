@@ -14,7 +14,7 @@ subdocks.main = new element_container([
 		{str: "IDE guide\n", scr: function(){o_console.help.to_set = o_console.help.subdocks.ide}},"\n"+
 			
 		"Features\n",
-		{str: "Element list\n", scr: function(){o_console.element_dock.enabled = true; move_to_front(o_console.element_dock)}},"\n"+
+		{str: "Element list\n", scr: function(){o_console.element_dock.enabled = not o_console.element_dock.enabled; move_to_front(o_console.element_dock)}},"\n"+
 			
 		"Options\n",
 		{str: "Themes\n", scr: function(){o_console.help.to_set = o_console.help.subdocks.themes}},
@@ -33,7 +33,7 @@ subdocks.settings = new element_container([
 	new_separator(),
 	[new_cd_checkbox(,"o_console.BAR.dock.enabled"),"Command bar window"],
 	[new_cd_checkbox(,"o_console.command_colors"),"Intellisense colors"],
-	[new_cd_checkbox(,"o_dev.autofill.side_text_override"),"Autofill side text"],
+	[new_cd_checkbox(,"o_console.autofill.side_text_override"),"Autofill side text"],
 	[new_cd_checkbox(,"o_console.bird_mode"),"Bird mode"],
 	new_separator(),
 	menu_button,

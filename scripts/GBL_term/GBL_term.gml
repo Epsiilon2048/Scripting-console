@@ -112,7 +112,7 @@ if identifier != dt_unknown
 		}
 		else if string_count(",", condensed) == 2
 		{
-			var split = string_split(",", condensed)
+			var split = string_split(condensed, ",")
 			var red = split[0]
 			var green = split[1]
 			var blue = split[2]
