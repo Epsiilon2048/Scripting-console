@@ -51,7 +51,7 @@ inst	= new_color_box("Instance  ", dt_instance),	scr	= new_color_box("Script    
 vari	= new_color_box("Variable  ", dt_variable),	bti	= new_color_box("Built-in  ", dt_builtinvar),	col = new_color_box("Color     ", dt_color),
 tag		= new_color_box("Tag       ", dt_tag),		unk	= new_color_box("Unknown   ", dt_unknown),		dep = new_color_box("Deprecated", dt_deprecated)
 
-var c = function(variable){call_color_box_ext(variable, gui_mx+20, gui_my+20, self, o_console.colors)}
+var c = function(variable){call_color_box(variable, gui_mx+20, gui_my+20, self, o_console.colors)}
 
 var ide_colors = new_console_dock("IDE colors", [
 	[new_color_box("Primary", "output"),new_color_box("Accent", "body_accent")],

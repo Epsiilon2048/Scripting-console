@@ -181,7 +181,6 @@ color_schemes.gms2 = create_color_scheme4(0,0,0,0) with color_schemes.gms2
 	
 	builtin = true
 }
-rainbow = false
 bird_mode = false
 color_scheme(cs_index)
 return "Regenerated color schemes"

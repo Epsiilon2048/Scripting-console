@@ -1,15 +1,5 @@
 
-function call_color_box(variable, x, y){
-
-call_color_box_ext(variable, x, y, self, o_console.object)
-}
-
-
-
-function call_color_box_ext(variable, x, y, scope, association){ with o_console.COLOR_PICKER {
-		
-if is_undefined(x) x = gui_mx
-if is_undefined(y) y = gui_my
+function call_color_box(variable, x=gui_mx, y=gui_my, scope=self, association=o_console.object){ with o_console.COLOR_PICKER {
 	
 ignore_input = true
 	

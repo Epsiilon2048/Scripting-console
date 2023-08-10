@@ -51,8 +51,6 @@ if string_length(command) > max_length _command = string_copy(command, 1, max_le
 else if shave(" ", command) == "" return {text: "", colors: []}
 else _command = command
 
-if not command_colors return {text: _command, colors: [{pos: string_length(_command)+1, col: "plain"}]}
-
 var color_list = []
 var marker = 0
 var _char_pos = is_undefined(char_pos) ? string_length(command) : char_pos

@@ -16,12 +16,6 @@ mouse_on_console = false
 
 element_dock = {set: noscript}
 
-rainbowify = function(list){
-	for(var i = 0; i <= array_length(list)-1; i++){
-		colors[$ list[@ i]] = color_add_hue(colors[$ list[@ i]], rainbow)
-	}
-}
-
 element_dragging = noone
 
 e = {}
@@ -62,9 +56,6 @@ prev_font = -1
 
 run_in_embed = false
 char_pos_arg = {}
-
-include_builtin_functions = true
-include_console_functions = false
 
 ds_types = ds_map_create() // if this is indexed, it has to be done after, using the already existing ind
 ds_names = {}
@@ -108,20 +99,18 @@ CHECKBOX = {}
 WINDOW = {}
 COLOR_PICKER = {}
 CTX_MENU = {}
-CTX_STRIP = {}
 SLIDER = {}
 SEPARATOR = {}
 CD_BUTTON = {}
-MEASURER = {}
 DOC_STRIP = {}
+DISPLAY = {}
 
 keyboard_scope = noone
 
 color_schemes = {}
 cs_index = cs_greenbeans
 step = 0
-
-ge = 129
+ge = bird_mode_
 
 identifiers = {
 	r: dt_real,
@@ -134,25 +123,10 @@ identifiers = {
 	c: dt_color,
 }
 
-event_commands = {
-	step:	  [],
-	step_end: [],
-	draw:	  [],
-	gui:	  [],
-}
-
 tags = {} with tags {
 	add			= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){add_console_element(gmcl_exec(command))}}
 	include		= {color: /*console_include_tag_color*/gmcl_string_color, autofill: noscript, func: console_include}
-	
-	step		= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("step", command)}}
-	step_end	= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("step_end", command)}}
-	draw		= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("draw", command)}}
-	gui			= {color: gmcl_string_color, autofill: gmcl_autofill_new, func: function(command){event_command_add("gui", command)}}
 }
-
-gui_mouse_x = gui_mx
-gui_mouse_y = gui_my
 
 birdcheck()
 
@@ -164,19 +138,11 @@ commands = -1
 show_hidden_commands = false
 show_hidden_args = false
 
-text_outline = 8
-
 tag_sep = " "
 
 autofill_from_float = false
 
 force_body_solid = false
-
-right_mb = false
-
-//these are just for the help command
-is_this_the_display = "it sure is!"
-checkboxes_like_this_one = false
 
 prev_exception = {longMessage: "No errors yet! Yay!!"}
 
@@ -189,34 +155,12 @@ input_log_limit = 20
 input_log_index = -1
 input_log_save = ""
 
-display_list = ds_create(ds_type_list, "display_list")
-
-x2 = 0
-y2 = 0
-mouse_click_range = 1
-rainbow = false
-
 log = ds_create(ds_type_list, "log")
-
-inst_select = false
-inst_selecting = noone
-inst_selecting_name = ""
-
-instance_cursor = false
 
 j = bird_mode_
 
-color_string = []
 command_log = ds_create(ds_type_list, "command_log")
 error_log = ds_create(ds_type_list, "error_log")
-
-command_colors = true
-
-O1 = ""
-O2 = ""
-O3 = ""
-O4 = ""
-O5 = ""
 
 cs_template = cs_greenbeans
 executing = false
@@ -228,10 +172,6 @@ initialized = false
 soft_init = true
 can_run = false
 enabled = true
-
-DISPLAY = {}
-
-selected_term = ""
 
 auto_scale = true
 prev_gui_size = gui_width*gui_height

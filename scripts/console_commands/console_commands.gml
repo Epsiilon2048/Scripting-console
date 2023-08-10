@@ -1,4 +1,11 @@
 
+function set_console_scale(scale){
+o_console.auto_scale = false
+o_console.scale(scale)
+}
+
+
+
 function create_variable(name, value){
 
 if not is_string(name) return "Variable name must be string!"

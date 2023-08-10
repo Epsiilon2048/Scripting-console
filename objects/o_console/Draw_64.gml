@@ -21,9 +21,6 @@ if element_dragging != noone element_dragging.draw()
 draw_autofill_list_new()
 COLOR_PICKER.draw()
 draw_ctx_menu()
-draw_console_measurer()
-
-event_commands_exec(event_commands.gui)
 
 draw_set_color(old_color)
 draw_set_alpha(old_alpha)

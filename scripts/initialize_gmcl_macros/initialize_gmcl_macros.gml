@@ -59,12 +59,6 @@ am("con",				dt_instance, o_console)
 
 am("var",				dt_method, create_variable)
 
-am("O1",				dt_variable, "o_console.O1")
-am("O2",				dt_variable, "o_console.O2")
-am("O3",				dt_variable, "o_console.O3")
-am("O4",				dt_variable, "o_console.O4")
-am("O5",				dt_variable, "o_console.O5")
-
 am("mouse_x",			dt_variable, function(){ return mouse_x })
 am("mouse_y",			dt_variable, function(){ return mouse_y })
 										

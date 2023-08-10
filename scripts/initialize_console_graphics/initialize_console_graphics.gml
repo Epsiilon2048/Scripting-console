@@ -318,22 +318,6 @@ with CTX_MENU
 	elements = []
 }
 
-with MEASURER {
-	
-	enabled = false
-	
-	setting = 1
-	
-	x1 = 0
-	y1 = 0
-	x2 = undefined
-	y2 = undefined
-	
-	length = 0
-	width = 0
-	height = 0
-}
-
 with DOC_STRIP
 {
 	char_height = 23
