@@ -1,4 +1,25 @@
 
+function color_scheme(value){ with o_console {
+
+if not is_undefined(color_schemes[$ value])
+{
+	colors = color_schemes[$ value]
+	
+	cs_index = value
+
+	if run_in_embed
+	{
+		return color_scheme_settings()
+	}
+	else
+	{
+		return stitch("Console color scheme set to ",value)
+	}
+}
+else return "No such color scheme exists!"
+}}
+
+
 function create_color_scheme4(main, body, plaintext, specialtext){
 
 var body_accent = make_color_hsv(

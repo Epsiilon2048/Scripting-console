@@ -1,2 +1,0 @@
-
-function noscript(){} //method placeholder

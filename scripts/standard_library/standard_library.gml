@@ -1,6 +1,7 @@
-
 //This is a library of functions which work independently from the console.
 
+global._scrvar_ = {}
+function noscript(){} //method placeholder
 
 /// @description Capitalizes a string
 function string_capitalize(str){
@@ -164,29 +165,6 @@ return (obj == global) ? "global" : object_get_name(obj)
 	
 	
 	
-/// @description Returns if all the given keys are down and at least one is pressed
-/// @param {...real} key
-function keyboard_check_multiple_pressed(){
-	
-var pressed = false
-	
-for(var i = 0; i <= argument_count-1; i++)
-{
-	if keyboard_check(argument[i])
-	{
-		if keyboard_check_pressed(argument[i])
-		{
-			pressed = true
-		}
-	}
-	else return false
-}
-	
-return pressed
-}
-	
-	
-	
 /// Returns if the mouse is between gui coordinates
 function gui_mouse_between(x1, y1, x2, y2){
 
@@ -230,25 +208,6 @@ for(var i = 0; i <= array_length(array)-1; i++)
 return _array
 }
 	
-
-
-/// @description Returns each item off an array as a string, separated by the separator
-function array_to_string(array, separator){
-
-if is_string(array) return array
-
-var str = ""
-var add = ""
-
-for(var i = 0; i <= array_length(array)-1; i++)
-{
-	add = string(array[i])
-	
-	str += separator + add
-}
-return string_copy(str, string_length(separator)+1, string_length(str)-1)
-}
-	
 	
 	
 /// @description Returns an array converted from a ds list
@@ -280,35 +239,6 @@ for(var i = 0; i <= name_count-1; i++)
 
 return new_struct
 }
-
-
-
-
-function struct_clear(struct){
-
-var names = variable_struct_get_names(struct)
-var name_count = array_length(names)
-
-for(var i = 0; i <= name_count-1; i++)
-{
-	struct[$ names[@ i]] = undefined
-}
-}
-
-
-
-
-function struct_add(dest, src){
-	
-var names = variable_struct_get_names(src)
-var name_count = array_length(names)
-
-for(var i = 0; i <= name_count-1; i++)
-{
-	dest[$ names[@ i]] = src[$ names[@ i]]
-}
-}
-
 
 
 
@@ -652,42 +582,6 @@ return string_char_at(str, string_length(str))
 
 
 
-
-function first_is_digit(str){
-
-var char = string_char_at(str, 1)
-
-if char == "-" char = string_char_at(str, 2)
-
-return ( string_digits(char) == char )
-}
-	
-	
-	
-	
-function bm_to_string(blendmode){
-	
-switch blendmode
-{
-case bm_normal:			return "bm_normal"
-case bm_add:			return "bm_add"
-case bm_subtract:		return "bm_subtract"
-case bm_max:			return "bm_max"
-case bm_dest_alpha:		return "bm_dest_alpha"
-case bm_dest_color:		return "bm_dest_color"
-case bm_inv_dest_alpha:	return "bm_inv_dest_alpha"
-case bm_inv_dest_color:	return "bm_inv_dest_color"
-case bm_src_alpha:		return "bm_src_alpha"
-case bm_src_alpha_sat:	return "bm_src_alpha_sat"
-case bm_inv_src_alpha:	return "bm_inv_src_alpha"
-case bm_inv_src_color:	return "bm_inv_src_color"
-}
-
-return "<unknown>"
-}
-	
-	
-	
 /// @param x1
 /// @param y1
 /// @param x2
@@ -841,5 +735,19 @@ case ds_type_map:		return "map"
 case ds_type_priority:	return "priority"
 case ds_type_queue:		return "queue"
 case ds_type_stack:		return "stack"
+}
+}
+	
+	
+	
+
+function birdcheck(){
+
+// I will unleash hell upon you if you try to get rid of that god damn bird
+
+if not sprite_exists(asset_get_index("bird_mode_")) 
+{
+	show_message(exceptionMissingBird)
+	game_end()
 }
 }
