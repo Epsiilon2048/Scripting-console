@@ -157,7 +157,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 					}
 					else string_value = _value
 				
-					output_string[i] = format_output(string_value)
+					output_string[i] = string_value//format_output(string_value)
 				}
 				else
 				{
@@ -198,7 +198,7 @@ for(var i = 0; i <= array_length(com)-1; i++)
 			#region Color
 			case dt_color:
 				_col = subject.value
-				output_string[i] = new_color_dock("o_console._col", false, true, true, true, true)
+				output_string[i] = new_color_dock("o_console._col")
 			break
 			#endregion
 	

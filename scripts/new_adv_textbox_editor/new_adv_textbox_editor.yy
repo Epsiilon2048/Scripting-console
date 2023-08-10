@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Docks",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Docks.yy",
+    "path": "folders/Console/Internal workings (extremely spooky)/Docks.yy",
   },
 }

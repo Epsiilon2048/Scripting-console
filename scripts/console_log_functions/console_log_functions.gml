@@ -1,7 +1,7 @@
 
 function console_log_input(input, output, is_bind){ with o_console {
 
-static max_byte_size = power(512, 2)  // 512 KB
+static max_byte_size = 512*8 * 1024  // 512 KB
 
 var _is_bind = is_undefined(is_bind) ? false : is_bind
 

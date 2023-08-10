@@ -66,12 +66,13 @@ else
 if is_undefined(x2) and plaintext == "" return false
 
 x2 = max(is_undefined(x2) ? 0 : x2, x+_wdist*2+width)
-var y2 = y+_hdist*2+height
+var _y = y
+var y2 = _y+_hdist*2+height
 
-draw_console_body(x, y, x2, y2)
+draw_console_body(x, _y, x2, y2, true)
 
 draw_set_color(color)
-draw_rectangle(x, y, x+o_console.BAR._sidebar_width, y2, false)
+draw_rectangle(x, _y, x+o_console.BAR._sidebar_width, y2-1, false)
 
 if plaintext != "" 
 {
@@ -79,7 +80,7 @@ if plaintext != ""
 	draw_set_valign(fa_top)
 	
 	draw_set_color(o_console.colors.plain)
-	draw_color_text(x+_wdist, y+_hdist+1, text)
+	draw_color_text(x+_wdist, _y+_hdist+1, text)
 }
 
 draw_set_color(old_color)

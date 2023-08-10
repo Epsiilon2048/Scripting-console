@@ -100,7 +100,7 @@ initialize = function(){
 	list = ds_list_create()
 	lists = ds_list_create()
 	include_side_text = false
-	side_text_override = undefined
+	side_text_override = true
 	
 	items = {}
 	
@@ -113,8 +113,10 @@ initialize = function(){
 	top = 0
 	right = 0
 	bottom = 0
-	
-	width = 40
+
+	doc = undefined
+
+	width = 30
 	height = 10
 	
 	sidetext_bar_length = 15
@@ -342,9 +344,24 @@ if ds_exists(ds_type_list, lists) ds_list_destroy(lists)
 	
 	
 scrollbar_get_boundaries = function(){
-
 	var cw = string_width("W")
 	var ch = string_height("W")
+	
+	var _doc = undefined
+	var doc_height = 0
+	with o_console.keyboard_scope if is_struct(colors) and variable_struct_exists(colors, "subject_interpret") _doc = colors.subject_interpret
+	if not is_undefined(_doc) and array_length(variable_struct_exists_get(_doc, "description", []))
+	{
+		show_debug_message(_doc)
+		if not is_undefined(_doc.error)
+		show_debug_message(_doc)
+		var dc = o_console.DOC_STRIP
+		var doc_asp = ch/dc.char_height
+		var _doc_hdist = round(dc.hdist*doc_asp)
+		doc_height = _doc_hdist*2+ch + 2 - 2
+		doc = _doc
+	}
+	else doc = undefined
 	
 	var _sidetext_bar_length = sidetext_bar_length*include_side_text*cw
 	
@@ -360,7 +377,7 @@ scrollbar_get_boundaries = function(){
 	}
 	
 	left = x
-	top = y-_height - scrollbar._bar_width*(scrollbar.wbar_enabled and scrollbar.wbar_length > 0)//+ (height*ch+2-_height)
+	top = y-_height - scrollbar._bar_width*(scrollbar.wbar_enabled and scrollbar.wbar_length > 0)-doc_height//+ (height*ch+2-_height)
 	right = left+_width-1
 	bottom = top+_height-1
 	
@@ -470,8 +487,9 @@ if list.include_side_text
 }
 var text_y
 
+if not is_undefined(list.doc) draw_doc_strip(list.left, list.bottom-1, list.doc, list.right-1)
 
-draw_console_body(list.left, list.top, list.right-1, list.bottom-1)
+draw_console_body(list.left, list.top, list.right-1, list.bottom-1, true)
 
 var imin = floor(list.scrollbar.scroll_y/ch)
 var imax = min(floor(list.scrollbar.scroll_y/ch+list.height), ds_list_size(list.list)-1)  // experience it in IMAX

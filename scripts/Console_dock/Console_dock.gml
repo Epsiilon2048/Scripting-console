@@ -1,4 +1,9 @@
 
+function format_console_element(){
+is_console_element = true
+}
+
+
 function format_for_dock(scope){
 
 var vesg = variable_struct_exists_get
@@ -71,8 +76,6 @@ initialize = function(){
 	
 	enabled = true
 	
-	push_from_bottom = false
-	
 	name = ""
 	association = self
 	
@@ -106,6 +109,8 @@ initialize = function(){
 	draw_name = true
 	draw_name_bar = true
 	draw_outline = true
+	
+	condensed = false
 	
 	dragging = false
 	mouse_xoffset = 0
@@ -304,7 +309,7 @@ after_dock = function(){
 	var asp = ch/dc.char_height
 	
 	var _outline_width = round(dc.name_outline_width*asp)
-	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
+	var _name_hdist = round(dc.name_hdist*asp)*(not condensed)+_outline_width
 	var _element_wdist = round(dc.element_wdist*asp)
 		
 	draw_set_font(old_font)
@@ -386,7 +391,7 @@ get_dropdown_input = function(){
 	var asp = ch/dc.char_height
 
 	var _outline_width = round(dc.name_outline_width*asp)
-	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
+	var _name_hdist = round(dc.name_hdist*asp)*(not condensed)+_outline_width
 	var _dropdown_base = round(dc.dropdown_base*asp)
 	var _dropdown_wdist = round(dc.dropdown_wdist*asp)+_outline_width
 	
@@ -424,7 +429,6 @@ get_dropdown_input = function(){
 
 
 get_input = function(){
-
 	if not is_undefined(to_set) set(to_set)
 
 	before_func()
@@ -454,11 +458,11 @@ get_input = function(){
 	
 	var _outline_width = round(dc.name_outline_width*asp)
 	var _name_wdist = round(dc.name_wdist*asp)+_outline_width
-	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
-	var _element_wdist = round(dc.element_wdist*asp)
-	var _element_hdist = round(dc.element_hdist*asp)
-	var _element_wsep = round(dc.element_wsep*asp)
-	var _element_hsep = round(dc.element_hsep*asp)
+	var _name_hdist = round(dc.name_hdist*asp)*(not condensed)+_outline_width
+	var _element_wdist = round(dc.element_wdist*asp)*(not condensed)
+	var _element_hdist = round(dc.element_hdist*asp)*(not condensed)
+	var _element_wsep = round(dc.element_wsep*asp)*(not condensed)
+	var _element_hsep = round(dc.element_hsep*asp)*(not condensed)
 	var _dropdown_base = round(dc.dropdown_base*asp)
 	var _dropdown_wdist = round(dc.dropdown_wdist*asp)+_outline_width
 	var _dragging_radius = round(dc.dragging_radius*asp)
@@ -666,7 +670,7 @@ draw = function(){
 	
 	var _outline_width = round(dc.name_outline_width*asp)
 	var _name_wdist = round(dc.name_wdist*asp)+_outline_width
-	var _name_hdist = round(dc.name_hdist*asp)+_outline_width
+	var _name_hdist = round(dc.name_hdist*asp)*(not condensed)+_outline_width
 	var _dropdown_base = round(dc.dropdown_base*asp)
 	var _dropdown_hypotenuse = round(dc.dropdown_hypotenuse*asp)
 	var _dropdown_wdist = round(dc.dropdown_wdist*asp)+_outline_width

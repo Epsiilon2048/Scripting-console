@@ -113,7 +113,6 @@ element_dock_update()
 
 
 
-
 function replace_console_element(element){ with o_console {
 
 if not variable_struct_exists(element, "id")
@@ -136,6 +135,7 @@ if variable_struct_exists(e, element.id)
 	add_console_element(element)
 	element.x = xx
 	element.y = yy
+	element.get_input()
 }
 else add_console_element(element)
 }}

@@ -25,8 +25,73 @@ function input_set(str, add){ with o_console.BAR {
 
 
 
+function input_set_pos(input){ with o_console.keyboard_scope {
+input = string(input)
+
+if string_pos(string_char_at(text, char_pos2), o_console.refresh_sep) char_pos2--
+
+var _min = char_pos2
+var _max = char_pos2
+
+var str_length = string_length(text)
+var char = string_char_at(text, _max)
+
+while _max < (str_length) and not (char != "" and string_pos(char, o_console.refresh_sep))
+{
+	_max++
+	char = string_char_at(text, _max)
+}
+
+var char = string_char_at(text, _min)
+while _min > 0 and not (char != "" and string_pos(char, o_console.refresh_sep))
+{
+	_min--
+	char = string_char_at(text, _min)
+}
+_min++
+_max++
+
+text = string_delete(text, _min, _max-_min)
+text = string_insert(input, text, _min)
+keyboard_string = text
+char_pos1 = min(_min+string_length(input), string_length(text)+1)
+char_pos2 = char_pos1
+
+if not att.allow_alpha
+{
+	if not string_is_float(text)
+	{
+		text = "0"
+		char_pos1 = 1
+		char_pos2 = char_pos1
+		char_selection = false
+	}
+	else
+	{
+		text = string_format_float(clamp(real(text), att.value_min, att.value_max), att.float_places)
+	}
+}
+
+convert(text)
+
+var _association = is_undefined(association) ? (docked ? dock.association : self) : association
+if att.set_variable_on_input and not is_undefined(variable) with _association variable_string_set(other.variable, other.value)
+			
+text_width = string_width("W")*clamp(string_length(text), att.length_min, att.length_max)
+				
+char_mouse = false
+				
+colors = color_method(text)
+blink_step = 0
+keyboard_string = text
+set_boundaries()
+}}
+
+
 
 function output_set(output){ with o_console.OUTPUT {
+
+dock.name = "Output"
 
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
 
@@ -40,7 +105,6 @@ if is_string(output)
 	exit
 }
 
-
 if is_bool(output)
 {
 	dock.to_set = output ? "true" : "false"
@@ -48,14 +112,12 @@ if is_bool(output)
 	exit
 }
 
-
 if is_real(output)
 {
-	dock.to_set = string_format_float(output, 3)
+	dock.to_set = output
 	move_to_front(self)
 	exit
 }
-
 
 if is_ptr(output)
 {
@@ -66,7 +128,6 @@ if is_ptr(output)
 
 if is_method(output)
 {
-	show_message(1)
 	dock.to_set = string(output)
 	move_to_front(self)
 	exit
@@ -95,7 +156,7 @@ if is_struct(output)
 			output.set()
 		}
 		
-		add_console_element(output)
+		replace_console_element(output)
 		exit
 	}
 	
@@ -108,7 +169,7 @@ if is_struct(output)
 	
 	if variable_struct_names_count(output) == 0
 	{
-		dock.to_set = "Empty struct"
+		dock.to_set = "{ }"
 		move_to_front(self)
 		exit
 	}
@@ -123,7 +184,7 @@ if is_array(output)
 {
 	if array_length(output) == 0
 	{
-		dock.to_set = "Empty array"
+		dock.to_set = "[ ]"
 		move_to_front(self)
 		exit
 	}
@@ -170,20 +231,25 @@ for(var i = 0; i <= min(max_items, array_length(list)-1); i++)
 		
 	if is_numeric(value)
 	{
-		str += string_format_float(value, 3)+sep
+		str += string(value)+sep
 		continue
 	}
 		
 	if is_struct(value)
 	{
-		str += instanceof(value)+sep
+		var struct = string_replace_all(string(value), " : ", ": ")
+		if string_length(struct) > 150 str += instanceof(value)+sep
+		else str += struct+sep
 		continue
 	}
 		
 	if is_array(value)
 	{
+		var array = string_replace_all(string(value), " : ", ": ")
 		var len = array_length(value)
-		str += "array with "+string(len)+" item"+((len == 1) ? "" : "s")+sep
+		if string_length(array) > 150 str += "array with "+string(len)+" item"+((len == 1) ? "" : "s")+sep
+		else str += array+sep
+		
 		continue
 	}
 		
@@ -218,7 +284,7 @@ dock.to_set = str
 if is_struct(output) and variable_struct_exists(output, "__embedded__") output = output.o
 
 dock.association = dock
-o_console.O1 = output
+o_console.O = output
 		
 if is_array(output)
 {
@@ -283,6 +349,7 @@ dock.enabled = not is_undefined(output)
 if dock.enabled move_to_front(self)
 */
 }}
+
 
 
 function output_set_lines(output){

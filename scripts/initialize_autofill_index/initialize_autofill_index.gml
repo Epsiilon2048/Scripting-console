@@ -5,13 +5,13 @@ builtin_excluded = [
 	//"string",
 	//"array",
 	//"ds_list",
-	//"ds_map",
+	"ds_map",
 	//"ds_grid_",
-	//"ds_priority_",
-	//"ds_queue_",
-	//"ds_stack_",
+	"ds_priority_",
+	"ds_queue_",
+	"ds_stack_",
 	"ads_",
-	"layer_",
+	//"layer_",
 	"gesture_",
 	"keyboard_",
 	"font_",
@@ -33,7 +33,7 @@ builtin_excluded = [
 	"path_",		 
 	"matchmaking_", 
 	"gpu_",
-	"file_",
+	//"file_",
 	"draw_",		 
 	"display_",	 
 	"date_",		 
@@ -171,11 +171,12 @@ autofill = {}; with autofill {
 			var color = dt_variable
 			var value = variable_instance_get(o_console.variable_scope, item)
 
-			if is_method(value) color = dt_method
+			if is_method(value) color = dt_variable//dt_method
 			else if is_struct(value) color = dt_instance
 		
 			return new Autofill_item(item, item, "Variable", color)
 		}
+		show_all_if_blank = true
 		get()
 	}
 

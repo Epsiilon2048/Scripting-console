@@ -1,5 +1,5 @@
 function Variable_container() constructor{
-
+	
 initialize = function(){
 	
 	variable = undefined	// Variable name

@@ -45,6 +45,7 @@ var is_number = string_is_float(autofill_string)
 
 if reset
 {
+	o_console.variable_scope_list = []
 	af.get("")
 	exit
 }
@@ -55,6 +56,7 @@ if is_number
 {
 	instances.enabled = true
 	input_log.enabled = true
+	o_console.variable_scope_list = []
 	af.get(autofill_string)
 	exit
 }
@@ -63,6 +65,7 @@ if is_number
 if first == "$"
 {
 	chatterbox.enabled = true
+	o_console.variable_scope_list = []
 	af.get(autofill_string)
 	exit
 }
@@ -103,6 +106,7 @@ if iden != dt_unknown
 	break
 	}
 	
+	o_console.variable_scope_list = []
 	af.get(autofill_string)
 	exit
 }
@@ -119,6 +123,7 @@ if is_struct(char_pos_arg.scope) or (is_numeric(char_pos_arg.scope) and better_i
 	af.get(char_pos_arg.variable)
 	exit
 }
+o_console.variable_scope_list = []
 
 // Only text
 if dots == 0 and not has_bracket

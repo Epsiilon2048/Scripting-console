@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Graphical elements",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Graphical elements.yy",
+    "name": "Legacy",
+    "path": "folders/Legacy.yy",
   },
 }

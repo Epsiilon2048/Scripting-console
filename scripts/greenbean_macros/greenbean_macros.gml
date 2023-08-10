@@ -6,7 +6,7 @@
 #macro mouse_on_console			o_console.mouse_on
 #macro clicking_on_console		o_console.clicking_on
 #macro console_typing			(o_console.keyboard_scope != noone)
-#macro chatterbox_is_ready true//gmcl_work_with_chatterbox and global.__chatterbox_exists and variable_global_exists("chatterboxVariablesMap")
+#macro chatterbox_is_ready gmcl_work_with_chatterbox and global.__chatterbox_exists and variable_global_exists("chatterboxVariablesMap")
 
 console_object_exists = object_exists(asset_get_index("o_console"))
 
@@ -17,15 +17,13 @@ console_object_exists = object_exists(asset_get_index("o_console"))
 
 
 #region Virtual key fixes
-var apple = (os_type == os_macosx or os_type == os_ios)
-
 #macro vk_rcommand 91
 #macro vk_lcommand 92
 #macro vk_super global.__super_key
 #macro vk_tilde global.__tilde_key
 
-vk_super = apple ? vk_lcommand : vk_control
-vk_tilde = apple ? 50 : 192
+vk_super = (os_type == os_macosx or os_type == os_ios) ? vk_lcommand : vk_control
+vk_tilde = (os_type == os_macosx or os_type == os_ios) ? 50 : 192
 #endregion
 
 
@@ -79,4 +77,53 @@ vk_tilde = apple ? 50 : 192
 #macro dt_tag			"tag"
 #macro dt_unknown		"plain"
 #macro dt_deprecated	"deprecated"
+#endregion
+
+
+#region Exceptions
+#macro exceptionUnknown "Awfully sorry about this! The console encountered a runtime error with an unknown cause."
+
+#macro exceptionNoValue "No value for arg"
+#macro exceptionNoIndex "No value for index"
+
+#macro exceptionMissingScope "Missing scope"
+#macro exceptionVariableNotExists "Variable does not exist"
+#macro exceptionInstanceNotExists "Instance does not exist"
+#macro exceptionAssetNotExists "Asset does not exist"
+#macro exceptionObjectNotExists "Object does not exist"
+#macro exceptionScriptNotExists "Script does not exist"
+#macro exceptionDsNotExists "Intended ds at index does not exist"
+
+#macro exceptionExpectingNumeric "Expecting numeric value"
+#macro exceptionExpectingDsIndex "Expecting ds index (numeric)"
+#macro exceptionExpectingString "Expecting string"
+#macro exceptionExpectingStruct "Expecting struct"
+#macro exceptionExpectingArray "Expecting array"
+
+#macro exceptionBadIdentifier "Identifier does not accept this datatype"
+
+#macro exceptionIndexBelowZero "Expecting non-negative index"
+#macro exceptionIndexExceedsBounds "Index out of range"
+#macro exceptionUnrecognized "Unrecognized term"
+#macro exceptionHurtFeelings "User has hurt feelings of console"
+#macro exceptionMissingBird "put the bird back please"
+
+#macro exceptionBadScope "Unsupported datatype for scope"
+#macro exceptionBadIndex "Unsupported datatype for index"
+#macro exceptionFailedAccess "Value cannot be accessed with brackets"
+#macro exceptionMissingAccessor "Missing ds accessor"
+#macro exceptionBadAccessor "Variable cannot be accessed in this way"
+#macro exceptionGridExpectingComma "ds grids require x and y indexes for access"
+
+#macro exceptionBotchedString "Invalid string syntax"
+#macro exceptionBotchedInstance "Invalid instance syntax"
+#macro exceptionBotchedAsset "Invalid asset syntax"
+#macro exceptionBotchedMethod "Invalid method syntax"
+#macro exceptionBotchedReal "Invalid real syntax"
+#macro exceptionBotchedVariable "Invalid variable syntax"
+#macro exceptionBotchedColor "Invalid color syntax"
+
+#macro exceptionNoChatterbox "This feature is exclusive to chatterbox, which doesn't exist in this project!"
+#macro exceptionChatterboxNotReady "Chatterbox has not initialized variable map!"
+#macro exceptionChatterboxVariableNotExists "Chatterbox variable does not exist"
 #endregion

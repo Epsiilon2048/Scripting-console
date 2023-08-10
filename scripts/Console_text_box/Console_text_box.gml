@@ -44,7 +44,7 @@ return text_box
 
 function new_value_box(name, variable, is_scrubber, scrubber_step, length_min, length_max, value_min, value_max, allow_float, float_places){
 var s = new_scrubber(name, variable, scrubber_step)
-s.att.text_color = "real"
+s.att.text_color = dt_real
 s.att.scrubber = is_scrubber
 s.att.value_min = value_min
 s.att.value_max = value_max
@@ -61,7 +61,6 @@ function Console_text_box() constructor{
 format_console_element()
 
 initialize = function(variable){
-	
 	// Mandatory
 	enabled = true
 	name = is_undefined(variable) ? "Text box" : string(variable)
@@ -161,7 +160,6 @@ initialize = function(variable){
 	last_input = -1
 	
 	
-	
 	update_id = o_console.TEXT_BOX.update_id++
 	
 	convert = function(value){
@@ -180,7 +178,7 @@ initialize = function(variable){
 	char_filter = noscript
 	color_method = noscript // The script used to color the string
 	value_conversion = string // How the value is converted from the text
-	autofill_method = noscript
+	autofill_method = autofill_clear
 	
 	att = {} with att {
 		draw_box = true // Whether or not the box is drawn around the text
@@ -222,6 +220,7 @@ initialize = function(variable){
 	}
 	
 	update_variable()
+	return self
 }
 
 
@@ -245,6 +244,21 @@ initialize_scrubber = function(variable, step){
 	att.allow_alpha = false
 	att.set_variable_on_input = true
 	att.scoped_color = dt_real
+	return self
+}
+
+
+setprop = noscript
+setprop = function(property, value=undefined){
+	if is_struct(property){
+		struct_foreach(property, function(_name, _value){
+			setprop(_name, _value)
+		})
+		return self
+	}
+	
+	self[$ property] = value
+	return self
 }
 
 
@@ -525,7 +539,12 @@ get_input = function(){
 		{
 			scoped = false
 			if att.scrubber typing = false
-			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
+			if o_console.keyboard_scope == self 
+			{
+				o_console.keyboard_scope = noone
+				o_console.AUTOFILL.show = false
+				autofill_method()
+			}
 		}
 		
 		last_input = o_console.step
@@ -615,6 +634,10 @@ get_input = function(){
 			
 			o_console.keyboard_scope = self
 			scoped = true
+			o_console.AUTOFILL.show = false
+			autofill_method()
+			o_console.AUTOFILL.x = is_undefined(cbox_left) ? left : cbox_left
+			o_console.AUTOFILL.y = is_undefined(cbox_top) ? (y-_text_hdist) : (cbox_top+1)
 			keyboard_string = text
 			keyboard_key = vk_nokey
 		}
@@ -626,7 +649,10 @@ get_input = function(){
 	var key_escape_pressed = keyboard_check_pressed(vk_escape)
 	var key_enter_pressed = keyboard_check_pressed(vk_enter)
 	
-	if key_enter_pressed and scoped on_enter()
+	if key_enter_pressed and scoped 
+	{
+		on_enter()
+	}
 	if not (mouse_left_pressed or key_escape_pressed or (att.exit_with_enter and key_enter_pressed)) and clicking and not mouse_left
 	{
 		clicking = false
@@ -716,7 +742,10 @@ get_input = function(){
 			}
 			
 			o_console.keyboard_scope = self
+			o_console.AUTOFILL.show = false
 			scoped = true
+			o_console.AUTOFILL.x = is_undefined(cbox_left) ? left : cbox_left
+			o_console.AUTOFILL.y = is_undefined(cbox_top) ? (y-_text_hdist) : (cbox_top+1)
 			autofill_method(text, char_pos1)
 			keyboard_string = text
 			keyboard_key = vk_nokey
@@ -725,7 +754,11 @@ get_input = function(){
 		}
 		else if scoped and not o_console.autofill_default.mouse_on
 		{
-			if o_console.keyboard_scope == self o_console.keyboard_scope = noone
+			if o_console.keyboard_scope == self 
+			{
+				o_console.keyboard_scope = noone
+				o_console.AUTOFILL.show = false
+			}
 			scoped = false
 			autofill_method()
 			if att.scrubber typing = false
@@ -1010,6 +1043,7 @@ get_input = function(){
 						if string_pos(string_last(char), " ;,()")
 						{
 							o_console.AUTOFILL.show = false
+							autofill_method()
 						}
 					}
 					keyboard_string = text

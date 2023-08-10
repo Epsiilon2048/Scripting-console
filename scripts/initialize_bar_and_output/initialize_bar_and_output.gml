@@ -69,11 +69,10 @@ with OUTPUT {
 	dock = new Console_dock()
 	dock.initialize()
 	dock.set(text)
-	dock.name = "Console output"
+	dock.name = "Output"
 	dock.id = "Output"
 	dock.draw_name_bar = false
 
-	fade_time = 6 //seconds
 	fade_step = 0
 	alpha = 0
 	alpha_dec = .04
@@ -85,14 +84,14 @@ with OUTPUT {
 	get_input = console_output_inputs
 	draw = draw_console_output
 	
-	dock.get_ctx_elements = function(){
-		return [
-			new_ctx_text("Forward to new window", function(){
-				add_console_element(new_console_dock("Dock", dock))
-				output_set("Forwarded output to new window")
-			})
-		]
-	}
+	//dock.get_ctx_elements = function(){
+	//	return [
+	//		new_ctx_text("Forward to new window", function(){
+	//			add_console_element(new_console_dock("Dock", dock))
+	//			output_set("Forwarded output to new window")
+	//		})
+	//	]
+	//}
 	
 	dock.before_func = function(){
 		docked = o_console.BAR.dock.enabled
@@ -131,13 +130,15 @@ add_console_element(BAR)
 add_console_element(OUTPUT.dock)
 
 var greetings = [
-	"I hope you're having a wonderful day!",
+	"Hope you're having a lovely day!",
 	"Afternoon! Or morning! Or whenever!",
 	"Howsya day going?",
 	"Hiya!",
 	"Ay how's it goin?",
 	"Remember to take breaks from time to time!",
-	"yooooooo sup",
+	"I'm alive!",
+	"Oh me oh my, so many commands to try!",
+	"Did you know? This console houses an ancient sentience!",
 ]
 var greeting = greetings[ round( current_time mod array_length(greetings) ) ] 
 

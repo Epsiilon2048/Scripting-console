@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "NewGBL",
-    "path": "folders/NewGBL.yy",
+    "name": "An attempted language rewrite",
+    "path": "folders/Legacy/An attempted language rewrite.yy",
   },
 }

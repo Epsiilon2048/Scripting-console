@@ -17,12 +17,7 @@ command_order = ds_create(ds_type_list, "command_order")
 
 com_add_category("Console features", false)
 com_add("help", {desc: "Opens the help menu"})
-com_add("console_settings", {desc: "Opens the console settings menu"})
-com_add("color_scheme", {args:["color scheme index"], desc: "Sets the console color scheme to the specified index"})
-com_add("color_scheme_settings", {hidden: true, desc: "Returns the color scheme settings menu"})
-com_add("console_videos", {hidden: true, desc: "Returns a list of videos featuring the console"})
 com_add("destroy_console", {hidden: true, hiddenargs: ["are you certain?"], desc: ":("})
-com_add("error_report", {desc: "Returns the exception of the previous error thrown by a console command"})
 
 com_add("display", {desc: "Adds a display element from a variable; if left blank, toggles the display dock", optargs: ["variable"]})
 com_add("textbox", {desc: "Creates a text box element", args: ["variable"]})
@@ -45,8 +40,6 @@ command_doc_add("instance_create_depth", {args: ["x", "y", "depth", "obj"]})
 command_doc_add("array_delete", {args: ["array", "index", "number"]})
 command_doc_add("array_insert", {args: ["array", "index", "value"]})
 command_doc_add("array_push", {args: ["array", "value"], moreargs: true})
-
-command_doc_add("shader_set_uniform_f", {args: ["uniform_id", "val"], moreargs: true})
 
 deprecated_commands = ds_create(ds_type_map, "deprecated_commands")
 // newname, ver, note

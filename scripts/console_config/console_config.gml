@@ -3,7 +3,7 @@
 // Only use for quick solutions!
 #macro gmcl_automatic_gui_resize	false
 
-// Console works with the ChatterBox extension
+// Console can read and write chatterbox variables
 #macro gmcl_work_with_chatterbox	true
 
 // Normally it's not initialized immediately
@@ -13,4 +13,4 @@
 #macro gmcl_instant_setup			true
 
 // Runs the dev_console_setup script on console startup
-#macro gmcl_in_debug_mode			true
+#macro gmcl_in_debug_mode			false

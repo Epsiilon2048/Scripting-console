@@ -22,7 +22,7 @@ if not initialized and startup > -1
 			initialize_color_schemes,
 			initialize_console_graphics,
 			initialize_bar_and_output,
-			user_console_startup,
+			on_console_startup,
 			dev_console_setup,
 			
 			function(){
@@ -86,9 +86,6 @@ if not initialized and startup > -1
 if not enabled or not can_run exit
 
 var i = bird_mode_
-
-gui_mouse_x = gui_mx
-gui_mouse_y = gui_my
 
 if font != prev_font set_font(font)
 
@@ -156,24 +153,14 @@ if window_has_focus()
 	{
 		var el = elements[| front]
 		move_to_front(el)
-		//ds_list_delete(elements, front)
-		//ds_list_insert(elements, 0, el)
 	}
 }
 
 if not mouse_check_button(mb_left) element_dragging = noone
 
-console_measurer_inputs()
-
 // It's for your own good
 if sprite_get_width(j) != (719+1) or sprite_get_height(j) != (541-1) ge()
 
-a=10
-
-event_commands_exec(event_commands.step_end)
 step ++
 
 draw_set_font(old_font)
-
-
-//newparse = GBL_parse(BAR.text_box.text)

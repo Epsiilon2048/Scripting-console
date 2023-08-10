@@ -1,5 +1,5 @@
 
-function new_color_dock(variable="", use_varbox=true, use_rgb=true, use_hsv=true, use_hex=true, use_gml=true){
+function new_color_dock(variable="", use_varbox=true, use_rgb=true, use_hsv=true, use_hex=true, use_gml=false){
 	
 var cb = {} with cb {
 	
@@ -84,6 +84,7 @@ var cb = {} with cb {
 		hex = "FFFFFF"
 		hex_text_box = new_text_box("Hex", "hex").set_att(cd.hex_att)
 		hex_text_box.draw_name = false
+		hex_text_box.select_all_on_click = true
 		
 		hex_text_box.char_filter = function(char){
 			static hex_chars = "0123456789ABCDEF"
@@ -93,7 +94,6 @@ var cb = {} with cb {
 			for(var i = 1; i <= string_length(char); i++)
 			{
 				var _char = string_char_at(char, i)
-				
 				if string_pos(_char, hex_chars) new_char += _char
 			}
 			
@@ -107,7 +107,7 @@ var cb = {} with cb {
 		gml_text_box.value_conversion = real
 	}
 	
-	if use_hex and use_gml	array_push(elements, ["Hex", hex_text_box, "GML", gml_text_box])
+	if use_hex and use_gml	array_push(elements, ["Hex", hex_text_box, "Dec", gml_text_box])
 	else if use_hex			array_push(elements, ["Hex", hex_text_box])
 	else if use_gml			array_push(elements, ["GML", gml_text_box])
 }

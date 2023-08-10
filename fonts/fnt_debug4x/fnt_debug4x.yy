@@ -120,7 +120,7 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Fonts.yy",
+    "path": "folders/Console/Internal workings (extremely spooky)/Graphics/Fonts.yy",
   },
   "pointRounding": 0,
   "ranges": [

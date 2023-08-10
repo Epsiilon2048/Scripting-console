@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Initialization",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Initialization.yy",
+    "path": "folders/Console/Internal workings (extremely spooky)/Initialization.yy",
   },
 }

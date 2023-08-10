@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Unsorted",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Unsorted.yy",
+    "name": "Console language",
+    "path": "folders/Console/Internal workings (extremely spooky)/Console language.yy",
   },
 }

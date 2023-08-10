@@ -7,7 +7,7 @@ if criteria == ""
 {
 	return "Must specify criteria!"
 }
-else if criteria == "*"
+else if criteria == "*" or criteria == "all"
 {
 	o_console.builtin_excluded = []
 	return console_macro_add_builtin(undefined)+" (wow did you actually need to do that ??)"

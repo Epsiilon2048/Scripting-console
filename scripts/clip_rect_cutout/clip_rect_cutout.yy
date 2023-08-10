@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Shaders",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Shaders.yy",
+    "name": "IDE",
+    "path": "folders/Console/Internal workings (extremely spooky)/IDE.yy",
   },
 }

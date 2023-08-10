@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "Unsorted",
-    "path": "folders/Console/Internal workings (extremely spooky)/(what a brave soul you are)/Unsorted.yy",
+    "name": "Graphics",
+    "path": "folders/Console/Internal workings (extremely spooky)/Graphics.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
